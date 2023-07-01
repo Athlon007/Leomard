@@ -1,0 +1,573 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC572A505356005ECF36 /* LeomardApp.swift */; };
+		B01ECC5A2A505356005ECF36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC592A505356005ECF36 /* ContentView.swift */; };
+		B01ECC5C2A505357005ECF36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B01ECC5B2A505357005ECF36 /* Assets.xcassets */; };
+		B01ECC5F2A505357005ECF36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B01ECC5E2A505357005ECF36 /* Preview Assets.xcassets */; };
+		B01ECC6A2A505357005ECF36 /* LeomardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC692A505357005ECF36 /* LeomardTests.swift */; };
+		B01ECC742A505357005ECF36 /* LeomardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC732A505357005ECF36 /* LeomardUITests.swift */; };
+		B01ECC762A505357005ECF36 /* LeomardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B01ECC662A505357005ECF36 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B01ECC4C2A505356005ECF36 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B01ECC532A505356005ECF36;
+			remoteInfo = Leomard;
+		};
+		B01ECC702A505357005ECF36 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B01ECC4C2A505356005ECF36 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B01ECC532A505356005ECF36;
+			remoteInfo = Leomard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B01ECC542A505356005ECF36 /* Leomard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Leomard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B01ECC572A505356005ECF36 /* LeomardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardApp.swift; sourceTree = "<group>"; };
+		B01ECC592A505356005ECF36 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B01ECC5B2A505357005ECF36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B01ECC5E2A505357005ECF36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B01ECC602A505357005ECF36 /* Leomard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Leomard.entitlements; sourceTree = "<group>"; };
+		B01ECC652A505357005ECF36 /* LeomardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeomardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B01ECC692A505357005ECF36 /* LeomardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardTests.swift; sourceTree = "<group>"; };
+		B01ECC6F2A505357005ECF36 /* LeomardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeomardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B01ECC732A505357005ECF36 /* LeomardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITests.swift; sourceTree = "<group>"; };
+		B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B01ECC512A505356005ECF36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC622A505357005ECF36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC6C2A505357005ECF36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B01ECC4B2A505356005ECF36 = {
+			isa = PBXGroup;
+			children = (
+				B01ECC562A505356005ECF36 /* Leomard */,
+				B01ECC682A505357005ECF36 /* LeomardTests */,
+				B01ECC722A505357005ECF36 /* LeomardUITests */,
+				B01ECC552A505356005ECF36 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B01ECC552A505356005ECF36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B01ECC542A505356005ECF36 /* Leomard.app */,
+				B01ECC652A505357005ECF36 /* LeomardTests.xctest */,
+				B01ECC6F2A505357005ECF36 /* LeomardUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B01ECC562A505356005ECF36 /* Leomard */ = {
+			isa = PBXGroup;
+			children = (
+				B01ECC572A505356005ECF36 /* LeomardApp.swift */,
+				B01ECC592A505356005ECF36 /* ContentView.swift */,
+				B01ECC5B2A505357005ECF36 /* Assets.xcassets */,
+				B01ECC602A505357005ECF36 /* Leomard.entitlements */,
+				B01ECC5D2A505357005ECF36 /* Preview Content */,
+			);
+			path = Leomard;
+			sourceTree = "<group>";
+		};
+		B01ECC5D2A505357005ECF36 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B01ECC5E2A505357005ECF36 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B01ECC682A505357005ECF36 /* LeomardTests */ = {
+			isa = PBXGroup;
+			children = (
+				B01ECC692A505357005ECF36 /* LeomardTests.swift */,
+			);
+			path = LeomardTests;
+			sourceTree = "<group>";
+		};
+		B01ECC722A505357005ECF36 /* LeomardUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B01ECC732A505357005ECF36 /* LeomardUITests.swift */,
+				B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */,
+			);
+			path = LeomardUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B01ECC532A505356005ECF36 /* Leomard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B01ECC792A505357005ECF36 /* Build configuration list for PBXNativeTarget "Leomard" */;
+			buildPhases = (
+				B01ECC502A505356005ECF36 /* Sources */,
+				B01ECC512A505356005ECF36 /* Frameworks */,
+				B01ECC522A505356005ECF36 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Leomard;
+			productName = Leomard;
+			productReference = B01ECC542A505356005ECF36 /* Leomard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B01ECC642A505357005ECF36 /* LeomardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B01ECC7C2A505357005ECF36 /* Build configuration list for PBXNativeTarget "LeomardTests" */;
+			buildPhases = (
+				B01ECC612A505357005ECF36 /* Sources */,
+				B01ECC622A505357005ECF36 /* Frameworks */,
+				B01ECC632A505357005ECF36 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B01ECC672A505357005ECF36 /* PBXTargetDependency */,
+			);
+			name = LeomardTests;
+			productName = LeomardTests;
+			productReference = B01ECC652A505357005ECF36 /* LeomardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B01ECC6E2A505357005ECF36 /* LeomardUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B01ECC7F2A505357005ECF36 /* Build configuration list for PBXNativeTarget "LeomardUITests" */;
+			buildPhases = (
+				B01ECC6B2A505357005ECF36 /* Sources */,
+				B01ECC6C2A505357005ECF36 /* Frameworks */,
+				B01ECC6D2A505357005ECF36 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B01ECC712A505357005ECF36 /* PBXTargetDependency */,
+			);
+			name = LeomardUITests;
+			productName = LeomardUITests;
+			productReference = B01ECC6F2A505357005ECF36 /* LeomardUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B01ECC4C2A505356005ECF36 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					B01ECC532A505356005ECF36 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					B01ECC642A505357005ECF36 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = B01ECC532A505356005ECF36;
+					};
+					B01ECC6E2A505357005ECF36 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = B01ECC532A505356005ECF36;
+					};
+				};
+			};
+			buildConfigurationList = B01ECC4F2A505356005ECF36 /* Build configuration list for PBXProject "Leomard" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B01ECC4B2A505356005ECF36;
+			productRefGroup = B01ECC552A505356005ECF36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B01ECC532A505356005ECF36 /* Leomard */,
+				B01ECC642A505357005ECF36 /* LeomardTests */,
+				B01ECC6E2A505357005ECF36 /* LeomardUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B01ECC522A505356005ECF36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B01ECC5F2A505357005ECF36 /* Preview Assets.xcassets in Resources */,
+				B01ECC5C2A505357005ECF36 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC632A505357005ECF36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC6D2A505357005ECF36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B01ECC502A505356005ECF36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B01ECC5A2A505356005ECF36 /* ContentView.swift in Sources */,
+				B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC612A505357005ECF36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B01ECC6A2A505357005ECF36 /* LeomardTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B01ECC6B2A505357005ECF36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B01ECC742A505357005ECF36 /* LeomardUITests.swift in Sources */,
+				B01ECC762A505357005ECF36 /* LeomardUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B01ECC672A505357005ECF36 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B01ECC532A505356005ECF36 /* Leomard */;
+			targetProxy = B01ECC662A505357005ECF36 /* PBXContainerItemProxy */;
+		};
+		B01ECC712A505357005ECF36 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B01ECC532A505356005ECF36 /* Leomard */;
+			targetProxy = B01ECC702A505357005ECF36 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B01ECC772A505357005ECF36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B01ECC782A505357005ECF36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		B01ECC7A2A505357005ECF36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Leomard/Leomard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Leomard/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.Leomard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B01ECC7B2A505357005ECF36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Leomard/Leomard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Leomard/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.Leomard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B01ECC7D2A505357005ECF36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.LeomardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leomard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leomard";
+			};
+			name = Debug;
+		};
+		B01ECC7E2A505357005ECF36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.LeomardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leomard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leomard";
+			};
+			name = Release;
+		};
+		B01ECC802A505357005ECF36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.LeomardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Leomard;
+			};
+			name = Debug;
+		};
+		B01ECC812A505357005ECF36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.LeomardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Leomard;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B01ECC4F2A505356005ECF36 /* Build configuration list for PBXProject "Leomard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B01ECC772A505357005ECF36 /* Debug */,
+				B01ECC782A505357005ECF36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B01ECC792A505357005ECF36 /* Build configuration list for PBXNativeTarget "Leomard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B01ECC7A2A505357005ECF36 /* Debug */,
+				B01ECC7B2A505357005ECF36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B01ECC7C2A505357005ECF36 /* Build configuration list for PBXNativeTarget "LeomardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B01ECC7D2A505357005ECF36 /* Debug */,
+				B01ECC7E2A505357005ECF36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B01ECC7F2A505357005ECF36 /* Build configuration list for PBXNativeTarget "LeomardUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B01ECC802A505357005ECF36 /* Debug */,
+				B01ECC812A505357005ECF36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B01ECC4C2A505356005ECF36 /* Project object */;
+}
