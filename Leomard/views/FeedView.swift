@@ -58,6 +58,9 @@ struct FeedView: View {
                     self.loadPosts()
                 }
             }
+            Button(action: reload) {
+                Image(systemName: "arrow.clockwise")
+            }
         }
         .frame(
             minWidth: 0,
@@ -151,5 +154,6 @@ struct FeedView: View {
     
     func reload() {
         self.postsResponse.posts.removeAll()
+        loadPosts()
     }
 }

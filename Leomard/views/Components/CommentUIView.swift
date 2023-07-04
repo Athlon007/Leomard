@@ -47,16 +47,7 @@ struct CommentUIView: View {
                         Text(String(commentView.counts.childCount))
                     }
                 }
-                let elapsed = DateFormatConverter.getElapsedTime(from: self.commentView.comment.published)
-                if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
-                    Text("(\(elapsed.seconds) seconds ago)")
-                } else if elapsed.days == 0 && elapsed.hours == 0 {
-                    Text("(\(elapsed.minutes) minutes ago)")
-                } else if elapsed.days == 0 {
-                    Text("(\(elapsed.hours) hours ago)")
-                } else {
-                    Text("(\(elapsed.days) days ago)")
-                }
+                DateDisplayView(date: self.commentView.comment.published)
             }
             .frame(
                 minWidth: 0,

@@ -18,6 +18,7 @@ struct PostUIView: View {
     @State var postBody: String? = nil
     @State var url: URL? = nil
     @State var gifHeight: CGFloat = 400
+    @State var minimumHeight: CGFloat = 0
     
     @Environment(\.openURL) var openURL
     
@@ -127,16 +128,7 @@ struct PostUIView: View {
                     Text("by")
                     PersonDisplay(person: postView.creator)
                 }
-                let elapsed = DateFormatConverter.getElapsedTime(from: self.postView.post.published)
-                if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
-                    Text("(\(elapsed.seconds) seconds ago)")
-                } else if elapsed.days == 0 && elapsed.hours == 0 {
-                    Text("(\(elapsed.minutes) minutes ago)")
-                } else if elapsed.days == 0 {
-                    Text("(\(elapsed.hours) hours ago)")
-                } else {
-                    Text("(\(elapsed.days) days ago)")
-                }
+                DateDisplayView(date: self.postView.post.published)
             }
             .frame (
                 maxWidth: .infinity,
@@ -244,5 +236,13 @@ struct PostUIView: View {
                 print(error)
             }
         }
+    }
+}
+
+struct LargestHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
     }
 }

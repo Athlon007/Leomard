@@ -71,8 +71,7 @@ final class RequestHandler {
                 
                 jsonDictionary["auth"] = sessionService.load()?.loginResponse.jwt
                 jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
-     
-                
+    
                 request.httpBody = jsonData
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {
