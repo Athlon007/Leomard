@@ -41,7 +41,9 @@ struct PageSidebarUIView: View {
                 if siteView!.site.sidebar != nil {
                     let banner = MarkdownContent(siteView!.site.sidebar!)
                     Markdown(banner)
+                    Spacer()
                 }
+                
             }
             .padding(5)
             .background(Color(.textBackgroundColor))

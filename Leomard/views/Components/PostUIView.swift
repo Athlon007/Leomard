@@ -60,13 +60,8 @@ struct PostUIView: View {
                                 .frame(maxWidth: .infinity)
                                 .cornerRadius(4)
                         default:
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(
-                                    width: 20,
-                                    alignment: .leading
-                                )
+                            Text("Failed to load image.")
+                                .italic()
                         }
                     })
                     .padding(.leading, 4)
@@ -123,13 +118,15 @@ struct PostUIView: View {
             LazyHStack(spacing: 4) {
                 HStack(spacing: 4) {
                     Text("in")
-                        .fontWeight(.semibold)
+                    CommunityAvatar(community: postView.community)
                     Text(self.postView.community.name)
+                        .fontWeight(.semibold)
                 }
                 HStack(spacing: 4) {
                     Text("by")
-                        .fontWeight(.semibold)
+                    PersonAvatar(person: postView.creator)
                     Text(self.postView.creator.name)
+                        .fontWeight(.semibold)
                 }
                 let elapsed = DateFormatConverter.getElapsedTime(from: self.postView.post.published)
                 if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {

@@ -24,6 +24,7 @@ struct CommentUIView: View {
     var body: some View {
         VStack {
             HStack {
+                PersonAvatar(person: commentView.creator)
                 Text(commentView.creator.name)
                     .frame(
                         minWidth: 0,
@@ -43,6 +44,16 @@ struct CommentUIView: View {
                         Image(systemName: "ellipsis.message")
                         Text(String(commentView.counts.childCount))
                     }
+                }
+                let elapsed = DateFormatConverter.getElapsedTime(from: self.commentView.comment.published)
+                if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
+                    Text("(\(elapsed.seconds) seconds ago)")
+                } else if elapsed.days == 0 && elapsed.hours == 0 {
+                    Text("(\(elapsed.minutes) minutes ago)")
+                } else if elapsed.days == 0 {
+                    Text("(\(elapsed.hours) hours ago)")
+                } else {
+                    Text("(\(elapsed.days) days ago)")
                 }
             }
             .frame(
