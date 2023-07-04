@@ -24,13 +24,7 @@ struct CommentUIView: View {
     var body: some View {
         VStack {
             HStack {
-                PersonAvatar(person: commentView.creator)
-                Text(commentView.creator.name)
-                    .frame(
-                        minWidth: 0,
-                        alignment: .leading
-                    )
-                    .fontWeight(.semibold)
+                PersonDisplay(person: commentView.creator)
                 HStack {
                     Image(systemName: "arrow.up")
                     Text(String(commentView.counts.upvotes))

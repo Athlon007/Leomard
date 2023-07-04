@@ -15,7 +15,7 @@ struct ContentView: View {
         .init(id: 1, title: "Inbox", imageName: "tray"),
         .init(id: 2, title: "Search", imageName: "magnifyingglass")
     ]
-    var profileOption: Option = Option(id: 3, title: "Profile", imageName: "person.crop.circle")
+    @State var profileOption: Option = Option(id: 3, title: "Profile", imageName: "person.crop.circle")
     @State var followedCommunities: [CommunityFollowerView] = []
     @State var myUser: MyUserInfo? = nil
     @State var siteView: SiteView? = nil
@@ -35,7 +35,7 @@ struct ContentView: View {
             NavigationSplitView {
                 NavbarView(
                     options: options,
-                    profileOption: profileOption,
+                    profileOption: $profileOption,
                     currentSelection: $currentSelection,
                     followedCommunities: $followedCommunities
                 )
@@ -89,6 +89,11 @@ struct ContentView: View {
                 self.siteView = getSiteResponse.siteView
                 if self.myUser != nil {
                     self.followedCommunities = getSiteResponse.myUser!.follows
+                    self.profileOption.title = self.myUser!.localUserView.person.name
+                    if self.myUser!.localUserView.person.avatar != nil {
+                        self.profileOption.externalLink = self.myUser!.localUserView.person.avatar!
+                        print(self.profileOption.externalLink)
+                    }
                 }
             case .failure(let error):
                 print(error)
@@ -108,6 +113,8 @@ struct ContentView: View {
         myUser = nil
         siteView = nil
         followedCommunities.removeAll()
+        self.profileOption.title = "Profile"
+        self.profileOption.externalLink = nil
         
         loadUserData()
     }

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NavbarView: View {
     let options: [Option]
-    let profileOption: Option
+    @Binding var profileOption: Option
     @Binding var currentSelection: Option
     @Binding var followedCommunities: [CommunityFollowerView]
     

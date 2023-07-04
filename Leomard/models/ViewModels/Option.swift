@@ -9,6 +9,7 @@ import Foundation
 
 struct Option: Hashable {
     let id: Int
-    let title: String
+    var title: String
     let imageName: String
+    var externalLink: String?
 }

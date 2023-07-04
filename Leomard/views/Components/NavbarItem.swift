@@ -14,14 +14,28 @@ struct NavbarItem: View {
     
     var body: some View {
         HStack {
-            Image(systemName: option.imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(
-                    width: 20,
-                    alignment: .leading
-                )
-                .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
+            if let link = option.externalLink {
+                AsyncImage(url: URL(string: link),
+                           content: { phase in
+                    switch phase {
+                    case .success(let image):
+                        image.resizable()
+                            .AvatarFormatting()
+                    default:
+                        Image(systemName: option.imageName)
+                            .AvatarFormatting()
+                    }
+                })
+            } else {
+                Image(systemName: option.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(
+                        width: 20,
+                        alignment: .leading
+                    )
+                    .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
+            }
             Text(option.title)
                 .frame(
                     maxWidth: .infinity,

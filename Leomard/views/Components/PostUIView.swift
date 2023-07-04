@@ -125,9 +125,7 @@ struct PostUIView: View {
                 }
                 HStack(spacing: 4) {
                     Text("by")
-                    PersonAvatar(person: postView.creator)
-                    Text(self.postView.creator.name)
-                        .fontWeight(.semibold)
+                    PersonDisplay(person: postView.creator)
                 }
                 let elapsed = DateFormatConverter.getElapsedTime(from: self.postView.post.published)
                 if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
