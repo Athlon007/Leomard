@@ -59,7 +59,10 @@ struct PostPopup: View {
                                         loadComments()
                                     }
                                 }
-                            Divider()
+                            if !(commentView == self.comments.last && lastPage) {
+                                Divider()
+                            }
+                            Spacer()
                         }
                     }
                     .frame(
@@ -74,6 +77,10 @@ struct PostPopup: View {
                     maxHeight: 750
                 )
                 .background(Color(.textBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
             }
             .cornerRadius(4)
             .padding(.top, 20)

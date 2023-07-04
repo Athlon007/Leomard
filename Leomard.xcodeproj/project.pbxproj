@@ -26,6 +26,7 @@
 		B01ECC742A505357005ECF36 /* LeomardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC732A505357005ECF36 /* LeomardUITests.swift */; };
 		B01ECC762A505357005ECF36 /* LeomardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
+		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */; };
 		B0CEBE3F2A51982E00982D4D /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3E2A51982E00982D4D /* Option.swift */; };
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
@@ -118,6 +119,7 @@
 		B01ECC732A505357005ECF36 /* LeomardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITests.swift; sourceTree = "<group>"; };
 		B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B091F8372A5432A900F0DA32 /* PostContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContextMenu.swift; sourceTree = "<group>"; };
+		B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSidebarUIView.swift; sourceTree = "<group>"; };
 		B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		B0CEBE3E2A51982E00982D4D /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B0CEBE402A51989D00982D4D /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				B0D7A1682A5356B900FE2852 /* CommentUIView.swift */,
 				B0D7A16E2A5420E600FE2852 /* AnimatedImage.swift */,
 				B091F8372A5432A900F0DA32 /* PostContextMenu.swift */,
+				B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				B0CEBE552A51D2F100982D4D /* SessionInfo.swift in Sources */,
 				B0CEBE6D2A52C93400982D4D /* CommunityFollowerView.swift in Sources */,
 				B0CEBE7A2A52CF6D00982D4D /* PersonBlockView.swift in Sources */,
+				B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */,
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,

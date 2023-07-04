@@ -159,6 +159,7 @@ struct PostUIView: View {
         .background(Color(.textBackgroundColor))
         .cornerRadius(4)
         .frame(
+            minWidth: 0,
             maxWidth: .infinity,
             maxHeight: .infinity
         )

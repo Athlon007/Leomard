@@ -65,12 +65,12 @@ class SessionService: Service {
     }
     
     public func destroy() {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionService.sessionKey
-        ]
-        
-        SecItemDelete(query as CFDictionary)
+        do {
+            let fileURL = try self.getUrl(file: SessionService.loginResponseFile)
+            try FileManager.default.removeItem(at: fileURL)
+        } catch {
+            print("Unable to destroy the session: \(error)")
+        }
         
         self.currentSession = nil
     }

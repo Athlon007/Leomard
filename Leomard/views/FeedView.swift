@@ -23,6 +23,8 @@ struct FeedView: View {
     @State var postService: PostService? = nil
     
     @State var isLoadingPosts: Bool = false
+    
+    @Binding var siteView: SiteView?
 
     var body: some View {
         HStack {
@@ -79,6 +81,7 @@ struct FeedView: View {
                                 .contextMenu {
                                     PostContextMenu(postView: postView)
                                 }
+                                .frame(maxWidth: .infinity)
                             Spacer()
                                 .frame(height: 0)
                             
@@ -94,19 +97,19 @@ struct FeedView: View {
                     if proxy.size.width > 1000 {
                         List {
                             VStack {
-                                Text("Page sidebar goes here.")
+                                if siteView != nil {
+                                    PageSidebarUIView(siteView: $siteView)
+                                }
                             }
                             .frame(
                                 minWidth: 0,
                                 maxWidth: .infinity
                             )
-                            .background(Color(.textBackgroundColor))
                             .cornerRadius(4)
-                            
                         }
                         .frame(
                             minWidth: 0,
-                            maxWidth: 600,
+                            maxWidth: 400,
                             maxHeight: .infinity,
                             alignment: .center
                         )

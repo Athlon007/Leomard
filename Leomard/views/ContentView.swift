@@ -18,6 +18,7 @@ struct ContentView: View {
     var profileOption: Option = Option(id: 3, title: "Profile", imageName: "person.crop.circle")
     @State var followedCommunities: [CommunityFollowerView] = []
     @State var myUser: MyUserInfo? = nil
+    @State var siteView: SiteView? = nil
     
     let sessionService = SessionService()
     @State var requestHandler: RequestHandler?
@@ -51,7 +52,7 @@ struct ContentView: View {
                         LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
                     }
                 default:
-                    FeedView(sessionService: sessionService, contentView: self)
+                    FeedView(sessionService: sessionService, contentView: self, siteView: $siteView)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                 }
@@ -81,6 +82,7 @@ struct ContentView: View {
             switch (result) {
             case .success(let getSiteResponse):
                 self.myUser = getSiteResponse.myUser
+                self.siteView = getSiteResponse.siteView
                 if self.myUser != nil {
                     self.followedCommunities = getSiteResponse.myUser!.follows
                 }
@@ -96,6 +98,14 @@ struct ContentView: View {
     
     func closePost() {
         self.openedPostView = nil
+    }
+    
+    func logout() {
+        myUser = nil
+        siteView = nil
+        followedCommunities = []
+        
+        loadUserData()
     }
 }
 

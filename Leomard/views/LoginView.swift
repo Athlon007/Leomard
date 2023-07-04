@@ -40,7 +40,7 @@ struct LoginView: View {
                     maxWidth: .infinity,
                     alignment: .leading
                 )
-            TextField("Password", text: $password)
+            SecureField("Password", text: $password)
             Button("Login", action: login)
                 .buttonStyle(.borderedProminent)
             if isLoginFailed {
