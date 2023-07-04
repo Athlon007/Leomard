@@ -150,6 +150,6 @@ struct FeedView: View {
     }
     
     func reload() {
-        self.postsResponse.posts = []
+        self.postsResponse.posts.removeAll()
     }
 }

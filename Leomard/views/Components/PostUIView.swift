@@ -87,20 +87,35 @@ struct PostUIView: View {
                     openURL(url!)
                 }
             }
-            else if postView.post.url != nil {
+            else if postView.post.url != nil && postView.post.embedTitle == nil {
                 // Image-only view.
-                if LinkHelper.isAnimatedLink(link: postView.post.url!) {                    
+                if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+                    // GIF
                     AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+                } else if LinkHelper.isImageLink(link: postView.post.url!) {
+                    // Static Images
+                    Spacer()
+                    Text("")
+                    AsyncImage(url: URL(string: postView.post.url!),
+                                               content: { phase in
+                                        switch phase {
+                                        case .success(let image):
+                                            image.resizable()
+                                                .scaledToFit()
+                                                .frame(minWidth:0, maxWidth: .infinity, alignment: .leading)
+                                        case .failure(_):
+                                            // Can't load image? Fallback to link.
+                                            Link("Failed to load image: \(postView.post.url!)", destination: URL(string: postView.post.url!)!)
+                                        default:
+                                            Text("Failed to load the image.")
+                                                .italic()
+                                        }
+                                    })
                 } else {
-                    let content = MarkdownContent("![](" + postView.post.url! + ")")
-                    Markdown(content)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-                        .lineLimit(nil)
+                    // Simple external link.
+                    let url = URL(string: postView.post.url!)!
+                    Link(url.absoluteString, destination: url)
                 }
                 Spacer()
             }
@@ -167,6 +182,19 @@ struct PostUIView: View {
             self.postBody = self.postView.post.body
             if self.postBody != nil {
                 self.postBody = postBody!.replacingOccurrences(of: "\r", with: "<br>")
+                let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
+                let range = NSRange(location: 0, length: postBody!.utf16.count)
+                
+                let matches = regex.matches(in: postBody!, options: [], range: range)
+                
+                var imageUrls: [String] = []
+                
+                for match in matches {
+                    if let urlRange = Range(match.range(at: 1), in: postBody!) {
+                        let imageUrl = String(postBody![urlRange])
+                        imageUrls.append(imageUrl)
+                    }
+                }
             }
             if shortBody && postBody != nil && postBody!.count > PostUIView.maxPostLength {
                 postBody = String(postBody!.prefix(PostUIView.maxPostLength))

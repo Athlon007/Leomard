@@ -34,7 +34,6 @@ struct NavbarItem: View {
         .onTapGesture {
             self.currentSelection = option
         }
-        .background(Color.gray.opacity(0))
     }
 }
 

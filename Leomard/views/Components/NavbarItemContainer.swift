@@ -17,6 +17,5 @@ extension VStack {
         )
         .padding(.leading, 10)
         .padding(.trailing, 10)
-        .background(.ultraThinMaterial)
     }
 }

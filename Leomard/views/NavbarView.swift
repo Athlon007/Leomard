@@ -30,7 +30,10 @@ struct NavbarView: View {
                 NavbarCommunityItem(community: communityView.community)
             }
         }
-        Spacer()
+        .frame(
+            minHeight: 0,
+            maxHeight: .infinity
+        )
         VStack {
             NavbarItem(option: profileOption, currentSelection: $currentSelection)
         }

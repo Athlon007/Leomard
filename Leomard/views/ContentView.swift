@@ -31,7 +31,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            NavigationView {
+            NavigationSplitView {
                 NavbarView(
                     options: options,
                     profileOption: profileOption,
@@ -44,6 +44,8 @@ struct ContentView: View {
                     minWidth: 50
                     
                 )
+
+            } detail: {
                 switch currentSelection.id {
                 case 3:
                     if self.sessionService.isSessionActive() {
@@ -103,7 +105,7 @@ struct ContentView: View {
     func logout() {
         myUser = nil
         siteView = nil
-        followedCommunities = []
+        followedCommunities.removeAll()
         
         loadUserData()
     }
