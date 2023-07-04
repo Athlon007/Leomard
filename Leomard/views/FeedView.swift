@@ -23,7 +23,7 @@ struct FeedView: View {
     @State var postService: PostService? = nil
     
     @State var isLoadingPosts: Bool = false
-    
+
     var body: some View {
         HStack {
             HStack {
@@ -61,32 +61,62 @@ struct FeedView: View {
             minWidth: 0,
             idealWidth: .infinity
         )
+        
         VStack {
-            List {
-                ForEach(postsResponse.posts, id: \.self) { postView in
-                    PostUIView(postView: postView, shortBody: true)
-                        .onAppear {
-                            if postView == self.postsResponse.posts.last {
-                                self.loadPosts()
+            GeometryReader { proxy in
+                HStack {
+                    List {
+                        ForEach(postsResponse.posts, id: \.self) { postView in
+                            PostUIView(postView: postView, shortBody: true)
+                                .onAppear {
+                                    if postView == self.postsResponse.posts.last {
+                                        self.loadPosts()
+                                    }
+                                }
+                                .onTapGesture {
+                                    self.contentView.openPost(postView: postView)
+                                }
+                                .contextMenu {
+                                    PostContextMenu(postView: postView)
+                                }
+                            Spacer()
+                                .frame(height: 0)
+                            
+                        }
+                    }
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: 600,
+                        maxHeight: .infinity,
+                        alignment: .center
+                    )
+                    
+                    if proxy.size.width > 1000 {
+                        List {
+                            VStack {
+                                Text("Page sidebar goes here.")
                             }
+                            .frame(
+                                minWidth: 0,
+                                maxWidth: .infinity
+                            )
+                            .background(Color(.textBackgroundColor))
+                            .cornerRadius(4)
+                            
                         }
-                        .onTapGesture {
-                            self.contentView.openPost(postView: postView)
-                        }
-                        .contextMenu {
-                            PostContextMenu(postView: postView)
-                        }
-                    Spacer()
-                        .frame(height: 0)
-
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
+                    }
                 }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .center
+                )
             }
-            .frame(
-                minWidth: 0,
-                maxWidth: 600,
-                maxHeight: .infinity
-            )
-
         }
         .cornerRadius(4)
         .task {

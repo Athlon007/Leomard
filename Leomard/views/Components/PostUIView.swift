@@ -17,6 +17,7 @@ struct PostUIView: View {
     @State var postBody: String? = nil
     @State var url: URL? = nil
     @State var gifHeight: CGFloat = 400
+    
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -87,7 +88,6 @@ struct PostUIView: View {
                 }
             }
             else if postView.post.url != nil {
-                Markdown("") // Dunno why, but it fixes the crashing when opening image-only posts.
                 // Image-only view.
                 if LinkHelper.isAnimatedLink(link: postView.post.url!) {                    
                     AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
@@ -102,6 +102,7 @@ struct PostUIView: View {
                         )
                         .lineLimit(nil)
                 }
+                Spacer()
             }
             Spacer(minLength: 6)
             LazyHStack(spacing: 4) {
@@ -175,6 +176,7 @@ struct PostUIView: View {
             if postView.post.url != nil {
                 url = URL(string: postView.post.url!)
             }
+        
         }
         .contextMenu {
             PostContextMenu(postView: self.postView)
