@@ -77,4 +77,23 @@ class CommentService: Service {
             }
         }
     }
+    
+    public func setCommentLike(comment: Comment, score: Int, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let body = CreateCommentLike(commentId: comment.id, score: score)
+            self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
+                switch (result) {
+                case .success(let apiResponse):
+                    if let data = apiResponse.data {
+                        do {
+                            let response = try self.decode(type: CommentResponse.self, data: data)
+                            completion(.success(response))
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
 }

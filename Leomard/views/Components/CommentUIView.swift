@@ -10,7 +10,7 @@ import SwiftUI
 import MarkdownUI
 
 struct CommentUIView: View {
-    let commentView: CommentView
+    @State var commentView: CommentView
     let indentLevel: Int
     let commentService: CommentService
     static let intentOffset: Int = 15
@@ -35,9 +35,17 @@ struct CommentUIView: View {
                     Image(systemName: "arrow.up")
                     Text(String(commentView.counts.upvotes))
                 }
+                .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
+                .onTapGesture {
+                    likeComment()
+                }
                 HStack {
                     Image(systemName: "arrow.down")
                     Text(String(commentView.counts.downvotes))
+                }
+                .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
+                .onTapGesture {
+                    dislikeComment()
                 }
                 if commentView.counts.childCount > 0 {
                     HStack {
@@ -131,5 +139,35 @@ struct CommentUIView: View {
     
     func showComment() {
         self.hidden = false
+    }
+    
+    func likeComment() {
+        var score = 1
+        if commentView.myVote == 1 {
+            score = 0
+        }
+        self.commentService.setCommentLike(comment: commentView.comment, score: score) { result in
+            switch result {
+            case .success(let commentResponse):
+                self.commentView = commentResponse.commentView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func dislikeComment() {
+        var score = -1
+        if commentView.myVote == -1 {
+            score = 0
+        }
+        self.commentService.setCommentLike(comment: commentView.comment, score: score) { result in
+            switch result {
+            case .success(let commentResponse):
+                self.commentView = commentResponse.commentView
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

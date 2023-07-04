@@ -30,6 +30,8 @@
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
 		B091F83E2A5476E000F0DA32 /* PostResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83D2A5476E000F0DA32 /* PostResponse.swift */; };
 		B091F8402A547A7E00F0DA32 /* CreatePostLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83F2A547A7E00F0DA32 /* CreatePostLike.swift */; };
+		B091F8442A5480E300F0DA32 /* CommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8432A5480E300F0DA32 /* CommentResponse.swift */; };
+		B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8452A54816000F0DA32 /* CreateCommentLike.swift */; };
 		B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */; };
 		B0CEBE3F2A51982E00982D4D /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3E2A51982E00982D4D /* Option.swift */; };
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
@@ -126,6 +128,8 @@
 		B091F83B2A54708800F0DA32 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		B091F83D2A5476E000F0DA32 /* PostResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostResponse.swift; sourceTree = "<group>"; };
 		B091F83F2A547A7E00F0DA32 /* CreatePostLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostLike.swift; sourceTree = "<group>"; };
+		B091F8432A5480E300F0DA32 /* CommentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentResponse.swift; sourceTree = "<group>"; };
+		B091F8452A54816000F0DA32 /* CreateCommentLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommentLike.swift; sourceTree = "<group>"; };
 		B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		B0CEBE3E2A51982E00982D4D /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B0CEBE402A51989D00982D4D /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -366,6 +370,7 @@
 			children = (
 				B0CEBE4B2A519F3300982D4D /* Login.swift */,
 				B091F83F2A547A7E00F0DA32 /* CreatePostLike.swift */,
+				B091F8452A54816000F0DA32 /* CreateCommentLike.swift */,
 			);
 			path = dtos;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 				B0CEBE5C2A52C2CD00982D4D /* GetSiteResponse.swift */,
 				B0D7A1622A53529B00FE2852 /* GetCommentsResponse.swift */,
 				B091F83D2A5476E000F0DA32 /* PostResponse.swift */,
+				B091F8432A5480E300F0DA32 /* CommentResponse.swift */,
 			);
 			path = Gets;
 			sourceTree = "<group>";
@@ -631,11 +637,13 @@
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,
 				B0CEBE612A52C60B00982D4D /* PersonView.swift in Sources */,
+				B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */,
 				B0CEBE8B2A52D34400982D4D /* SiteView.swift in Sources */,
 				B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */,
 				B0CEBE902A52D43000982D4D /* SiteService.swift in Sources */,
 				B00695DE2A50E24800206C77 /* String.swift in Sources */,
 				B0CEBE872A52D25000982D4D /* LocalSiteRateLimit.swift in Sources */,
+				B091F8442A5480E300F0DA32 /* CommentResponse.swift in Sources */,
 				B0CEBE462A519BEF00982D4D /* NavbarItemContainer.swift in Sources */,
 				B00695D92A50CD0900206C77 /* GetPostsResponse.swift in Sources */,
 				B0D7A1632A53529B00FE2852 /* GetCommentsResponse.swift in Sources */,
