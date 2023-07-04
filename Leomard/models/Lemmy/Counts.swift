@@ -12,9 +12,9 @@ struct PostAggregates: Hashable, Codable
     public let id: Int
     public let postId: Int
     public let comments: Int
-    public let score: Int
-    public let upvotes: Int
-    public let downvotes: Int
+    public var score: Int
+    public var upvotes: Int
+    public var downvotes: Int
     public let published: Date
     public let newestCommentTimeNecro: Date
     public let newestCommentTime: Date

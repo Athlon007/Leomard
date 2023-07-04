@@ -69,7 +69,7 @@ struct FeedView: View {
                 HStack {
                     List {
                         ForEach(postsResponse.posts, id: \.self) { postView in
-                            PostUIView(postView: postView, shortBody: true)
+                            PostUIView(postView: postView, shortBody: true, postService: self.postService!)
                                 .onAppear {
                                     if postView == self.postsResponse.posts.last {
                                         self.loadPosts()

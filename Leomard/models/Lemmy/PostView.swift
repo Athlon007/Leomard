@@ -13,10 +13,11 @@ struct PostView: Hashable, Codable
     public let creator: Person
     public let community: Community
     public let creatorBannedFromCommunity: Bool
-    public let counts: PostAggregates
+    public var counts: PostAggregates
     public let subscribed: String
     public let saved: Bool
     public let read: Bool
     public let creatorBlocked: Bool
     public let unreadComments: Int
+    public var myVote: Int?
 }

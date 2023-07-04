@@ -24,6 +24,7 @@ struct ContentView: View {
     @State var requestHandler: RequestHandler?
     @State var siteService: SiteService?
     @State var commentService: CommentService?
+    @State var postService: PostService?
     
     @State var openedPostView: PostView? = nil
     @State var showingPopover = true
@@ -66,11 +67,12 @@ struct ContentView: View {
                 self.requestHandler = RequestHandler(sessionService: self.sessionService)
                 self.siteService = SiteService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 self.commentService = CommentService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
+                self.postService = PostService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 
                 self.loadUserData()
             }
             if self.openedPostView != nil {
-                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!)
+                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!)
             }
         }
     }

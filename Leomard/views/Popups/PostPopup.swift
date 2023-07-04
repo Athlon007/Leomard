@@ -12,6 +12,7 @@ struct PostPopup: View {
     let postView: PostView
     let contentView: ContentView
     let commentService: CommentService
+    let postService: PostService
     
     @State var comments: [CommentView] = []
     @State var page: Int = 1
@@ -46,7 +47,7 @@ struct PostPopup: View {
                     .padding(.top, 10)
                     .padding(.bottom, 0)
                     List {
-                        PostUIView(postView: postView, shortBody: false)
+                        PostUIView(postView: postView, shortBody: false, postService: self.postService)
                             .frame(
                                 minHeight: 0,
                                 alignment: .top

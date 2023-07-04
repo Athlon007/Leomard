@@ -39,4 +39,23 @@ class PostService: Service {
             }
         }
     }
+    
+    public func setPostLike(post: Post, score: Int, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        let body = CreatePostLike(postId: post.id, score: score)
+        self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/post/like", method: .post, body: body) { result in
+            switch (result) {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        let response = try self.decode(type: PostResponse.self, data: data)
+                        completion(.success(response))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

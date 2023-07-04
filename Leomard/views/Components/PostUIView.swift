@@ -12,6 +12,7 @@ import MarkdownUI
 struct PostUIView: View {
     @State var postView: PostView
     let shortBody: Bool
+    let postService: PostService
     private static let maxPostLength: Int = 400
     
     @State var postBody: String? = nil
@@ -149,9 +150,17 @@ struct PostUIView: View {
                     Image(systemName: "arrow.up")
                     Text(String(postView.counts.upvotes))
                 }
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                .onTapGesture {
+                    likePost()
+                }
                 HStack {
                     Image(systemName: "arrow.down")
                     Text(String(postView.counts.downvotes))
+                }
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                .onTapGesture {
+                    dislikePost()
                 }
                 HStack {
                     Image(systemName: "ellipsis.message")
@@ -206,6 +215,36 @@ struct PostUIView: View {
         }
         .contextMenu {
             PostContextMenu(postView: self.postView)
+        }
+    }
+    
+    func likePost() {
+        var score = 1
+        if postView.myVote == 1 {
+            score = 0
+        }
+        self.postService.setPostLike(post: postView.post, score: score) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func dislikePost() {
+        var score = -1
+        if postView.myVote == -1 {
+            score = 0
+        }
+        self.postService.setPostLike(post: postView.post, score: score) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }

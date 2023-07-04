@@ -35,8 +35,6 @@ final class RequestHandler {
             urlString = "https://\(urlString)"
         }
         
-        print(urlString)
-        
         if sessionService.isSessionActive() {
             let jwt = sessionService.load()?.loginResponse.jwt
             if !urlString.contains("?") {
@@ -45,6 +43,8 @@ final class RequestHandler {
                 urlString += "&auth=\(jwt!)"
             }
         }
+        
+        print(urlString)
         
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -59,7 +59,20 @@ final class RequestHandler {
             do {
                 let encoder = JSONEncoder()
                 encoder.keyEncodingStrategy = .convertToSnakeCase
-                let jsonData = try encoder.encode(body)
+                var jsonData = try encoder.encode(body)
+                
+                // Add the authentication to body, as it's needed for POSTs.
+                // To do that, we first must decode back the object, add "auth" key, and re-encode it.
+                guard var jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
+                        let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode JSON data."])
+                        completion(.failure(error))
+                        return
+                    }
+                
+                jsonDictionary["auth"] = sessionService.load()?.loginResponse.jwt
+                jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+     
+                
                 request.httpBody = jsonData
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {
