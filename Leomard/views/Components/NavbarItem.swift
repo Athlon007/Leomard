@@ -11,6 +11,7 @@ import SwiftUI
 struct NavbarItem: View {
     let option: Option
     @Binding var currentSelection: Option
+    let contentView: ContentView
     
     var body: some View {
         HStack {
@@ -47,6 +48,7 @@ struct NavbarItem: View {
         .padding(.bottom, 10)
         .onTapGesture {
             self.currentSelection = option
+            contentView.dismissProfileView()
         }
     }
 }

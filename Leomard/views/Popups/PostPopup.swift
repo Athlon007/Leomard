@@ -52,7 +52,7 @@ struct PostPopup: View {
                     .padding(.top, 10)
                     .padding(.bottom, 0)
                     List {
-                        PostUIView(postView: postView, shortBody: false, postService: self.postService, myself: $myself)
+                        PostUIView(postView: postView, shortBody: false, postService: self.postService, myself: $myself, contentView: contentView)
                             .frame(
                                 minHeight: 0,
                                 alignment: .top
@@ -85,7 +85,7 @@ struct PostPopup: View {
                         }
                         Spacer()
                         ForEach(comments, id: \.self) { commentView in
-                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post)
+                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post, contentView: contentView)
                                 .onAppear {
                                     if commentView == self.comments.last {
                                         loadComments()

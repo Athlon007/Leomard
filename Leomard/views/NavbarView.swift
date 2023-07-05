@@ -13,13 +13,12 @@ struct NavbarView: View {
     @Binding var profileOption: Option
     @Binding var currentSelection: Option
     @Binding var followedCommunities: [CommunityFollowerView]
-    
-    @Namespace var ns
+    let contentView: ContentView
     
     var body: some View {
         VStack {
             ForEach(options, id: \.self) { option in
-                NavbarItem(option: option, currentSelection: $currentSelection)
+                NavbarItem(option: option, currentSelection: $currentSelection, contentView: contentView)
             }
         }
         .NavBarItemContainer()
@@ -35,7 +34,7 @@ struct NavbarView: View {
             maxHeight: .infinity
         )
         VStack {
-            NavbarItem(option: profileOption, currentSelection: $currentSelection)
+            NavbarItem(option: profileOption, currentSelection: $currentSelection, contentView: contentView)
         }
         .NavBarItemContainer()
     }

@@ -73,7 +73,7 @@ struct FeedView: View {
                     ScrollViewReader { scrollProxy in
                         List {
                             ForEach(postsResponse.posts, id: \.self) { postView in
-                                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself)
+                                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
                                     .onAppear {
                                         if postView == self.postsResponse.posts.last {
                                             self.loadPosts()

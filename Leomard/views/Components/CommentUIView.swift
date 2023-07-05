@@ -15,7 +15,7 @@ struct CommentUIView: View {
     let commentService: CommentService
     @Binding var myself: MyUserInfo?
     @State var post: Post
-    
+    let contentView: ContentView
     
     static let intentOffset: Int = 15
     static let limit: Int = 10
@@ -59,6 +59,9 @@ struct CommentUIView: View {
                 HStack {
                     HStack {
                         PersonDisplay(person: commentView.creator, myself: $myself)
+                            .onTapGesture {
+                                contentView.openPerson(profile: commentView.creator)
+                            }
                         HStack {
                             Image(systemName: "arrow.up")
                             Text(String(commentView.counts.upvotes))
@@ -180,7 +183,7 @@ struct CommentUIView: View {
                     if subComments.count > 0 {
                         Spacer()
                         ForEach(subComments, id: \.self) { commentView in
-                            CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post)
+                            CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
                             if commentView != self.subComments.last {
                                 Divider()
                                     .padding(.leading, 20)

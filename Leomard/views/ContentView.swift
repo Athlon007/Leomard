@@ -27,7 +27,7 @@ struct ContentView: View {
     @State var postService: PostService?
     
     @State var openedPostView: PostView? = nil
-    @State var showingPopover = true
+    @State var openedPerson: Person? = nil
 
     
     var body: some View {
@@ -37,7 +37,8 @@ struct ContentView: View {
                     options: options,
                     profileOption: $profileOption,
                     currentSelection: $currentSelection,
-                    followedCommunities: $followedCommunities
+                    followedCommunities: $followedCommunities,
+                    contentView: self
                 )
                 .listStyle(SidebarListStyle())
                 .navigationBarBackButtonHidden(true)
@@ -45,23 +46,39 @@ struct ContentView: View {
                     minWidth: 50
                 )
             } detail: {
-                switch currentSelection.id {
-                case 3:
-                    if self.sessionService.isSessionActive() {
-                        ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
-                            .listStyle(SidebarListStyle())
-                            .scrollContentBackground(.hidden)
-                    } else {
-                        LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
+                ZStack {
+                    VStack {
+                        switch currentSelection.id {
+                        case 3:
+                            if self.sessionService.isSessionActive() {
+                                ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
+                                    .listStyle(SidebarListStyle())
+                                    .scrollContentBackground(.hidden)
+                            } else {
+                                LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
+                            }
+                        default:
+                            FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
+                        }
                     }
-                default:
-                    FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
+                    
+                    if openedPerson != nil {
+                        VStack {
+                            ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
+                        }
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
+                        .background(.thickMaterial)
+                    }
                 }
+                .frame(minWidth: 600, minHeight: 400)
             }
             .frame(minWidth: 600, minHeight: 400)
-            .background(.regularMaterial)
+            //.background(.regularMaterial)
             .task {
                 self.currentSelection = self.options[0]
                 self.requestHandler = RequestHandler(sessionService: self.sessionService)
@@ -71,6 +88,7 @@ struct ContentView: View {
                 
                 self.loadUserData()
             }
+
             if self.openedPostView != nil {
                 PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
             }
@@ -118,7 +136,12 @@ struct ContentView: View {
         loadUserData()
     }
     
+    func openPerson(profile: Person) {
+        self.openedPerson = profile
+    }
+    
     func dismissProfileView() {
+        self.openedPerson = nil
         
     }
 }

@@ -15,6 +15,7 @@ struct PostUIView: View {
     let shortBody: Bool
     let postService: PostService
     @Binding var myself: MyUserInfo?
+    let contentView: ContentView
     
     private static let maxPostLength: Int = 400
     
@@ -166,6 +167,9 @@ struct PostUIView: View {
                 HStack(spacing: 4) {
                     Text("by")
                     PersonDisplay(person: postView.creator, myself: $myself)
+                        .onTapGesture {
+                            self.contentView.openPerson(profile: postView.creator)
+                        }
                 }
                 DateDisplayView(date: self.postView.post.published)
             }

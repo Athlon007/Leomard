@@ -19,10 +19,9 @@ struct ProfileView: View {
     
     @State var postService: PostService? = nil
     @State var personService: PersonService? = nil
-    let browseOptions: [Option] = [
+    @State var browseOptions: [Option] = [
         .init(id: 0, title: "Comments", imageName: "message"),
         .init(id: 1, title: "Posts", imageName: "doc.plaintext"),
-        .init(id: 2, title: "Saved", imageName: "star")
     ]
     @State var selectedBrowseOption: Option = Option(id: 0, title: "Comments", imageName: "message")
     
@@ -75,7 +74,7 @@ struct ProfileView: View {
                                 List {
                                     ForEach(personDetails!.comments, id: \.self) { commentView in
                                         VStack {
-                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post)
+                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
                                                 .onAppear {
                                                     if commentView == personDetails!.comments.last {
                                                         self.loadPersonDetails()
@@ -112,7 +111,7 @@ struct ProfileView: View {
                                 }
                                 List {
                                     ForEach(personDetails!.posts, id: \.self) { postView in
-                                        PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself)
+                                        PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
                                             .onAppear {
                                                 if postView == personDetails!.posts.last {
                                                     self.loadPersonDetails()
@@ -169,6 +168,10 @@ struct ProfileView: View {
         }
         .cornerRadius(4)
         .task {
+            if person == myself?.localUserView.person {
+                browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
+            }
+            
             let requestHandler = RequestHandler(sessionService: self.sessionService)
             self.postService = PostService(requestHandler: requestHandler, sessionService: sessionService)
             self.personService = PersonService(requestHandler: requestHandler, sessionService: sessionService)

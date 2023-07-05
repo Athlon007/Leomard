@@ -66,7 +66,7 @@ class PostService: Service {
             case .success(let apiResponse):
                 if let data = apiResponse.data {
                     do {
-                        var responses = try self.decode(type: GetPostResponse.self, data: data)
+                        let responses = try self.decode(type: GetPostResponse.self, data: data)
                         completion(.success(responses))
                     } catch {
                         completion(.failure(error))
