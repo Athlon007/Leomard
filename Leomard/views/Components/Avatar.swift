@@ -11,10 +11,11 @@ import SwiftUI
 extension Image {
     func AvatarFormatting(size: CGFloat) -> some View {
         return self.resizable()
+            .resizable()
+            .antialiased(true)
             .interpolation(.high)
-            .aspectRatio(contentMode: .fit)
-            .scaledToFit()
-            .frame(width: size, height: size, alignment: .leading)
+            .aspectRatio(contentMode: .fill)
+            .frame(width: size, height: size, alignment: .center)
             .clipShape(Circle())
     }
 }

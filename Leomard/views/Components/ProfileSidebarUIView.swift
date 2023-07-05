@@ -48,11 +48,12 @@ struct ProfileSidebarUIView: View {
                     PersonAvatar(person: personView.person, size: 120)
                         .frame(
                             maxWidth: .infinity,
-                            alignment: .leading
+                            alignment: .bottomLeading
                         )
                         .padding(.top, 35)
                         .padding(.leading, 10)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Spacer()
                 VStack {
                     if personView.person.displayName != nil {
@@ -126,10 +127,19 @@ struct ProfileSidebarUIView: View {
                 if personView.person.bio != nil {
                     let banner = MarkdownContent(personView.person.bio!)
                     Markdown(banner)
+                        .lineLimit(nil)
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: .leading
+                        )
                         .padding()
                     Spacer()
                 }
             }
+            .frame(
+                maxWidth: .infinity
+            )
             .background(Color(.textBackgroundColor))
         }
     }
