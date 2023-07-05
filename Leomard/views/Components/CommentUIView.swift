@@ -15,7 +15,6 @@ struct CommentUIView: View {
     let commentService: CommentService
     @Binding var myself: MyUserInfo?
     @State var post: Post
-    var onDeleteAction: Void
     
     
     static let intentOffset: Int = 15
@@ -31,146 +30,170 @@ struct CommentUIView: View {
     @FocusState var isSendingComment: Bool
     
     var body: some View {
-        VStack {
-            HStack {
-                HStack {
-                    PersonDisplay(person: commentView.creator, myself: $myself)
-                    HStack {
-                        Image(systemName: "arrow.up")
-                        Text(String(commentView.counts.upvotes))
-                    }
-                    .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
-                    .onTapGesture {
-                        likeComment()
-                    }
-                    HStack {
-                        Image(systemName: "arrow.down")
-                        Text(String(commentView.counts.downvotes))
-                    }
-                    .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
-                    .onTapGesture {
-                        dislikeComment()
-                    }
-                    if commentView.counts.childCount > 0 {
-                        HStack {
-                            Image(systemName: "ellipsis.message")
-                            Text(String(commentView.counts.childCount))
-                        }
-                    }
-                    DateDisplayView(date: self.commentView.comment.published)
-                }
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
+        if commentView.comment.deleted {
+            VStack {
+                Text("Comment deleted by the user.")
+                    .italic()
+                    .foregroundColor(.secondary)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
                     )
-                HStack {
-                    if commentView.creator.actorId == myself?.localUserView.person.actorId {
-                        Button(action: deleteComment) {
-                            Image(systemName: "trash")
-                        }
-                        .buttonStyle(.link)
-                        .foregroundColor(.primary)
-                    }
-                    Button(action: startReply) {
-                        Image(systemName: "arrowshape.turn.up.left")
-                    }
-                    .buttonStyle(.link)
-                    .foregroundColor(.primary)
-                }
-                .frame(
-                    minWidth: 0,
-                    alignment: .trailing
-                    )
+                Divider()
             }
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity,
-                alignment: .leading
-                )
-            if self.hidden {
-                Button("...", action: showComment)
-                    .buttonStyle(.plain)
-                    .foregroundColor(Color(.secondaryLabelColor))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                let content = MarkdownContent(commentView.comment.content)
-                Markdown(content)
+        } else if commentView.comment.removed {
+            VStack {
+                Text("Comment remoevd by moderator.")
+                    .italic()
+                    .foregroundColor(.secondary)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                Divider()
+            }
+        } else {
+            VStack {
+                HStack {
+                    HStack {
+                        PersonDisplay(person: commentView.creator, myself: $myself)
+                        HStack {
+                            Image(systemName: "arrow.up")
+                            Text(String(commentView.counts.upvotes))
+                        }
+                        .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
+                        .onTapGesture {
+                            likeComment()
+                        }
+                        HStack {
+                            Image(systemName: "arrow.down")
+                            Text(String(commentView.counts.downvotes))
+                        }
+                        .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
+                        .onTapGesture {
+                            dislikeComment()
+                        }
+                        if commentView.counts.childCount > 0 {
+                            HStack {
+                                Image(systemName: "ellipsis.message")
+                                Text(String(commentView.counts.childCount))
+                            }
+                        }
+                        DateDisplayView(date: self.commentView.comment.published)
+                    }
                     .frame(
                         minWidth: 0,
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-                    .onTapGesture {
-                        hideComment()
-                    }
-                if isReplying {
-                    Spacer()
-                    VStack {
-                        Text("Reply")
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .fontWeight(.semibold)
-                        TextEditor(text: $commentText)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                            .frame(
-                                maxWidth: .infinity,
-                                minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                maxHeight: .infinity,
-                                alignment: .leading
-                            )
-                            .lineLimit(5...)
-                            .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                        HStack {
-                            Button("Send", action: createComment)
-                                .buttonStyle(.borderedProminent)
-                                .frame(
-                                    alignment: .leading
-                                )
-                                .disabled(!isSendable())
-                            Button("Cancel", action: cancelComment)
-                                .buttonStyle(.automatic)
-                                .frame(
-                                    alignment: .leading
-                                )
+                    HStack {
+                        if commentView.creator.actorId == myself?.localUserView.person.actorId {
+                            Button(action: deleteComment) {
+                                Image(systemName: "trash")
+                            }
+                            .buttonStyle(.link)
+                            .foregroundColor(.primary)
                         }
+                        Button(action: startReply) {
+                            Image(systemName: "arrowshape.turn.up.left")
+                        }
+                        .buttonStyle(.link)
+                        .foregroundColor(.primary)
+                    }
+                    .frame(
+                        minWidth: 0,
+                        alignment: .trailing
+                    )
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                if self.hidden {
+                    Button("...", action: showComment)
+                        .buttonStyle(.plain)
+                        .foregroundColor(Color(.secondaryLabelColor))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    let content = MarkdownContent(commentView.comment.content)
+                    Markdown(content)
                         .frame(
+                            minWidth: 0,
                             maxWidth: .infinity,
                             alignment: .leading
                         )
-                    }
-                }
-                if subComments.count > 0 {
-                    Spacer()
-                    ForEach(subComments, id: \.self) { commentView in
-                        CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, onDeleteAction: self.deleteChild(childCommentView: commentView))
-                        if commentView != self.subComments.last {
-                            Divider()
-                                .padding(.leading, 20)
+                        .onTapGesture {
+                            hideComment()
+                        }
+                    if isReplying {
+                        Spacer()
+                        VStack {
+                            Text("Reply")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            TextEditor(text: $commentText)
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                                .frame(
+                                    maxWidth: .infinity,
+                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                    maxHeight: .infinity,
+                                    alignment: .leading
+                                )
+                                .lineLimit(5...)
+                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                            HStack {
+                                Button("Send", action: createComment)
+                                    .buttonStyle(.borderedProminent)
+                                    .frame(
+                                        alignment: .leading
+                                    )
+                                    .disabled(!isSendable())
+                                Button("Cancel", action: cancelComment)
+                                    .buttonStyle(.automatic)
+                                    .frame(
+                                        alignment: .leading
+                                    )
+                            }
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
                         }
                     }
-                    if !lastResultEmpty {
-                        Divider()
-                        Button("Load more...", action: loadSubcomments)
-                            .buttonStyle(.plain)
-                            .foregroundColor(Color(.secondaryLabelColor))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, CGFloat(CommentUIView.intentOffset))
+                    if subComments.count > 0 {
+                        Spacer()
+                        ForEach(subComments, id: \.self) { commentView in
+                            CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post)
+                            if commentView != self.subComments.last {
+                                Divider()
+                                    .padding(.leading, 20)
+                            }
+                        }
+                        if !lastResultEmpty {
+                            Divider()
+                            Button("Load more...", action: loadSubcomments)
+                                .buttonStyle(.plain)
+                                .foregroundColor(Color(.secondaryLabelColor))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, CGFloat(CommentUIView.intentOffset))
+                        }
                     }
                 }
             }
-        }
-        .frame(
-            minWidth: 0,
-            maxWidth: .infinity,
-            alignment: .leading
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                alignment: .leading
             )
-        .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
-        .task {
-            if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
-                loadSubcomments()
+            .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
+            .task {
+                if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
+                    loadSubcomments()
+                }
             }
         }
     }
@@ -243,7 +266,9 @@ struct CommentUIView: View {
         commentService.createComment(content: comment, post: post, parent: commentView.comment) { result in
             switch result {
             case .success(let commentResponse):
-                subComments.insert(commentResponse.commentView, at: 0)
+                DispatchQueue.main.async {
+                    subComments.insert(commentResponse.commentView, at: 0)
+                }
                 commentText = ""
                 isSendingComment = false
             case .failure(let error):
@@ -265,14 +290,11 @@ struct CommentUIView: View {
         commentService.deleteComment(comment: commentView.comment) { result in
             switch result {
             case .success(_):
-                onDeleteAction
+                self.commentView.comment.deleted = true
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    func deleteChild(childCommentView: CommentView) {
-        subComments = subComments.filter { $0 != childCommentView}
-    }
 }

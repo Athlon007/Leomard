@@ -73,6 +73,7 @@ struct PostUIView: View {
             if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
                 // Article View
                 VStack {
+                    Spacer()
                     AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
                                content: { phase in
                         switch phase {
@@ -95,6 +96,9 @@ struct PostUIView: View {
                     .padding(.leading, 4)
                     .padding(.trailing, 4)
                     .padding(.top, 4)
+                    if LinkHelper.isWebp(link: postView.post.thumbnailUrl!) {
+                        Spacer()
+                    }
                     Text(postView.post.url!)
                         .foregroundColor(Color(.linkColor))
                         .fixedSize(horizontal: false, vertical: false)
@@ -126,7 +130,7 @@ struct PostUIView: View {
                         case .success(let image):
                             image.resizable()
                                 .scaledToFit()
-                                .frame(minWidth:0, maxWidth: .infinity, alignment: .leading)
+                                .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .background(GeometryReader { geometry in
                                     Color.clear
                                         .onAppear {
@@ -135,12 +139,15 @@ struct PostUIView: View {
                                 })
                         case .failure(_):
                             // Can't load image? Fallback to link.
-                            Link("Failed to load image: \(postView.post.url!)", destination: URL(string: postView.post.url!)!)
+                            Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
                         default:
                             Text("Failed to load the image.")
                                 .italic()
                         }
                     })
+                    if LinkHelper.isWebp(link: postView.post.url!) {
+                        Spacer()
+                    }
                 } else {
                     // Simple external link.
                     let url = URL(string: postView.post.url!)!

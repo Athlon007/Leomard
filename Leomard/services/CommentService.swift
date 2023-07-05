@@ -116,19 +116,12 @@ class CommentService: Service {
         }
     }
     
-    public func deleteComment(comment: Comment, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+    public func deleteComment(comment: Comment, completion: @escaping (Result<Bool, Error>) -> Void) {
         let body = DeleteComment(commentId: comment.id, deleted: true)
         requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment/delete", method: .post, body: body) { result in
             switch result {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let response = try self.decode(type: CommentResponse.self, data: data)
-                        completion(.success(response))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
+            case .success(_):
+                completion(.success(true))
             case .failure(let error):
                 completion(.failure(error))
             }

@@ -23,7 +23,7 @@ class LinkHelper {
     static let imageFormats = [
         ".jpg",
         ".jpeg",
-        ".webp", // .webp seems to crash the app for now...
+        ".webp",
         ".png",
         ".bmp"
     ]
@@ -50,5 +50,9 @@ class LinkHelper {
         }
         
         return false
+    }
+    
+    static func isWebp(link: String) -> Bool {
+        return link.lowercased().hasSuffix(".webp")
     }
 }

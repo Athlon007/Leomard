@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct CommentView: Hashable, Codable {    
-    public let comment: Comment
+struct CommentView: Hashable, Codable {
+    public var comment: Comment
     public let community: Community
     public let counts: CommentAggregates
     public let creator: Person

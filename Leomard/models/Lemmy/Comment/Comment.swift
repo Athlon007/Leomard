@@ -11,7 +11,7 @@ struct Comment: Codable, Hashable {
     public let apId: String
     public let content: String
     public let creatorId: Int
-    public let deleted: Bool
+    public var deleted: Bool
     public let distinguished: Bool
     public let id: Int
     public let languageId: Int

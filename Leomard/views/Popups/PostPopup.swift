@@ -15,7 +15,7 @@ struct PostPopup: View {
     let postService: PostService
     @Binding var myself: MyUserInfo?
     
-    @State var comments: [CommentView] = []
+    @StateObject var comments: [CommentView] = []
     @State var page: Int = 1
     @State var lastPage: Bool = false
     
@@ -85,7 +85,7 @@ struct PostPopup: View {
                         }
                         Spacer()
                         ForEach(comments, id: \.self) { commentView in
-                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post, onDeleteAction: deleteComment(commentView: commentView))
+                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post)
                                 .onAppear {
                                     if commentView == self.comments.last {
                                         loadComments()
@@ -134,11 +134,7 @@ struct PostPopup: View {
         page = 1
     }
     
-    func loadComments() {
-        if self.postView.counts.comments == 0 {
-            return
-        }
-        
+    func loadComments() {        
         self.commentService.getAllComments(post: postView.post, page: page) { result in
             switch result {
             case .success(let getCommentView) :
@@ -167,9 +163,11 @@ struct PostPopup: View {
         commentService.createComment(content: comment, post: postView.post) { result in
             switch result {
             case .success(let commentResponse):
-                comments.insert(commentResponse.commentView, at: 0)
-                commentText = ""
-                isSendingComment = false
+                DispatchQueue.main.async {
+                    comments.insert(commentResponse.commentView, at: 0)
+                    commentText = ""
+                    isSendingComment = false
+                }
             case .failure(let error):
                 print(error)
             }
@@ -178,9 +176,5 @@ struct PostPopup: View {
     
     func isTextFieldEmpty() -> Bool {
         return commentText.count == 0
-    }
-    
-    func deleteComment(commentView: CommentView) {
-        comments = comments.filter { $0 != commentView}
     }
 }
