@@ -288,7 +288,6 @@ struct CommentUIView: View {
                 case .success(let commentResponse):
                     DispatchQueue.main.sync {
                         commentView = commentResponse.commentView
-                        subComments.insert(commentResponse.commentView, at: 0)
                         commentText = ""
                         isSendingComment = false
                         isEditingComment = false
