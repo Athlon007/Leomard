@@ -10,15 +10,16 @@ import SwiftUI
 import MarkdownUI
 
 struct ProfileSidebarUIView: View {
-    let person: Person
-    let aggregates: PersonAggregates
+    //let person: Person
+    //let aggregates: PersonAggregates
+    let personView: PersonView
     
     var body: some View {
         VStack {
             VStack {
                 ZStack {
-                    if person.banner != nil {
-                        AsyncImage(url: URL(string: person.banner!)!, content: { phase in
+                    if personView.person.banner != nil {
+                        AsyncImage(url: URL(string: personView.person.banner!)!, content: { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -44,7 +45,7 @@ struct ProfileSidebarUIView: View {
                             alignment: .top
                         )
                     }
-                    PersonAvatar(person: person, size: 120)
+                    PersonAvatar(person: personView.person, size: 120)
                         .frame(
                             maxWidth: .infinity,
                             alignment: .leading
@@ -54,21 +55,21 @@ struct ProfileSidebarUIView: View {
                 }
                 Spacer()
                 VStack {
-                    if person.displayName != nil {
-                        Text(person.displayName!)
+                    if personView.person.displayName != nil {
+                        Text(personView.person.displayName!)
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 24))
-                        Text(person.name + "@" + LinkHelper.stripToHost(link: person.actorId))
+                        Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.secondary)
                     } else {
-                        Text(person.name)
+                        Text(personView.person.name)
                          .bold()
                          .frame(maxWidth: .infinity, alignment: .leading)
                          .font(.system(size: 24))
-                        Text(person.name + "@" + LinkHelper.stripToHost(link: person.actorId))
+                        Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.secondary)
@@ -81,21 +82,21 @@ struct ProfileSidebarUIView: View {
                     HStack {
                         HStack(spacing: 7) {
                             Image(systemName: "doc.plaintext")
-                            Text(String(aggregates.postCount))
+                            Text(String(personView.counts.postCount))
                         }
                         HStack(spacing: 7) {
                             Image(systemName: "arrow.up")
-                            Text(String(aggregates.postScore))
+                            Text(String(personView.counts.postScore))
                         }
                     }
                     HStack {
                         HStack(spacing: 7) {
                             Image(systemName: "message")
-                            Text(String(aggregates.commentCount))
+                            Text(String(personView.counts.commentCount))
                         }
                         HStack(spacing: 7) {
                             Image(systemName: "arrow.up")
-                            Text(String(aggregates.commentScore))
+                            Text(String(personView.counts.commentScore))
                         }
                     }
                     .frame(
@@ -108,11 +109,11 @@ struct ProfileSidebarUIView: View {
                 HStack(spacing: 25) {
                     HStack(spacing: 7) {
                         Image(systemName: "calendar.badge.plus")
-                        DateDisplayView(date: person.published, noBrackets: true, noTapAction: true)
+                        DateDisplayView(date: personView.person.published, noBrackets: true, noTapAction: true)
                     }
                     HStack(spacing: 7) {
                         Image(systemName: "birthday.cake")
-                        DateDisplayView(date: person.published, showRealTime: true, noBrackets: true, noTapAction: true, prettyFormat: true)
+                        DateDisplayView(date: personView.person.published, showRealTime: true, noBrackets: true, noTapAction: true, prettyFormat: true)
                     }
                 }
                 .frame(
@@ -122,8 +123,8 @@ struct ProfileSidebarUIView: View {
                 .padding()
                 .padding(.top, -20)
                 Spacer()
-                if person.bio != nil {
-                    let banner = MarkdownContent(person.bio!)
+                if personView.person.bio != nil {
+                    let banner = MarkdownContent(personView.person.bio!)
                     Markdown(banner)
                         .padding()
                     Spacer()

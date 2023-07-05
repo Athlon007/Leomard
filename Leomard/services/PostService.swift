@@ -58,4 +58,23 @@ class PostService: Service {
             }
         }
     }
+    
+    public func getPostForComment(comment: Comment, completion: @escaping (Result<GetPostResponse, Error>) -> Void) {
+        let url = self.sessionService.getLemmyInstance()
+        self.requestHandler.makeApiRequest(host: url, request: "/post?comment_id=\(String(comment.id))", method: .get) { result in
+            switch (result) {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        var responses = try self.decode(type: GetPostResponse.self, data: data)
+                        completion(.success(responses))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
