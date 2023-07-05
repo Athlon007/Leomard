@@ -180,7 +180,7 @@ struct CommentUIView: View {
                             )
                         }
                     }
-                    if subComments.count > 0 {
+                    if subComments.count > 0 || commentView.counts.childCount > 0 {
                         Spacer()
                         ForEach(subComments, id: \.self) { commentView in
                             CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
@@ -191,7 +191,7 @@ struct CommentUIView: View {
                         }
                         if !lastResultEmpty {
                             Divider()
-                            Button("Load more...", action: loadSubcomments)
+                            Button("Load replies", action: loadSubcomments)
                                 .buttonStyle(.plain)
                                 .foregroundColor(Color(.secondaryLabelColor))
                                 .frame(maxWidth: .infinity, alignment: .leading)

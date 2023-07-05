@@ -78,7 +78,6 @@ struct ContentView: View {
                 .frame(minWidth: 600, minHeight: 400)
             }
             .frame(minWidth: 600, minHeight: 400)
-            //.background(.regularMaterial)
             .task {
                 self.currentSelection = self.options[0]
                 self.requestHandler = RequestHandler(sessionService: self.sessionService)
