@@ -13,6 +13,11 @@ struct CommentUIView: View {
     @State var commentView: CommentView
     let indentLevel: Int
     let commentService: CommentService
+    @Binding var myself: MyUserInfo?
+    @State var post: Post
+    var onDeleteAction: Void
+    
+    
     static let intentOffset: Int = 15
     static let limit: Int = 10
     
@@ -21,33 +26,62 @@ struct CommentUIView: View {
     @State var lastResultEmpty: Bool = false
     @State var hidden: Bool = false
     
+    @State var isReplying: Bool = false
+    @State var commentText: String = ""
+    @FocusState var isSendingComment: Bool
+    
     var body: some View {
         VStack {
             HStack {
-                PersonDisplay(person: commentView.creator)
                 HStack {
-                    Image(systemName: "arrow.up")
-                    Text(String(commentView.counts.upvotes))
-                }
-                .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
-                .onTapGesture {
-                    likeComment()
-                }
-                HStack {
-                    Image(systemName: "arrow.down")
-                    Text(String(commentView.counts.downvotes))
-                }
-                .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
-                .onTapGesture {
-                    dislikeComment()
-                }
-                if commentView.counts.childCount > 0 {
+                    PersonDisplay(person: commentView.creator, myself: $myself)
                     HStack {
-                        Image(systemName: "ellipsis.message")
-                        Text(String(commentView.counts.childCount))
+                        Image(systemName: "arrow.up")
+                        Text(String(commentView.counts.upvotes))
                     }
+                    .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
+                    .onTapGesture {
+                        likeComment()
+                    }
+                    HStack {
+                        Image(systemName: "arrow.down")
+                        Text(String(commentView.counts.downvotes))
+                    }
+                    .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
+                    .onTapGesture {
+                        dislikeComment()
+                    }
+                    if commentView.counts.childCount > 0 {
+                        HStack {
+                            Image(systemName: "ellipsis.message")
+                            Text(String(commentView.counts.childCount))
+                        }
+                    }
+                    DateDisplayView(date: self.commentView.comment.published)
                 }
-                DateDisplayView(date: self.commentView.comment.published)
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    alignment: .leading
+                    )
+                HStack {
+                    if commentView.creator.actorId == myself?.localUserView.person.actorId {
+                        Button(action: deleteComment) {
+                            Image(systemName: "trash")
+                        }
+                        .buttonStyle(.link)
+                        .foregroundColor(.primary)
+                    }
+                    Button(action: startReply) {
+                        Image(systemName: "arrowshape.turn.up.left")
+                    }
+                    .buttonStyle(.link)
+                    .foregroundColor(.primary)
+                }
+                .frame(
+                    minWidth: 0,
+                    alignment: .trailing
+                    )
             }
             .frame(
                 minWidth: 0,
@@ -70,10 +104,48 @@ struct CommentUIView: View {
                     .onTapGesture {
                         hideComment()
                     }
-                if commentView.counts.childCount > 0 {
+                if isReplying {
+                    Spacer()
+                    VStack {
+                        Text("Reply")
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                            .fontWeight(.semibold)
+                        TextEditor(text: $commentText)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                            .frame(
+                                maxWidth: .infinity,
+                                minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                maxHeight: .infinity,
+                                alignment: .leading
+                            )
+                            .lineLimit(5...)
+                            .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                        HStack {
+                            Button("Send", action: createComment)
+                                .buttonStyle(.borderedProminent)
+                                .frame(
+                                    alignment: .leading
+                                )
+                                .disabled(!isSendable())
+                            Button("Cancel", action: cancelComment)
+                                .buttonStyle(.automatic)
+                                .frame(
+                                    alignment: .leading
+                                )
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    }
+                }
+                if subComments.count > 0 {
                     Spacer()
                     ForEach(subComments, id: \.self) { commentView in
-                        CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService)
+                        CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, onDeleteAction: self.deleteChild(childCommentView: commentView))
                         if commentView != self.subComments.last {
                             Divider()
                                 .padding(.leading, 20)
@@ -154,5 +226,53 @@ struct CommentUIView: View {
                 print(error)
             }
         }
+    }
+    
+    func startReply() {
+        isReplying = true
+    }
+    
+    func createComment() {
+        if !isSendable() {
+            return
+        }
+        
+        isSendingComment = true
+        let comment = commentText
+        
+        commentService.createComment(content: comment, post: post, parent: commentView.comment) { result in
+            switch result {
+            case .success(let commentResponse):
+                subComments.insert(commentResponse.commentView, at: 0)
+                commentText = ""
+                isSendingComment = false
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func isSendable() -> Bool {
+        return commentText.count > 0 && !isSendingComment
+    }
+    
+    func cancelComment() {
+        commentText = ""
+        isReplying = false
+    }
+    
+    func deleteComment() {
+        commentService.deleteComment(comment: commentView.comment) { result in
+            switch result {
+            case .success(_):
+                onDeleteAction
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func deleteChild(childCommentView: CommentView) {
+        subComments = subComments.filter { $0 != childCommentView}
     }
 }

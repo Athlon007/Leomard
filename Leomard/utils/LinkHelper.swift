@@ -23,7 +23,7 @@ class LinkHelper {
     static let imageFormats = [
         ".jpg",
         ".jpeg",
-        ".webp",
+        ".webp", // .webp seems to crash the app for now...
         ".png",
         ".bmp"
     ]
@@ -39,8 +39,7 @@ class LinkHelper {
     }
     
     static let animatedFormats = [
-        ".gif",
-        ".mp4"
+        ".gif"
     ]
     
     static func isAnimatedLink(link: String) -> Bool {

@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PersonDisplay: View {
     let person: Person
+    @Binding var myself: MyUserInfo?
+    
     @State var color: Color = .primary
 
     var body: some View {
@@ -26,6 +28,10 @@ struct PersonDisplay: View {
                 
                 if person.botAccount {
                     self.color = .green
+                }
+                
+                if person.actorId == myself?.localUserView.person.actorId {
+                    self.color = .blue
                 }
                 
                 if person.name == "athlon" && person.actorId.starts(with: "https://lemm.ee/u/") {

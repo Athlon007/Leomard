@@ -14,6 +14,8 @@ struct PostUIView: View {
     @State var postView: PostView
     let shortBody: Bool
     let postService: PostService
+    @Binding var myself: MyUserInfo?
+    
     private static let maxPostLength: Int = 400
     
     @State var postBody: String? = nil
@@ -25,8 +27,7 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
-    
-    
+
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -157,7 +158,7 @@ struct PostUIView: View {
                 }
                 HStack(spacing: 4) {
                     Text("by")
-                    PersonDisplay(person: postView.creator)
+                    PersonDisplay(person: postView.creator, myself: $myself)
                 }
                 DateDisplayView(date: self.postView.post.published)
             }

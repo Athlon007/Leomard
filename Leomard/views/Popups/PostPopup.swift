@@ -13,6 +13,7 @@ struct PostPopup: View {
     let contentView: ContentView
     let commentService: CommentService
     let postService: PostService
+    @Binding var myself: MyUserInfo?
     
     @State var comments: [CommentView] = []
     @State var page: Int = 1
@@ -51,7 +52,7 @@ struct PostPopup: View {
                     .padding(.top, 10)
                     .padding(.bottom, 0)
                     List {
-                        PostUIView(postView: postView, shortBody: false, postService: self.postService)
+                        PostUIView(postView: postView, shortBody: false, postService: self.postService, myself: $myself)
                             .frame(
                                 minHeight: 0,
                                 alignment: .top
@@ -63,6 +64,7 @@ struct PostPopup: View {
                                     maxWidth: .infinity,
                                     alignment: .leading
                                 )
+                                .fontWeight(.semibold)
                             TextEditor(text: $commentText)
                                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
                                 .frame(
@@ -83,7 +85,7 @@ struct PostPopup: View {
                         }
                         Spacer()
                         ForEach(comments, id: \.self) { commentView in
-                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService)
+                            CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post, onDeleteAction: deleteComment(commentView: commentView))
                                 .onAppear {
                                     if commentView == self.comments.last {
                                         loadComments()
@@ -159,12 +161,15 @@ struct PostPopup: View {
     
     func createComment() {
         let comment = commentText
-        commentText = ""
+        
+        isSendingComment = true
         
         commentService.createComment(content: comment, post: postView.post) { result in
             switch result {
             case .success(let commentResponse):
                 comments.insert(commentResponse.commentView, at: 0)
+                commentText = ""
+                isSendingComment = false
             case .failure(let error):
                 print(error)
             }
@@ -173,5 +178,9 @@ struct PostPopup: View {
     
     func isTextFieldEmpty() -> Bool {
         return commentText.count == 0
+    }
+    
+    func deleteComment(commentView: CommentView) {
+        comments = comments.filter { $0 != commentView}
     }
 }

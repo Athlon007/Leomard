@@ -35,6 +35,7 @@
 		B091F8482A54874700F0DA32 /* PersonDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8472A54874700F0DA32 /* PersonDisplay.swift */; };
 		B091F84A2A54A54000F0DA32 /* DateDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8492A54A54000F0DA32 /* DateDisplayView.swift */; };
 		B091F84C2A55791C00F0DA32 /* CreateComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F84B2A55791C00F0DA32 /* CreateComment.swift */; };
+		B091F84E2A55968C00F0DA32 /* DeleteComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F84D2A55968C00F0DA32 /* DeleteComment.swift */; };
 		B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */; };
 		B0CEBE3F2A51982E00982D4D /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3E2A51982E00982D4D /* Option.swift */; };
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
@@ -136,6 +137,7 @@
 		B091F8472A54874700F0DA32 /* PersonDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDisplay.swift; sourceTree = "<group>"; };
 		B091F8492A54A54000F0DA32 /* DateDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateDisplayView.swift; sourceTree = "<group>"; };
 		B091F84B2A55791C00F0DA32 /* CreateComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateComment.swift; sourceTree = "<group>"; };
+		B091F84D2A55968C00F0DA32 /* DeleteComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteComment.swift; sourceTree = "<group>"; };
 		B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		B0CEBE3E2A51982E00982D4D /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B0CEBE402A51989D00982D4D /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -356,7 +358,7 @@
 				B0CEBE7E2A52D00F00982D4D /* User */,
 				B0CEBE7B2A52CF8400982D4D /* Person */,
 				B0CEBE762A52CF2000982D4D /* Community */,
-				B0CEBE4A2A519F2700982D4D /* dtos */,
+				B0CEBE4A2A519F2700982D4D /* Forms */,
 				B00695CE2A50C22200206C77 /* PostView.swift */,
 				B00695D02A50C23400206C77 /* Post.swift */,
 				B00695D62A50C58A00206C77 /* Counts.swift */,
@@ -373,14 +375,16 @@
 			path = Lemmy;
 			sourceTree = "<group>";
 		};
-		B0CEBE4A2A519F2700982D4D /* dtos */ = {
+		B0CEBE4A2A519F2700982D4D /* Forms */ = {
 			isa = PBXGroup;
 			children = (
 				B0CEBE4B2A519F3300982D4D /* Login.swift */,
 				B091F83F2A547A7E00F0DA32 /* CreatePostLike.swift */,
 				B091F8452A54816000F0DA32 /* CreateCommentLike.swift */,
+				B091F84B2A55791C00F0DA32 /* CreateComment.swift */,
+				B091F84D2A55968C00F0DA32 /* DeleteComment.swift */,
 			);
-			path = dtos;
+			path = Forms;
 			sourceTree = "<group>";
 		};
 		B0CEBE532A51D2E000982D4D /* Leomard */ = {
@@ -464,7 +468,6 @@
 				B0D7A15C2A533DAF00FE2852 /* CommentAggregates.swift */,
 				B0D7A1602A53524A00FE2852 /* CommentView.swift */,
 				B0D7A1662A5353E200FE2852 /* CommentSortType.swift */,
-				B091F84B2A55791C00F0DA32 /* CreateComment.swift */,
 			);
 			path = Comment;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				B0CEBE7A2A52CF6D00982D4D /* PersonBlockView.swift in Sources */,
 				B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */,
 				B091F84C2A55791C00F0DA32 /* CreateComment.swift in Sources */,
+				B091F84E2A55968C00F0DA32 /* DeleteComment.swift in Sources */,
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,

@@ -12,6 +12,7 @@ import MarkdownUI
 struct FeedView: View {
     let sessionService: SessionService
     let contentView: ContentView
+    @Binding var myself: MyUserInfo?
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     
@@ -72,7 +73,7 @@ struct FeedView: View {
                     ScrollViewReader { scrollProxy in
                         List {
                             ForEach(postsResponse.posts, id: \.self) { postView in
-                                PostUIView(postView: postView, shortBody: true, postService: self.postService!)
+                                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself)
                                     .onAppear {
                                         if postView == self.postsResponse.posts.last {
                                             self.loadPosts()

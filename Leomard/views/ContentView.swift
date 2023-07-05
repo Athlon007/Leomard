@@ -55,7 +55,7 @@ struct ContentView: View {
                         LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
                     }
                 default:
-                    FeedView(sessionService: sessionService, contentView: self, siteView: $siteView)
+                    FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                 }
@@ -72,7 +72,7 @@ struct ContentView: View {
                 self.loadUserData()
             }
             if self.openedPostView != nil {
-                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!)
+                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
             }
         }
     }
