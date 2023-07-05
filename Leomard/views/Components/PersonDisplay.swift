@@ -29,7 +29,7 @@ struct PersonDisplay: View {
                 }
                 
                 if person.name == "athlon" && person.actorId.starts(with: "https://lemm.ee/u/") {
-                    self.color = .pink
+                    self.color = .purple
                 }
             }
     }

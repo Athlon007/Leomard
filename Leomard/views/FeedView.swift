@@ -75,7 +75,6 @@ struct FeedView: View {
                                 PostUIView(postView: postView, shortBody: true, postService: self.postService!)
                                     .onAppear {
                                         if postView == self.postsResponse.posts.last {
-                                            print("Reached the end")
                                             self.loadPosts()
                                         }
                                     }

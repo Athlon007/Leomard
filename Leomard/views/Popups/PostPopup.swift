@@ -18,6 +18,10 @@ struct PostPopup: View {
     @State var page: Int = 1
     @State var lastPage: Bool = false
     
+    @State var commentText: String = ""
+    @FocusState var isSendingComment: Bool
+
+    
     var body: some View {
         ZStack {
             VStack {  }
@@ -52,6 +56,31 @@ struct PostPopup: View {
                                 minHeight: 0,
                                 alignment: .top
                             )
+                        Spacer()
+                        VStack {
+                            Text("Comment")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                            TextEditor(text: $commentText)
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                                .frame(
+                                    maxWidth: .infinity,
+                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                    maxHeight: .infinity,
+                                    alignment: .leading
+                                )
+                                .lineLimit(5...)
+                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                            Button("Send", action: createComment)
+                                .buttonStyle(.borderedProminent)
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .disabled(isTextFieldEmpty())
+                        }
                         Spacer()
                         ForEach(comments, id: \.self) { commentView in
                             CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService)
@@ -126,5 +155,23 @@ struct PostPopup: View {
                 print(error)
             }
         }
+    }
+    
+    func createComment() {
+        let comment = commentText
+        commentText = ""
+        
+        commentService.createComment(content: comment, post: postView.post) { result in
+            switch result {
+            case .success(let commentResponse):
+                comments.insert(commentResponse.commentView, at: 0)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func isTextFieldEmpty() -> Bool {
+        return commentText.count == 0
     }
 }

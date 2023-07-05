@@ -23,7 +23,7 @@ class CommentService: Service {
             } else {
                 return count
             }
-        }        
+        }
         return dotCount - 1
     }
     
@@ -43,7 +43,7 @@ class CommentService: Service {
                             getCommentResponse.comments = getCommentResponse.comments.filter { $0 != commentView}
                         }
                     }
-                      
+                    
                     completion(.success(getCommentResponse))
                 } catch {
                     completion(.failure(error))
@@ -80,20 +80,39 @@ class CommentService: Service {
     
     public func setCommentLike(comment: Comment, score: Int, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = CreateCommentLike(commentId: comment.id, score: score)
-            self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
-                switch (result) {
-                case .success(let apiResponse):
-                    if let data = apiResponse.data {
-                        do {
-                            let response = try self.decode(type: CommentResponse.self, data: data)
-                            completion(.success(response))
-                        } catch {
-                            completion(.failure(error))
-                        }
+        self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
+            switch (result) {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        let response = try self.decode(type: CommentResponse.self, data: data)
+                        completion(.success(response))
+                    } catch {
+                        completion(.failure(error))
                     }
-                case .failure(let error):
-                    completion(.failure(error))
                 }
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
+    }
+    
+    public func createComment(content: String, post: Post, parent: Comment? = nil, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let body = CreateComment(content: content, formId: nil, languageId: nil, parentId: parent?.id, postId: post.id)
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .post, body: body) { result in
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        let response = try self.decode(type: CommentResponse.self, data: data)
+                        completion(.success(response))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
