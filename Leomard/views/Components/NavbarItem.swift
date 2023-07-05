@@ -70,7 +70,8 @@ struct NavbarCommunityItem: View {
                     switch phase {
                     case .success(let image):
                         image.resizable()
-                            .interpolation(.high)
+                        .interpolation(.high)
+                        .antialiased(true)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, alignment: .leading)
                         .clipShape(Circle())

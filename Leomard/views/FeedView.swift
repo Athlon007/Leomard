@@ -65,37 +65,39 @@ struct FeedView: View {
         .frame(
             minWidth: 0,
             idealWidth: .infinity
-        )
-        
+        )        
         VStack {
             GeometryReader { proxy in
                 HStack {
-                    List {
-                        ForEach(postsResponse.posts, id: \.self) { postView in
-                            PostUIView(postView: postView, shortBody: true, postService: self.postService!)
-                                .onAppear {
-                                    if postView == self.postsResponse.posts.last {
-                                        self.loadPosts()
+                    ScrollViewReader { scrollProxy in
+                        List {
+                            ForEach(postsResponse.posts, id: \.self) { postView in
+                                PostUIView(postView: postView, shortBody: true, postService: self.postService!)
+                                    .onAppear {
+                                        if postView == self.postsResponse.posts.last {
+                                            print("Reached the end")
+                                            self.loadPosts()
+                                        }
                                     }
-                                }
-                                .onTapGesture {
-                                    self.contentView.openPost(postView: postView)
-                                }
-                                .contextMenu {
-                                    PostContextMenu(postView: postView)
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            Spacer()
-                                .frame(height: 0)
-                            
+                                    .onTapGesture {
+                                        self.contentView.openPost(postView: postView)
+                                    }
+                                    .contextMenu {
+                                        PostContextMenu(postView: postView)
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                Spacer()
+                                    .frame(height: 0)
+                                
+                            }
                         }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                     }
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: 600,
-                        maxHeight: .infinity,
-                        alignment: .center
-                    )
                     
                     if proxy.size.width > 1000 {
                         List {
@@ -133,6 +135,10 @@ struct FeedView: View {
     }
     
     func loadPosts() {
+        if self.isLoadingPosts {
+            return
+        }
+        
         self.isLoadingPosts = true
         if self.postsResponse.posts == [] {
             self.page = 1
