@@ -29,6 +29,7 @@ struct CommentUIView: View {
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool
     @State var isEditingComment: Bool = false
+    @State var updatedTimeAsString: String = ""
     
     var body: some View {
         if commentView.comment.deleted {
@@ -84,7 +85,8 @@ struct CommentUIView: View {
                         if commentView.comment.updated != nil {
                             HStack {
                                 Image(systemName: "pencil")
-                            }
+                                
+                            }.help(updatedTimeAsString)
                         }
                     }
                     .frame(
@@ -204,6 +206,12 @@ struct CommentUIView: View {
             .task {
                 if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
                     loadSubcomments()
+                }
+                
+                if commentView.comment.updated != nil {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
                 }
             }
         }
