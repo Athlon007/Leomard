@@ -28,6 +28,7 @@ struct CommentUIView: View {
     @State var isReplying: Bool = false
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool
+    @State var isEditingComment: Bool = false
     
     var body: some View {
         if commentView.comment.deleted {
@@ -43,7 +44,7 @@ struct CommentUIView: View {
             }
         } else if commentView.comment.removed {
             VStack {
-                Text("Comment remoevd by moderator.")
+                Text("Comment removed by moderator.")
                     .italic()
                     .foregroundColor(.secondary)
                     .frame(
@@ -80,6 +81,11 @@ struct CommentUIView: View {
                             }
                         }
                         DateDisplayView(date: self.commentView.comment.published)
+                        if commentView.comment.updated != nil {
+                            HStack {
+                                Image(systemName: "pencil")
+                            }
+                        }
                     }
                     .frame(
                         minWidth: 0,
@@ -88,6 +94,11 @@ struct CommentUIView: View {
                     )
                     HStack {
                         if commentView.creator.actorId == myself?.localUserView.person.actorId {
+                            Button(action: startEditComment) {
+                                Image(systemName: "pencil")
+                            }
+                            .buttonStyle(.link)
+                            .foregroundColor(.primary)
                             Button(action: deleteComment) {
                                 Image(systemName: "trash")
                             }
@@ -126,10 +137,10 @@ struct CommentUIView: View {
                         .onTapGesture {
                             hideComment()
                         }
-                    if isReplying {
+                    if isReplying || isEditingComment {
                         Spacer()
                         VStack {
-                            Text("Reply")
+                            Text(isEditingComment ? "Edit" :"Reply")
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .leading
@@ -146,7 +157,7 @@ struct CommentUIView: View {
                                 .lineLimit(5...)
                                 .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
                             HStack {
-                                Button("Send", action: createComment)
+                                Button(isEditingComment ? "Save" : "Send", action: onSaveSendCommentClick)
                                     .buttonStyle(.borderedProminent)
                                     .frame(
                                         alignment: .leading
@@ -255,7 +266,7 @@ struct CommentUIView: View {
         isReplying = true
     }
     
-    func createComment() {
+    func onSaveSendCommentClick() {
         if !isSendable() {
             return
         }
@@ -263,16 +274,33 @@ struct CommentUIView: View {
         isSendingComment = true
         let comment = commentText
         
-        commentService.createComment(content: comment, post: post, parent: commentView.comment) { result in
-            switch result {
-            case .success(let commentResponse):
-                DispatchQueue.main.sync {
-                    subComments.insert(commentResponse.commentView, at: 0)
-                    commentText = ""
-                    isSendingComment = false
+        if isEditingComment {
+            commentService.updateComment(comment: commentView.comment, content: comment) { result in
+                switch result {
+                case .success(let commentResponse):
+                    DispatchQueue.main.sync {
+                        commentView = commentResponse.commentView
+                        subComments.insert(commentResponse.commentView, at: 0)
+                        commentText = ""
+                        isSendingComment = false
+                        isEditingComment = false
+                    }
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
+            }
+        } else {
+            commentService.createComment(content: comment, post: post, parent: commentView.comment) { result in
+                switch result {
+                case .success(let commentResponse):
+                    DispatchQueue.main.sync {
+                        subComments.insert(commentResponse.commentView, at: 0)
+                        commentText = ""
+                        isSendingComment = false
+                    }
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }
@@ -284,6 +312,7 @@ struct CommentUIView: View {
     func cancelComment() {
         commentText = ""
         isReplying = false
+        isEditingComment = false
     }
     
     func deleteComment() {
@@ -295,6 +324,11 @@ struct CommentUIView: View {
                 print(error)
             }
         }
+    }
+    
+    func startEditComment() {
+        isEditingComment = true
+        commentText = commentView.comment.content
     }
     
 }

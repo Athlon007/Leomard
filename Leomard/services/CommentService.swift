@@ -127,4 +127,23 @@ class CommentService: Service {
             }
         }
     }
+    
+    public func updateComment(comment: Comment, content: String, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let body = EditComment(commentId: comment.id, content: content, formId: nil, languageId: nil)
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .put, body: body) { result in
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        let response = try self.decode(type: CommentResponse.self, data: data)
+                        completion(.success(response))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
