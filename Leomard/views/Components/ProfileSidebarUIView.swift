@@ -17,7 +17,7 @@ struct ProfileSidebarUIView: View {
     var body: some View {
         VStack {
             VStack {
-                ZStack {
+                ZStack(alignment: .bottomLeading) {
                     if personView.person.banner != nil {
                         AsyncImage(url: URL(string: personView.person.banner!)!, content: { phase in
                             switch phase {
@@ -50,8 +50,9 @@ struct ProfileSidebarUIView: View {
                             maxWidth: .infinity,
                             alignment: .bottomLeading
                         )
-                        .padding(.top, 35)
+                        .padding(.top, 10)
                         .padding(.leading, 10)
+                        .padding(.bottom, 0)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Spacer()
