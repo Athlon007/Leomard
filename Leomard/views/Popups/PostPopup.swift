@@ -15,7 +15,7 @@ struct PostPopup: View {
     let postService: PostService
     @Binding var myself: MyUserInfo?
     
-    @StateObject var comments: [CommentView] = []
+    @State var comments: [CommentView] = []
     @State var page: Int = 1
     @State var lastPage: Bool = false
     
