@@ -30,30 +30,41 @@ struct ProfileView: View {
     
     var body: some View {
         HStack {
+            if person != myself?.localUserView.person {
+                Button("Dismiss", action: contentView.dismissProfileView)
+                    .buttonStyle(.link)
+            }
+            Spacer()
             HStack {
-                Image(systemName: selectedBrowseOption.imageName)
-                    .padding(.trailing, 0)
-                Picker("", selection: $selectedBrowseOption) {
-                    ForEach(browseOptions, id: \.self) { method in
-                        Text(method.title)
+                HStack {
+                    Image(systemName: selectedBrowseOption.imageName)
+                        .padding(.trailing, 0)
+                    Picker("", selection: $selectedBrowseOption) {
+                        ForEach(browseOptions, id: \.self) { method in
+                            Text(method.title)
+                        }
+                    }
+                    .frame(maxWidth: 120)
+                    .padding(.leading, -10)
+                    .onChange(of: selectedBrowseOption) { value in
+                        self.reloadFeed()
                     }
                 }
-                .frame(maxWidth: 120)
-                .padding(.leading, -10)
-                .onChange(of: selectedBrowseOption) { value in
-                    self.reloadFeed()
-                    self.loadPersonDetails()
+                Button(action: reloadFeed) {
+                    Image(systemName: "arrow.clockwise")
                 }
             }
-            Button(action: reloadFeed) {
-                Image(systemName: "arrow.clockwise")
+            Spacer()
+            if person == myself?.localUserView.person {
+                Button("Logout", action: logout)
             }
-            Button("Logout", action: logout)
         }
         .frame(
             minWidth: 0,
             idealWidth: .infinity
         )
+        .padding(.leading)
+        .padding(.trailing)
         VStack {
             GeometryReader { proxy in
                 HStack {
@@ -94,6 +105,11 @@ struct ProfileView: View {
                                 )
 
                             default:
+                                if personDetails?.posts == [] {
+                                    Text("No posts found!")
+                                        .italic()
+                                        .foregroundColor(.secondary)
+                                }
                                 List {
                                     ForEach(personDetails!.posts, id: \.self) { postView in
                                         PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself)
@@ -168,9 +184,9 @@ struct ProfileView: View {
     }
     
     func loadPersonDetails() {
-        if page == 1 {
-            self.personDetails?.comments = []
-            self.personDetails?.posts = []
+        if page == 1 && self.personDetails != nil {
+            self.personDetails!.comments = []
+            self.personDetails!.posts = []
         }
         
         self.personService?.getPersonDetails(person: person, page: page, savedOnly: selectedBrowseOption.id == 2) { result in

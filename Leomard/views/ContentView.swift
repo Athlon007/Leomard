@@ -43,9 +43,7 @@ struct ContentView: View {
                 .navigationBarBackButtonHidden(true)
                 .frame(
                     minWidth: 50
-                    
                 )
-
             } detail: {
                 switch currentSelection.id {
                 case 3:
@@ -118,6 +116,10 @@ struct ContentView: View {
         self.profileOption.externalLink = nil
         
         loadUserData()
+    }
+    
+    func dismissProfileView() {
+        
     }
 }
 
