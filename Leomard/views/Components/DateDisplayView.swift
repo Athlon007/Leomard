@@ -11,46 +11,77 @@ import SwiftUI
 struct DateDisplayView: View {
     let date: Date
     @State var showRealTime: Bool = false
+    @State var noBrackets: Bool = false
+    @State var noTapAction: Bool = false
+    @State var prettyFormat: Bool = false
     
     var body: some View {
         if showRealTime {
-            Text("(\(formatDate()))")
+            Text(formatDate())
                 .onTapGesture {
                     toggleShowRealTime()
                 }
         } else {
-            let elapsed = DateFormatConverter.getElapsedTime(from: self.date)
-            if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
-                Text("(\(elapsed.seconds) seconds ago)")
-                    .onTapGesture {
-                        toggleShowRealTime()
-                    }
-            } else if elapsed.days == 0 && elapsed.hours == 0 {
-                Text("(\(elapsed.minutes) minutes ago)")
-                    .onTapGesture {
-                        toggleShowRealTime()
-                    }
-            } else if elapsed.days == 0 {
-                Text("(\(elapsed.hours) hours ago)")
-                    .onTapGesture {
-                        toggleShowRealTime()
-                    }
-            } else {
-                Text("(\(elapsed.days) days ago)")
-                    .onTapGesture {
-                        toggleShowRealTime()
-                    }
-            }
+            Text(getNiceText())
+                .onTapGesture {
+                    toggleShowRealTime()
+                }
         }
     }
     
     func toggleShowRealTime() {
+        if noTapAction {
+            return
+        }
+        
         self.showRealTime = !self.showRealTime
     }
     
     func formatDate() -> String {
+        if prettyFormat {
+            return formatDatePretty()
+        }
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: self.date)
+        var output = dateFormatter.string(from: self.date)
+        
+        if !noBrackets {
+            output = "(\(output))"
+        }
+        
+        return output
+    }
+    
+    func formatDatePretty() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy"
+        var output = dateFormatter.string(from: self.date)
+        
+        if !noBrackets {
+            output = "(\(output))"
+        }
+        
+        return output
+    }
+    
+    func getNiceText() -> String {
+        let elapsed = DateFormatConverter.getElapsedTime(from: self.date)
+        var output = ""
+        if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
+            output = "\(elapsed.seconds) seconds ago"
+        } else if elapsed.days == 0 && elapsed.hours == 0 {
+            output = "\(elapsed.minutes) minutes ago"
+        } else if elapsed.days == 0 {
+            output = "\(elapsed.hours) hours ago"
+        } else {
+            output = "\(elapsed.days) days ago"
+        }
+        
+        if !noBrackets {
+            output = "(\(output))"
+        }
+        
+        return output
     }
 }

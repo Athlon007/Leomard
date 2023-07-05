@@ -50,7 +50,9 @@ struct ContentView: View {
                 switch currentSelection.id {
                 case 3:
                     if self.sessionService.isSessionActive() {
-                        ProfileView(sessionService: sessionService, contentView: self)
+                        ProfileView(sessionService: sessionService, contentView: self, myself: $myUser)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
                     } else {
                         LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
                     }

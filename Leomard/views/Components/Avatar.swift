@@ -9,18 +9,19 @@ import Foundation
 import SwiftUI
 
 extension Image {
-    func AvatarFormatting() -> some View {
+    func AvatarFormatting(size: CGFloat) -> some View {
         return self.resizable()
             .interpolation(.high)
             .aspectRatio(contentMode: .fit)
             .scaledToFit()
-            .frame(width: 20, height: 20, alignment: .leading)
+            .frame(width: size, height: size, alignment: .leading)
             .clipShape(Circle())
     }
 }
 
 struct PersonAvatar: View {
     let person: Person
+    var size: CGFloat = 20
     
     var body: some View {
         if person.avatar != nil {
@@ -28,21 +29,22 @@ struct PersonAvatar: View {
                        content: { phase in
                 switch phase {
                 case .success(let image):
-                    image.AvatarFormatting()
+                    image.AvatarFormatting(size: size)
                 default:
                     Image(systemName: "person.circle")
-                        .AvatarFormatting()
+                        .AvatarFormatting(size: size)
                 }
             })
         } else {
             Image(systemName: "person.circle")
-                .AvatarFormatting()
+                .AvatarFormatting(size: size)
         }
     }
 }
 
 struct CommunityAvatar: View {
     let community: Community
+    var size: CGFloat = 20
     
     var body: some View {
         if community.icon != nil {
@@ -50,15 +52,15 @@ struct CommunityAvatar: View {
                        content: { phase in
                 switch phase {
                 case .success(let image):
-                    image.AvatarFormatting()
+                    image.AvatarFormatting(size: size)
                 default:
                     Image(systemName: "person.2.circle")
-                        .AvatarFormatting()
+                        .AvatarFormatting(size: size)
                 }
             })
         } else {
             Image(systemName: "person.2.circle")
-                .AvatarFormatting()
+                .AvatarFormatting(size: size)
         }
     }
 }

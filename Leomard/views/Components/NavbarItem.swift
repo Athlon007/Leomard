@@ -20,10 +20,10 @@ struct NavbarItem: View {
                     switch phase {
                     case .success(let image):
                         image.resizable()
-                            .AvatarFormatting()
+                            .AvatarFormatting(size: 20)
                     default:
                         Image(systemName: option.imageName)
-                            .AvatarFormatting()
+                            .AvatarFormatting(size: 20)
                     }
                 })
             } else {
