@@ -163,7 +163,7 @@ struct PostPopup: View {
         commentService.createComment(content: comment, post: postView.post) { result in
             switch result {
             case .success(let commentResponse):
-                DispatchQueue.main.async {
+                DispatchQueue.main.sync {
                     comments.insert(commentResponse.commentView, at: 0)
                     commentText = ""
                     isSendingComment = false

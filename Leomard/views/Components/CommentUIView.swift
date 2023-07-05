@@ -266,11 +266,11 @@ struct CommentUIView: View {
         commentService.createComment(content: comment, post: post, parent: commentView.comment) { result in
             switch result {
             case .success(let commentResponse):
-                DispatchQueue.main.async {
+                DispatchQueue.main.sync {
                     subComments.insert(commentResponse.commentView, at: 0)
+                    commentText = ""
+                    isSendingComment = false
                 }
-                commentText = ""
-                isSendingComment = false
             case .failure(let error):
                 print(error)
             }
