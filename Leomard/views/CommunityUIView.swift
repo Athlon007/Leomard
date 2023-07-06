@@ -167,7 +167,7 @@ struct CommunityUIView: View {
                         List {
                             VStack {
                                 if communityResponse != nil {
-                                    CommunityUISidebarView(communityResponse: communityResponse!)
+                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView)
                                 }
                             }
                             .frame(

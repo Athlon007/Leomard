@@ -8,7 +8,7 @@
 import Foundation
 
 struct GetCommunityResponse: Codable {
-    public let communityView: CommunityView
+    public var communityView: CommunityView
     public let discussionLanguages: [Int]
     public let moderators: [CommunityModeratorView]
     public let site: Site?

@@ -188,6 +188,21 @@ struct ContentView: View {
         showDismissInCommunityView = false
         openCommunity(community: community)
     }
+    
+    func reloadSubscriptionList() {
+        self.siteService!.getSite { result in
+            switch (result) {
+            case .success(let getSiteResponse):
+                self.myUser = getSiteResponse.myUser
+                self.siteView = getSiteResponse.siteView
+                if self.myUser != nil {
+                    self.followedCommunities = getSiteResponse.myUser!.follows
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

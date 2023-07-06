@@ -10,7 +10,9 @@ import SwiftUI
 import MarkdownUI
 
 struct CommunityUISidebarView: View {
-    let communityResponse: GetCommunityResponse
+    @State var communityResponse: GetCommunityResponse
+    let communityService: CommunityService
+    let contentView: ContentView
     
     var body: some View {
         VStack {
@@ -112,7 +114,16 @@ struct CommunityUISidebarView: View {
     }
     
     func onSubscribeButtonClick() {
-        
+        let subscribe = communityResponse.communityView.subscribed == .notSubscribed
+        communityService.followCommunity(community: communityResponse.communityView.community, follow: subscribe) { result in
+            switch result {
+            case .success(let response):
+                self.communityResponse.communityView = response.communityView
+                self.contentView.reloadSubscriptionList()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     func getSubscribeButtonText() -> String {
