@@ -30,7 +30,7 @@ struct ContentView: View {
     @State var postHidden: Bool = false
     @State var openedPerson: Person? = nil
     @State var openedCommunity: Community? = nil
-
+    @State var showDismissInCommunityView: Bool = true
     
     var body: some View {
         ZStack {
@@ -40,7 +40,8 @@ struct ContentView: View {
                     profileOption: $profileOption,
                     currentSelection: $currentSelection,
                     followedCommunities: $followedCommunities,
-                    contentView: self
+                    contentView: self,
+                    currentCommunity: $openedCommunity
                 )
                 .listStyle(SidebarListStyle())
                 .navigationBarBackButtonHidden(true)
@@ -79,7 +80,7 @@ struct ContentView: View {
                     
                     if openedCommunity != nil {
                         VStack {
-                            CommunityUIView(communityId: openedCommunity!.id, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self)
+                            CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, showDismissInCommunityView: $showDismissInCommunityView)
                         }
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
@@ -169,20 +170,25 @@ struct ContentView: View {
     
     func openCommunity(community: Community) {
         dismissProfileView()
-        self.openedCommunity = community
+        self.openedCommunity = nil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // A small hack to force SwiftUI to redraw the ComunityView
+            self.openedCommunity = community
+        }
         self.postHidden = true
     }
     
     func dismissCommunity() {
         self.openedCommunity = nil
         self.postHidden = false
+        showDismissInCommunityView = true
+    }
+    
+    func openCommunityFromSidebar(community: Community) {
+        showDismissInCommunityView = false
+        openCommunity(community: community)
     }
 }
-
-enum FocusField: Hashable {
-    case field
-}
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

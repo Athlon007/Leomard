@@ -9,12 +9,13 @@ import Foundation
 import SwiftUI
 
 struct CommunityUIView: View {
-    let communityId: Int
+    let community: Community
     let sessionService: SessionService
     let postService: PostService
     let commentService: CommentService
     let contentView: ContentView
     @State var myself: MyUserInfo?
+    @Binding var showDismissInCommunityView: Bool
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     @State var browseOptions: [Option] = [
@@ -34,8 +35,10 @@ struct CommunityUIView: View {
     
     var body: some View {
         HStack {
-            Button("Dismiss", action: contentView.dismissCommunity)
-                .buttonStyle(.link)
+            if showDismissInCommunityView {
+                Button("Dismiss", action: contentView.dismissCommunity)
+                    .buttonStyle(.link)
+            }
             Spacer()
             HStack {
                 HStack {
@@ -198,7 +201,7 @@ struct CommunityUIView: View {
     }
     
     func loadCommunity() {
-        self.communityService?.getCommunity(id: self.communityId) { result in
+        self.communityService?.getCommunity(id: self.community.id) { result in
             switch result {
             case .success(let response):
                 self.communityResponse = response

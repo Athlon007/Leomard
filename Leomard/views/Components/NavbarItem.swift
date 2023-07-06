@@ -12,6 +12,7 @@ struct NavbarItem: View {
     let option: Option
     @Binding var currentSelection: Option
     let contentView: ContentView
+    @Binding var currentCommunity: Community?
     
     var body: some View {
         HStack {
@@ -35,26 +36,29 @@ struct NavbarItem: View {
                         width: 20,
                         alignment: .leading
                     )
-                    .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
+                    .foregroundColor(currentSelection == option && currentCommunity == nil ? Color(.linkColor) : Color(.labelColor))
             }
             Text(option.title)
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading
                 )
-                .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
+                .foregroundColor(currentSelection == option && currentCommunity == nil ? Color(.linkColor) : Color(.labelColor))
             Spacer()
         }
         .padding(.bottom, 10)
         .onTapGesture {
             self.currentSelection = option
             contentView.dismissProfileView()
+            contentView.dismissCommunity()
         }
     }
 }
 
 struct NavbarCommunityItem: View {
     let community: Community
+    @Binding var currentCommunity: Community?
+    let contentView: ContentView
     
     var body: some View {
         HStack {
@@ -93,11 +97,12 @@ struct NavbarCommunityItem: View {
                     maxWidth: .infinity,
                     alignment: .leading
                 )
+                .foregroundColor(currentCommunity == community ? Color(.linkColor) : Color(.labelColor))
             Spacer()
         }
         .padding(.bottom, 10)
         .onTapGesture {
-            // TODO: Load community.
+            self.contentView.openCommunityFromSidebar(community: community)
         }
         .background(Color.gray.opacity(0))
     }
