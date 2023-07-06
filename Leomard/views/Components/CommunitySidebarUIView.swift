@@ -80,6 +80,18 @@ struct CommunityUISidebarView: View {
                 .padding()
                 .padding(.top, -20)
                 Spacer()
+                HStack() {
+                    Button(getSubscribeButtonText(), action: onSubscribeButtonClick)
+                        .buttonStyle(.borderedProminent)
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                            )
+                }
+                .padding()
+                .padding(.top, 0)
+                .padding(.bottom, 0)
+                .frame(maxWidth: .infinity)
                 if let description = communityResponse.communityView.community.description {
                     Markdown(MarkdownContent(description))
                         .lineLimit(nil)
@@ -97,5 +109,13 @@ struct CommunityUISidebarView: View {
             )
             .background(Color(.textBackgroundColor))
         }
+    }
+    
+    func onSubscribeButtonClick() {
+        
+    }
+    
+    func getSubscribeButtonText() -> String {
+        return communityResponse.communityView.subscribed == .notSubscribed ? "Subscribe" : "Unsubscribe"
     }
 }

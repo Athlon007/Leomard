@@ -26,4 +26,11 @@ enum SubscribedType: String, Codable {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid subscribed type value: \(rawValue)")
         }
     }
+    
+    var description: String {
+        let lowercasedString = self.rawValue
+        let firstCharacter = String(lowercasedString.prefix(1)).capitalized
+        let remainingCharacters = String(lowercasedString.dropFirst())
+        return firstCharacter + remainingCharacters
+    }
 }
