@@ -27,6 +27,7 @@ struct ContentView: View {
     @State var postService: PostService?
     
     @State var openedPostView: PostView? = nil
+    @State var postHidden: Bool = false
     @State var openedPerson: Person? = nil
 
     
@@ -90,6 +91,7 @@ struct ContentView: View {
 
             if self.openedPostView != nil {
                 PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
+                    .opacity(postHidden ? 0 : 1)
             }
         }
     }
@@ -118,6 +120,8 @@ struct ContentView: View {
     }
     
     func openPost(postView: PostView) {
+        postHidden = false
+        self.openedPostView = nil
         self.openedPostView = postView
     }
     
@@ -131,17 +135,25 @@ struct ContentView: View {
         followedCommunities.removeAll()
         self.profileOption.title = "Profile"
         self.profileOption.externalLink = nil
+        postHidden = false
+        openedPostView = nil
+        openedPerson = nil
         
         loadUserData()
     }
     
     func openPerson(profile: Person) {
         self.openedPerson = profile
+        self.postHidden = true
     }
     
     func dismissProfileView() {
         self.openedPerson = nil
-        
+        postHidden = false
+    }
+    
+    func hidePost() {
+        postHidden = true
     }
 }
 

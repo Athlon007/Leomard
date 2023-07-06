@@ -61,6 +61,7 @@ struct CommentUIView: View {
                         PersonDisplay(person: commentView.creator, myself: $myself)
                             .onTapGesture {
                                 contentView.openPerson(profile: commentView.creator)
+
                             }
                         HStack {
                             Image(systemName: "arrow.up")
@@ -134,6 +135,7 @@ struct CommentUIView: View {
                 } else {
                     let content = MarkdownContent(commentView.comment.content)
                     Markdown(content)
+                        .lineLimit(nil)
                         .frame(
                             minWidth: 0,
                             maxWidth: .infinity,

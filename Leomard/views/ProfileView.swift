@@ -71,6 +71,11 @@ struct ProfileView: View {
                         if personDetails != nil {
                             switch selectedBrowseOption.id {
                             case 0:
+                                if personDetails?.comments == [] {
+                                    Text("No comments found!")
+                                        .italic()
+                                        .foregroundColor(.secondary)
+                                }
                                 List {
                                     ForEach(personDetails!.comments, id: \.self) { commentView in
                                         VStack {
@@ -80,6 +85,10 @@ struct ProfileView: View {
                                                         self.loadPersonDetails()
                                                     }
                                                 }
+                                                .frame(
+                                                    maxWidth: .infinity,
+                                                    maxHeight: .infinity
+                                                    )
                                                 .padding(.top, 15)
                                                 .padding(.bottom, 15)
                                                 .padding(.trailing, 15)
@@ -94,8 +103,7 @@ struct ProfileView: View {
                                             .frame(height: 0)
                                         
                                     }
-                                }
-                                
+                                }               
                                 .frame(
                                     minWidth: 0,
                                     maxWidth: 600,
