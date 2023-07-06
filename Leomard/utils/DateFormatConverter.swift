@@ -21,7 +21,13 @@ struct DateFormatConverter
             return Date()
         }
         
-        return date
+        // Convert from GMT to local time
+        let calendar = Calendar.current
+        let currentTimeZone = TimeZone.current
+        let gmtOffset = currentTimeZone.secondsFromGMT(for: date)
+        let convertedDate = calendar.date(byAdding: .second, value: gmtOffset, to: date)!
+        
+        return convertedDate
     }
     
     static func getElapsedTime(from date: Date) -> ElapsedTime {
