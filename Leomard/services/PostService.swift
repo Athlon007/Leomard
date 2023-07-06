@@ -77,4 +77,28 @@ class PostService: Service {
             }
         }
     }
+    
+    public func getPostsForCommunity(community: Community, page: Int, completion: @escaping (Result<GetPostsResponse, Error>) -> Void) {
+        let url = sessionService.getLemmyInstance()
+        requestHandler.makeApiRequest(host: url, request: "/post/list?community_id=\(community.id)&page=\(String(page))", method: .get) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        var responses = try self.decode(type: GetPostsResponse.self, data: data)
+                        responses.posts.forEach { postView in
+                            if postView.post.nsfw {
+                                responses.posts = responses.posts.filter { $0 != postView}
+                            }
+                        }
+                        completion(.success(responses))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

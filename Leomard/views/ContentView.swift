@@ -29,6 +29,7 @@ struct ContentView: View {
     @State var openedPostView: PostView? = nil
     @State var postHidden: Bool = false
     @State var openedPerson: Person? = nil
+    @State var openedCommunity: Community? = nil
 
     
     var body: some View {
@@ -70,6 +71,15 @@ struct ContentView: View {
                             ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
+                        }
+                        .listStyle(SidebarListStyle())
+                        .scrollContentBackground(.hidden)
+                        .background(.thickMaterial)
+                    }
+                    
+                    if openedCommunity != nil {
+                        VStack {
+                            CommunityUIView(communityId: openedCommunity!.id, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self)
                         }
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
@@ -143,6 +153,7 @@ struct ContentView: View {
     }
     
     func openPerson(profile: Person) {
+        dismissCommunity()
         self.openedPerson = profile
         self.postHidden = true
     }
@@ -154,6 +165,17 @@ struct ContentView: View {
     
     func hidePost() {
         postHidden = true
+    }
+    
+    func openCommunity(community: Community) {
+        dismissProfileView()
+        self.openedCommunity = community
+        self.postHidden = true
+    }
+    
+    func dismissCommunity() {
+        self.openedCommunity = nil
+        self.postHidden = false
     }
 }
 

@@ -54,6 +54,29 @@ class CommentService: Service {
         }
     }
     
+    public func getCommentsForCommunity(community: Community, page: Int, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
+        let host = sessionService.getLemmyInstance()
+        requestHandler.makeApiRequest(host: host, request: "/comment/list?community_id=\(String(community.id))", method: .get) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        var response = try self.decode(type: GetCommentsResponse.self, data: data)
+                        if page > 1 && response.comments.count > 0 {
+                            response.comments.removeFirst()
+                        }
+                        
+                        completion(.success(response))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     public func getSubcomments(comment: Comment, page: Int, level: Int, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
         let commentId = comment.id
         let host = self.sessionService.getLemmyInstance()

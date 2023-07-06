@@ -164,6 +164,9 @@ struct PostUIView: View {
                     Text(self.postView.community.name)
                         .fontWeight(.semibold)
                 }
+                .onTapGesture {
+                    self.contentView.openCommunity(community: postView.community)
+                }
                 HStack(spacing: 4) {
                     Text("by")
                     PersonDisplay(person: postView.creator, myself: $myself)

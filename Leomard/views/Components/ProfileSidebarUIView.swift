@@ -10,8 +10,6 @@ import SwiftUI
 import MarkdownUI
 
 struct ProfileSidebarUIView: View {
-    //let person: Person
-    //let aggregates: PersonAggregates
     let personView: PersonView
     
     var body: some View {
