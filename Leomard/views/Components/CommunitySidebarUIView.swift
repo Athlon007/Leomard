@@ -89,6 +89,8 @@ struct CommunityUISidebarView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                             )
+                        .padding(.top, -20)
+                        .padding(.bottom, -20)
                 }
                 .padding()
                 .padding(.top, 0)
@@ -103,6 +105,7 @@ struct CommunityUISidebarView: View {
                             alignment: .leading
                         )
                         .padding()
+                        .padding(.top, -20)
                     Spacer()
                 }
             }
