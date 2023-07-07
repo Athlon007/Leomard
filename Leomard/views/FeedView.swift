@@ -79,9 +79,6 @@ struct FeedView: View {
                                             self.loadPosts()
                                         }
                                     }
-                                    .contextMenu {
-                                        PostContextMenu(postView: postView)
-                                    }
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 Spacer()
                                 

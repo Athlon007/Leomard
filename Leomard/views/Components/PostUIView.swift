@@ -251,11 +251,11 @@ struct PostUIView: View {
                 url = URL(string: postView.post.url!)
             }
         }
-        .contextMenu {
-            PostContextMenu(postView: self.postView)
-        }
         .onTapGesture {
             self.contentView.openPost(postView: self.postView)
+        }
+        .contextMenu {
+            PostContextMenu(postView: self.postView)
         }
     }
     

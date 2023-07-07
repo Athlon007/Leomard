@@ -133,8 +133,7 @@ struct ProfileView: View {
                                             }
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         Spacer()
-                                            .frame(height: 0)
-                                        
+                                            .frame(height: 0)   
                                     }
                                 }
                                 .frame(
