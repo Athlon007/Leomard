@@ -55,7 +55,18 @@ struct DateDisplayView: View {
     
     func formatDatePretty() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM yyyy"
+
+        let day = Calendar.current.dateComponents([.day], from: date).day
+        var suffix = "th"
+        if day == 1 || day == 21 || day == 31 {
+            suffix = "st"
+        } else if day == 2 || day == 22 {
+            suffix = "nd"
+        } else if day == 3 || day == 23 {
+            suffix = "rd"
+        }
+        
+        dateFormatter.dateFormat = "d'\(suffix)' MMMM yyyy"
         var output = dateFormatter.string(from: self.date)
         
         if !noBrackets {

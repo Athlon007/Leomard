@@ -73,7 +73,15 @@ struct CommunityUISidebarView: View {
                     HStack(spacing: 7) {
                         Image(systemName: "calendar.badge.plus")
                         DateDisplayView(date: communityResponse.communityView.counts.published, showRealTime: true, noBrackets: true, noTapAction: true, prettyFormat: true)
-                    }
+                    }.help("Created")
+                    HStack(spacing: 7) {
+                        Image(systemName: "person.3")
+                        Text(String(communityResponse.communityView.counts.subscribers))
+                    }.help("Subscribers")
+                    HStack(spacing: 7) {
+                        Image(systemName: "eye")
+                        Text(String(communityResponse.communityView.counts.usersActiveHalfYear))
+                    }.help("Active Users (6 months)")
                 }
                 .frame(
                     maxWidth: .infinity,
