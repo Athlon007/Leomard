@@ -8,9 +8,17 @@
 import Foundation
 
 struct SearchResponse: Codable {
-    public let comments: [CommentView]
-    public let communities: [CommentView]
-    public let posts: [PostView]
-    public let type: [SearchType]
-    public let users: [PersonView]
+    public var comments: [CommentView]
+    public var communities: [CommentView]
+    public var posts: [PostView]
+    public let type_: SearchType
+    public var users: [PersonView]
+    
+    init() {
+        comments = []
+        communities = []
+        posts = []
+        type_ = .all
+        users = []
+    }
 }

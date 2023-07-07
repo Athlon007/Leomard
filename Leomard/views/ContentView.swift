@@ -53,7 +53,9 @@ struct ContentView: View {
                     VStack {
                         switch currentSelection.id {
                         case 2:
-                            SearchView(sessionService: sessionService, contentView: self)
+                            SearchView(sessionService: sessionService, postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
                         case 3:
                             if self.sessionService.isSessionActive() {
                                 ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)

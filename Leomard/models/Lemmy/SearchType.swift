@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SearchType: String, Codable {
+enum SearchType: String, Codable, CustomStringConvertible {
     case all
     case comments
     case posts

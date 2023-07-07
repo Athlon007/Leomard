@@ -43,6 +43,8 @@ final class RequestHandler {
                 urlString += "&auth=\(jwt!)"
             }
         }
+        
+        print(urlString)
              
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
