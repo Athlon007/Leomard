@@ -52,6 +52,8 @@ struct ContentView: View {
                 ZStack {
                     VStack {
                         switch currentSelection.id {
+                        case 2:
+                            SearchView(sessionService: sessionService, contentView: self)
                         case 3:
                             if self.sessionService.isSessionActive() {
                                 ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
