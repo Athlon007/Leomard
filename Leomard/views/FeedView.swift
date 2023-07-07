@@ -66,7 +66,7 @@ struct FeedView: View {
         .frame(
             minWidth: 0,
             idealWidth: .infinity
-        )        
+        )
         VStack {
             GeometryReader { proxy in
                 HStack {
@@ -81,7 +81,6 @@ struct FeedView: View {
                                     }
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 Spacer()
-                                
                             }
                         }
                         .frame(
