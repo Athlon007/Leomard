@@ -81,24 +81,16 @@ struct PostContextMenu: View {
         let url = URL(string: imageLink)!
         URLSession.shared.dataTask(with: url) { (data, _, error) in
             guard let data = data, error == nil else {
-                // Handle error
                 return
             }
             
-            // Create a file name for the image
             let fileName = url.lastPathComponent
-            
-            // Get the Downloads directory URL
             guard let downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
-                // Handle directory not found error
                 return
             }
-            
-            // Append the file name to the Downloads directory URL
             let fileURL = downloadsDirectory.appendingPathComponent(fileName)
             
             do {
-                // Save the image data to the file URL
                 try data.write(to: fileURL)
                 print("Image saved successfully!")
                 
@@ -106,7 +98,6 @@ struct PostContextMenu: View {
                     NSWorkspace.shared.open(fileURL)
                 }
             } catch {
-                // Handle error while saving
                 print("Error saving image: \(error.localizedDescription)")
             }
         }.resume()
