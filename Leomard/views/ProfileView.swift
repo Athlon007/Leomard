@@ -103,7 +103,7 @@ struct ProfileView: View {
                                             .frame(height: 0)
                                         
                                     }
-                                }               
+                                }
                                 .frame(
                                     minWidth: 0,
                                     maxWidth: 600,

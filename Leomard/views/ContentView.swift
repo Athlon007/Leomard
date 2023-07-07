@@ -137,7 +137,7 @@ struct ContentView: View {
         self.openedPostView = nil
         self.openedPostView = postView
     }
-    
+     
     func closePost() {
         self.openedPostView = nil
     }

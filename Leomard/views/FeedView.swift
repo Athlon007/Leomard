@@ -79,15 +79,11 @@ struct FeedView: View {
                                             self.loadPosts()
                                         }
                                     }
-                                    .onTapGesture {
-                                        self.contentView.openPost(postView: postView)
-                                    }
                                     .contextMenu {
                                         PostContextMenu(postView: postView)
                                     }
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 Spacer()
-                                    .frame(height: 0)
                                 
                             }
                         }

@@ -254,6 +254,9 @@ struct PostUIView: View {
         .contextMenu {
             PostContextMenu(postView: self.postView)
         }
+        .onTapGesture {
+            self.contentView.openPost(postView: self.postView)
+        }
     }
     
     func likePost() {
