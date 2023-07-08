@@ -68,15 +68,26 @@ struct ProfileView: View {
             GeometryReader { proxy in
                 HStack {
                     ScrollViewReader { scrollProxy in
-                        if personDetails != nil {
-                            switch selectedBrowseOption.id {
-                            case 0:
-                                if personDetails?.comments == [] {
-                                    Text("No comments found!")
-                                        .italic()
-                                        .foregroundColor(.secondary)
+                        List {
+                            if personDetails != nil {
+                                if proxy.size.width < 1000 {
+                                    VStack {
+                                        ProfileSidebarUIView(personView: personDetails!.personView)
+                                    }
+                                    .frame(
+                                        minWidth: 0,
+                                        maxWidth: .infinity
+                                    )
+                                    .cornerRadius(4)
+                                    .padding(.bottom, 15)
                                 }
-                                List {
+                                switch selectedBrowseOption.id {
+                                case 0:
+                                    if personDetails?.comments == [] {
+                                        Text("No comments found!")
+                                            .italic()
+                                            .foregroundColor(.secondary)
+                                    }
                                     ForEach(personDetails!.comments, id: \.self) { commentView in
                                         VStack {
                                             CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
@@ -88,7 +99,7 @@ struct ProfileView: View {
                                                 .frame(
                                                     maxWidth: .infinity,
                                                     maxHeight: .infinity
-                                                    )
+                                                )
                                                 .padding(.top, 15)
                                                 .padding(.bottom, 15)
                                                 .padding(.trailing, 15)
@@ -103,21 +114,12 @@ struct ProfileView: View {
                                             .frame(height: 0)
                                         
                                     }
-                                }
-                                .frame(
-                                    minWidth: 0,
-                                    maxWidth: 600,
-                                    maxHeight: .infinity,
-                                    alignment: .center
-                                )
-
-                            default:
-                                if personDetails?.posts == [] {
-                                    Text("No posts found!")
-                                        .italic()
-                                        .foregroundColor(.secondary)
-                                }
-                                List {
+                                default:
+                                    if personDetails?.posts == [] {
+                                        Text("No posts found!")
+                                            .italic()
+                                            .foregroundColor(.secondary)
+                                    }
                                     ForEach(personDetails!.posts, id: \.self) { postView in
                                         PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
                                             .onAppear {
@@ -127,17 +129,18 @@ struct ProfileView: View {
                                             }
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         Spacer()
-                                            .frame(height: 0)   
+                                            .frame(height: 0)
                                     }
+                                    
                                 }
-                                .frame(
-                                    minWidth: 0,
-                                    maxWidth: 600,
-                                    maxHeight: .infinity,
-                                    alignment: .center
-                                )
                             }
                         }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                     }
                     
                     if proxy.size.width > 1000 {

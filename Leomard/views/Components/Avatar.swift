@@ -66,3 +66,25 @@ struct CommunityAvatar: View {
     }
 }
 
+struct SiteAvatar: View {
+    let site: Site
+    var size: CGFloat = 20
+    
+    var body: some View {
+        if let icon = site.icon {
+            AsyncImage(url: URL(string: icon),
+                       content: { phase in
+                switch phase {
+                case .success(let image):
+                    image.AvatarFormatting(size: size)
+                default:
+                    Image(systemName: "person.2.circle")
+                        .AvatarFormatting(size: size)
+                }
+            })
+        } else {
+            Image(systemName: "person.2.circle")
+                .AvatarFormatting(size: size)
+        }
+    }
+}

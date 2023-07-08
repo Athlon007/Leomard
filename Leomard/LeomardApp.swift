@@ -10,8 +10,7 @@ import SwiftUI
 @main
 struct LeomardApp: App {
     @Environment(\.openWindow) private var openWindow
-    //@StateObject var userPreferences: UserPreferences = UserPreferences()
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -19,6 +18,7 @@ struct LeomardApp: App {
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
+        .windowResizability(.contentSize)
         .commands {
             CommandGroup(after: .appInfo) {
                 Button("Preferences", action: showPreferences)
@@ -27,9 +27,11 @@ struct LeomardApp: App {
         }
         Window("Preferences", id: "preferences") {
             PreferencesView()
+                .frame(minWidth: 600, maxWidth: 600, maxHeight: 800)
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
+        .windowResizability(.contentSize)
     }
     
     func showPreferences() {

@@ -55,13 +55,36 @@ struct PreferencesView: View {
             .listStyle(SidebarListStyle())
             .navigationBarBackButtonHidden(true)
         } detail: {
-            switch currentSelection {
-            case self.preferenceOptions[0]:
-                Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
-                Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
-            default:
-                Text("")
+            List {
+                switch currentSelection {
+                case self.preferenceOptions[0]:
+                    Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
+                        ForEach(self.userPreferences.sortTypes, id: \.self) { method in
+                            Text(String(describing: method))
+                        }
+                    }
+                    Picker("Default comment sort method", selection: self.userPreferences.$commentSortMethod) {
+                        ForEach(CommentSortType.allCases, id: \.self) { method in
+                            Text(String(describing: method))
+                        }
+                    }
+                    Picker("Default listing type", selection: self.userPreferences.$listType) {
+                        ForEach(ListingType.allCases, id: \.self) { method in
+                            Text(String(describing: method))
+                        }
+                    }
+                    Spacer()
+                    Text("NSFW")
+                    Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
+                    Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
+                default:
+                    Text("")
+                }
             }
+            .padding(.leading)
+            .padding(.trailing)
+            .listStyle(SidebarListStyle())
+            .scrollContentBackground(.hidden)
         }
         .task {
             self.currentSelection = self.preferenceOptions[0]

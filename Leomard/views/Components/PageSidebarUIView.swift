@@ -16,22 +16,18 @@ struct PageSidebarUIView: View {
         VStack {
             VStack {
                 if siteView!.site.banner != nil {
-                    VStack {
-                        let content = MarkdownContent("![](" + siteView!.site.banner! + ")")
-                        Markdown(content)
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity,
-                                maxHeight: 200,
-                                alignment: .leading
-                            )
-                    }
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 0,
-                        maxHeight: 200
-                    )
+                    AsyncImage(url: URL(string: siteView!.site.banner!)!, content: { phase in
+                        switch phase {
+                        case .success(let image):
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .opacity(0.1)
+                                .frame(maxWidth: 600, maxHeight: .infinity)
+                        default:
+                            VStack {}
+                        }
+                    })
+                    .padding(.trailing, -25)
                 }
                 Text(siteView!.site.name)
                     .bold()

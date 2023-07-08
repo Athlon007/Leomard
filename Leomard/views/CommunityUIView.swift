@@ -97,6 +97,7 @@ struct CommunityUIView: View {
                                         alignment: .center
                                     )
                                     .cornerRadius(4)
+                                    .padding(.bottom, 15)
                                 }
                                 switch selectedBrowseOption.id {
                                 case 1:

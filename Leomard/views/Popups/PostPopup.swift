@@ -18,6 +18,7 @@ struct PostPopup: View {
     @State var comments: [CommentView] = []
     @State var page: Int = 1
     @State var lastPage: Bool = false
+    @State var sortType: CommentSortType = UserPreferences().commentSortMethod
     
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool
@@ -84,6 +85,18 @@ struct PostPopup: View {
                                 .disabled(isTextFieldEmpty())
                         }
                         Spacer()
+                        Picker("Sort By", selection: $sortType) {
+                            ForEach(CommentSortType.allCases, id: \.self) { method in
+                                Text(String(describing: method))
+                            }
+                        }
+                        .onChange(of: sortType) { value in
+                            page = 1
+                            self.comments = []
+                            loadComments()
+                        }
+                        .frame(maxWidth: 150)
+                        Spacer()
                         ForEach(comments, id: \.self) { commentView in
                             CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: postView.post, contentView: contentView)
                                 .onAppear {
@@ -135,14 +148,10 @@ struct PostPopup: View {
     }
     
     func loadComments() {        
-        self.commentService.getAllComments(post: postView.post, page: page) { result in
+        self.commentService.getAllComments(post: postView.post, page: page, sortType: sortType) { result in
             switch result {
             case .success(let getCommentView) :
-                if self.comments == [] {
-                    self.comments = getCommentView.comments
-                } else {
-                    self.comments = self.comments + getCommentView.comments
-                }
+                self.comments += getCommentView.comments
                 page += 1
                 
                 if getCommentView.comments == [] {
