@@ -67,6 +67,9 @@ struct SearchView: View {
         )
         .padding(.leading)
         .padding(.trailing)
+        .task {
+            searchFocused = true
+        }
         VStack {
             HStack {
                 ScrollViewReader { scrollProxy in

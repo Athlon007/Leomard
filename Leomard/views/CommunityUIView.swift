@@ -85,15 +85,26 @@ struct CommunityUIView: View {
             GeometryReader { proxy in
                 HStack {
                     ScrollViewReader { scrollProxy in
-                        if communityResponse != nil {
-                            switch selectedBrowseOption.id {
-                            case 1:
-                                if self.comments == [] {
-                                    Text("No comments found!")
-                                        .italic()
-                                        .foregroundColor(.secondary)
+                        List {
+                            if communityResponse != nil {
+                                if proxy.size.width < 1000 {
+                                    VStack {
+                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView)
+                                    }
+                                    .frame(
+                                        minWidth: 0,
+                                        maxWidth: .infinity,
+                                        alignment: .center
+                                    )
+                                    .cornerRadius(4)
                                 }
-                                List {
+                                switch selectedBrowseOption.id {
+                                case 1:
+                                    if self.comments == [] {
+                                        Text("No comments found!")
+                                            .italic()
+                                            .foregroundColor(.secondary)
+                                    }
                                     ForEach(comments, id: \.self) { commentView in
                                         VStack {
                                             CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
@@ -120,20 +131,18 @@ struct CommunityUIView: View {
                                             .frame(height: 0)
                                         
                                     }
-                                }
-                                .frame(
-                                    minWidth: 0,
-                                    maxWidth: 600,
-                                    maxHeight: .infinity,
-                                    alignment: .center
-                                )
-                            default:
-                                if self.posts == [] {
-                                    Text("No posts found!")
-                                        .italic()
-                                        .foregroundColor(.secondary)
-                                }
-                                List {
+                                    .frame(
+                                        minWidth: 0,
+                                        maxWidth: 600,
+                                        maxHeight: .infinity,
+                                        alignment: .center
+                                    )
+                                default:
+                                    if self.posts == [] {
+                                        Text("No posts found!")
+                                            .italic()
+                                            .foregroundColor(.secondary)
+                                    }
                                     ForEach(posts, id: \.self) { postView in
                                         PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
                                             .onAppear {
@@ -150,17 +159,16 @@ struct CommunityUIView: View {
                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         Spacer()
                                             .frame(height: 0)
-                                        
                                     }
                                 }
-                                .frame(
-                                    minWidth: 0,
-                                    maxWidth: 600,
-                                    maxHeight: .infinity,
-                                    alignment: .center
-                                )
                             }
                         }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                     }
                     
                     if proxy.size.width > 1000 {

@@ -55,6 +55,8 @@
 		B091F8712A58769100F0DA32 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8702A58769100F0DA32 /* SearchView.swift */; };
 		B091F8742A596CEA00F0DA32 /* CommunitySearchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8732A596CEA00F0DA32 /* CommunitySearchUIView.swift */; };
 		B091F8762A59998500F0DA32 /* UserSearchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8752A59998500F0DA32 /* UserSearchUIView.swift */; };
+		B091F8782A59BAE700F0DA32 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8772A59BAE700F0DA32 /* PreferenceView.swift */; };
+		B091F87A2A59C5AE00F0DA32 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8792A59C5AE00F0DA32 /* UserPreferences.swift */; };
 		B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */; };
 		B0CEBE3F2A51982E00982D4D /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3E2A51982E00982D4D /* Option.swift */; };
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
@@ -176,6 +178,8 @@
 		B091F8702A58769100F0DA32 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		B091F8732A596CEA00F0DA32 /* CommunitySearchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchUIView.swift; sourceTree = "<group>"; };
 		B091F8752A59998500F0DA32 /* UserSearchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchUIView.swift; sourceTree = "<group>"; };
+		B091F8772A59BAE700F0DA32 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
+		B091F8792A59C5AE00F0DA32 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		B0CEBE3E2A51982E00982D4D /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B0CEBE402A51989D00982D4D /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -346,6 +350,7 @@
 				B0CEBE582A51E8F700982D4D /* ProfileView.swift */,
 				B091F85E2A56CAA900F0DA32 /* CommunityUIView.swift */,
 				B091F8702A58769100F0DA32 /* SearchView.swift */,
+				B091F8772A59BAE700F0DA32 /* PreferenceView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -443,6 +448,7 @@
 			children = (
 				B0CEBE542A51D2F100982D4D /* SessionInfo.swift */,
 				B0D7A16A2A53929200FE2852 /* ElapsedTime.swift */,
+				B091F8792A59C5AE00F0DA32 /* UserPreferences.swift */,
 			);
 			path = Leomard;
 			sourceTree = "<group>";
@@ -678,6 +684,7 @@
 				B091F8712A58769100F0DA32 /* SearchView.swift in Sources */,
 				B091F8402A547A7E00F0DA32 /* CreatePostLike.swift in Sources */,
 				B091F86F2A5832D700F0DA32 /* SearchType.swift in Sources */,
+				B091F87A2A59C5AE00F0DA32 /* UserPreferences.swift in Sources */,
 				B0CEBE7D2A52CFA600982D4D /* MyUserInfo.swift in Sources */,
 				B0CEBE822A52D08400982D4D /* LocalSite.swift in Sources */,
 				B0CEBE632A52C64600982D4D /* Language.swift in Sources */,
@@ -694,6 +701,7 @@
 				B0CEBE592A51E8F700982D4D /* ProfileView.swift in Sources */,
 				B0CEBE5D2A52C2CD00982D4D /* GetSiteResponse.swift in Sources */,
 				B091F8692A57716500F0DA32 /* CommunityResponse.swift in Sources */,
+				B091F8782A59BAE700F0DA32 /* PreferenceView.swift in Sources */,
 				B0CEBE6F2A52C96900982D4D /* LocalUser.swift in Sources */,
 				B091F86D2A58323A00F0DA32 /* SearchResponse.swift in Sources */,
 				B0CEBE892A52D2E500982D4D /* Site.swift in Sources */,

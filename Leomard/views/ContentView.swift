@@ -9,6 +9,8 @@ import SwiftUI
 import MarkdownUI
 
 struct ContentView: View {
+    //@StateObject var userPreferences: UserPreferences
+    
     @State var currentSelection: Option = Option(id: 0, title: "Home", imageName: "house")
     var options: [Option] = [
         .init(id: 0, title: "Feed", imageName: "house"),

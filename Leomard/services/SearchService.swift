@@ -10,6 +10,7 @@ import Foundation
 class SearchService: Service {
     let requestHandler: RequestHandler
     let sessionService: SessionService
+    let userPreferences: UserPreferences = UserPreferences()
     
     init(requestHandler: RequestHandler, sessionService: SessionService) {
         self.requestHandler = requestHandler
@@ -26,19 +27,19 @@ class SearchService: Service {
                     if let data = apiResponse.data {
                         var response = try self.decode(type: SearchResponse.self, data: data)
                         response.posts.forEach { postView in
-                            if postView.post.nsfw {
+                            if postView.post.nsfw && !self.userPreferences.showNsfw  {
                                 response.posts = response.posts.filter { $0 != postView }
                             }
                         }
                         
                         response.communities.forEach { communityView in
-                            if communityView.community.nsfw {
+                            if communityView.community.nsfw && !self.userPreferences.showNsfw {
                                 response.communities = response.communities.filter { $0 != communityView }
                             }
                         }
                         
                         response.comments.forEach { commentView in
-                            if commentView.post.nsfw {
+                            if commentView.post.nsfw && !self.userPreferences.showNsfw  {
                                 response.comments = response.comments.filter { $0 != commentView }
                             }
                         }

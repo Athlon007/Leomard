@@ -28,6 +28,8 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
+    
+    @StateObject var userPreferences: UserPreferences = UserPreferences()
 
     @Environment(\.openURL) var openURL
     
@@ -89,6 +91,7 @@ struct PostUIView: View {
                                             self.imageHeight = geometry.size.height
                                         }
                                 })
+                                .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
                         default:
                             Text("Failed to load image.")
                                 .italic()
@@ -121,6 +124,7 @@ struct PostUIView: View {
                     // GIF
                     AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+                        .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
                 } else if LinkHelper.isImageLink(link: postView.post.url!) {
                     // Static Images
                     Spacer()
@@ -138,7 +142,6 @@ struct PostUIView: View {
                                             self.imageHeight = geometry.size.height
                                         }
                                 })
-                                .blur(radius: postView.post.nsfw ? 20 : 0)
                         case .failure(_):
                             // Can't load image? Fallback to link.
                             Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
@@ -147,6 +150,7 @@ struct PostUIView: View {
                                 .italic()
                         }
                     })
+                    .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
                     if LinkHelper.isWebp(link: postView.post.url!) {
                         Spacer()
                     }
