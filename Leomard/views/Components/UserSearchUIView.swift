@@ -1,5 +1,5 @@
 //
-//  CommunityUIView.swift
+//  UserSearchUIView.swift
 //  Leomard
 //
 //  Created by Konrad Figura on 08/07/2023.
@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct CommunitySearchUIView: View {
-    @State var communityView: CommunityView
+struct UserSearchUIView: View {
+    @State var personView: PersonView
     let contentView: ContentView
     
     var body: some View {
         ZStack {
-            if communityView.community.banner != nil {
-                AsyncImage(url: URL(string: communityView.community.banner!)!, content: { phase in
+            if personView.person.banner != nil {
+                AsyncImage(url: URL(string: personView.person.banner!)!, content: { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable()
@@ -29,29 +29,18 @@ struct CommunitySearchUIView: View {
                 .padding(.trailing, -25)
             }
             HStack {
-                CommunityAvatar(community: communityView.community, size: 100)
+                PersonAvatar(person: personView.person, size: 100)
                 VStack(spacing: 10) {
                     VStack {
-                        Text(communityView.community.title)
+                        Text(personView.person.displayName ?? personView.person.name)
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 18))
-                        Text(communityView.community.name + "@" + LinkHelper.stripToHost(link: communityView.community.actorId))
+                        Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.secondary)
                     }
-                    HStack {
-                        HStack(spacing: 7) {
-                            Image(systemName: "person.3")
-                            Text(String(communityView.counts.subscribers))
-                        }.help("Subscribers")
-                        HStack(spacing: 7) {
-                            Image(systemName: "eye")
-                            Text(String(communityView.counts.usersActiveHalfYear))
-                        }.help("Active Users (6 months)")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -61,7 +50,7 @@ struct CommunitySearchUIView: View {
         }
         .frame(maxWidth: 600, maxHeight: 100, alignment: .leading)
         .onTapGesture {
-            contentView.openCommunity(community: communityView.community)
+            contentView.openPerson(profile: personView.person)
         }
     }
 }

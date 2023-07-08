@@ -26,6 +26,8 @@ struct SearchView: View {
     
     @State var searching: Bool = false
     @State var page: Int = 1
+    @State var searchedOnce: Bool = false
+    @FocusState var searchFocused: Bool
     
     var body: some View {
         HStack {
@@ -39,7 +41,9 @@ struct SearchView: View {
                     .onSubmit {
                         self.page = 1
                         self.search()
+                        searchFocused = false
                     }
+                    .focused($searchFocused)
                 HStack {
                     Picker("", selection: $selectedSearchType) {
                         ForEach(availableSearchTypes, id: \.self) { method in
@@ -73,7 +77,7 @@ struct SearchView: View {
                     
                     switch selectedSearchType {
                     case .comments:
-                        if searchResponse.comments == [] && !self.searching {
+                        if searchResponse.comments == [] && !self.searching && self.searchedOnce {
                             Text("No comments found!")
                                 .italic()
                                 .foregroundColor(.secondary)
@@ -113,7 +117,7 @@ struct SearchView: View {
                             alignment: .center
                         )
                     case .communities:
-                        if searchResponse.communities == [] && !self.searching {
+                        if searchResponse.communities == [] && !self.searching && self.searchedOnce {
                             Text("No communities found!")
                                 .italic()
                                 .foregroundColor(.secondary)
@@ -149,8 +153,45 @@ struct SearchView: View {
                             maxHeight: .infinity,
                             alignment: .center
                         )
+                    case .users:
+                        if searchResponse.users == [] && !self.searching && self.searchedOnce {
+                            Text("No users found!")
+                                .italic()
+                                .foregroundColor(.secondary)
+                        }
+                        List {
+                            ForEach(searchResponse.users, id: \.self) { personView in
+                                VStack {
+                                    UserSearchUIView(personView: personView, contentView: contentView)
+                                        .onAppear {
+                                            if personView == searchResponse.users.last {
+                                                self.search()
+                                            }
+                                        }
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            maxHeight: .infinity
+                                        )
+                                        .padding(.top, 15)
+                                        .padding(.bottom, 15)
+                                        .padding(.trailing, 15)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color(.textBackgroundColor))
+                                .cornerRadius(4)
+                                Spacer()
+                                    .frame(height: 0)
+                                
+                            }
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                     default:
-                        if searchResponse.posts == [] && !self.searching {
+                        if searchResponse.posts == [] && !self.searching && self.searchedOnce {
                             Text("No posts found!")
                                 .italic()
                                 .foregroundColor(.secondary)
@@ -197,6 +238,8 @@ struct SearchView: View {
         if self.searchQuery == "" {
             return
         }
+        
+        self.searchedOnce = true
         
         if page == 1 {
             self.searchResponse.communities = []

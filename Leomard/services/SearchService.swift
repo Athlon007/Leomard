@@ -24,7 +24,25 @@ class SearchService: Service {
             case .success(let apiResponse):
                 do {
                     if let data = apiResponse.data {
-                        let response = try self.decode(type: SearchResponse.self, data: data)
+                        var response = try self.decode(type: SearchResponse.self, data: data)
+                        response.posts.forEach { postView in
+                            if postView.post.nsfw {
+                                response.posts = response.posts.filter { $0 != postView }
+                            }
+                        }
+                        
+                        response.communities.forEach { communityView in
+                            if communityView.community.nsfw {
+                                response.communities = response.communities.filter { $0 != communityView }
+                            }
+                        }
+                        
+                        response.comments.forEach { commentView in
+                            if commentView.post.nsfw {
+                                response.comments = response.comments.filter { $0 != commentView }
+                            }
+                        }
+                        
                         completion(.success(response))
                     }
                 } catch {
