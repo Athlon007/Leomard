@@ -49,7 +49,7 @@
             startingLineNumber = "220"
             endingLineNumber = "220"
             landmarkName = "loadPosts()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -65,7 +65,7 @@
             startingLineNumber = "245"
             endingLineNumber = "245"
             landmarkName = "reloadFeed()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -81,7 +81,7 @@
             startingLineNumber = "246"
             endingLineNumber = "246"
             landmarkName = "reloadFeed()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -97,7 +97,7 @@
             startingLineNumber = "248"
             endingLineNumber = "248"
             landmarkName = "reloadFeed()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

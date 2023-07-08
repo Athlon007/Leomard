@@ -9,7 +9,7 @@ import Foundation
 
 struct SearchResponse: Codable {
     public var comments: [CommentView]
-    public var communities: [CommentView]
+    public var communities: [CommunityView]
     public var posts: [PostView]
     public let type_: SearchType
     public var users: [PersonView]

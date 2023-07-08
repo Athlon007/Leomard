@@ -138,6 +138,7 @@ struct PostUIView: View {
                                             self.imageHeight = geometry.size.height
                                         }
                                 })
+                                .blur(radius: postView.post.nsfw ? 20 : 0)
                         case .failure(_):
                             // Can't load image? Fallback to link.
                             Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)

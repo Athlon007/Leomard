@@ -32,14 +32,14 @@ struct SearchView: View {
             Spacer()
             VStack {
                 TextField("Search", text: $searchQuery)
-                .frame(
-                    minWidth: 0,
-                    maxWidth: 600
-                )
-                .onSubmit {
-                    self.page = 1
-                    self.search()
-                }
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: 600
+                    )
+                    .onSubmit {
+                        self.page = 1
+                        self.search()
+                    }
                 HStack {
                     Picker("", selection: $selectedSearchType) {
                         ForEach(availableSearchTypes, id: \.self) { method in
@@ -112,7 +112,43 @@ struct SearchView: View {
                             maxHeight: .infinity,
                             alignment: .center
                         )
-                        
+                    case .communities:
+                        if searchResponse.communities == [] && !self.searching {
+                            Text("No communities found!")
+                                .italic()
+                                .foregroundColor(.secondary)
+                        }
+                        List {
+                            ForEach(searchResponse.communities, id: \.self) { communityView in
+                                VStack {
+                                    CommunitySearchUIView(communityView: communityView, contentView: contentView)
+                                        .onAppear {
+                                            if communityView == searchResponse.communities.last {
+                                                self.search()
+                                            }
+                                        }
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            maxHeight: .infinity
+                                        )
+                                        .padding(.top, 15)
+                                        .padding(.bottom, 15)
+                                        .padding(.trailing, 15)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color(.textBackgroundColor))
+                                .cornerRadius(4)
+                                Spacer()
+                                    .frame(height: 0)
+                                
+                            }
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                     default:
                         if searchResponse.posts == [] && !self.searching {
                             Text("No posts found!")
@@ -160,6 +196,13 @@ struct SearchView: View {
     func search() {
         if self.searchQuery == "" {
             return
+        }
+        
+        if page == 1 {
+            self.searchResponse.communities = []
+            self.searchResponse.comments = []
+            self.searchResponse.posts = []
+            self.searchResponse.users = []
         }
         
         self.searching = true

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CommunityAggregates: Codable {
+struct CommunityAggregates: Codable, Hashable {
     public let id: Int
     public let comments: Int
     public let communityId: Int
