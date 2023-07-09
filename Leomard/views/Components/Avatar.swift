@@ -16,6 +16,7 @@ extension Image {
             .interpolation(.high)
             .aspectRatio(contentMode: .fill)
             .frame(width: size, height: size, alignment: .center)
+            .backgroundStyle(.white)
             .clipShape(Circle())
     }
 }

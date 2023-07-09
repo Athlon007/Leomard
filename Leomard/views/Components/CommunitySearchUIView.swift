@@ -21,7 +21,7 @@ struct CommunitySearchUIView: View {
                     case .success(let image):
                         image.resizable()
                             .aspectRatio(contentMode: .fill)
-                            .opacity(0.1)
+                            .opacity(0.25)
                             .frame(maxWidth: 600, maxHeight: .infinity)
                     default:
                         VStack {}

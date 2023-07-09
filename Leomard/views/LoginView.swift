@@ -50,6 +50,9 @@ struct LoginView: View {
         }
         .padding(.trailing, 10)
         .padding(.leading, 10)
+        .task {
+            loadRecommendedInstances()
+        }
     }
     
     func login() {
@@ -66,6 +69,18 @@ struct LoginView: View {
             case .failure(let error):
                 print(error)
                 self.isLoginFailed = true
+            }
+        }
+    }
+    
+    func loadRecommendedInstances() {
+        let loginService: LoginService = LoginService(requestHandler: requestHandler, sessionService: sessionService)
+        loginService.getLemmyInstances() { result in
+            switch result {
+            case .success(let instances):
+                print(instances)
+            case .failure(let error):
+                print(error)
             }
         }
     }
