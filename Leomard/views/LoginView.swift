@@ -12,46 +12,86 @@ struct LoginView: View {
     let sessionService: SessionService
     let requestHandler: RequestHandler
     var contentView: ContentView
-    
+        
     @State private var lemmyInstance: String = ""
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var isLoginFailed: Bool = false
+    @State var instances: [LemmyInstance] = []
+    @State var selectedInstance: LemmyInstance? = nil
     
     var body: some View {
-        VStack {
-            Text("Lemmy Instance")
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-            TextField("Lemmy Instance", text: $lemmyInstance)
-            Text("Username or e-mail")
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-            TextField("Username or e-mail", text: $username)
-            Text("Password")
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-            SecureField("Password", text: $password)
-            Button("Login", action: login)
-                .buttonStyle(.borderedProminent)
-            if isLoginFailed {
-                Text("Unable to login. Check your login info and try again")
-                    .foregroundColor(.red)
+        ZStack {
+            VStack {
+                Text("Leomard")
+                    .bold()
+                    .font(.system(size: 24))
+                List {
+                    ForEach(instances, id: \.self) { instance in
+                        HStack {
+                            VStack{
+                                Image(systemName: "person.2.circle")
+                                    .AvatarFormatting(size: 50)
+                            }
+                            VStack {
+                                Text(instance.name)
+                                    .bold()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.system(size: 18))
+                                Text(instance.url)
+                                    .bold()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .frame(minWidth: 0, alignment: .center)
+                        .onTapGesture {
+                            self.lemmyInstance = instance.url
+                            selectedInstance = instance
+                        }
+                        .padding()
+                        .cornerRadius(4)
+                        .background(selectedInstance == instance ? Color(.selectedContentBackgroundColor) : Color.clear)
+                    }
+                }.frame(maxWidth: .infinity, maxHeight: 200)
+                Text("Lemmy Instance")
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                TextField("lemmy.world", text: $lemmyInstance)
+                    .onChange(of: $lemmyInstance) {
+                        
+                    }
+                Text("Username or e-mail")
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                TextField("", text: $username)
+                Text("Password")
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                SecureField("", text: $password)
+                Button("Login", action: login)
+                    .buttonStyle(.borderedProminent)
+                if isLoginFailed {
+                    Text("Unable to login. Check your login info and try again")
+                        .foregroundColor(.red)
+                }
             }
-        }
-        .padding(.trailing, 10)
-        .padding(.leading, 10)
-        .task {
-            loadRecommendedInstances()
+            .padding()
+            .frame(maxWidth: 600)
+            .task {
+                loadRecommendedInstances()
+            }
+            .background(Color(.textBackgroundColor))
+            .cornerRadius(4)
         }
     }
     
@@ -78,7 +118,7 @@ struct LoginView: View {
         loginService.getLemmyInstances() { result in
             switch result {
             case .success(let instances):
-                print(instances)
+                self.instances = instances
             case .failure(let error):
                 print(error)
             }

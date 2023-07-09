@@ -65,6 +65,9 @@ struct ContentView: View {
                                     .scrollContentBackground(.hidden)
                             } else {
                                 LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
+                                    .frame(maxWidth: .infinity)
+                                    .listStyle(SidebarListStyle())
+                                    .scrollContentBackground(.hidden)
                             }
                         default:
                             FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)

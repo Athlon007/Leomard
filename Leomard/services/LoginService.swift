@@ -43,7 +43,7 @@ class LoginService: Service {
         }
         
         let session = URLSession.shared
-        let task = session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
                 return
