@@ -12,7 +12,8 @@ struct PreferencesView: View {
     @StateObject var userPreferences: UserPreferences = UserPreferences()
     
     let preferenceOptions: [PreferenceOption] = [
-        .init(name: "Content", icon: "text.alignleft", color: .blue)
+        .init(name: "Content", icon: "text.alignleft", color: .blue),
+        .init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
     @State var currentSelection: PreferenceOption?
 
@@ -77,6 +78,9 @@ struct PreferencesView: View {
                     Text("NSFW")
                     Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
                     Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
+                case preferenceOptions[1]:
+                    Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
+                    Text("Use '@instance.name' at the end of the search query, to search other Lemmy instances.")
                 default:
                     Text("")
                 }

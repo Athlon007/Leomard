@@ -15,5 +15,7 @@ final class UserPreferences: ObservableObject {
     @AppStorage("listing_type", store: .standard) var listType: ListingType = .all
     @AppStorage("comment_sort_method", store: .standard) var commentSortMethod: CommentSortType = .top
     
+    @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
+    
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
 }

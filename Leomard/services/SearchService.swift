@@ -18,8 +18,15 @@ class SearchService: Service {
     }
     
     public func search(query: String, searchType: SearchType, page: Int, completion: @escaping (Result<SearchResponse, Error>) -> Void) {
-        let host = sessionService.getLemmyInstance()
-        let searchQuery = query.replacingOccurrences(of: " ", with: "%20")
+        var host = sessionService.getLemmyInstance()
+        var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
+        
+        // Experimental cross-instance search.
+        if userPreferences.experimentXInstanceSearch && searchQuery.range(of: "@[\\w-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
+            host = searchQuery.components(separatedBy: "@").last!
+            searchQuery = searchQuery.replacingOccurrences(of: "@\(host)", with: "")
+        }
+        
         var request = "/search?q=\(searchQuery)&type_=\(String(describing: searchType))&page=\(String(page))"
         if searchType == .communities {
             request += "&sort=TopAll"
