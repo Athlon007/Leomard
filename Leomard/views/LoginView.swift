@@ -13,10 +13,10 @@ struct LoginView: View {
     let requestHandler: RequestHandler
     var contentView: ContentView
         
-    @State private var lemmyInstance: String = ""
-    @State private var username: String = ""
-    @State private var password: String = ""
-    @State private var isLoginFailed: Bool = false
+    @State var url: String = ""
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var isLoginFailed: Bool = false
     @State var instances: [LemmyInstance] = []
     @State var selectedInstance: LemmyInstance? = nil
     
@@ -46,7 +46,7 @@ struct LoginView: View {
                         }
                         .frame(minWidth: 0, alignment: .center)
                         .onTapGesture {
-                            self.lemmyInstance = instance.url
+                            self.url = instance.url
                             selectedInstance = instance
                         }
                         .padding()
@@ -60,10 +60,7 @@ struct LoginView: View {
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-                TextField("lemmy.world", text: $lemmyInstance)
-                    .onChange(of: $lemmyInstance) {
-                        
-                    }
+                TextField("lemmy.world", text: $url)
                 Text("Username or e-mail")
                     .frame(
                         minWidth: 0,
@@ -98,10 +95,10 @@ struct LoginView: View {
     func login() {
         let loginService: LoginService = LoginService(requestHandler: requestHandler, sessionService: sessionService)
         let login = Login(usernameOrEmail: self.username, password: self.password, totp2faToken: "")
-        loginService.login(lemmyInstance: self.lemmyInstance, login: login) { result in
+        loginService.login(lemmyInstance: self.url, login: login) { result in
             switch (result) {
             case .success(let loginResponse):
-                let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: lemmyInstance)
+                let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url)
                 self.sessionService.save(response: sessionInfo)
                 self.isLoginFailed = false
                 self.contentView.navigateToFeed()
