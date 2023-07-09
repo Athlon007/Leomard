@@ -14,6 +14,7 @@ struct UserSearchUIView: View {
     
     var body: some View {
         ZStack {
+            /*
             if personView.person.banner != nil {
                 AsyncImage(url: URL(string: personView.person.banner!)!, content: { phase in
                     switch phase {
@@ -27,7 +28,7 @@ struct UserSearchUIView: View {
                     }
                 })
                 .padding(.trailing, -25)
-            }
+            }*/
             HStack {
                 PersonAvatar(person: personView.person, size: 100)
                 VStack(spacing: 10) {

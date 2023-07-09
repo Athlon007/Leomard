@@ -98,34 +98,36 @@ struct CommentUIView: View {
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-                    HStack {
-                        if commentView.creator.actorId == myself?.localUserView.person.actorId {
-                            Button(action: startEditComment) {
-                                Image(systemName: "pencil")
+                    if myself != nil {
+                        HStack {
+                            if commentView.creator.actorId == myself?.localUserView.person.actorId {
+                                Button(action: startEditComment) {
+                                    Image(systemName: "pencil")
+                                }
+                                .buttonStyle(.link)
+                                .foregroundColor(.primary)
+                                Button(action: deleteComment) {
+                                    Image(systemName: "trash")
+                                }
+                                .buttonStyle(.link)
+                                .foregroundColor(.primary)
+                            }
+                            Button(action: savePost) {
+                                Image(systemName: "bookmark")
+                            }
+                            .buttonStyle(.link)
+                            .foregroundColor(commentView.saved ? .green : .primary)
+                            Button(action: startReply) {
+                                Image(systemName: "arrowshape.turn.up.left")
                             }
                             .buttonStyle(.link)
                             .foregroundColor(.primary)
-                            Button(action: deleteComment) {
-                                Image(systemName: "trash")
-                            }
-                            .buttonStyle(.link)
-                            .foregroundColor(.primary)
                         }
-                        Button(action: savePost) {
-                            Image(systemName: "bookmark")
-                        }
-                        .buttonStyle(.link)
-                        .foregroundColor(commentView.saved ? .green : .primary)
-                        Button(action: startReply) {
-                            Image(systemName: "arrowshape.turn.up.left")
-                        }
-                        .buttonStyle(.link)
-                        .foregroundColor(.primary)
+                        .frame(
+                            minWidth: 0,
+                            alignment: .trailing
+                        )
                     }
-                    .frame(
-                        minWidth: 0,
-                        alignment: .trailing
-                    )
                 }
                 .frame(
                     minWidth: 0,
@@ -251,6 +253,10 @@ struct CommentUIView: View {
     }
     
     func likeComment() {
+        if myself == nil {
+            return
+        }
+        
         var score = 1
         if commentView.myVote == 1 {
             score = 0
@@ -266,6 +272,10 @@ struct CommentUIView: View {
     }
     
     func dislikeComment() {
+        if myself == nil {
+            return
+        }
+        
         var score = -1
         if commentView.myVote == -1 {
             score = 0

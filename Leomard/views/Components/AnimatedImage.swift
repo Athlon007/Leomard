@@ -112,7 +112,7 @@ class WKWebViewNonInteractable: WKWebView
 }
 
 class WKWebVideoNonInteractable: WKWebView
-{    
+{
     override public func scrollWheel(with event: NSEvent)
     {
         self.nextResponder?.scrollWheel(with: event)

@@ -226,17 +226,19 @@ struct PostUIView: View {
                     maxWidth: .infinity,
                     alignment: .leading
                 )
-                HStack {
+                if myself != nil {
                     HStack {
-                        Image(systemName: "bookmark")
+                        HStack {
+                            Image(systemName: "bookmark")
+                        }
+                        .frame(alignment: .trailing)
+                        .foregroundColor(postView.saved ? .green : .primary)
+                        .onTapGesture {
+                            savePost()
+                        }
                     }
-                    .frame(alignment: .trailing)
-                    .foregroundColor(postView.saved ? .green : .primary)
-                    .onTapGesture {
-                        savePost()
-                    }
+                    .frame(minWidth: 0, alignment: .trailing)
                 }
-                .frame(minWidth: 0, alignment: .trailing)
             }
             .frame(
                 maxWidth: .infinity,
@@ -295,6 +297,10 @@ struct PostUIView: View {
     }
     
     func likePost() {
+        if myself == nil {
+            return
+        }
+        
         var score = 1
         if postView.myVote == 1 {
             score = 0
@@ -310,6 +316,10 @@ struct PostUIView: View {
     }
     
     func dislikePost() {
+        if myself == nil {
+            return
+        }
+        
         var score = -1
         if postView.myVote == -1 {
             score = 0

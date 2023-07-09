@@ -21,7 +21,6 @@ struct PageSidebarUIView: View {
                         case .success(let image):
                             image.resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .opacity(0.1)
                                 .frame(maxWidth: 600, maxHeight: .infinity)
                         default:
                             VStack {}

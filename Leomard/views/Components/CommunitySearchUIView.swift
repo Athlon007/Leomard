@@ -14,6 +14,7 @@ struct CommunitySearchUIView: View {
     
     var body: some View {
         ZStack {
+            /*
             if communityView.community.banner != nil {
                 AsyncImage(url: URL(string: communityView.community.banner!)!, content: { phase in
                     switch phase {
@@ -28,6 +29,7 @@ struct CommunitySearchUIView: View {
                 })
                 .padding(.trailing, -25)
             }
+             */
             HStack {
                 CommunityAvatar(community: communityView.community, size: 100)
                 VStack(spacing: 10) {

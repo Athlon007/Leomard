@@ -20,7 +20,11 @@ class SearchService: Service {
     public func search(query: String, searchType: SearchType, page: Int, completion: @escaping (Result<SearchResponse, Error>) -> Void) {
         let host = sessionService.getLemmyInstance()
         let searchQuery = query.replacingOccurrences(of: " ", with: "%20")
-        requestHandler.makeApiRequest(host: host, request: "/search?q=\(searchQuery)&type_=\(String(describing: searchType))&page=\(String(page))", method: .get) { result in
+        var request = "/search?q=\(searchQuery)&type_=\(String(describing: searchType))&page=\(String(page))"
+        if searchType == .communities {
+            request += "&sort=TopAll"
+        }
+        requestHandler.makeApiRequest(host: host, request: request, method: .get) { result in
             switch result {
             case .success(let apiResponse):
                 do {
