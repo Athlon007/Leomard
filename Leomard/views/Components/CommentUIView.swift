@@ -111,6 +111,11 @@ struct CommentUIView: View {
                             .buttonStyle(.link)
                             .foregroundColor(.primary)
                         }
+                        Button(action: savePost) {
+                            Image(systemName: "bookmark")
+                        }
+                        .buttonStyle(.link)
+                        .foregroundColor(commentView.saved ? .green : .primary)
                         Button(action: startReply) {
                             Image(systemName: "arrowshape.turn.up.left")
                         }
@@ -343,4 +348,15 @@ struct CommentUIView: View {
         commentText = commentView.comment.content
     }
     
+    func savePost() {
+        let save = !commentView.saved
+        self.commentService.saveComment(comment: commentView.comment, save: save) { result in
+            switch result {
+            case .success(let commentResponse):
+                self.commentView = commentResponse.commentView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 }

@@ -169,4 +169,24 @@ class CommentService: Service {
             }
         }
     }
+    
+    public func saveComment(comment: Comment, save: Bool, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let url = sessionService.getLemmyInstance()
+        let body = SaveComment(commentId: comment.id, save: save)
+        requestHandler.makeApiRequest(host: url, request: "/comment/save", method: .put, body: body) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        let response = try self.decode(type: CommentResponse.self, data: data)
+                        completion(.success(response))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

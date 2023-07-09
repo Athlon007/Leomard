@@ -102,4 +102,24 @@ class PostService: Service {
             }
         }
     }
+    
+    public func savePost(post: Post, save: Bool, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        let url = sessionService.getLemmyInstance()
+        let body = SavePost(postId: post.id, save: save)
+        requestHandler.makeApiRequest(host: url, request: "/post/save", method: .put, body: body) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        let response = try self.decode(type: PostResponse.self, data: data)
+                        completion(.success(response))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

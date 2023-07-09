@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import MarkdownUI
 import Combine
+import AVKit
 
 struct PostUIView: View {
     @State var postView: PostView
@@ -74,48 +75,56 @@ struct PostUIView: View {
                 
             }
             if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
-                // Article View
-                VStack {
-                    Spacer()
-                    AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
-                               content: { phase in
-                        switch phase {
-                        case .success(let image):
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .cornerRadius(4)
-                                .background(GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            self.imageHeight = geometry.size.height
-                                        }
-                                })
-                                .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
-                        default:
-                            Text("Failed to load image.")
-                                .italic()
-                        }
-                    })
-                    .padding(.leading, 4)
-                    .padding(.trailing, 4)
-                    .padding(.top, 4)
-                    if LinkHelper.isWebp(link: postView.post.thumbnailUrl!) {
+                if LinkHelper.isYouTubeLink(link: postView.post.url!) {
+                    YoutubePlayer(link: postView.post.url!, imageHeight: $gifHeight)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                } else {
+                    // Article View
+                    VStack {
                         Spacer()
+                        
+                        AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
+                                   content: { phase in
+                            switch phase {
+                            case .success(let image):
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .cornerRadius(4)
+                                    .background(GeometryReader { geometry in
+                                        Color.clear
+                                            .onAppear {
+                                                self.imageHeight = geometry.size.height
+                                            }
+                                    })
+                                    .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
+                            default:
+                                Text("Failed to load image.")
+                                    .italic()
+                            }
+                        })
+                        .padding(.leading, 4)
+                        .padding(.trailing, 4)
+                        .padding(.top, 4)
+                        if LinkHelper.isWebp(link: postView.post.thumbnailUrl!) {
+                            Spacer()
+                        }
+                        Text(postView.post.url!)
+                            .foregroundColor(Color(.linkColor))
+                            .fixedSize(horizontal: false, vertical: false)
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity,
+                                alignment: .leading
+                            )
+                        
                     }
-                    Text(postView.post.url!)
-                        .foregroundColor(Color(.linkColor))
-                        .fixedSize(horizontal: false, vertical: false)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .leading
-                        )
-                }
-                .background(.ultraThickMaterial)
-                .cornerRadius(4)
-                .onTapGesture {
-                    openURL(url!)
+                    .background(.ultraThickMaterial)
+                    .cornerRadius(4)
+                    .onTapGesture {
+                        openURL(url!)
+                    }
                 }
             }
             else if postView.post.url != nil && postView.post.embedTitle == nil {
@@ -146,8 +155,8 @@ struct PostUIView: View {
                             // Can't load image? Fallback to link.
                             Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
                         default:
-                            Text("Failed to load the image.")
-                                .italic()
+                            ProgressView()
+                                .progressViewStyle(.circular)
                         }
                     })
                     .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
@@ -160,6 +169,9 @@ struct PostUIView: View {
                     Link(url.absoluteString, destination: url)
                 }
                 Spacer()
+            } else if postView.post.embedVideoUrl != nil && LinkHelper.isVideosLink(link: postView.post.embedVideoUrl!) {
+                VideoPlayer(player: AVPlayer(url: URL(string: postView.post.embedVideoUrl!)!))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             Spacer(minLength: 6)
             LazyHStack(spacing: 4) {
@@ -187,26 +199,44 @@ struct PostUIView: View {
             )
             Spacer(minLength: 6)
             LazyHStack {
+                HStack{
+                    HStack {
+                        Image(systemName: "arrow.up")
+                        Text(String(postView.counts.upvotes))
+                    }
+                    .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                    .onTapGesture {
+                        likePost()
+                    }
+                    HStack {
+                        Image(systemName: "arrow.down")
+                        Text(String(postView.counts.downvotes))
+                    }
+                    .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                    .onTapGesture {
+                        dislikePost()
+                    }
+                    HStack {
+                        Image(systemName: "ellipsis.message")
+                        Text(String(postView.counts.comments))
+                    }
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
                 HStack {
-                    Image(systemName: "arrow.up")
-                    Text(String(postView.counts.upvotes))
+                    HStack {
+                        Image(systemName: "bookmark")
+                    }
+                    .frame(alignment: .trailing)
+                    .foregroundColor(postView.saved ? .green : .primary)
+                    .onTapGesture {
+                        savePost()
+                    }
                 }
-                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-                .onTapGesture {
-                    likePost()
-                }
-                HStack {
-                    Image(systemName: "arrow.down")
-                    Text(String(postView.counts.downvotes))
-                }
-                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-                .onTapGesture {
-                    dislikePost()
-                }
-                HStack {
-                    Image(systemName: "ellipsis.message")
-                    Text(String(postView.counts.comments))
-                }
+                .frame(minWidth: 0, alignment: .trailing)
             }
             .frame(
                 maxWidth: .infinity,
@@ -292,5 +322,21 @@ struct PostUIView: View {
                 print(error)
             }
         }
+    }
+    
+    func savePost() {
+        let save = !postView.saved
+        self.postService.savePost(post: postView.post, save: save) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func printText() {
+        print("test")
     }
 }

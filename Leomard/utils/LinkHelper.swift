@@ -55,4 +55,23 @@ class LinkHelper {
     static func isWebp(link: String) -> Bool {
         return link.lowercased().hasSuffix(".webp")
     }
+    
+    static let videoFormats = [
+        ".mp4",
+        ".avi"
+    ]
+    
+    static func isVideosLink(link: String) -> Bool {
+        for format in videoFormats {
+            if link.lowercased().hasSuffix(format) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    static func isYouTubeLink(link: String) -> Bool {
+        return link.contains("youtube.com") || link.contains("youtu.be")
+    }
 }
