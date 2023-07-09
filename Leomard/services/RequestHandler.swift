@@ -35,7 +35,7 @@ final class RequestHandler {
             urlString = "https://\(urlString)"
         }
         
-        if sessionService.isSessionActive() {
+        if sessionService.isSessionActive() && method == .get {
             let jwt = sessionService.load()?.loginResponse.jwt
             if !urlString.contains("?") {
                 urlString += "?auth=\(jwt!)"
@@ -67,9 +67,10 @@ final class RequestHandler {
                         return
                     }
                 
-                jsonDictionary["auth"] = sessionService.load()?.loginResponse.jwt
-                jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
-    
+                if sessionService.isSessionActive() {
+                    jsonDictionary["auth"] = sessionService.load()?.loginResponse.jwt
+                    jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+                }
                 request.httpBody = jsonData
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {

@@ -26,22 +26,28 @@ struct PostContextMenu: View {
             Text("Copy Post Link")
                 .padding()
         }
-        if postView.post.url != nil {
+        if let url = postView.post.url {
             Button(action: {
-                copyToClipboard(text: postView.post.url!)
+                openURL(URL(string: url)!)
             }) {
-                Text(LinkHelper.isImageLink(link: postView.post.url!) ? "Copy Image Link" : "Copy External Link")
+                Text("Open External Link")
                     .padding()
             }
-            if LinkHelper.isImageLink(link: postView.post.url!) {
+            Button(action: {
+                copyToClipboard(text: url)
+            }) {
+                Text(LinkHelper.isImageLink(link: url) ? "Copy Image Link" : "Copy External Link")
+                    .padding()
+            }
+            if LinkHelper.isImageLink(link: url) {
                 Button(action: {
-                    copyImageToClipboard(imageLink: postView.post.url!)
+                    copyImageToClipboard(imageLink: url)
                 }) {
                     Text("Copy Image")
                         .padding()
                 }
                 Button(action: {
-                    saveImage(imageLink: postView.post.url!)
+                    saveImage(imageLink: url)
                 }) {
                     Text("Save Image to Downloads")
                         .padding()

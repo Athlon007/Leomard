@@ -30,6 +30,7 @@ struct AnimatedImage: NSViewRepresentable {
                    overflow: hidden;
                }
                img {
+                   display: block;
                    width: 100%;
                    height: 100%;
                    object-fit: contain;
@@ -111,7 +112,7 @@ class WKWebViewNonInteractable: WKWebView
 }
 
 class WKWebVideoNonInteractable: WKWebView
-{
+{    
     override public func scrollWheel(with event: NSEvent)
     {
         self.nextResponder?.scrollWheel(with: event)
@@ -119,5 +120,15 @@ class WKWebVideoNonInteractable: WKWebView
     
     override public func rightMouseDown(with event: NSEvent) {
         self.nextResponder?.rightMouseDown(with: event)
+    }
+    
+    override public func resize(withOldSuperviewSize oldSize: NSSize) {
+        self.evaluateJavaScript("document.body.remove()")
+        super.resize(withOldSuperviewSize: oldSize)
+    }
+    
+    override public func resizeSubviews(withOldSize oldSize: NSSize) {
+        self.evaluateJavaScript("document.body.remove()")
+        super.resizeSubviews(withOldSize: oldSize)
     }
 }
