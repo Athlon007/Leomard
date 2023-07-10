@@ -28,6 +28,7 @@
 		B01ECC6A2A505357005ECF36 /* LeomardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC692A505357005ECF36 /* LeomardTests.swift */; };
 		B01ECC742A505357005ECF36 /* LeomardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC732A505357005ECF36 /* LeomardUITests.swift */; };
 		B01ECC762A505357005ECF36 /* LeomardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */; };
+		B05B211A2A5C6D0000BA8FB2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21192A5C6D0000BA8FB2 /* Error.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
 		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
@@ -157,6 +158,7 @@
 		B01ECC6F2A505357005ECF36 /* LeomardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeomardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B01ECC732A505357005ECF36 /* LeomardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITests.swift; sourceTree = "<group>"; };
 		B01ECC752A505357005ECF36 /* LeomardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B05B21192A5C6D0000BA8FB2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		B091F8372A5432A900F0DA32 /* PostContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContextMenu.swift; sourceTree = "<group>"; };
 		B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSidebarUIView.swift; sourceTree = "<group>"; };
 		B091F83B2A54708800F0DA32 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				B00695DB2A50D21900206C77 /* DateFormatConverter.swift */,
 				B00695DD2A50E24800206C77 /* String.swift */,
 				B0D7A1572A531E5600FE2852 /* LinkHelper.swift */,
+				B05B21192A5C6D0000BA8FB2 /* Error.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				B0D7A15B2A533BCB00FE2852 /* Comment.swift in Sources */,
 				B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */,
 				B091F8542A55EE9200F0DA32 /* PersonService.swift in Sources */,
+				B05B211A2A5C6D0000BA8FB2 /* Error.swift in Sources */,
 				B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */,
 				B0CEBE442A519A1600982D4D /* NavbarItem.swift in Sources */,
 				B091F8802A5AE3A300F0DA32 /* LemmyInstance.swift in Sources */,

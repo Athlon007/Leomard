@@ -7,6 +7,14 @@
 
 import Foundation
 
-struct ErrorResponse: Codable {
-    let error: String
+protocol ErrorResponseProtocol: LocalizedError {
+    var error: String { get }
+}
+
+struct ErrorResponse: Error, Codable {
+    var error: String
+
+    init(error: String) {
+        self.error = error
+    }
 }

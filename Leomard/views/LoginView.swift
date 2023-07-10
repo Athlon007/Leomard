@@ -17,7 +17,9 @@ struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
     @State var twoFA: String = ""
+    
     @State var isLoginFailed: Bool = false
+    @State var is2faRequired: Bool = false
     @State var instances: [LemmyInstance] = []
     @State var selectedInstance: LemmyInstance? = nil
     
@@ -67,35 +69,37 @@ struct LoginView: View {
                             }
                         }
                     }.frame(maxWidth: .infinity, maxHeight: 225)
-                
-                Text("Or type the link to your instance here:")
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                TextField("lemmy.world", text: $url)
-                Text("Username or e-mail")
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                TextField("", text: $username)
-                Text("Password")
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                SecureField("", text: $password)
-                Text("2FA Code (Optional)")
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                TextField("", text: $twoFA)
+                    
+                    Text("Or type the link to your instance here:")
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    TextField("lemmy.world", text: $url)
+                    Text("Username or e-mail")
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    TextField("", text: $username)
+                    Text("Password")
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    SecureField("", text: $password)
+                    if is2faRequired {
+                        Text("2FA Code")
+                            .frame(
+                                minWidth: 0,
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        TextField("", text: $twoFA)
+                    }
                 }
                 Button("Login", action: login)
                     .buttonStyle(.borderedProminent)
@@ -126,6 +130,10 @@ struct LoginView: View {
                 self.contentView.navigateToFeed()
                 self.contentView.loadUserData()
             case .failure(let error):
+                if error.tryGetErrorMessage() == "incorrect_totp token" || error.tryGetErrorMessage() == "missing_totp_token" {
+                    self.is2faRequired = true
+                }
+                
                 print(error)
                 self.isLoginFailed = true
             }

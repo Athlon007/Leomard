@@ -19,4 +19,13 @@ class Service {
         encoder.keyEncodingStrategy = .convertToSnakeCase
         return try encoder.encode(object)
     }
+    
+    func completeError(_ data: Data, _ completion: @escaping (Result<LoginResponse, Error>) -> Void) {
+        do {
+            let err = try self.decode(type: ErrorResponse.self, data: data)
+            completion(.failure(err))
+        } catch {
+            completion(.failure(error))
+        }
+    }
 }

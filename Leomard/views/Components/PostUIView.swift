@@ -201,52 +201,42 @@ struct PostUIView: View {
                 alignment: .leading
             )
             Spacer(minLength: 6)
-            LazyHStack {
-                HStack{
-                    HStack {
-                        Image(systemName: "arrow.up")
-                        Text(String(postView.counts.upvotes))
-                    }
-                    .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-                    .onTapGesture {
-                        likePost()
-                    }
-                    HStack {
-                        Image(systemName: "arrow.down")
-                        Text(String(postView.counts.downvotes))
-                    }
-                    .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-                    .onTapGesture {
-                        dislikePost()
-                    }
-                    HStack {
-                        Image(systemName: "ellipsis.message")
-                        Text(String(postView.counts.comments))
-                    }
+            HStack {
+                HStack {
+                    Image(systemName: "arrow.up")
+                    Text(String(postView.counts.upvotes))
                 }
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                .onTapGesture {
+                    likePost()
+                }
+                HStack {
+                    Image(systemName: "arrow.down")
+                    Text(String(postView.counts.downvotes))
+                }
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                .onTapGesture {
+                    dislikePost()
+                }
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(postView.counts.comments))
+                }
+                Spacer()
                 if myself != nil {
                     HStack {
-                        HStack {
-                            Image(systemName: "bookmark")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(postView.saved ? .green : .primary)
-                        .onTapGesture {
-                            savePost()
-                        }
+                        Image(systemName: "bookmark")
                     }
-                    .frame(minWidth: 0, alignment: .trailing)
+                    .frame(alignment: .trailing)
+                    .foregroundColor(postView.saved ? .green : .primary)
+                    .onTapGesture {
+                        savePost()
+                    }
                 }
             }
             .frame(
                 maxWidth: .infinity,
-                maxHeight: .infinity,
-                alignment: .leading
+                maxHeight: .infinity
             )
         }
         .padding(.leading, 5)

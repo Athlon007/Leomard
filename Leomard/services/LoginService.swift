@@ -17,7 +17,7 @@ class LoginService: Service {
         self.requestHandler = requestHandler
         self.sessionService = sessionService
     }
-    
+   
     public func login(lemmyInstance: String, login: Login,Ca completion: @escaping (Result<LoginResponse, Error>) -> Void) {
         self.requestHandler.makeApiRequest(host: lemmyInstance, request: "/user/login", method: .post, body: login) { result in
             switch (result) {
@@ -27,7 +27,7 @@ class LoginService: Service {
                         let loginResponse: LoginResponse = try self.decode(type: LoginResponse.self, data: data)
                         completion(.success(loginResponse))
                     } catch {
-                        completion(.failure(error))
+                        self.completeError(data, completion)
                     }
                 }
             case .failure(let error):
@@ -71,30 +71,19 @@ class LoginService: Service {
                         continue
                     }
                     
-                    let federated = row[3]
-                    let users = row[6]
-                    let blockedBy = row[8]
-                    let upTime = row[9]
+                    let federated = row[3] == "Yes"
+                    let users = Int(row[6])!
+                    let blockedBy = Int(row[8])!
+                    let upTime = Double(row[9].replacingOccurrences(of: "%", with: "")) ?? 0
                     
-                    // Instance must be federated and not NSFW.
-                    if federated != "Yes" {
+                    // Instance to show rules:
+                    // - Must be federated and not NSFW.
+                    // - Must have 500 users (or more)
+                    // - Must not be blocked by more than 10 other instanes
+                    // - Uptime must be larger than 95%
+                    if !federated || users < 500 || blockedBy >= 10 || upTime < 0.95 {
                         continue
                     }
-                    
-                    // Instance must have 500 or more users
-                    if Int(users)! < 500 {
-                        continue
-                    }
-                    
-                    // Instance cannot be blocked by more than 10 other instances.
-                    if Int(blockedBy)! > 10 {
-                        continue
-                    }
-                    
-                    // Uptime must be larger than 95%
-                    if Int(upTime.replacingOccurrences(of: "%", with: ""))! < 95 {
-                        continue
-                    }        
                 
                     let name: String = nameAndUrl.split(separator: "]").map(String.init)[0].replacingOccurrences(of: "[", with: "")
                     let link: String = nameAndUrl.split(separator: "(").map(String.init)[1].replacingOccurrences(of: ")", with: "")
