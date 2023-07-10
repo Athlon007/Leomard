@@ -20,7 +20,23 @@ class Service {
         return try encoder.encode(object)
     }
     
-    func completeError(_ data: Data, _ completion: @escaping (Result<LoginResponse, Error>) -> Void) {
+    func respond<T: Decodable>(_ result: Result<APIResponse, Error>, _ completion: @escaping (Result<T, Error>) -> Void) {
+        switch result {
+        case .success(let apiResponse):
+            if let data = apiResponse.data {
+                do {
+                    let response = try self.decode(type: T.self, data: data)
+                    completion(.success(response))
+                } catch {
+                    self.respondError(data, completion)
+                }
+            }
+        case .failure(let error):
+            completion(.failure(error))
+        }
+    }
+    
+    func respondError<T: Decodable>(_ data: Data, _ completion: @escaping (Result<T, Error>) -> Void) {
         do {
             let err = try self.decode(type: ErrorResponse.self, data: data)
             completion(.failure(err))

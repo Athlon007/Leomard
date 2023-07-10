@@ -46,7 +46,7 @@ class CommentService: Service {
                     
                     completion(.success(getCommentResponse))
                 } catch {
-                    completion(.failure(error))
+                    self.respondError(response.data!, completion)
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -59,17 +59,17 @@ class CommentService: Service {
         requestHandler.makeApiRequest(host: host, request: "/comment/list?community_id=\(String(community.id))", method: .get) { result in
             switch result {
             case .success(let apiResponse):
-                do {
-                    if let data = apiResponse.data {
+                if let data = apiResponse.data {
+                    do {
                         var response = try self.decode(type: GetCommentsResponse.self, data: data)
                         if page > 1 && response.comments.count > 0 {
                             response.comments.removeFirst()
                         }
                         
                         completion(.success(response))
+                    } catch {
+                        self.respondError(data, completion)
                     }
-                } catch {
-                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -93,7 +93,7 @@ class CommentService: Service {
                     }
                     completion(.success(getCommentResponse))
                 } catch {
-                    completion(.failure(error))
+                    self.respondError(response.data!, completion)
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -104,69 +104,28 @@ class CommentService: Service {
     public func setCommentLike(comment: Comment, score: Int, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = CreateCommentLike(commentId: comment.id, score: score)
         self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
-            switch (result) {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let response = try self.decode(type: CommentResponse.self, data: data)
-                        completion(.success(response))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
     
     public func createComment(content: String, post: Post, parent: Comment? = nil, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = CreateComment(content: content, formId: nil, languageId: nil, parentId: parent?.id, postId: post.id)
         requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .post, body: body) { result in
-            switch result {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let response = try self.decode(type: CommentResponse.self, data: data)
-                        completion(.success(response))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
     
     public func deleteComment(comment: Comment, completion: @escaping (Result<Bool, Error>) -> Void) {
         let body = DeleteComment(commentId: comment.id, deleted: true)
         requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment/delete", method: .post, body: body) { result in
-            switch result {
-            case .success(_):
-                completion(.success(true))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
     
     public func updateComment(comment: Comment, content: String, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = EditComment(commentId: comment.id, content: content, formId: nil, languageId: nil)
         requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .put, body: body) { result in
-            switch result {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let response = try self.decode(type: CommentResponse.self, data: data)
-                        completion(.success(response))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
     
@@ -174,19 +133,7 @@ class CommentService: Service {
         let url = sessionService.getLemmyInstance()
         let body = SaveComment(commentId: comment.id, save: save)
         requestHandler.makeApiRequest(host: url, request: "/comment/save", method: .put, body: body) { result in
-            switch result {
-            case .success(let apiResponse):
-                do {
-                    if let data = apiResponse.data {
-                        let response = try self.decode(type: CommentResponse.self, data: data)
-                        completion(.success(response))
-                    }
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
 }

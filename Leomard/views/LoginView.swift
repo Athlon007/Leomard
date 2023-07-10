@@ -132,10 +132,10 @@ struct LoginView: View {
             case .failure(let error):
                 if error.tryGetErrorMessage() == "incorrect_totp token" || error.tryGetErrorMessage() == "missing_totp_token" {
                     self.is2faRequired = true
+                } else {
+                    print(error)
+                    self.isLoginFailed = true
                 }
-                
-                print(error)
-                self.isLoginFailed = true
             }
         }
     }

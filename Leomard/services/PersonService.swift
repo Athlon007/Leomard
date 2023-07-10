@@ -22,19 +22,7 @@ class PersonService: Service {
             request += "&saved_only=true"
         }
         requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: request, method: .get) { result in
-            switch result {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let response = try self.decode(type: GetPersonDetailsResponse.self, data: data)
-                        completion(.success(response))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
 }

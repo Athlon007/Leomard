@@ -18,19 +18,7 @@ class SiteService: Service {
     
     public func getSite(Ca completion: @escaping (Result<GetSiteResponse, Error>) -> Void) {
         self.requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/site", method: .get) { result in
-            switch (result) {
-            case.success(let response):
-                if response.data != nil {
-                    do {
-                        let getSiteResponse = try self.decode(type: GetSiteResponse.self, data: response.data!)
-                        completion(.success(getSiteResponse))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
 }

@@ -58,7 +58,7 @@ class SearchService: Service {
                         completion(.success(response))
                     }
                 } catch {
-                    completion(.failure(error))
+                    self.respondError(apiResponse.data!, completion)
                 }
             case .failure(let error):
                 completion(.failure(error))

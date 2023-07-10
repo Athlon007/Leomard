@@ -373,8 +373,8 @@
 		B0CEBE3A2A51978B00982D4D /* services */ = {
 			isa = PBXGroup;
 			children = (
-				B01137782A50A50B0060768F /* PostService.swift */,
 				B011377A2A50A5C40060768F /* RequestHandler.swift */,
+				B01137782A50A50B0060768F /* PostService.swift */,
 				B0CEBE472A519E0A00982D4D /* SessionService.swift */,
 				B0CEBE4F2A51A90700982D4D /* LoginService.swift */,
 				B0CEBE512A51CC2700982D4D /* Service.swift */,

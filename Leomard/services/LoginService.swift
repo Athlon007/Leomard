@@ -20,19 +20,7 @@ class LoginService: Service {
    
     public func login(lemmyInstance: String, login: Login,Ca completion: @escaping (Result<LoginResponse, Error>) -> Void) {
         self.requestHandler.makeApiRequest(host: lemmyInstance, request: "/user/login", method: .post, body: login) { result in
-            switch (result) {
-            case .success(let apiResponse):
-                if let data = apiResponse.data {
-                    do {
-                        let loginResponse: LoginResponse = try self.decode(type: LoginResponse.self, data: data)
-                        completion(.success(loginResponse))
-                    } catch {
-                        self.completeError(data, completion)
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            self.respond(result, completion)
         }
     }
     
