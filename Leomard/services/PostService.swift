@@ -122,4 +122,30 @@ class PostService: Service {
             }
         }
     }
+    
+    public func createPost(community: Community, name: String, body: String?, url: String?, nsfw: Bool?, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        let url = sessionService.getLemmyInstance()
+        
+        let bodyText = body == "" ? nil : body
+        let urlText = url == "" ? nil : url
+        let nsfwBool = nsfw == nil || nsfw == false ? nil : nsfw
+        
+        let body = CreatePost(body: bodyText, communityId: community.id, honeypot: nil, languageId: nil, name: name, nsfw: nsfwBool, url: urlText)
+        
+        requestHandler.makeApiRequest(host: url, request: "/post", method: .post, body: body) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        let response = try self.decode(type: PostResponse.self, data: data)
+                        completion(.success(response))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

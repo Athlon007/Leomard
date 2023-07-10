@@ -13,6 +13,7 @@ struct CommunityUISidebarView: View {
     @State var communityResponse: GetCommunityResponse
     let communityService: CommunityService
     let contentView: ContentView
+    @Binding var myself: MyUserInfo?
     
     var body: some View {
         VStack {
@@ -94,11 +95,22 @@ struct CommunityUISidebarView: View {
                     Button(getSubscribeButtonText(), action: onSubscribeButtonClick)
                         .buttonStyle(.borderedProminent)
                         .frame(
-                            maxWidth: .infinity,
                             alignment: .leading
-                            )
+                        )
                         .padding(.top, -20)
                         .padding(.bottom, -20)
+                    if myself != nil {
+                        Button(action: openPostCreator) {
+                            Image(systemName: "square.and.pencil")
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.top, -20)
+                        .padding(.bottom, -20)
+                    }
+                    Spacer()
                 }
                 .padding()
                 .padding(.top, 0)
@@ -139,5 +151,9 @@ struct CommunityUISidebarView: View {
     
     func getSubscribeButtonText() -> String {
         return communityResponse.communityView.subscribed == .notSubscribed ? "Subscribe" : "Unsubscribe"
+    }
+    
+    func openPostCreator() {
+        contentView.openPostCreation(community: communityResponse.communityView.community)
     }
 }

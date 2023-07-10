@@ -80,7 +80,12 @@ struct PreferencesView: View {
                     Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
                 case preferenceOptions[1]:
                     Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
-                    Text("Use '@instance.name' at the end of the search query, to search other Lemmy instances.")
+                    Text("""
+                         Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
+                         Example: 'awesome post @lemmy.world'
+                         """)
+                        .frame(maxWidth: .infinity)
+                        .lineLimit(nil)
                 default:
                     Text("")
                 }
@@ -89,6 +94,7 @@ struct PreferencesView: View {
             .padding(.trailing)
             .listStyle(SidebarListStyle())
             .scrollContentBackground(.hidden)
+            .frame(maxWidth: .infinity)
         }
         .task {
             self.currentSelection = self.preferenceOptions[0]

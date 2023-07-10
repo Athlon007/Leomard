@@ -89,7 +89,7 @@ struct ContentView: View {
                     
                     if openedCommunity != nil {
                         VStack {
-                            CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, showDismissInCommunityView: $showDismissInCommunityView)
+                            CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
                         }
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
@@ -211,6 +211,14 @@ struct ContentView: View {
                 print(error)
             }
         }
+    }
+    
+    func openPostCreation(community: Community) {
+        
+    }
+    
+    func closePostCreation() {
+        
     }
 }
 

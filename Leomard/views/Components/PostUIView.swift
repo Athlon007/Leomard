@@ -138,6 +138,9 @@ struct PostUIView: View {
                     // Static Images
                     Spacer()
                     Text("")
+                    if LinkHelper.isWebp(link: postView.post.url!) {
+                        Spacer()
+                    }
                     AsyncImage(url: URL(string: postView.post.url!),
                                content: { phase in
                         switch phase {

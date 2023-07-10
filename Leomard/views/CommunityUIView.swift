@@ -89,7 +89,7 @@ struct CommunityUIView: View {
                             if communityResponse != nil {
                                 if proxy.size.width < 1000 {
                                     VStack {
-                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView)
+                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself)
                                     }
                                     .frame(
                                         minWidth: 0,
@@ -176,7 +176,7 @@ struct CommunityUIView: View {
                         List {
                             VStack {
                                 if communityResponse != nil {
-                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView)
+                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself)
                                 }
                             }
                             .frame(
