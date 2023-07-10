@@ -10,5 +10,5 @@ import Foundation
 struct Login: Hashable, Codable {
     public let usernameOrEmail: String
     public let password: String
-    public let totp2faToken: String?
+    public let totp_2faToken: String?
 }

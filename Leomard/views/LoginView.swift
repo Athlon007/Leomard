@@ -12,10 +12,11 @@ struct LoginView: View {
     let sessionService: SessionService
     let requestHandler: RequestHandler
     var contentView: ContentView
-        
+    
     @State var url: String = ""
     @State var username: String = ""
     @State var password: String = ""
+    @State var twoFA: String = ""
     @State var isLoginFailed: Bool = false
     @State var instances: [LemmyInstance] = []
     @State var selectedInstance: LemmyInstance? = nil
@@ -23,38 +24,51 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("Leomard")
-                    .bold()
-                    .font(.system(size: 24))
-                List {
-                    ForEach(instances, id: \.self) { instance in
-                        HStack {
-                            VStack{
-                                Image(systemName: "person.2.circle")
-                                    .AvatarFormatting(size: 50)
-                            }
-                            VStack {
-                                Text(instance.name)
-                                    .bold()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .font(.system(size: 18))
-                                Text(instance.url)
-                                    .bold()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .foregroundColor(.secondary)
+                VStack {
+                    Image(nsImage: NSApplication.shared.applicationIconImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                    Text("Leomard")
+                        .bold()
+                        .font(.system(size: 24))
+                }
+                VStack {
+                    Text("Pick your Lemmy instance")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    List {
+                        ForEach(instances, id: \.self) { instance in
+                            HStack {
+                                HStack {
+                                    VStack{
+                                        Image(systemName: "person.2.circle")
+                                            .AvatarFormatting(size: 50)
+                                    }
+                                    VStack {
+                                        Text(instance.name)
+                                            .bold()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .font(.system(size: 18))
+                                        Text(instance.url)
+                                            .bold()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .foregroundColor(selectedInstance == instance ? Color(.selectedMenuItemTextColor) : .secondary)
+                                    }
+                                }
+                                .frame(minWidth: 0, alignment: .center)
+                                .onTapGesture {
+                                    self.url = instance.url
+                                    selectedInstance = instance
+                                }
+                                .padding()
+                                .background(selectedInstance == instance ? Color(.selectedContentBackgroundColor) : Color.clear)
+                                .foregroundColor(selectedInstance == instance ? Color(.selectedMenuItemTextColor) : .primary)
+                                .cornerRadius(4)
                             }
                         }
-                        .frame(minWidth: 0, alignment: .center)
-                        .onTapGesture {
-                            self.url = instance.url
-                            selectedInstance = instance
-                        }
-                        .padding()
-                        .cornerRadius(4)
-                        .background(selectedInstance == instance ? Color(.selectedContentBackgroundColor) : Color.clear)
-                    }
-                }.frame(maxWidth: .infinity, maxHeight: 200)
-                Text("Lemmy Instance")
+                    }.frame(maxWidth: .infinity, maxHeight: 225)
+                
+                Text("Or type the link to your instance here:")
                     .frame(
                         minWidth: 0,
                         maxWidth: .infinity,
@@ -75,6 +89,14 @@ struct LoginView: View {
                         alignment: .leading
                     )
                 SecureField("", text: $password)
+                Text("2FA Code (Optional)")
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                TextField("", text: $twoFA)
+                }
                 Button("Login", action: login)
                     .buttonStyle(.borderedProminent)
                 if isLoginFailed {
@@ -94,7 +116,7 @@ struct LoginView: View {
     
     func login() {
         let loginService: LoginService = LoginService(requestHandler: requestHandler, sessionService: sessionService)
-        let login = Login(usernameOrEmail: self.username, password: self.password, totp2faToken: "")
+        let login = Login(usernameOrEmail: self.username, password: self.password, totp_2faToken: self.twoFA)
         loginService.login(lemmyInstance: self.url, login: login) { result in
             switch (result) {
             case .success(let loginResponse):
