@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MarkdownUI
 
 struct PostCreationPopup: View {
     let contentView: ContentView
@@ -18,6 +19,8 @@ struct PostCreationPopup: View {
     @State var bodyText: String = ""
     @State var url: String = ""
     @State var isNsfw: Bool = false
+    
+    @State var isUrlValid: Bool = true
     
     var body: some View {
         ZStack {
@@ -56,22 +59,60 @@ struct PostCreationPopup: View {
                             )
                             .fontWeight(.semibold)
                         TextField("", text: $title)
+                        Text("URL")
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                            .fontWeight(.semibold)
+                        TextField("", text: $url)
+                            .onChange(of: url) { _ in
+                                checkUrlValidity()
+                            }
+                            .border(!isUrlValid ? .red : .clear, width: 4)
                         Text("Body")
                             .frame(
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
                             .fontWeight(.semibold)
-                        TextEditor(text: $bodyText)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                            .frame(
-                                maxWidth: .infinity,
-                                minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                maxHeight: .infinity,
-                                alignment: .leading
-                            )
-                            .lineLimit(5...)
-                            .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                        Spacer()
+                        VStack {
+                            Spacer()
+                            TextEditor(text: $bodyText)
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                                .frame(
+                                    maxWidth: .infinity,
+                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                    maxHeight: .infinity,
+                                    alignment: .leading
+                                )
+                                .lineLimit(5...)
+                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                            Text("Preview")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            List {
+                                let content = MarkdownContent(bodyText)
+                                Markdown(content)
+                                    .frame(
+                                    minWidth: 0,
+                                    maxWidth: .infinity,
+                                    minHeight: 0,
+                                    maxHeight: .infinity,
+                                    alignment: .leading
+                                )
+                            }
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: .leading
+                        )
+                        Spacer()
                         Button("Send", action: sendPost)
                             .buttonStyle(.borderedProminent)
                             .frame(
@@ -80,6 +121,7 @@ struct PostCreationPopup: View {
                             )
                             .disabled(canSend())
                     }
+                    .padding()
                 }
                 .frame(
                     minWidth: 0,
@@ -106,7 +148,7 @@ struct PostCreationPopup: View {
     }
     
     func close() {
-        contentView.closePost()
+        contentView.closePostCreation()
     }
     
     func sendPost() {
@@ -115,5 +157,31 @@ struct PostCreationPopup: View {
     
     func canSend() -> Bool {
         return false
+    }
+    
+    func checkUrlValidity() {
+        if url.count == 0 {
+            self.isUrlValid = true
+            return
+        }
+        
+         let urlText = url
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if urlText != url {
+                // We kinda don't wanna spam HEAD requests...
+                return
+            }
+            
+            let url = URL(string: url)
+            if url == nil {
+                self.isUrlValid = false
+                return
+            }
+            
+            url?.isReachable() { success in
+                self.isUrlValid = success
+            }
+        }
     }
 }

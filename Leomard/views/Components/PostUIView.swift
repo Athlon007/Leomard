@@ -72,7 +72,6 @@ struct PostUIView: View {
                                 self.bodyHeight = geometry.size.height
                             }
                     })
-                
             }
             if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
                 if LinkHelper.isYouTubeLink(link: postView.post.url!) {

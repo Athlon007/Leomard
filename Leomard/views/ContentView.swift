@@ -33,6 +33,7 @@ struct ContentView: View {
     @State var openedPerson: Person? = nil
     @State var openedCommunity: Community? = nil
     @State var showDismissInCommunityView: Bool = true
+    @State var openedPostMakingForCommunity: Community? = nil
     
     var body: some View {
         ZStack {
@@ -112,6 +113,10 @@ struct ContentView: View {
             if self.openedPostView != nil {
                 PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
                     .opacity(postHidden ? 0 : 1)
+            }
+            
+            if self.openedPostMakingForCommunity != nil {
+                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser)
             }
         }
     }
@@ -214,11 +219,11 @@ struct ContentView: View {
     }
     
     func openPostCreation(community: Community) {
-        
+        openedPostMakingForCommunity = community
     }
     
     func closePostCreation() {
-        
+        openedPostMakingForCommunity = nil
     }
 }
 
