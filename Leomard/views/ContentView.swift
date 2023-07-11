@@ -39,88 +39,84 @@ struct ContentView: View {
     @State var editedPost: PostView? = nil
     
     var body: some View {
-        ZStack {
-            NavigationSplitView {
-                NavbarView(
-                    options: options,
-                    profileOption: $profileOption,
-                    currentSelection: $currentSelection,
-                    followedCommunities: $followedCommunities,
-                    contentView: self,
-                    currentCommunity: $openedCommunity
-                )
-                .listStyle(SidebarListStyle())
-                .navigationBarBackButtonHidden(true)
-                .frame(
-                    minWidth: 50
-                )
-            } detail: {
-                ZStack {
-                    VStack {
-                        switch currentSelection.id {
-                        case 2:
-                            SearchView(sessionService: sessionService, postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+        NavigationSplitView() {
+            NavbarView(
+                options: options,
+                profileOption: $profileOption,
+                currentSelection: $currentSelection,
+                followedCommunities: $followedCommunities,
+                contentView: self,
+                currentCommunity: $openedCommunity
+            )
+            .listStyle(SidebarListStyle())
+            .navigationBarBackButtonHidden(true)
+            .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 750)
+        } detail: {
+            ZStack {
+                VStack {
+                    switch currentSelection.id {
+                    case 2:
+                        SearchView(sessionService: sessionService, postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    case 3:
+                        if self.sessionService.isSessionActive() && myUser != nil {
+                            ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
-                        case 3:
-                            if self.sessionService.isSessionActive() && myUser != nil {
-                                ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            } else {
-                                LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
-                                    .frame(maxWidth: .infinity)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            }
-                        default:
-                            FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
+                        } else {
+                            LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
+                                .frame(maxWidth: .infinity)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         }
-                    }
-                    
-                    if openedPerson != nil {
-                        VStack {
-                            ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        }
-                        .listStyle(SidebarListStyle())
-                        .scrollContentBackground(.hidden)
-                        .background(.thickMaterial)
-                    }
-                    
-                    if openedCommunity != nil {
-                        VStack {
-                            CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
-                        }
-                        .listStyle(SidebarListStyle())
-                        .scrollContentBackground(.hidden)
-                        .background(.thickMaterial)
+                    default:
+                        FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
                     }
                 }
-                .frame(minWidth: 600, minHeight: 400)
+                
+                if openedPerson != nil {
+                    VStack {
+                        ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    }
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+                }
+                
+                if openedCommunity != nil {
+                    VStack {
+                        CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
+                    }
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+                }
             }
             .frame(minWidth: 600, minHeight: 400)
-            .task {
-                self.currentSelection = self.options[0]
-                self.requestHandler = RequestHandler(sessionService: self.sessionService)
-                self.siteService = SiteService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                self.commentService = CommentService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                self.postService = PostService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                
-                self.loadUserData()
-            }
-
-            if self.openedPostView != nil {
-                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
-                    .opacity(postHidden ? 0 : 1)
-            }
+        }
+        .frame(minWidth: 600, minHeight: 400)
+        .task {
+            self.currentSelection = self.options[0]
+            self.requestHandler = RequestHandler(sessionService: self.sessionService)
+            self.siteService = SiteService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
+            self.commentService = CommentService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
+            self.postService = PostService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
             
-            if self.openedPostMakingForCommunity != nil {
-                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser, onPostAdded: self.onPostAdded!, editedPost: editedPost)
-            }
+            self.loadUserData()
+        }
+        
+        if self.openedPostView != nil {
+            PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
+                .opacity(postHidden ? 0 : 1)
+        }
+        
+        if self.openedPostMakingForCommunity != nil {
+            PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser, onPostAdded: self.onPostAdded!, editedPost: editedPost)
         }
     }
     
@@ -239,6 +235,10 @@ struct ContentView: View {
     func closePostEdit() {
         openedPostMakingForCommunity = nil
         self.editedPost = nil
+    }
+    
+    func evaluate(_ width: CGFloat) {
+        print("Width: \(width)")
     }
 }
 

@@ -18,7 +18,7 @@ struct LeomardApp: App {
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
-        .windowResizability(.contentSize)
+        .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(after: .appInfo) {
                 Button("Preferences", action: showPreferences)
