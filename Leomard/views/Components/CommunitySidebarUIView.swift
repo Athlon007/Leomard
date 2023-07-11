@@ -132,6 +132,9 @@ struct CommunityUISidebarView: View {
             maxWidth: .infinity
         )
         .background(Color(.textBackgroundColor))
+        .contextMenu {
+            CommunityContextMenu(communityView: self.communityResponse.communityView)
+        }
     }
     
     func onSubscribeButtonClick() {

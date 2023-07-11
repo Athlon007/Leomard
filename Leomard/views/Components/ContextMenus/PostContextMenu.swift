@@ -21,7 +21,7 @@ struct PostContextMenu: View {
                 .padding()
         }
         Button(action: {
-            copyToClipboard(text: postView.post.apId)
+            Clipboard.copyToClipboard(text: postView.post.apId)
         }) {
             Text("Copy Post Link")
                 .padding()
@@ -34,14 +34,14 @@ struct PostContextMenu: View {
                     .padding()
             }
             Button(action: {
-                copyToClipboard(text: url)
+                Clipboard.copyToClipboard(text: url)
             }) {
                 Text(LinkHelper.isImageLink(link: url) ? "Copy Image Link" : "Copy External Link")
                     .padding()
             }
             if LinkHelper.isImageLink(link: url) {
                 Button(action: {
-                    copyImageToClipboard(imageLink: url)
+                    Clipboard.copyImageToClipboard(imageLink: url)
                 }) {
                     Text("Copy Image")
                         .padding()
@@ -58,29 +58,13 @@ struct PostContextMenu: View {
         ShareLink(item: URL(string: postView.post .apId)!) {
             Text("Share")
         }
-    }
-    
-    func copyToClipboard(text: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: NSPasteboard.PasteboardType.string)
-    }
-    
-    func copyImageToClipboard(imageLink: String) {
-        guard let imageURL = URL(string: imageLink) else {
-            return
-        }
-        
-        let session = URLSession.shared
-        let task = session.dataTask(with: imageURL) { data, response, error in
-            guard let data = data, let image = NSImage(data: data) else {
-                return
-            }
+        Button(action: {
             
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.writeObjects([image] as [NSPasteboardWriting])
+        }) {
+            Text("Report")
+                .padding()
         }
-        
-        task.resume()
+        .disabled(true)
     }
     
     func saveImage(imageLink: String) {

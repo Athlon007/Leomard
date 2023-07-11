@@ -141,5 +141,9 @@ struct ProfileSidebarUIView: View {
             maxWidth: .infinity
         )
         .background(Color(.textBackgroundColor))
+        .contextMenu {
+            PersonContextMenu(personView: self.personView)
+        }
+        
     }
 }

@@ -65,5 +65,8 @@ struct CommunitySearchUIView: View {
         .onTapGesture {
             contentView.openCommunity(community: communityView.community)
         }
+        .contextMenu {
+            CommunityContextMenu(communityView: self.communityView)
+        }
     }
 }

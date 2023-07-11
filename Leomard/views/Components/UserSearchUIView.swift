@@ -53,5 +53,8 @@ struct UserSearchUIView: View {
         .onTapGesture {
             contentView.openPerson(profile: personView.person)
         }
+        .contextMenu {
+            PersonContextMenu(personView: personView)
+        }
     }
 }

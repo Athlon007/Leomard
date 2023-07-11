@@ -226,6 +226,9 @@ struct CommentUIView: View {
                     updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
                 }
             }
+            .contextMenu {
+                CommentContextMenu(commentView: self.commentView)
+            }
         }
     }
     
