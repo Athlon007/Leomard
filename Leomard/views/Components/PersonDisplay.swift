@@ -17,26 +17,31 @@ struct PersonDisplay: View {
     var body: some View {
         PersonAvatar(person: person)
         Text(person.name)
-            .fontWeight(.semibold)
+            .PersonNameFormat(person: person, myself: myself)
+    }
+}
+
+extension Text {
+    func PersonNameFormat(person: Person, myself: MyUserInfo?) -> some View {
+        var color: Color = .primary
+        if person.admin {
+            color = .red
+        }
+        
+        if person.botAccount {
+            color = .green
+        }
+        
+        if person.actorId == myself?.localUserView.person.actorId {
+            color = .blue
+        }
+        
+        if person.name == "athlon" && person.actorId.starts(with: "https://lemm.ee/u/") {
+            color = .purple
+        }
+        
+        return self.fontWeight(.semibold)
             .foregroundColor(color)
             .strikethrough(person.banned)
-            .task {
-                
-                if person.admin {
-                    self.color = .red
-                }
-                
-                if person.botAccount {
-                    self.color = .green
-                }
-                
-                if person.actorId == myself?.localUserView.person.actorId {
-                    self.color = .blue
-                }
-                
-                if person.name == "athlon" && person.actorId.starts(with: "https://lemm.ee/u/") {
-                    self.color = .purple
-                }
-            }
     }
 }

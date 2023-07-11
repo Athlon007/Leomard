@@ -72,7 +72,7 @@ struct ProfileView: View {
                             if personDetails != nil {
                                 if proxy.size.width < 1000 {
                                     VStack {
-                                        ProfileSidebarUIView(personView: personDetails!.personView)
+                                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
                                     }
                                     .frame(
                                         minWidth: 0,
@@ -147,7 +147,7 @@ struct ProfileView: View {
                         List {
                             VStack {
                                 if personDetails != nil {
-                                    ProfileSidebarUIView(personView: personDetails!.personView)
+                                    ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
                                 }
                             }
                             .frame(
