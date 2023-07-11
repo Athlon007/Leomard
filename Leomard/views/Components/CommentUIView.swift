@@ -154,7 +154,7 @@ struct CommentUIView: View {
                     if isReplying || isEditingComment {
                         Spacer()
                         VStack {
-                            Text(isEditingComment ? "Edit" :"Reply")
+                            Text(isEditingComment ? "Edit" : "Reply")
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .leading

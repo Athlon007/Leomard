@@ -14,6 +14,7 @@ struct CommunityUISidebarView: View {
     let communityService: CommunityService
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
+    var onPostAdded: (PostView) -> Void
     
     var body: some View {
         VStack {
@@ -154,6 +155,6 @@ struct CommunityUISidebarView: View {
     }
     
     func openPostCreator() {
-        contentView.openPostCreation(community: communityResponse.communityView.community)
+        contentView.openPostCreation(community: communityResponse.communityView.community, onPostAdded: onPostAdded)
     }
 }

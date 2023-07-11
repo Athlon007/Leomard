@@ -33,7 +33,10 @@ struct ContentView: View {
     @State var openedPerson: Person? = nil
     @State var openedCommunity: Community? = nil
     @State var showDismissInCommunityView: Bool = true
+    // Post creation
     @State var openedPostMakingForCommunity: Community? = nil
+    @State var onPostAdded: ((PostView) -> Void)? = nil
+    @State var editedPost: PostView? = nil
     
     var body: some View {
         ZStack {
@@ -60,7 +63,7 @@ struct ContentView: View {
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 3:
-                            if self.sessionService.isSessionActive() {
+                            if self.sessionService.isSessionActive() && myUser != nil {
                                 ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
                                     .listStyle(SidebarListStyle())
                                     .scrollContentBackground(.hidden)
@@ -116,7 +119,7 @@ struct ContentView: View {
             }
             
             if self.openedPostMakingForCommunity != nil {
-                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser)
+                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser, onPostAdded: self.onPostAdded!, editedPost: editedPost)
             }
         }
     }
@@ -218,12 +221,24 @@ struct ContentView: View {
         }
     }
     
-    func openPostCreation(community: Community) {
+    func openPostCreation(community: Community, onPostAdded: @escaping (PostView) -> Void) {
         openedPostMakingForCommunity = community
+        self.onPostAdded = onPostAdded
     }
     
     func closePostCreation() {
         openedPostMakingForCommunity = nil
+    }
+    
+    func openPostEdition(post: PostView, onPostEdited: @escaping (PostView) -> Void) {
+        self.editedPost = post
+        openedPostMakingForCommunity = post.community
+        self.onPostAdded = onPostEdited
+    }
+    
+    func closePostEdit() {
+        openedPostMakingForCommunity = nil
+        self.editedPost = nil
     }
 }
 

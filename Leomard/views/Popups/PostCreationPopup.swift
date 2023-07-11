@@ -14,6 +14,8 @@ struct PostCreationPopup: View {
     let community: Community
     let postService: PostService
     @Binding var myself: MyUserInfo?
+    let onPostAdded: (PostView) -> Void
+    let editedPost: PostView?
     
     @State var title: String = ""
     @State var bodyText: String = ""
@@ -113,13 +115,18 @@ struct PostCreationPopup: View {
                             alignment: .leading
                         )
                         Spacer()
+                        Toggle("NSFW", isOn: $isNsfw)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
                         Button("Send", action: sendPost)
                             .buttonStyle(.borderedProminent)
                             .frame(
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
-                            .disabled(canSend())
+                            .disabled(!canSendPost())
                     }
                     .padding()
                 }
@@ -145,6 +152,14 @@ struct PostCreationPopup: View {
             minHeight: 0,
             maxHeight: .infinity
         )
+        .task {
+            if self.editedPost != nil {
+                self.title = self.editedPost!.post.name
+                self.bodyText = self.editedPost!.post.body ?? ""
+                self.url = self.editedPost!.post.url ?? ""
+                self.isNsfw = self.editedPost!.post.nsfw
+            }
+        }
     }
     
     func close() {
@@ -152,11 +167,35 @@ struct PostCreationPopup: View {
     }
     
     func sendPost() {
+        if !canSendPost() {
+            return
+        }
         
+        if self.editedPost != nil {
+            self.postService.editPost(post: editedPost!.post, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
+                switch result {
+                case .success(let response):
+                    self.onPostAdded(response.postView)
+                    contentView.closePostEdit()
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        } else {
+            self.postService.createPost(community: community, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
+                switch result {
+                case .success(let response):
+                    contentView.closePostCreation()
+                    self.onPostAdded(response.postView)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
     
-    func canSend() -> Bool {
-        return false
+    func canSendPost() -> Bool {
+        return title.count > 0 && self.isUrlValid
     }
     
     func checkUrlValidity() {

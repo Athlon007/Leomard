@@ -9,7 +9,7 @@ import Foundation
 
 struct PostView: Hashable, Codable
 {
-    public let post: Post
+    public var post: Post
     public let creator: Person
     public let community: Community
     public let creatorBannedFromCommunity: Bool

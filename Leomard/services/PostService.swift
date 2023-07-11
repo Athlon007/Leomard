@@ -88,7 +88,6 @@ class PostService: Service {
     }
     
     public func createPost(community: Community, name: String, body: String?, url: String?, nsfw: Bool?, completion: @escaping (Result<PostResponse, Error>) -> Void) {
-        let url = sessionService.getLemmyInstance()
         
         let bodyText = body == "" ? nil : body
         let urlText = url == "" ? nil : url
@@ -96,7 +95,21 @@ class PostService: Service {
         
         let body = CreatePost(body: bodyText, communityId: community.id, honeypot: nil, languageId: nil, name: name, nsfw: nsfwBool, url: urlText)
         
-        requestHandler.makeApiRequest(host: url, request: "/post", method: .post, body: body) { result in
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/post", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func deletePost(post: Post, deleted: Bool, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        let body = DeletePost(postId: post.id, deleted: deleted)
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/post/delete", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func editPost(post: Post, name: String?, body: String?, url: String?, nsfw: Bool?, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        let body = EditPost(postId: post.id, body: body == "" ? nil : body, honeypot: nil, languageId: nil, name: name == "" ? nil : name, nsfw: nsfw == nil || nsfw == false ? nil : nsfw, url: url == "" ? nil: url)
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/post", method: .put, body: body) { result in
             self.respond(result, completion)
         }
     }

@@ -10,22 +10,22 @@ import Foundation
 struct Post: Hashable, Codable
 {
     public let id: Int
-    public let name: String
-    public let body: String?
+    public var name: String
+    public var body: String?
     public let creatorId: Int
     public let communityId: Int
     public let removed: Bool
     public let locked: Bool
     public let published: Date
     public let updated: Date?
-    public let deleted: Bool
-    public let nsfw: Bool
+    public var deleted: Bool
+    public var nsfw: Bool
     public let apId: String
     public let local: Bool
     public let languageId: Int
     public let featuredCommunity: Bool
     public let featuredLocal: Bool
-    public let url: String?
+    public var url: String?
     public let thumbnailUrl: String?
     public let embedTitle: String?
     public let embedDescription: String?

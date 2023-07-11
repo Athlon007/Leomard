@@ -89,7 +89,7 @@ struct CommunityUIView: View {
                             if communityResponse != nil {
                                 if proxy.size.width < 1000 {
                                     VStack {
-                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself)
+                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
                                     }
                                     .frame(
                                         minWidth: 0,
@@ -176,7 +176,7 @@ struct CommunityUIView: View {
                         List {
                             VStack {
                                 if communityResponse != nil {
-                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself)
+                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
                                 }
                             }
                             .frame(
@@ -266,6 +266,12 @@ struct CommunityUIView: View {
             case .failure(let error):
                 print(error)
             }
+        }
+    }
+    
+    func addNewPost(postView: PostView) {
+        DispatchQueue.main.async {
+            self.posts.insert(postView, at: 0)
         }
     }
 }
