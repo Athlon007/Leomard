@@ -164,7 +164,9 @@ struct PrivateMessageUIView: View {
                     isSendingComment = false
                     isReplied = true
                     
-                    // Mark it too as read.
+                    toggleMarkAsRead()
+                    
+                    // Mark the response (your message) as read too.
                     privateMessageService.markAsRead(privateMessage: privateMessageResponse.privateMessageView.privateMessage, read: true) {_ in }
                 }
             case .failure(let error):

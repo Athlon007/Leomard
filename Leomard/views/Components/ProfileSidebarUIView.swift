@@ -13,6 +13,10 @@ struct ProfileSidebarUIView: View {
     let personView: PersonView
     @Binding var myself: MyUserInfo?
     
+    @State var writingMessage: Bool = false
+    @State var messageText: String = ""
+    @State var isSendingMessage: Bool = false
+    
     var body: some View {
         VStack {
             ZStack() {
@@ -123,6 +127,60 @@ struct ProfileSidebarUIView: View {
             )
             .padding()
             .padding(.top, -20)
+            if personView.person != myself?.localUserView.person {
+                Spacer()
+                HStack {
+                    Button(action: startWritePrivateMessage) {
+                        Image(systemName: "envelope")
+                    }
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding()
+                .padding(.top, -20)
+            }
+            if self.writingMessage {
+                Spacer()
+                VStack {
+                    Text("Private Message")
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .fontWeight(.semibold)
+                    TextEditor(text: $messageText)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                        .frame(
+                            maxWidth: .infinity,
+                            minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                            maxHeight: .infinity,
+                            alignment: .leading
+                        )
+                        .lineLimit(5...)
+                        .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                    HStack {
+                        Button("Send", action: onSendMessage)
+                            .buttonStyle(.borderedProminent)
+                            .frame(
+                                alignment: .leading
+                            )
+                            .disabled(!isSendable())
+                        Button("Cancel", action: cancelComment)
+                            .buttonStyle(.automatic)
+                            .frame(
+                                alignment: .leading
+                            )
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                }
+                .padding()
+                .padding(.top, -20)
+            }
             Spacer()
             if personView.person.bio != nil {
                 let banner = MarkdownContent(personView.person.bio!)
@@ -134,6 +192,7 @@ struct ProfileSidebarUIView: View {
                         alignment: .leading
                     )
                     .padding()
+                    .padding(.top, -20)
                 Spacer()
             }
         }
@@ -145,5 +204,37 @@ struct ProfileSidebarUIView: View {
             PersonContextMenu(personView: self.personView)
         }
         
+    }
+    
+    func startWritePrivateMessage() {
+        writingMessage = true
+    }
+    
+    func onSendMessage() {
+        let requestHandler = RequestHandler(sessionService: SessionService())
+        let service = PrivateMessageService(requestHandler: requestHandler, sessionService: SessionService())
+        isSendingMessage = true
+        
+        service.sendPrivateMessage(content: messageText, recipient: personView.person) { result in
+            switch result {
+            case .success(let privateMessageResponse):
+                service.markAsRead(privateMessage: privateMessageResponse.privateMessageView.privateMessage, read: true) { _ in }
+                messageText = ""
+                writingMessage = false
+                isSendingMessage = false
+            case .failure(let error):
+                print(error)
+                isSendingMessage = false
+            }
+        }
+    }
+    
+    func cancelComment() {
+        messageText = ""
+        writingMessage = false
+    }
+    
+    func isSendable() -> Bool {
+        return messageText.count > 0 && !isSendingMessage
     }
 }

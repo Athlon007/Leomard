@@ -53,9 +53,6 @@
 		B05B214E2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B214D2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift */; };
 		B05B21502A5F2DF500BA8FB2 /* CreatePrivateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B214F2A5F2DF500BA8FB2 /* CreatePrivateMessage.swift */; };
 		B05B21522A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21512A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift */; };
-		B05B21552A5F337600BA8FB2 /* PrivateMessageChatPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21542A5F337600BA8FB2 /* PrivateMessageChatPopup.swift */; };
-		B05B21572A5F343300BA8FB2 /* Chats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21562A5F343300BA8FB2 /* Chats.swift */; };
-		B05B21592A5F349B00BA8FB2 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21582A5F349B00BA8FB2 /* Chat.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
 		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
@@ -210,9 +207,6 @@
 		B05B214D2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageUIView.swift; sourceTree = "<group>"; };
 		B05B214F2A5F2DF500BA8FB2 /* CreatePrivateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePrivateMessage.swift; sourceTree = "<group>"; };
 		B05B21512A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkPrivateMessageAsRead.swift; sourceTree = "<group>"; };
-		B05B21542A5F337600BA8FB2 /* PrivateMessageChatPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageChatPopup.swift; sourceTree = "<group>"; };
-		B05B21562A5F343300BA8FB2 /* Chats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chats.swift; sourceTree = "<group>"; };
-		B05B21582A5F349B00BA8FB2 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		B091F8372A5432A900F0DA32 /* PostContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContextMenu.swift; sourceTree = "<group>"; };
 		B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSidebarUIView.swift; sourceTree = "<group>"; };
 		B091F83B2A54708800F0DA32 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -455,7 +449,6 @@
 			isa = PBXGroup;
 			children = (
 				B091F8792A59C5AE00F0DA32 /* UserPreferences.swift */,
-				B05B21562A5F343300BA8FB2 /* Chats.swift */,
 			);
 			path = AppStorage;
 			sourceTree = "<group>";
@@ -581,7 +574,6 @@
 				B0CEBE542A51D2F100982D4D /* SessionInfo.swift */,
 				B0D7A16A2A53929200FE2852 /* ElapsedTime.swift */,
 				B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */,
-				B05B21582A5F349B00BA8FB2 /* Chat.swift */,
 			);
 			path = Leomard;
 			sourceTree = "<group>";
@@ -659,7 +651,6 @@
 			children = (
 				B0D7A1552A53128500FE2852 /* PostPopup.swift */,
 				B00A5C482A5C30A000D3CF98 /* PostCreationPopup.swift */,
-				B05B21542A5F337600BA8FB2 /* PrivateMessageChatPopup.swift */,
 			);
 			path = Popups;
 			sourceTree = "<group>";
@@ -838,7 +829,6 @@
 				B091F8542A55EE9200F0DA32 /* PersonService.swift in Sources */,
 				B05B211A2A5C6D0000BA8FB2 /* Error.swift in Sources */,
 				B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */,
-				B05B21572A5F343300BA8FB2 /* Chats.swift in Sources */,
 				B05B21522A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift in Sources */,
 				B0CEBE442A519A1600982D4D /* NavbarItem.swift in Sources */,
 				B091F8802A5AE3A300F0DA32 /* LemmyInstance.swift in Sources */,
@@ -856,7 +846,6 @@
 				B0CEBE5D2A52C2CD00982D4D /* GetSiteResponse.swift in Sources */,
 				B091F8692A57716500F0DA32 /* CommunityResponse.swift in Sources */,
 				B05B214E2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift in Sources */,
-				B05B21552A5F337600BA8FB2 /* PrivateMessageChatPopup.swift in Sources */,
 				B091F8782A59BAE700F0DA32 /* PreferenceView.swift in Sources */,
 				B0CEBE6F2A52C96900982D4D /* LocalUser.swift in Sources */,
 				B091F86D2A58323A00F0DA32 /* SearchResponse.swift in Sources */,
@@ -914,7 +903,6 @@
 				B00A5C472A5C2A5C00D3CF98 /* CreatePost.swift in Sources */,
 				B091F8742A596CEA00F0DA32 /* CommunitySearchUIView.swift in Sources */,
 				B0CEBE4C2A519F3300982D4D /* Login.swift in Sources */,
-				B05B21592A5F349B00BA8FB2 /* Chat.swift in Sources */,
 				B0CEBE842A52D14100982D4D /* RegistrationMode.swift in Sources */,
 				B0CEBE4E2A519F7300982D4D /* LoginResponse.swift in Sources */,
 				B091F85B2A56030000F0DA32 /* CommunityView.swift in Sources */,

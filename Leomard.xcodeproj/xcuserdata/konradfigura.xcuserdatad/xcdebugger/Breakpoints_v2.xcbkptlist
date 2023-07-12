@@ -545,7 +545,7 @@
             startingLineNumber = "135"
             endingLineNumber = "135"
             landmarkName = "loadContent()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -561,7 +561,7 @@
             startingLineNumber = "127"
             endingLineNumber = "127"
             landmarkName = "loadContent()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -577,7 +577,7 @@
             startingLineNumber = "147"
             endingLineNumber = "147"
             landmarkName = "loadContent()"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "4E79B38F-C208-4EC9-BE69-C0A49A7450D1 - af58384feb4f291"
@@ -638,10 +638,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
-            landmarkName = "startPeriodicUnreadMessageCheck()"
-            landmarkType = "7">
+            startingLineNumber = "293"
+            endingLineNumber = "293">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

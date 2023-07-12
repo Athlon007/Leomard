@@ -8,14 +8,30 @@
 import Foundation
 import SwiftUI
 
+struct FrequencyOption: Hashable, Equatable {
+    let name: String
+    let seconds: Int
+}
+
 struct PreferencesView: View {
     @StateObject var userPreferences: UserPreferences = UserPreferences()
     
     let preferenceOptions: [PreferenceOption] = [
-        .init(name: "Content", icon: "text.alignleft", color: .blue),
+        .init(name: "General", icon: "gearshape", color: .blue),
+        .init(name: "Content", icon: "text.alignleft", color: .cyan),
         .init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
     @State var currentSelection: PreferenceOption?
+    
+    let notificationCheckFrequencies: [FrequencyOption] = [
+        .init(name: "Never", seconds: -1),
+        .init(name: "10 seconds", seconds: 10),
+        .init(name: "30 seconds", seconds: 30),
+        .init(name: "1 minute", seconds: 60),
+        .init(name: "3 minutes", seconds: 60 * 3),
+        .init(name: "10 minutes", seconds: 60 * 10)
+    ]
+    @State var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
 
     
     var body: some View {
@@ -59,6 +75,15 @@ struct PreferencesView: View {
             List {
                 switch currentSelection {
                 case self.preferenceOptions[0]:
+                    Picker("Check notifications every", selection: $selectedNotificaitonCheckFrequency) {
+                        ForEach(self.notificationCheckFrequencies, id: \.self) { option in
+                            /*@START_MENU_TOKEN@*/Text(option.name)/*@END_MENU_TOKEN@*/
+                        }
+                    }
+                    .onChange(of: selectedNotificaitonCheckFrequency) { value in
+                        self.userPreferences.checkNotifsEverySeconds = value.seconds
+                    }
+                case self.preferenceOptions[1]:
                     Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
                         ForEach(self.userPreferences.sortTypes, id: \.self) { method in
                             Text(String(describing: method))
@@ -78,7 +103,7 @@ struct PreferencesView: View {
                     Text("NSFW")
                     Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
                     Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
-                case preferenceOptions[1]:
+                case preferenceOptions[2]:
                     Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
                     Text("""
                          Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
@@ -98,6 +123,16 @@ struct PreferencesView: View {
         }
         .task {
             self.currentSelection = self.preferenceOptions[0]
+        
+            for notificationCheckFrequency in notificationCheckFrequencies {
+                if userPreferences.checkNotifsEverySeconds == notificationCheckFrequency.seconds {
+                    selectedNotificaitonCheckFrequency = notificationCheckFrequency
+                    break
+                }
+            }
+            if selectedNotificaitonCheckFrequency.name == "Err" {
+                selectedNotificaitonCheckFrequency = notificationCheckFrequencies[3]
+            }
         }
     }
 }

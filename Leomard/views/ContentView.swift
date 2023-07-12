@@ -277,7 +277,11 @@ struct ContentView: View {
     
     func startPeriodicUnreadMessageCheck() {
         // Check every 1 minute if we got a new unread message.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [self] in
+        if UserPreferences().checkNotifsEverySeconds <= -1 {
+            return
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(UserPreferences().checkNotifsEverySeconds)) { [self] in
             self.updateUnreadMessagesCount()
             self.startPeriodicUnreadMessageCheck()
         }
