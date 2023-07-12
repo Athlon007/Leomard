@@ -9,7 +9,7 @@ import Foundation
 
 struct CommentReplyView: Codable, Hashable {
     var comment: Comment
-    let commentReply: CommentReply
+    var commentReply: CommentReply
     let community: Community
     var counts: CommentAggregates
     let creator: Person

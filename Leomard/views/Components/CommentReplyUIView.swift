@@ -14,9 +14,7 @@ struct CommentReplyUIView: View {
     let commentService: CommentService
     @Binding var myself: MyUserInfo?
     let contentView: ContentView
-    
-    static let intentOffset: Int = 15
-    static let limit: Int = 10
+    @Binding var unreadOnlyMode: Bool
     
     @State var isReplying: Bool = false
     @State var commentText: String = ""
@@ -97,11 +95,11 @@ struct CommentReplyUIView: View {
                             )
                             if myself != nil {
                                 HStack {
-                                    Button(action: markAsRead) {
+                                    Button(action: toggleMarkAsRead) {
                                         Image(systemName: "envelope.open")
                                     }
                                     .buttonStyle(.link)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(commentReplyView.commentReply.read ? .blue : .primary)
                                     Button(action: savePost) {
                                         Image(systemName: "bookmark")
                                     }
@@ -287,11 +285,14 @@ struct CommentReplyUIView: View {
         }
     }
     
-    func markAsRead() {
-        self.contentView.repliesService?.markAsRead(commentReply: self.commentReplyView.commentReply, read: true) { result in
+    func toggleMarkAsRead() {
+        self.contentView.repliesService?.markAsRead(commentReply: self.commentReplyView.commentReply, read: !self.commentReplyView.commentReply.read) { result in
             switch result {
-            case .success(_):
-                self.isReplied = true
+            case .success(let response):
+                if unreadOnlyMode {
+                    self.isReplied = true
+                }
+                self.commentReplyView.commentReply.read = response.commentReplyView.commentReply.read
                 self.contentView.updateUnreadMessagesCount()
             case .failure(let error):
                 print(error)

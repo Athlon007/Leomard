@@ -11,7 +11,7 @@ struct CommentReply: Codable, Hashable {
     let commentId: Int
     let id: Int
     let published: Date
-    let read: Bool
+    var read: Bool
     let recipientId: Int
     
     init(from decoder: Decoder) throws {

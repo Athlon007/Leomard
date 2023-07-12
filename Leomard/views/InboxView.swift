@@ -78,7 +78,7 @@ struct InboxView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     ForEach(commentReplies, id: \.self) { commentReply in
-                        CommentReplyUIView(commentReplyView: commentReply, commentService: commentService, myself: $myself, contentView: contentView)
+                        CommentReplyUIView(commentReplyView: commentReply, commentService: commentService, myself: $myself, contentView: contentView, unreadOnlyMode: $unreadOnly)
                             .onAppear {
                                 if commentReply == commentReplies.last {
                                     page += 1
