@@ -26,6 +26,12 @@ struct PersonContextMenu: View {
             Text("Copy Profile Link")
                 .padding()
         }
+        Button(action: {
+            Clipboard.copyToClipboard(text: "@" + personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
+        }) {
+            Text("Copy Handle")
+                .padding()
+        }
         Divider()
         Button(action: {
             
