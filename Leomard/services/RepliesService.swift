@@ -33,4 +33,11 @@ class RepliesService: Service {
             self.respond(result, completion)
         }
     }
+    
+    func markAsRead(commentReply: CommentReply, read: Bool, completion: @escaping(Result<CommentReplyResponse, Error>) -> Void) {
+        let body = MarkCommentReplyAsRead(commentReplyId: commentReply.id, read: read)
+        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment/mark_as_read", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

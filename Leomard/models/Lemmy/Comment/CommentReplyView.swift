@@ -8,16 +8,16 @@
 import Foundation
 
 struct CommentReplyView: Codable, Hashable {
-    let comment: Comment
+    var comment: Comment
     let commentReply: CommentReply
     let community: Community
-    let counts: CommentAggregates
+    var counts: CommentAggregates
     let creator: Person
     let creatorBannedFromCommunity: Bool
     let creatorBlocked: Bool
-    let myVote: Int?
+    var myVote: Int?
     let post: Post
     let recipient: Person
-    let saved: Bool
+    var saved: Bool
     let subscribed: SubscribedType
 }

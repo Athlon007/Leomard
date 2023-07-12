@@ -13,6 +13,8 @@ struct InboxView: View {
     let requestHandler: RequestHandler
     let sessionService: SessionService
     @Binding var myself: MyUserInfo?
+    let contentView: ContentView
+    let commentService: CommentService
     
     @State var privateMessageService: PrivateMessageService? = nil
     
@@ -26,6 +28,9 @@ struct InboxView: View {
     @State var privateMessages: [PrivateMessageView] = []
     @State var page: Int = 1
     @State var unreadOnly: Bool = true
+    @State var reachedEnd: Bool = false
+    
+    @State var isLoading: Bool = false
     
     var body: some View {
         VStack {
@@ -50,16 +55,46 @@ struct InboxView: View {
                     }
             }
             List {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+                
                 switch selectedView {
                 case views[1]:
+                    if privateMessages.count == 0 && !isLoading {
+                        Text("You don't have any private messages.")
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
                     ForEach(privateMessages, id: \.self) { privateMessage in
                         Text(privateMessage.privateMessage.content)
                     }
                 default:
+                    if commentReplies.count == 0 && !isLoading {
+                        Text("You don't have any replies.")
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
                     ForEach(commentReplies, id: \.self) { commentReply in
-                        Text(commentReply.comment.content)
+                        CommentReplyUIView(commentReplyView: commentReply, commentService: commentService, myself: $myself, contentView: contentView)
+                            .onAppear {
+                                if commentReply == commentReplies.last {
+                                    page += 1
+                                    loadContent()
+                                }
+                            }
+                        Spacer()
                     }
                 }
+            }
+            .frame(maxWidth: 600, maxHeight: .infinity)
+            if selectedView == views[1] {
+                Spacer()
+                Text("DISCLAIMER: Private messages in Lemmy are not secure.")
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -75,25 +110,46 @@ struct InboxView: View {
         if page == 1 {
             self.commentReplies = []
             self.privateMessages = []
+            self.reachedEnd = false
         }
+        
+        if reachedEnd {
+            return
+        }
+        
+        self.isLoading = true
         
         switch selectedView {
         case views[1]:
             self.privateMessageService!.getPrivateMessages(unreadOnly: self.unreadOnly, page: self.page) { result in
                 switch result {
                 case .success(let privateMessagesResponse):
-                    self.privateMessages = privateMessagesResponse.privateMessages
+                    self.isLoading = false
+                    self.privateMessages += privateMessagesResponse.privateMessages
+                    
+                    if privateMessagesResponse.privateMessages.count == 0 {
+                        reachedEnd = true
+                    }
+                    
                 case .failure(let error):
                     print(error)
+                    self.isLoading = false
                 }
             }
         default:
             self.repliesService.getReplies(unreadOnly: self.unreadOnly, sortType: .new, page: page) { result in
                 switch result {
                 case .success(let repliesResponse):
-                    self.commentReplies = repliesResponse.replies
+                    self.isLoading = false
+                    self.commentReplies += repliesResponse.replies
+                    
+                    if repliesResponse.replies.count == 0 {
+                        reachedEnd = true
+                    }
+                    
                 case .failure(let error):
                     print(error)
+                    self.isLoading = false
                 }
             }
         }

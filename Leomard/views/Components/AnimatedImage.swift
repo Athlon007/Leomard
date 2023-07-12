@@ -59,7 +59,7 @@ struct YoutubePlayer: NSViewRepresentable {
         var url = self.link
         if url.contains("youtube.com/watch?v=") {
             url = url.replacingOccurrences(of: "/watch?v=", with: "/embed/")
-        } else if link.contains("youtu.be") {
+        } else if link.contains("youtu.be/") {
             url = url.replacingOccurrences(of: "youtu.be/", with: "youtube.com/embed/")
         }
         
@@ -121,14 +121,9 @@ class WKWebVideoNonInteractable: WKWebView
     override public func rightMouseDown(with event: NSEvent) {
         self.nextResponder?.rightMouseDown(with: event)
     }
-    
-    override public func resize(withOldSuperviewSize oldSize: NSSize) {
+        
+    override public func viewDidMoveToSuperview() {
         self.evaluateJavaScript("document.body.remove()")
-        super.resize(withOldSuperviewSize: oldSize)
-    }
-    
-    override public func resizeSubviews(withOldSize oldSize: NSSize) {
-        self.evaluateJavaScript("document.body.remove()")
-        super.resizeSubviews(withOldSize: oldSize)
+        super.viewDidMoveToSuperview()
     }
 }

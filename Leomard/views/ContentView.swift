@@ -40,6 +40,7 @@ struct ContentView: View {
     @State var editedPost: PostView? = nil
     
     @Binding var columnStatus: NavigationSplitViewVisibility
+    @State var unreadMessages: Int = 0
     
     var body: some View {
         ZStack {
@@ -50,7 +51,8 @@ struct ContentView: View {
                     currentSelection: $currentSelection,
                     followedCommunities: $followedCommunities,
                     contentView: self,
-                    currentCommunity: $openedCommunity
+                    currentCommunity: $openedCommunity,
+                    unreadMessagesCount: $unreadMessages
                 )
                 .listStyle(SidebarListStyle())
                 .navigationBarBackButtonHidden(true)
@@ -60,7 +62,7 @@ struct ContentView: View {
                     VStack {
                         switch currentSelection.id {
                         case 1:
-                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, sessionService: self.sessionService, myself: $myUser)
+                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, sessionService: self.sessionService, myself: $myUser, contentView: self, commentService: self.commentService!)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 2:
@@ -117,6 +119,8 @@ struct ContentView: View {
                 self.repliesService = RepliesService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 
                 self.loadUserData()
+                self.updateUnreadMessagesCount()
+                self.startPeriodicUnreadMessageCheck()
             }
             
             if self.openedPostView != nil {
@@ -151,6 +155,8 @@ struct ContentView: View {
                 print(error)
             }
         }
+        
+        updateUnreadMessagesCount()
     }
     
     func openPost(postView: PostView) {
@@ -158,7 +164,18 @@ struct ContentView: View {
         self.openedPostView = nil
         self.openedPostView = postView
     }
-     
+    
+    func openPostForComment(comment: Comment) {
+        postService?.getPostForComment(comment: comment) { result in
+            switch result {
+            case .success(let postResponse):
+                self.openedPostView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
     func closePost() {
         self.openedPostView = nil
     }
@@ -247,7 +264,22 @@ struct ContentView: View {
         self.editedPost = nil
     }
     
-    func evaluate(_ width: CGFloat) {
-        print("Width: \(width)")
+    func updateUnreadMessagesCount() {
+        self.repliesService!.getCounts { result in
+            switch result {
+            case .success(let unreadCountsResponse):
+                self.unreadMessages = unreadCountsResponse.total()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func startPeriodicUnreadMessageCheck() {
+        // Check every 1 minute if we got a new unread message.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [self] in
+            self.updateUnreadMessagesCount()
+            self.startPeriodicUnreadMessageCheck()
+        }
     }
 }

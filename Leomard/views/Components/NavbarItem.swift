@@ -13,6 +13,7 @@ struct NavbarItem: View {
     @Binding var currentSelection: Option
     let contentView: ContentView
     @Binding var currentCommunity: Community?
+    @Binding var badgeCount: Int
     
     var body: some View {
         HStack {
@@ -40,10 +41,21 @@ struct NavbarItem: View {
             }
             Text(option.title)
                 .frame(
-                    maxWidth: .infinity,
+                    //maxWidth: .infinity,
                     alignment: .leading
                 )
                 .foregroundColor(currentSelection == option && currentCommunity == nil ? Color(.linkColor) : Color(.labelColor))
+            if badgeCount > 0 {
+                VStack {
+                    Text(String(badgeCount))
+                        .font(.system(size: 8))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 16, height: 16)
+                .background(.red)
+                .clipShape(Circle())
+                .padding(.leading, 0)
+            }
             Spacer()
         }
         .padding(.bottom, 10)

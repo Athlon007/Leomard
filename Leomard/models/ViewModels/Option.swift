@@ -12,4 +12,5 @@ struct Option: Hashable {
     var title: String
     let imageName: String
     var externalLink: String?
+    var badgeText: String?
 }

@@ -16,10 +16,13 @@ struct NavbarView: View {
     let contentView: ContentView
     @Binding var currentCommunity: Community?
     
+    @Binding var unreadMessagesCount: Int
+    @State var emptyCounter: Int = 0
+    
     var body: some View {
         VStack {
             ForEach(options, id: \.self) { option in
-                NavbarItem(option: option, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity)
+                NavbarItem(option: option, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity, badgeCount: option.id == 1 ? $unreadMessagesCount : $emptyCounter)
             }
         }
         .NavBarItemContainer()
@@ -35,7 +38,7 @@ struct NavbarView: View {
             maxHeight: .infinity
         )
         VStack {
-            NavbarItem(option: profileOption, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity)
+            NavbarItem(option: profileOption, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity, badgeCount: $emptyCounter)
         }
         .NavBarItemContainer()
     }
