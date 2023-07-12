@@ -18,6 +18,7 @@ struct NavbarView: View {
     
     @Binding var unreadMessagesCount: Int
     @State var emptyCounter: Int = 0
+    @State var followedVisible: Bool = true
     
     var body: some View {
         VStack {
@@ -28,9 +29,19 @@ struct NavbarView: View {
         .NavBarItemContainer()
         .padding(.top, 24)
         List {
-            Text("Followed")
-            ForEach(followedCommunities, id: \.self) { communityView in
-                NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
+            HStack(spacing: 14) {
+                Text("Followed")
+                Image(systemName: "v.circle")
+                    .foregroundColor(.secondary)
+                    .rotationEffect(.degrees(followedVisible ? 180 : 0))
+            }
+            .onTapGesture {
+                followedVisible = !followedVisible
+            }
+            if followedVisible {
+                ForEach(followedCommunities, id: \.self) { communityView in
+                    NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
+                }
             }
         }
         .frame(

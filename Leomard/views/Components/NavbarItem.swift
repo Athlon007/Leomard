@@ -87,12 +87,7 @@ struct NavbarCommunityItem: View {
                            content: { phase in
                     switch phase {
                     case .success(let image):
-                        image.resizable()
-                        .interpolation(.high)
-                        .antialiased(true)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, alignment: .leading)
-                        .clipShape(Circle())
+                        image.AvatarFormatting(size: 20)
                     default:
                         Image(systemName: "person.circle")
                             .resizable()
