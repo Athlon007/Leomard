@@ -15,7 +15,7 @@ struct PrivateMessage: Codable, Hashable {
     let id: Int
     let local: Bool
     let published: Date
-    let read: Bool
+    var read: Bool
     let recipientId: Int
     let updated: Date?
     

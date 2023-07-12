@@ -9,6 +9,6 @@ import Foundation
 
 struct PrivateMessageView: Codable, Hashable {
     let creator: Person
-    let privateMessage: PrivateMessage
+    var privateMessage: PrivateMessage
     let recipient: Person
 }

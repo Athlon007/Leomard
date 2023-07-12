@@ -69,7 +69,14 @@ struct InboxView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     ForEach(privateMessages, id: \.self) { privateMessage in
-                        Text(privateMessage.privateMessage.content)
+                        PrivateMessageUIView(privateMessageView: privateMessage, privateMessageService: privateMessageService!, myself: $myself, contentView: self.contentView, unreadOnlyMode: $unreadOnly)
+                            .onAppear {
+                                if privateMessage == privateMessages.last {
+                                    page += 1
+                                    loadContent()
+                                }
+                            }
+                        Spacer()
                     }
                 default:
                     if commentReplies.count == 0 && !isLoading {
