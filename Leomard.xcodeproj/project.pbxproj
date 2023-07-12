@@ -11,7 +11,7 @@
 		B00695D12A50C23400206C77 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D02A50C23400206C77 /* Post.swift */; };
 		B00695D32A50C3DB00206C77 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D22A50C3DB00206C77 /* Person.swift */; };
 		B00695D52A50C48300206C77 /* Community.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D42A50C48300206C77 /* Community.swift */; };
-		B00695D72A50C58A00206C77 /* Counts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D62A50C58A00206C77 /* Counts.swift */; };
+		B00695D72A50C58A00206C77 /* PostAggregates.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D62A50C58A00206C77 /* PostAggregates.swift */; };
 		B00695D92A50CD0900206C77 /* GetPostsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695D82A50CD0900206C77 /* GetPostsResponse.swift */; };
 		B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695DB2A50D21900206C77 /* DateFormatConverter.swift */; };
 		B00695DE2A50E24800206C77 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00695DD2A50E24800206C77 /* String.swift */; };
@@ -36,6 +36,17 @@
 		B05B21252A5DB51600BA8FB2 /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21242A5DB51600BA8FB2 /* Clipboard.swift */; };
 		B05B21272A5DB68500BA8FB2 /* CommentContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21262A5DB68500BA8FB2 /* CommentContextMenu.swift */; };
 		B05B21292A5DB75500BA8FB2 /* CommunityContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21282A5DB75500BA8FB2 /* CommunityContextMenu.swift */; };
+		B05B212B2A5EA6A100BA8FB2 /* CommentReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B212A2A5EA6A100BA8FB2 /* CommentReplyView.swift */; };
+		B05B212D2A5EA6CC00BA8FB2 /* CommentReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B212C2A5EA6CC00BA8FB2 /* CommentReply.swift */; };
+		B05B212F2A5EA80E00BA8FB2 /* GetRepliesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B212E2A5EA80E00BA8FB2 /* GetRepliesResponse.swift */; };
+		B05B21322A5EA84600BA8FB2 /* PrivateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21312A5EA84600BA8FB2 /* PrivateMessage.swift */; };
+		B05B21342A5EA98000BA8FB2 /* PrivateMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21332A5EA98000BA8FB2 /* PrivateMessageView.swift */; };
+		B05B21362A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21352A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift */; };
+		B05B21382A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21372A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift */; };
+		B05B213E2A5EAB6000BA8FB2 /* RepliesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B213D2A5EAB6000BA8FB2 /* RepliesService.swift */; };
+		B05B21402A5EADF700BA8FB2 /* PrivateMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B213F2A5EADF700BA8FB2 /* PrivateMessageService.swift */; };
+		B05B21422A5EAEE800BA8FB2 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21412A5EAEE800BA8FB2 /* InboxView.swift */; };
+		B05B21462A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21452A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
 		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
@@ -145,7 +156,7 @@
 		B00695D02A50C23400206C77 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		B00695D22A50C3DB00206C77 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		B00695D42A50C48300206C77 /* Community.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Community.swift; sourceTree = "<group>"; };
-		B00695D62A50C58A00206C77 /* Counts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counts.swift; sourceTree = "<group>"; };
+		B00695D62A50C58A00206C77 /* PostAggregates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAggregates.swift; sourceTree = "<group>"; };
 		B00695D82A50CD0900206C77 /* GetPostsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPostsResponse.swift; sourceTree = "<group>"; };
 		B00695DB2A50D21900206C77 /* DateFormatConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatConverter.swift; sourceTree = "<group>"; };
 		B00695DD2A50E24800206C77 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -173,6 +184,17 @@
 		B05B21242A5DB51600BA8FB2 /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		B05B21262A5DB68500BA8FB2 /* CommentContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentContextMenu.swift; sourceTree = "<group>"; };
 		B05B21282A5DB75500BA8FB2 /* CommunityContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityContextMenu.swift; sourceTree = "<group>"; };
+		B05B212A2A5EA6A100BA8FB2 /* CommentReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReplyView.swift; sourceTree = "<group>"; };
+		B05B212C2A5EA6CC00BA8FB2 /* CommentReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReply.swift; sourceTree = "<group>"; };
+		B05B212E2A5EA80E00BA8FB2 /* GetRepliesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRepliesResponse.swift; sourceTree = "<group>"; };
+		B05B21312A5EA84600BA8FB2 /* PrivateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessage.swift; sourceTree = "<group>"; };
+		B05B21332A5EA98000BA8FB2 /* PrivateMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageView.swift; sourceTree = "<group>"; };
+		B05B21352A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessagesResponse.swift; sourceTree = "<group>"; };
+		B05B21372A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageResponse.swift; sourceTree = "<group>"; };
+		B05B213D2A5EAB6000BA8FB2 /* RepliesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesService.swift; sourceTree = "<group>"; };
+		B05B213F2A5EADF700BA8FB2 /* PrivateMessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageService.swift; sourceTree = "<group>"; };
+		B05B21412A5EAEE800BA8FB2 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
+		B05B21452A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUnreadCountResponse.swift; sourceTree = "<group>"; };
 		B091F8372A5432A900F0DA32 /* PostContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContextMenu.swift; sourceTree = "<group>"; };
 		B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSidebarUIView.swift; sourceTree = "<group>"; };
 		B091F83B2A54708800F0DA32 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -380,6 +402,35 @@
 			path = ContextMenus;
 			sourceTree = "<group>";
 		};
+		B05B21302A5EA83C00BA8FB2 /* PrivateMessage */ = {
+			isa = PBXGroup;
+			children = (
+				B05B21312A5EA84600BA8FB2 /* PrivateMessage.swift */,
+				B05B21332A5EA98000BA8FB2 /* PrivateMessageView.swift */,
+			);
+			path = PrivateMessage;
+			sourceTree = "<group>";
+		};
+		B05B21432A5EAF2900BA8FB2 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				B00695CE2A50C22200206C77 /* PostView.swift */,
+				B00695D02A50C23400206C77 /* Post.swift */,
+				B00695D62A50C58A00206C77 /* PostAggregates.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		B05B21442A5EAF4900BA8FB2 /* CustomEmoji */ = {
+			isa = PBXGroup;
+			children = (
+				B0CEBE642A52C67B00982D4D /* CustomEmoji.swift */,
+				B0CEBE662A52C7EC00982D4D /* CustomEmojiKeyword.swift */,
+				B0CEBE682A52C81A00982D4D /* CustomEmojiView.swift */,
+			);
+			path = CustomEmoji;
+			sourceTree = "<group>";
+		};
 		B0CEBE392A51977B00982D4D /* views */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +444,7 @@
 				B091F85E2A56CAA900F0DA32 /* CommunityUIView.swift */,
 				B091F8702A58769100F0DA32 /* SearchView.swift */,
 				B091F8772A59BAE700F0DA32 /* PreferenceView.swift */,
+				B05B21412A5EAEE800BA8FB2 /* InboxView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -410,6 +462,8 @@
 				B091F8532A55EE9200F0DA32 /* PersonService.swift */,
 				B091F8622A56CD0100F0DA32 /* CommunityService.swift */,
 				B091F86A2A5831F400F0DA32 /* SearchService.swift */,
+				B05B213D2A5EAB6000BA8FB2 /* RepliesService.swift */,
+				B05B213F2A5EADF700BA8FB2 /* PrivateMessageService.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -446,6 +500,9 @@
 		B0CEBE492A519EB300982D4D /* Lemmy */ = {
 			isa = PBXGroup;
 			children = (
+				B05B21442A5EAF4900BA8FB2 /* CustomEmoji */,
+				B05B21432A5EAF2900BA8FB2 /* Post */,
+				B05B21302A5EA83C00BA8FB2 /* PrivateMessage */,
 				B0D7A1592A533BB300FE2852 /* Comment */,
 				B0CEBE8E2A52D3C200982D4D /* Gets */,
 				B0CEBE852A52D23300982D4D /* Site */,
@@ -453,19 +510,14 @@
 				B0CEBE7B2A52CF8400982D4D /* Person */,
 				B0CEBE762A52CF2000982D4D /* Community */,
 				B0CEBE4A2A519F2700982D4D /* Forms */,
-				B00695CE2A50C22200206C77 /* PostView.swift */,
-				B00695D02A50C23400206C77 /* Post.swift */,
-				B00695D62A50C58A00206C77 /* Counts.swift */,
 				B0CEBE4D2A519F7300982D4D /* LoginResponse.swift */,
 				B0CEBE622A52C64600982D4D /* Language.swift */,
-				B0CEBE642A52C67B00982D4D /* CustomEmoji.swift */,
-				B0CEBE662A52C7EC00982D4D /* CustomEmojiKeyword.swift */,
-				B0CEBE682A52C81A00982D4D /* CustomEmojiView.swift */,
 				B0CEBE702A52C99700982D4D /* ListingType.swift */,
 				B0CEBE722A52CA1800982D4D /* SortType.swift */,
 				B0CEBE8C2A52D37F00982D4D /* Tagline.swift */,
 				B0D7A15E2A5351CF00FE2852 /* SubscribedType.swift */,
 				B091F86E2A5832D700F0DA32 /* SearchType.swift */,
+				B05B21452A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift */,
 			);
 			path = Lemmy;
 			sourceTree = "<group>";
@@ -561,6 +613,9 @@
 				B091F8602A56CC8100F0DA32 /* GetCommunityResponse.swift */,
 				B091F86C2A58323A00F0DA32 /* SearchResponse.swift */,
 				B00A5C442A5C16EE00D3CF98 /* ErrorResponse.swift */,
+				B05B212E2A5EA80E00BA8FB2 /* GetRepliesResponse.swift */,
+				B05B21352A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift */,
+				B05B21372A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift */,
 			);
 			path = Gets;
 			sourceTree = "<group>";
@@ -581,6 +636,8 @@
 				B0D7A15C2A533DAF00FE2852 /* CommentAggregates.swift */,
 				B0D7A1602A53524A00FE2852 /* CommentView.swift */,
 				B0D7A1662A5353E200FE2852 /* CommentSortType.swift */,
+				B05B212A2A5EA6A100BA8FB2 /* CommentReplyView.swift */,
+				B05B212C2A5EA6CC00BA8FB2 /* CommentReply.swift */,
 			);
 			path = Comment;
 			sourceTree = "<group>";
@@ -738,6 +795,7 @@
 				B0CEBE7D2A52CFA600982D4D /* MyUserInfo.swift in Sources */,
 				B0CEBE822A52D08400982D4D /* LocalSite.swift in Sources */,
 				B0CEBE632A52C64600982D4D /* Language.swift in Sources */,
+				B05B21462A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift in Sources */,
 				B0CEBE922A52F15300982D4D /* PostUIView.swift in Sources */,
 				B0D7A15B2A533BCB00FE2852 /* Comment.swift in Sources */,
 				B05B21232A5DB41A00BA8FB2 /* PersonContextMenu.swift in Sources */,
@@ -747,10 +805,12 @@
 				B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */,
 				B0CEBE442A519A1600982D4D /* NavbarItem.swift in Sources */,
 				B091F8802A5AE3A300F0DA32 /* LemmyInstance.swift in Sources */,
-				B00695D72A50C58A00206C77 /* Counts.swift in Sources */,
+				B00695D72A50C58A00206C77 /* PostAggregates.swift in Sources */,
 				B0CEBE712A52C99700982D4D /* ListingType.swift in Sources */,
 				B0CEBE572A51D35600982D4D /* LoginView.swift in Sources */,
+				B05B21422A5EAEE800BA8FB2 /* InboxView.swift in Sources */,
 				B091F8672A57705C00F0DA32 /* FollowCommunity.swift in Sources */,
+				B05B21382A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift in Sources */,
 				B05B21252A5DB51600BA8FB2 /* Clipboard.swift in Sources */,
 				B05B21202A5D941F00BA8FB2 /* EditPost.swift in Sources */,
 				B0CEBE592A51E8F700982D4D /* ProfileView.swift in Sources */,
@@ -767,6 +827,8 @@
 				B0D7A16B2A53929200FE2852 /* ElapsedTime.swift in Sources */,
 				B05B211C2A5CAE8900BA8FB2 /* URL.swift in Sources */,
 				B0D7A15F2A5351CF00FE2852 /* SubscribedType.swift in Sources */,
+				B05B212F2A5EA80E00BA8FB2 /* GetRepliesResponse.swift in Sources */,
+				B05B21322A5EA84600BA8FB2 /* PrivateMessage.swift in Sources */,
 				B0D7A1582A531E5600FE2852 /* LinkHelper.swift in Sources */,
 				B0CEBE482A519E0A00982D4D /* SessionService.swift in Sources */,
 				B00695D12A50C23400206C77 /* Post.swift in Sources */,
@@ -778,23 +840,29 @@
 				B091F8562A55EF6900F0DA32 /* GetPersonDetailsResponse.swift in Sources */,
 				B0CEBE552A51D2F100982D4D /* SessionInfo.swift in Sources */,
 				B0CEBE6D2A52C93400982D4D /* CommunityFollowerView.swift in Sources */,
+				B05B213E2A5EAB6000BA8FB2 /* RepliesService.swift in Sources */,
 				B0CEBE7A2A52CF6D00982D4D /* PersonBlockView.swift in Sources */,
 				B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */,
 				B091F84C2A55791C00F0DA32 /* CreateComment.swift in Sources */,
+				B05B212B2A5EA6A100BA8FB2 /* CommentReplyView.swift in Sources */,
 				B091F84E2A55968C00F0DA32 /* DeleteComment.swift in Sources */,
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
+				B05B212D2A5EA6CC00BA8FB2 /* CommentReply.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,
 				B0CEBE612A52C60B00982D4D /* PersonView.swift in Sources */,
 				B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */,
 				B0CEBE8B2A52D34400982D4D /* SiteView.swift in Sources */,
+				B05B21342A5EA98000BA8FB2 /* PrivateMessageView.swift in Sources */,
 				B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */,
 				B05B21292A5DB75500BA8FB2 /* CommunityContextMenu.swift in Sources */,
 				B091F87C2A5AA56C00F0DA32 /* SavePost.swift in Sources */,
 				B0CEBE902A52D43000982D4D /* SiteService.swift in Sources */,
 				B00695DE2A50E24800206C77 /* String.swift in Sources */,
 				B0CEBE872A52D25000982D4D /* LocalSiteRateLimit.swift in Sources */,
+				B05B21362A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift in Sources */,
 				B091F8442A5480E300F0DA32 /* CommentResponse.swift in Sources */,
+				B05B21402A5EADF700BA8FB2 /* PrivateMessageService.swift in Sources */,
 				B0CEBE462A519BEF00982D4D /* NavbarItemContainer.swift in Sources */,
 				B00695D92A50CD0900206C77 /* GetPostsResponse.swift in Sources */,
 				B0D7A1632A53529B00FE2852 /* GetCommentsResponse.swift in Sources */,

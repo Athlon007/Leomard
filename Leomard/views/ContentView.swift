@@ -27,6 +27,7 @@ struct ContentView: View {
     @State var siteService: SiteService?
     @State var commentService: CommentService?
     @State var postService: PostService?
+    @State var repliesService: RepliesService?
     
     @State var openedPostView: PostView? = nil
     @State var postHidden: Bool = false
@@ -58,6 +59,10 @@ struct ContentView: View {
                 ZStack {
                     VStack {
                         switch currentSelection.id {
+                        case 1:
+                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, sessionService: self.sessionService, myself: $myUser)
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
                         case 2:
                             SearchView(sessionService: sessionService, postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
                                 .listStyle(SidebarListStyle())
@@ -109,6 +114,7 @@ struct ContentView: View {
                 self.siteService = SiteService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 self.commentService = CommentService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 self.postService = PostService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
+                self.repliesService = RepliesService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
                 
                 self.loadUserData()
             }
