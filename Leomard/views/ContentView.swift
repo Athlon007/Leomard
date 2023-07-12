@@ -38,8 +38,10 @@ struct ContentView: View {
     @State var onPostAdded: ((PostView) -> Void)? = nil
     @State var editedPost: PostView? = nil
     
+    @Binding var columnStatus: NavigationSplitViewVisibility
+    
     var body: some View {
-        NavigationSplitView() {
+        NavigationSplitView(columnVisibility: $columnStatus) {
             NavbarView(
                 options: options,
                 profileOption: $profileOption,
@@ -239,11 +241,5 @@ struct ContentView: View {
     
     func evaluate(_ width: CGFloat) {
         print("Width: \(width)")
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct LeomardApp: App {
     @Environment(\.openWindow) private var openWindow
+    
+    @State private var mainWindowNavSplitStatus = NavigationSplitViewVisibility.automatic
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .frame(minWidth: 600, minHeight: 800)
+            ContentView(columnStatus: $mainWindowNavSplitStatus)
+                .frame(minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800, minHeight: 800)
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
