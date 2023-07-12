@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Security
 
 class SessionService {
     private static var sessionKey = "key"
@@ -29,18 +30,25 @@ class SessionService {
         return output
     }
     
-    public func save(response: SessionInfo) {
-        do {
-            self.currentSession = response
-            let fileURL = try self.getUrl(file: SessionService.loginResponseFile)
-            
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            try encoder.encode(response).write(to: fileURL)
-
-        } catch {
-            print("Unable to encode login: \(error)")
+    public func save(response: SessionInfo) -> Bool {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        guard let data = try? encoder.encode(response) else {
+            return false
         }
+        
+        let keychainItemQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "LeomardApp",
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessible
+        ]
+        
+        let status = SecItemAdd(keychainItemQuery as CFDictionary, nil)
+        
+        self.currentSession = response
+        
+        return status == errSecSuccess
     }
     
     public func load() -> SessionInfo? {
@@ -48,31 +56,40 @@ class SessionService {
             return self.currentSession
         }
         
-        do {
-            let fileURL = try self.getUrl(file: SessionService.loginResponseFile)
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let response = try decoder.decode(SessionInfo.self, from: data)
-            return response
-        } catch {
-            return nil
+        let keychainItemQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "LeomardApp",
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        var retrievedData: AnyObject?
+        let status = SecItemCopyMatching(keychainItemQuery as CFDictionary, &retrievedData)
+        
+        if status == errSecSuccess {
+            if let data = retrievedData as? Data {
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                return try? decoder.decode(SessionInfo.self, from: data)
+            }
         }
+        
+        return nil
     }
     
     public func isSessionActive() -> Bool {
         return self.currentSession != nil
     }
     
-    public func destroy() {
-        do {
-            let fileURL = try self.getUrl(file: SessionService.loginResponseFile)
-            try FileManager.default.removeItem(at: fileURL)
-        } catch {
-            print("Unable to destroy the session: \(error)")
-        }
+    public func destroy() -> Bool {
+        let keychainItemQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "LeomardApp"
+        ]
         
+        let status = SecItemDelete(keychainItemQuery as CFDictionary)
         self.currentSession = nil
+        return status == errSecSuccess
     }
     
     public func getLemmyInstance() -> String {
