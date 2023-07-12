@@ -76,12 +76,7 @@ struct NavbarCommunityItem: View {
         HStack {
             if community.icon == nil {
                 Image(systemName: "person.circle")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(
-                        width: 20,
-                        alignment: .leading
-                    )
+                    .AvatarFormatting(size: 20)
             } else {
                 AsyncImage(url: URL(string: community.icon!),
                            content: { phase in
@@ -90,12 +85,7 @@ struct NavbarCommunityItem: View {
                         image.AvatarFormatting(size: 20)
                     default:
                         Image(systemName: "person.circle")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(
-                                width: 20,
-                                alignment: .leading
-                            )
+                            .AvatarFormatting(size: 20)
                     }
                 })
             }
