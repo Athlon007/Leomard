@@ -232,8 +232,8 @@ struct SearchView: View {
             self.searchQuery = ""
             self.selectedSearchType = .communities
             
-            let requestHandler = RequestHandler(sessionService: sessionService)
-            self.searchService = SearchService(requestHandler: requestHandler, sessionService: sessionService)
+            let requestHandler = RequestHandler()
+            self.searchService = SearchService(requestHandler: requestHandler)
         }
     }
     

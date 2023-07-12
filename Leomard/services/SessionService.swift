@@ -7,15 +7,15 @@
 
 import Foundation
 
-class SessionService: Service {
+class SessionService {
     private static var sessionKey = "key"
-    private var currentSession: SessionInfo? = nil
     private static let defaultLemmy = "lemmy.world"
     private static let root = "Leomard"
     private static let loginResponseFile = "LoginResponse.json"
     
-    public override init() {
-        super.init()
+    var currentSession: SessionInfo? = nil
+    
+    init() {
         self.currentSession = self.load()
     }
     

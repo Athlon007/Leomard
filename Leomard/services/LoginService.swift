@@ -9,13 +9,11 @@ import Foundation
 
 class LoginService: Service {
     private let requestHandler: RequestHandler
-    private let sessionService: SessionService
     
     private static let instancesList = "https://raw.githubusercontent.com/maltfield/awesome-lemmy-instances/main/awesome-lemmy-instances.csv"
     
-    public init(requestHandler: RequestHandler, sessionService: SessionService) {
+    public init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
-        self.sessionService = sessionService
     }
    
     public func login(lemmyInstance: String, login: Login,Ca completion: @escaping (Result<LoginResponse, Error>) -> Void) {

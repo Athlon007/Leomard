@@ -112,11 +112,11 @@ struct ContentView: View {
             .frame(minWidth: 600, minHeight: 400)
             .task {
                 self.currentSelection = self.options[0]
-                self.requestHandler = RequestHandler(sessionService: self.sessionService)
-                self.siteService = SiteService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                self.commentService = CommentService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                self.postService = PostService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
-                self.repliesService = RepliesService(requestHandler: self.requestHandler!, sessionService: self.sessionService)
+                self.requestHandler = RequestHandler()
+                self.siteService = SiteService(requestHandler: self.requestHandler!)
+                self.commentService = CommentService(requestHandler: self.requestHandler!)
+                self.postService = PostService(requestHandler: self.requestHandler!)
+                self.repliesService = RepliesService(requestHandler: self.requestHandler!)
                 
                 self.loadUserData()
                 self.updateUnreadMessagesCount()
@@ -183,7 +183,7 @@ struct ContentView: View {
     func logout() {
         myUser = nil
         siteView = nil
-        followedCommunities.removeAll()
+        followedCommunities = []
         self.profileOption.title = "Profile"
         self.profileOption.externalLink = nil
         postHidden = false
@@ -277,7 +277,7 @@ struct ContentView: View {
     
     func startPeriodicUnreadMessageCheck() {
         // Check every 1 minute if we got a new unread message.
-        if UserPreferences().checkNotifsEverySeconds <= -1 {
+        if UserPreferences().checkNotifsEverySeconds <= -1 || myUser == nil {
             return
         }
         

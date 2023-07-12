@@ -106,7 +106,7 @@ struct InboxView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .task {
-            self.privateMessageService = PrivateMessageService(requestHandler: requestHandler, sessionService: sessionService)
+            self.privateMessageService = PrivateMessageService(requestHandler: requestHandler)
             self.selectedView = views[0]
             
             self.loadContent()

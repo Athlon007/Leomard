@@ -9,15 +9,13 @@ import Foundation
 
 class SiteService: Service {
     private let requestHandler: RequestHandler
-    private let sessionService: SessionService
     
-    public init(requestHandler: RequestHandler, sessionService: SessionService) {
+    public init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
-        self.sessionService = sessionService
     }
     
     public func getSite(Ca completion: @escaping (Result<GetSiteResponse, Error>) -> Void) {
-        self.requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/site", method: .get) { result in
+        self.requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/site", method: .get) { result in
             self.respond(result, completion)
         }
     }

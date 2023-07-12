@@ -120,7 +120,7 @@ struct FeedView: View {
         }
         .cornerRadius(4)
         .task {
-            self.postService = PostService(requestHandler: RequestHandler(sessionService: self.sessionService), sessionService: sessionService)
+            self.postService = PostService(requestHandler: RequestHandler())
             loadPosts()
         }
         Spacer()

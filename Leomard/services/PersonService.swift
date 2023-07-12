@@ -9,11 +9,9 @@ import Foundation
 
 class PersonService: Service {
     let requestHandler: RequestHandler
-    let sessionService: SessionService
     
-    init(requestHandler: RequestHandler, sessionService: SessionService) {
+    init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
-        self.sessionService = sessionService
     }
     
     public func getPersonDetails(person: Person, page: Int, savedOnly: Bool, completion: @escaping (Result<GetPersonDetailsResponse, Error>) -> Void) {
@@ -21,7 +19,7 @@ class PersonService: Service {
         if savedOnly {
             request += "&saved_only=true"
         }
-        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: request, method: .get) { result in
+        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: request, method: .get) { result in
             self.respond(result, completion)
         }
     }

@@ -9,11 +9,9 @@ import Foundation
 
 class CommentService: Service {
     let requestHandler: RequestHandler
-    let sessionService: SessionService
     
-    public init(requestHandler: RequestHandler, sessionService: SessionService) {
+    public init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
-        self.sessionService = sessionService
     }
     
     private func getPathDepth(path: String) -> Int {
@@ -29,7 +27,7 @@ class CommentService: Service {
     
     public func getAllComments(post: Post, page: Int, sortType: CommentSortType, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
         let postId = post.id
-        let host = self.sessionService.getLemmyInstance()
+        let host = SessionService().getLemmyInstance()
         self.requestHandler.makeApiRequest(host: host, request: "/comment/list?post_id=\(String(postId))&sort=\(String(describing: sortType))&page=\(String(page))", method: .get) { result in
             switch result {
             case .success(let response):
@@ -55,7 +53,7 @@ class CommentService: Service {
     }
     
     public func getCommentsForCommunity(community: Community, page: Int, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
-        let host = sessionService.getLemmyInstance()
+        let host = SessionService().getLemmyInstance()
         requestHandler.makeApiRequest(host: host, request: "/comment/list?community_id=\(String(community.id))", method: .get) { result in
             switch result {
             case .success(let apiResponse):
@@ -79,7 +77,7 @@ class CommentService: Service {
     
     public func getSubcomments(comment: Comment, page: Int, level: Int, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
         let commentId = comment.id
-        let host = self.sessionService.getLemmyInstance()
+        let host = SessionService().getLemmyInstance()
         self.requestHandler.makeApiRequest(host: host, request: "/comment/list?parent_id=\(String(commentId))&sort=\(CommentSortType.top)&page=\(String(page))", method: .get) { result in
             switch result {
             case .success(let response):
@@ -103,34 +101,34 @@ class CommentService: Service {
     
     public func setCommentLike(comment: Comment, score: Int, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = CreateCommentLike(commentId: comment.id, score: score)
-        self.requestHandler.makeApiRequest(host: self.sessionService.getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
+        self.requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/comment/like", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }
     
     public func createComment(content: String, post: Post, parent: Comment? = nil, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = CreateComment(content: content, formId: nil, languageId: nil, parentId: parent?.id, postId: post.id)
-        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .post, body: body) { result in
+        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/comment", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }
     
     public func deleteComment(comment: Comment, completion: @escaping (Result<Bool, Error>) -> Void) {
         let body = DeleteComment(commentId: comment.id, deleted: true)
-        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment/delete", method: .post, body: body) { result in
+        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/comment/delete", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }
     
     public func updateComment(comment: Comment, content: String, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
         let body = EditComment(commentId: comment.id, content: content, formId: nil, languageId: nil)
-        requestHandler.makeApiRequest(host: sessionService.getLemmyInstance(), request: "/comment", method: .put, body: body) { result in
+        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/comment", method: .put, body: body) { result in
             self.respond(result, completion)
         }
     }
     
     public func saveComment(comment: Comment, save: Bool, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
-        let url = sessionService.getLemmyInstance()
+        let url = SessionService().getLemmyInstance()
         let body = SaveComment(commentId: comment.id, save: save)
         requestHandler.makeApiRequest(host: url, request: "/comment/save", method: .put, body: body) { result in
             self.respond(result, completion)

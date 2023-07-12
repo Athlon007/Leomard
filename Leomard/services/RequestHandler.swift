@@ -21,12 +21,7 @@ struct APIResponse {
 
 final class RequestHandler {
     public final let VERSION = "v3"
-    
-    let sessionService: SessionService
-    
-    public init(sessionService: SessionService) {
-        self.sessionService = sessionService
-    }
+
 
     public func makeApiRequest(host: String, request: String, method: HTTPMethod, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
         var urlString = "\(host)/api/\(self.VERSION)\(request)"
@@ -35,8 +30,8 @@ final class RequestHandler {
             urlString = "https://\(urlString)"
         }
         
-        if sessionService.isSessionActive() && method == .get {
-            let jwt = sessionService.load()?.loginResponse.jwt
+        if SessionService().isSessionActive() && method == .get {
+            let jwt = SessionService().load()?.loginResponse.jwt
             if !urlString.contains("?") {
                 urlString += "?auth=\(jwt!)"
             } else {
@@ -67,8 +62,8 @@ final class RequestHandler {
                         return
                     }
                 
-                if sessionService.isSessionActive() {
-                    jsonDictionary["auth"] = sessionService.load()?.loginResponse.jwt
+                if SessionService().isSessionActive() {
+                    jsonDictionary["auth"] = SessionService().load()?.loginResponse.jwt
                     jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
                 }
                 request.httpBody = jsonData

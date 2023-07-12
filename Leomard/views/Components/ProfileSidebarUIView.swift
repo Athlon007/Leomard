@@ -211,8 +211,8 @@ struct ProfileSidebarUIView: View {
     }
     
     func onSendMessage() {
-        let requestHandler = RequestHandler(sessionService: SessionService())
-        let service = PrivateMessageService(requestHandler: requestHandler, sessionService: SessionService())
+        let requestHandler = RequestHandler()
+        let service = PrivateMessageService(requestHandler: requestHandler)
         isSendingMessage = true
         
         service.sendPrivateMessage(content: messageText, recipient: personView.person) { result in

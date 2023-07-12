@@ -176,16 +176,16 @@ struct ProfileView: View {
                 browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
             }
             
-            let requestHandler = RequestHandler(sessionService: self.sessionService)
-            self.postService = PostService(requestHandler: requestHandler, sessionService: sessionService)
-            self.personService = PersonService(requestHandler: requestHandler, sessionService: sessionService)
+            let requestHandler = RequestHandler()
+            self.postService = PostService(requestHandler: requestHandler)
+            self.personService = PersonService(requestHandler: requestHandler)
             loadPersonDetails()
         }
         Spacer()
     }
     
     func logout() {
-        sessionService.destroy()
+        SessionService().destroy()
         contentView.navigateToFeed()
         contentView.logout()
     }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct LoginView: View {
-    let sessionService: SessionService
+    var sessionService: SessionService
     let requestHandler: RequestHandler
     var contentView: ContentView
     
@@ -119,7 +119,7 @@ struct LoginView: View {
     }
     
     func login() {
-        let loginService: LoginService = LoginService(requestHandler: requestHandler, sessionService: sessionService)
+        let loginService: LoginService = LoginService(requestHandler: requestHandler)
         let login = Login(usernameOrEmail: self.username, password: self.password, totp_2faToken: self.twoFA)
         loginService.login(lemmyInstance: self.url, login: login) { result in
             switch (result) {
@@ -130,7 +130,7 @@ struct LoginView: View {
                 self.contentView.navigateToFeed()
                 self.contentView.loadUserData()
             case .failure(let error):
-                if error.tryGetErrorMessage() == "incorrect_totp token" || error.tryGetErrorMessage() == "missing_totp_token" {
+                if error.tryGetErrorMessage() == "incorrect_totp_token" || error.tryGetErrorMessage() == "missing_totp_token" {
                     self.is2faRequired = true
                 } else {
                     print(error)
@@ -141,7 +141,7 @@ struct LoginView: View {
     }
     
     func loadRecommendedInstances() {
-        let loginService: LoginService = LoginService(requestHandler: requestHandler, sessionService: sessionService)
+        let loginService: LoginService = LoginService(requestHandler: requestHandler)
         loginService.getLemmyInstances() { result in
             switch result {
             case .success(let instances):

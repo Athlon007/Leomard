@@ -9,16 +9,14 @@ import Foundation
 
 class SearchService: Service {
     let requestHandler: RequestHandler
-    let sessionService: SessionService
     let userPreferences: UserPreferences = UserPreferences()
     
-    init(requestHandler: RequestHandler, sessionService: SessionService) {
+    init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
-        self.sessionService = sessionService
     }
     
     public func search(query: String, searchType: SearchType, page: Int, completion: @escaping (Result<SearchResponse, Error>) -> Void) {
-        var host = sessionService.getLemmyInstance()
+        var host = SessionService().getLemmyInstance()
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
         // Experimental cross-instance search.

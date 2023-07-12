@@ -201,8 +201,8 @@ struct CommunityUIView: View {
         }
         .cornerRadius(4)
         .task {
-            let requestHandler = RequestHandler(sessionService: self.sessionService)
-            self.communityService = CommunityService(requestHandler: requestHandler, sessionService: sessionService)
+            let requestHandler = RequestHandler()
+            self.communityService = CommunityService(requestHandler: requestHandler)
             self.selectedBrowseOption = browseOptions[0]
             loadCommunity()
         }
