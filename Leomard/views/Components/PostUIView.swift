@@ -19,6 +19,7 @@ struct PostUIView: View {
     let contentView: ContentView
     
     private static let maxPostLength: Int = 400
+    private static let blurStrength: CGFloat = 50
     
     @State var postBody: String? = nil
     @State var url: URL? = nil
@@ -99,7 +100,7 @@ struct PostUIView: View {
                                                     self.imageHeight = geometry.size.height
                                                 }
                                         })
-                                        .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
+                                        .blur(radius:(postView.post.nsfw || postView.community.nsfw) && userPreferences.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
                                 default:
                                     Text("Failed to load image.")
                                         .italic()
@@ -134,7 +135,7 @@ struct PostUIView: View {
                         // GIF
                         AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
-                            .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
+                            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && userPreferences.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
                     } else if LinkHelper.isImageLink(link: postView.post.url!) {
                         // Static Images
                         Spacer()
@@ -163,7 +164,7 @@ struct PostUIView: View {
                                     .progressViewStyle(.circular)
                             }
                         })
-                        .blur(radius: postView.post.nsfw && userPreferences.blurNsfw && shortBody ? 20 : 0)
+                        .blur(radius: (postView.post.nsfw || postView.community.nsfw) && userPreferences.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
                         if LinkHelper.isWebp(link: postView.post.url!) {
                             Spacer()
                         }

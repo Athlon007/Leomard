@@ -430,8 +430,8 @@
             filePath = "Leomard/views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "385"
-            endingLineNumber = "385"
+            startingLineNumber = "386"
+            endingLineNumber = "386"
             landmarkName = "onPostEdited(updatedPostView:)"
             landmarkType = "7">
          </BreakpointContent>
