@@ -77,6 +77,7 @@ struct NavbarCommunityItem: View {
             if community.icon == nil {
                 Image(systemName: "person.circle")
                     .AvatarFormatting(size: 20)
+                    .foregroundColor(.black)
             } else {
                 AsyncImage(url: URL(string: community.icon!),
                            content: { phase in
@@ -86,6 +87,7 @@ struct NavbarCommunityItem: View {
                     default:
                         Image(systemName: "person.circle")
                             .AvatarFormatting(size: 20)
+                            .foregroundColor(.black)
                     }
                 })
             }

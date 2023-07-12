@@ -35,11 +35,13 @@ struct PersonAvatar: View {
                 default:
                     Image(systemName: "person.circle")
                         .AvatarFormatting(size: size)
+                        .foregroundColor(.black)
                 }
             })
         } else {
             Image(systemName: "person.circle")
                 .AvatarFormatting(size: size)
+                .foregroundColor(.black)
         }
     }
 }
@@ -58,11 +60,13 @@ struct CommunityAvatar: View {
                 default:
                     Image(systemName: "person.2.circle")
                         .AvatarFormatting(size: size)
+                        .foregroundColor(.black)
                 }
             })
         } else {
             Image(systemName: "person.2.circle")
                 .AvatarFormatting(size: size)
+                .foregroundColor(.black)
         }
     }
 }
@@ -81,11 +85,13 @@ struct SiteAvatar: View {
                 default:
                     Image(systemName: "person.2.circle")
                         .AvatarFormatting(size: size)
+                        .foregroundColor(.black)
                 }
             })
         } else {
             Image(systemName: "person.2.circle")
                 .AvatarFormatting(size: size)
+                .foregroundColor(.black)
         }
     }
 }

@@ -125,7 +125,7 @@ struct LoginView: View {
             switch (result) {
             case .success(let loginResponse):
                 let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url)
-                self.sessionService.save(response: sessionInfo)
+                _ = self.sessionService.save(response: sessionInfo)
                 self.isLoginFailed = false
                 self.contentView.navigateToFeed()
                 self.contentView.loadUserData()
