@@ -639,7 +639,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "300"
-            endingLineNumber = "300">
+            endingLineNumber = "300"
+            landmarkName = "startPeriodicUnreadMessageCheck()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
