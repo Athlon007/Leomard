@@ -122,6 +122,9 @@ struct FeedView: View {
             self.postService = PostService(requestHandler: RequestHandler())
             loadPosts()
         }
+        .onDisappear {
+            self.postsResponse = GetPostsResponse()
+        }
         Spacer()
     }
     
