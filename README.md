@@ -1,6 +1,6 @@
 #  Leomard
 
-<img align="right" src="Assets/icon/macOS/128.png" alt="icon" width="128" />
+<img align="right" src="Assets/Icon/macOS/128.png" alt="icon" width="128" />
 
 Leomard is a Lemmy client for macOS, written in Swift using SwiftUI. Leomard allows you to browse Lemmy instances, view posts and comments, and create new posts and comments, read replies, and more.
 
