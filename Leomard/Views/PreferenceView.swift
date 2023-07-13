@@ -91,7 +91,7 @@ struct PreferencesView: View {
                         }
                         VStack(alignment: .leading) {
                             Text("Inbox")
-                            Toggle("List Unread by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
+                            Toggle("Show Unread only by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
                         }
                     case self.preferenceOptions[1]:
                         VStack(alignment: .leading) {

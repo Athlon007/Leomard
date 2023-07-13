@@ -31,6 +31,8 @@ struct CommentUIView: View {
     @State var isEditingComment: Bool = false
     @State var updatedTimeAsString: String = ""
     
+    @State var profileViewMode: Bool = false
+    
     var body: some View {
         if commentView.comment.deleted {
             VStack {
@@ -149,7 +151,11 @@ struct CommentUIView: View {
                             alignment: .leading
                         )
                         .onTapGesture {
-                            hideComment()
+                            if self.profileViewMode {
+                                contentView.openPostForComment(comment: self.commentView.comment)
+                            } else {
+                                hideComment()
+                            }
                         }
                     if isReplying || isEditingComment {
                         Spacer()
@@ -189,7 +195,7 @@ struct CommentUIView: View {
                             )
                         }
                     }
-                    if subComments.count > 0 || commentView.counts.childCount > 0 {
+                    if (subComments.count > 0 || commentView.counts.childCount > 0) && !profileViewMode {
                         Spacer()
                         ForEach(subComments, id: \.self) { commentView in
                             CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
@@ -248,7 +254,9 @@ struct CommentUIView: View {
     }
     
     func hideComment() {
-        self.hidden = true
+        if !self.profileViewMode {
+            self.hidden = true
+        }
     }
     
     func showComment() {

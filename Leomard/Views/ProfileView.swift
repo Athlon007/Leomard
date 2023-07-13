@@ -90,7 +90,7 @@ struct ProfileView: View {
                                     }
                                     ForEach(personDetails!.comments, id: \.self) { commentView in
                                         VStack {
-                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
+                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView, profileViewMode: true)
                                                 .onAppear {
                                                     if commentView == personDetails!.comments.last {
                                                         self.loadPersonDetails()
