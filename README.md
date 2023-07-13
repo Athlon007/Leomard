@@ -8,6 +8,12 @@ I made this app, because I do not like Lemmy's web interface, and I wanted to le
 
 This app is free and open source, is not affiliated with Lemmy or its developers, and it is developed in my free time. Please note that this app is still in early development, so bugs and issues are to be expected.
 
+### Why the name?
+
+- Leopard, but with an M, because it's a Lemmy client (the app icon is a leopard)
+- Leopards are larger than lemmings
+- Cats are cool
+
 ## Requirements
 
 - macOS 13.1 Ventura or later
@@ -18,7 +24,7 @@ Download the .dmg file from the releases page, and drag the app to your Applicat
 
 Start the app, you can login by clicking "Profile" in the bottom left corner.
 
-*Note: You may be prompted to allow the app to access your Keychain. This is required to store your login credentials.*
+*Note: You may be prompted to allow the app to access your Keychain. This is required to store your authorization token.*
 
 ## Screenshots
 
