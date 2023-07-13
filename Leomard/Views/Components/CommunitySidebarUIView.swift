@@ -17,7 +17,7 @@ struct CommunityUISidebarView: View {
     var onPostAdded: (PostView) -> Void
     
     var body: some View {
-        VStack {
+        LazyVStack {
             ZStack() {
                 if communityResponse.communityView.community.banner != nil {
                     AsyncImage(url: URL(string: communityResponse.communityView.community.banner!)!, content: { phase in

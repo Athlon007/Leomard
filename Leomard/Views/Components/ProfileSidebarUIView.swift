@@ -18,7 +18,7 @@ struct ProfileSidebarUIView: View {
     @State var isSendingMessage: Bool = false
     
     var body: some View {
-        VStack {
+        LazyVStack {
             ZStack() {
                 if personView.person.banner != nil {
                     AsyncImage(url: URL(string: personView.person.banner!)!, content: { phase in
@@ -57,7 +57,7 @@ struct ProfileSidebarUIView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             Spacer()
-            VStack {
+            LazyVStack {
                 if personView.person.displayName != nil {
                     Text(personView.person.displayName!)
                         .PersonNameFormat(person: personView.person, myself: myself)

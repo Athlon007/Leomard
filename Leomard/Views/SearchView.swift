@@ -15,20 +15,20 @@ struct SearchView: View {
     let commentService: CommentService
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
-    
+
     @State var searchService: SearchService?
-    
+
     @State var searchResponse: SearchResponse = SearchResponse()
 
     @State var searchQuery: String = ""
     @State var selectedSearchType: SearchType = .communities
     let availableSearchTypes: [SearchType] = [ .communities, .posts, .comments, .users ]
-    
+
     @State var searching: Bool = false
     @State var page: Int = 1
     @State var searchedOnce: Bool = false
     @FocusState var searchFocused: Bool
-    
+
     var body: some View {
         HStack {
             Spacer()
@@ -52,7 +52,7 @@ struct SearchView: View {
                     }
                     .pickerStyle(.radioGroup)
                     .horizontalRadioGroupLayout()
-                    .onChange(of: selectedSearchType) { value in
+                    .onChange(of: selectedSearchType) { _ in
                         self.page = 1
                         self.search()
                     }
@@ -72,12 +72,12 @@ struct SearchView: View {
         }
         VStack {
             HStack {
-                ScrollViewReader { scrollProxy in
+                ScrollViewReader { _ in
                     if self.searching && page == 1 {
                         ProgressView()
                             .progressViewStyle(.circular)
                     }
-                    
+
                     switch selectedSearchType {
                     case .comments:
                         if searchResponse.comments == [] && !self.searching && self.searchedOnce {
@@ -110,7 +110,7 @@ struct SearchView: View {
                                 }
                                 Spacer()
                                     .frame(height: 0)
-                                
+
                             }
                         }
                         .frame(
@@ -147,7 +147,7 @@ struct SearchView: View {
                                 .cornerRadius(4)
                                 Spacer()
                                     .frame(height: 0)
-                                
+
                             }
                         }
                         .frame(
@@ -184,7 +184,7 @@ struct SearchView: View {
                                 .cornerRadius(4)
                                 Spacer()
                                     .frame(height: 0)
-                                
+
                             }
                         }
                         .frame(
@@ -231,28 +231,28 @@ struct SearchView: View {
         .task {
             self.searchQuery = ""
             self.selectedSearchType = .communities
-            
+
             let requestHandler = RequestHandler()
             self.searchService = SearchService(requestHandler: requestHandler)
         }
     }
-    
+
     func search() {
         if self.searchQuery == "" {
             return
         }
-        
+
         self.searchedOnce = true
-        
+
         if page == 1 {
             self.searchResponse.communities = []
             self.searchResponse.comments = []
             self.searchResponse.posts = []
             self.searchResponse.users = []
         }
-        
+
         self.searching = true
-        
+
         searchService!.search(query: self.searchQuery, searchType: self.selectedSearchType, page: self.page) { result in
             switch result {
             case .success(let searchResponse):
@@ -267,8 +267,8 @@ struct SearchView: View {
             }
         }
     }
-    
+
     func loadPostFromComment(commentView: CommentView) {
-        
+
     }
 }
