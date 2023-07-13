@@ -90,7 +90,7 @@ struct PreferencesView: View {
                                 .lineLimit(nil)
                         }
                         VStack {
-                            Toggle("Inbox opens in 'Unread Only' mode by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
+                            Toggle("Inbox: List Unread by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
                         }
                     case self.preferenceOptions[1]:
                         VStack(alignment: .leading) {
