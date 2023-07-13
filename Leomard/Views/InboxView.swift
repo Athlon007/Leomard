@@ -27,7 +27,7 @@ struct InboxView: View {
     @State var commentReplies: [CommentReplyView] = []
     @State var privateMessages: [PrivateMessageView] = []
     @State var page: Int = 1
-    @State var unreadOnly: Bool = true
+    @State var unreadOnly: Bool = UserPreferences().unreadonlyWhenOpeningInbox
     @State var reachedEnd: Bool = false
     
     @State var isLoading: Bool = false

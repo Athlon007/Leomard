@@ -15,6 +15,7 @@ final class UserPreferences: ObservableObject {
     @AppStorage("listing_type", store: .standard) var listType: ListingType = .all
     @AppStorage("comment_sort_method", store: .standard) var commentSortMethod: CommentSortType = .top
     @AppStorage("check_notifs_every", store: .standard) var checkNotifsEverySeconds: Int = 60
+    @AppStorage("unreadonly_when_opening_inbox", store: .standard) var unreadonlyWhenOpeningInbox: Bool = true
     
     @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
     

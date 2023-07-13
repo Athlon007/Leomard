@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct FrequencyOption: Hashable, Equatable {
+fileprivate struct FrequencyOption: Hashable, Equatable {
     let name: String
     let seconds: Int
 }
@@ -16,14 +16,14 @@ struct FrequencyOption: Hashable, Equatable {
 struct PreferencesView: View {
     @StateObject var userPreferences: UserPreferences = UserPreferences()
     
-    let preferenceOptions: [PreferenceOption] = [
+    fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
         .init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
-    @State var currentSelection: PreferenceOption?
+    @State fileprivate var currentSelection: PreferenceOption?
     
-    let notificationCheckFrequencies: [FrequencyOption] = [
+    fileprivate let notificationCheckFrequencies: [FrequencyOption] = [
         .init(name: "Never", seconds: -1),
         .init(name: "10 seconds", seconds: 10),
         .init(name: "30 seconds", seconds: 30),
@@ -31,7 +31,7 @@ struct PreferencesView: View {
         .init(name: "3 minutes", seconds: 60 * 3),
         .init(name: "10 minutes", seconds: 60 * 10)
     ]
-    @State var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
+    @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
 
     
     var body: some View {
@@ -73,50 +73,63 @@ struct PreferencesView: View {
             .navigationBarBackButtonHidden(true)
         } detail: {
             List {
-                switch currentSelection {
-                case self.preferenceOptions[0]:
-                    Picker("Check notifications every", selection: $selectedNotificaitonCheckFrequency) {
-                        ForEach(self.notificationCheckFrequencies, id: \.self) { option in
-                            /*@START_MENU_TOKEN@*/Text(option.name)/*@END_MENU_TOKEN@*/
+                VStack(alignment: .leading, spacing: 20) {
+                    switch currentSelection {
+                    case self.preferenceOptions[0]:
+                        VStack{
+                            Picker("Check notifications every", selection: $selectedNotificaitonCheckFrequency) {
+                                ForEach(self.notificationCheckFrequencies, id: \.self) { option in
+                                    /*@START_MENU_TOKEN@*/Text(option.name)/*@END_MENU_TOKEN@*/
+                                }
+                            }
+                            .onChange(of: selectedNotificaitonCheckFrequency) { value in
+                                self.userPreferences.checkNotifsEverySeconds = value.seconds
+                            }
+                            Text("Note: Notifications are not checked when app is closed.")
+                                .frame(maxWidth: .infinity, alignment:.leading)
+                                .lineLimit(nil)
                         }
-                    }
-                    .onChange(of: selectedNotificaitonCheckFrequency) { value in
-                        self.userPreferences.checkNotifsEverySeconds = value.seconds
-                    }
-                    Text("Note: Notifications are not checked when app is closed.")
-                        .frame(maxWidth: .infinity, alignment:.leading)
-                        .lineLimit(nil)
-                case self.preferenceOptions[1]:
-                    Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
-                        ForEach(self.userPreferences.sortTypes, id: \.self) { method in
-                            Text(String(describing: method))
+                        VStack {
+                            Toggle("Inbox opens in 'Unread Only' mode by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
                         }
-                    }
-                    Picker("Default comment sort method", selection: self.userPreferences.$commentSortMethod) {
-                        ForEach(CommentSortType.allCases, id: \.self) { method in
-                            Text(String(describing: method))
+                    case self.preferenceOptions[1]:
+                        VStack(alignment: .leading) {
+                            Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
+                                ForEach(self.userPreferences.sortTypes, id: \.self) { method in
+                                    Text(String(describing: method))
+                                }
+                            }
+                            Picker("Default comment sort method", selection: self.userPreferences.$commentSortMethod) {
+                                ForEach(CommentSortType.allCases, id: \.self) { method in
+                                    Text(String(describing: method))
+                                }
+                            }
+                            Picker("Default listing type", selection: self.userPreferences.$listType) {
+                                ForEach(ListingType.allCases, id: \.self) { method in
+                                    Text(String(describing: method))
+                                }
+                            }
                         }
-                    }
-                    Picker("Default listing type", selection: self.userPreferences.$listType) {
-                        ForEach(ListingType.allCases, id: \.self) { method in
-                            Text(String(describing: method))
+                        VStack(alignment: .leading) {
+                            Text("NSFW")
+                            Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
+                            Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
                         }
-                    }
-                    Spacer()
-                    Text("NSFW")
-                    Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
-                    Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
-                case preferenceOptions[2]:
-                    Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
-                    Text("""
+                    case preferenceOptions[2]:
+                        VStack(alignment: .leading) {
+                            Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
+                            Text("""
                          Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
                          Example: 'awesome post @lemmy.world'
                          """)
-                        .frame(maxWidth: .infinity)
-                        .lineLimit(nil)
-                default:
-                    Text("")
+                            .frame(maxWidth: .infinity)
+                            .lineLimit(nil)
+                        }
+                    default:
+                        Text("")
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.leading)
             .padding(.trailing)
@@ -140,7 +153,7 @@ struct PreferencesView: View {
     }
 }
 
-struct PreferenceOption: Hashable {
+fileprivate struct PreferenceOption: Hashable {
     let name: String
     let icon: String
     let color: Color
