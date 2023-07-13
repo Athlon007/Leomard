@@ -14,8 +14,6 @@ fileprivate struct FrequencyOption: Hashable, Equatable {
 }
 
 struct PreferencesView: View {
-    @StateObject var userPreferences: UserPreferences = UserPreferences()
-    
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
@@ -83,7 +81,7 @@ struct PreferencesView: View {
                                 }
                             }
                             .onChange(of: selectedNotificaitonCheckFrequency) { value in
-                                self.userPreferences.checkNotifsEverySeconds = value.seconds
+                                UserPreferences.getInstance.checkNotifsEverySeconds = value.seconds
                             }
                             Text("Note: Notifications are not checked when app is closed.")
                                 .frame(maxWidth: .infinity, alignment:.leading)
@@ -91,21 +89,21 @@ struct PreferencesView: View {
                         }
                         VStack(alignment: .leading) {
                             Text("Inbox")
-                            Toggle("Show Unread only by default", isOn: self.userPreferences.$unreadonlyWhenOpeningInbox)
+                            Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
                         }
                     case self.preferenceOptions[1]:
                         VStack(alignment: .leading) {
-                            Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
-                                ForEach(self.userPreferences.sortTypes, id: \.self) { method in
+                            Picker("Default post sort method", selection: UserPreferences.getInstance.$postSortMethod) {
+                                ForEach(UserPreferences.getInstance.sortTypes, id: \.self) { method in
                                     Text(String(describing: method))
                                 }
                             }
-                            Picker("Default comment sort method", selection: self.userPreferences.$commentSortMethod) {
+                            Picker("Default comment sort method", selection: UserPreferences.getInstance.$commentSortMethod) {
                                 ForEach(CommentSortType.allCases, id: \.self) { method in
                                     Text(String(describing: method))
                                 }
                             }
-                            Picker("Default listing type", selection: self.userPreferences.$listType) {
+                            Picker("Default listing type", selection: UserPreferences.getInstance.$listType) {
                                 ForEach(ListingType.allCases, id: \.self) { method in
                                     Text(String(describing: method))
                                 }
@@ -113,12 +111,12 @@ struct PreferencesView: View {
                         }
                         VStack(alignment: .leading) {
                             Text("NSFW")
-                            Toggle("Show NSFW content", isOn: self.userPreferences.$showNsfw)
-                            Toggle("Blur NSFW content", isOn: self.userPreferences.$blurNsfw)
+                            Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
+                            Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
                         }
                     case preferenceOptions[2]:
                         VStack(alignment: .leading) {
-                            Toggle("Cross Instance Search", isOn: self.userPreferences.$experimentXInstanceSearch)
+                            Toggle("Cross Instance Search", isOn: UserPreferences.getInstance.$experimentXInstanceSearch)
                             Text("""
                          Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
                          Example: 'awesome post @lemmy.world'
@@ -142,7 +140,7 @@ struct PreferencesView: View {
             self.currentSelection = self.preferenceOptions[0]
         
             for notificationCheckFrequency in notificationCheckFrequencies {
-                if userPreferences.checkNotifsEverySeconds == notificationCheckFrequency.seconds {
+                if UserPreferences.getInstance.checkNotifsEverySeconds == notificationCheckFrequency.seconds {
                     selectedNotificaitonCheckFrequency = notificationCheckFrequency
                     break
                 }

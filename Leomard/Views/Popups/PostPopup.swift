@@ -18,7 +18,7 @@ struct PostPopup: View {
     @State var comments: [CommentView] = []
     @State var page: Int = 1
     @State var lastPage: Bool = false
-    @State var sortType: CommentSortType = UserPreferences().commentSortMethod
+    @State var sortType: CommentSortType = UserPreferences.getInstance.commentSortMethod
     
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool

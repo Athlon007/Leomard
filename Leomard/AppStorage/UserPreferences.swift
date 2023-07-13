@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 final class UserPreferences: ObservableObject {
+    private static var instance = UserPreferences()
+    public static var getInstance = UserPreferences.instance
+    
     @AppStorage("show_nsfw", store: .standard) var showNsfw: Bool = false
     @AppStorage("blur_nsfw", store: .standard) var blurNsfw: Bool = true
     @AppStorage("post_sort_method", store: .standard) var postSortMethod: SortType = .hot

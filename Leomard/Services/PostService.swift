@@ -9,7 +9,6 @@ import Foundation
 
 class PostService: Service {
     let requestHandler: RequestHandler
-    let userPreferences: UserPreferences = UserPreferences()
     
     public init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
@@ -24,7 +23,7 @@ class PostService: Service {
                     do {
                         var responses = try self.decode(type: GetPostsResponse.self, data: data)
                         responses.posts.forEach { postView in
-                            if postView.post.nsfw && !self.userPreferences.showNsfw {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw {
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }
@@ -62,7 +61,7 @@ class PostService: Service {
                     do {
                         var responses = try self.decode(type: GetPostsResponse.self, data: data)
                         responses.posts.forEach { postView in
-                            if postView.post.nsfw && !self.userPreferences.showNsfw  {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }

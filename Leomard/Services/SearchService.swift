@@ -9,7 +9,6 @@ import Foundation
 
 class SearchService: Service {
     let requestHandler: RequestHandler
-    let userPreferences: UserPreferences = UserPreferences()
     
     init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
@@ -20,7 +19,7 @@ class SearchService: Service {
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
         // Experimental cross-instance search.
-        if userPreferences.experimentXInstanceSearch && searchQuery.range(of: "@[\\w-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
+        if UserPreferences.getInstance.experimentXInstanceSearch && searchQuery.range(of: "@[\\w-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
             host = searchQuery.components(separatedBy: "@").last!
             searchQuery = searchQuery.replacingOccurrences(of: "@\(host)", with: "")
         }
@@ -36,19 +35,19 @@ class SearchService: Service {
                     if let data = apiResponse.data {
                         var response = try self.decode(type: SearchResponse.self, data: data)
                         response.posts.forEach { postView in
-                            if postView.post.nsfw && !self.userPreferences.showNsfw  {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
                                 response.posts = response.posts.filter { $0 != postView }
                             }
                         }
                         
                         response.communities.forEach { communityView in
-                            if communityView.community.nsfw && !self.userPreferences.showNsfw {
+                            if communityView.community.nsfw && !UserPreferences.getInstance.showNsfw {
                                 response.communities = response.communities.filter { $0 != communityView }
                             }
                         }
                         
                         response.comments.forEach { commentView in
-                            if commentView.post.nsfw && !self.userPreferences.showNsfw  {
+                            if commentView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
                                 response.comments = response.comments.filter { $0 != commentView }
                             }
                         }

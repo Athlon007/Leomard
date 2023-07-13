@@ -16,8 +16,8 @@ struct FeedView: View {
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     
-    @State var selectedListing: ListingType = UserPreferences().listType
-    @State var selectedSort: SortType = UserPreferences().postSortMethod
+    @State var selectedListing: ListingType = UserPreferences.getInstance.listType
+    @State var selectedSort: SortType = UserPreferences.getInstance.postSortMethod
     @State var postsResponse: GetPostsResponse = GetPostsResponse()
     
     @State var page: Int = 1
