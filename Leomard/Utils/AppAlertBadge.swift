@@ -19,4 +19,9 @@ actor AppAlertBadge {
     func resetBadge() {
         NSApplication.shared.dockTile.badgeLabel = nil
     }
+    
+    @MainActor
+    func setBadge(text: String) {
+        NSApplication.shared.dockTile.badgeLabel = text
+    }
 }

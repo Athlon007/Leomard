@@ -19,6 +19,10 @@ struct APIResponse {
     let data: Data?
 }
 
+struct NoBodyPost: Codable {
+    let auth: String
+}
+
 final class RequestHandler {
     public final let VERSION = "v3"
 
@@ -47,7 +51,7 @@ final class RequestHandler {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
-        // Body is set? Include it.
+        // Body is set? Include the Auth in body
         if let body = body {
             do {
                 let encoder = JSONEncoder()
@@ -66,6 +70,18 @@ final class RequestHandler {
                     jsonDictionary["auth"] = SessionService().load()?.loginResponse.jwt
                     jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
                 }
+                request.httpBody = jsonData
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            } catch {
+                completion(.failure(error))
+                return
+            }
+        } else if method != .get && SessionService().load()?.loginResponse.jwt != nil {
+            // If no body is set, but the method is **NOT** GET, then add the "NoBodyPost" object with auth key.
+            let encoder = JSONEncoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
+            do {
+                let jsonData = try encoder.encode(NoBodyPost(auth: SessionService().load()!.loginResponse.jwt!))
                 request.httpBody = jsonData
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {

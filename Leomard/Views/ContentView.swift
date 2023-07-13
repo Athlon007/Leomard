@@ -275,7 +275,11 @@ struct ContentView: View {
                     if self.unreadMessages == 0 {
                         self.appIconBadge.resetBadge()
                     } else {
-                        self.appIconBadge.setBadge(number: self.unreadMessages)
+                        if self.unreadMessages > 99 {
+                            self.appIconBadge.setBadge(text: "🙀")
+                        } else {
+                            self.appIconBadge.setBadge(number: self.unreadMessages)
+                        }
                     }
                 }
             case .failure(let error):

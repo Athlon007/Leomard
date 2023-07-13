@@ -35,6 +35,7 @@ struct InboxView: View {
     var body: some View {
         VStack {
             HStack {
+                Spacer()
                 Image(systemName: selectedView.imageName)
                     .padding(.trailing, 0)
                 Picker("", selection: $selectedView) {
@@ -53,7 +54,15 @@ struct InboxView: View {
                         self.page = 1
                         self.loadContent()
                     }
+                Spacer()
+                if selectedView == views[0] {
+                    Button(action: markAllAsRead) {
+                        Image(systemName: "envelope.open")
+                    }.buttonStyle(.link)
+                }
             }
+            .padding(.leading)
+            .padding(.trailing)
             List {
                 if isLoading {
                     ProgressView()
@@ -158,6 +167,24 @@ struct InboxView: View {
                     print(error)
                     self.isLoading = false
                 }
+            }
+        }
+    }
+    
+    func markAllAsRead() {
+        self.repliesService.markAllAsRead { result in
+            switch result {
+            case .success(_):
+                if self.unreadOnly {
+                    self.commentReplies = []
+                } else {
+                    self.page = 1
+                    loadContent()
+                }
+                
+                self.contentView.updateUnreadMessagesCount()
+            case .failure(let error):
+                print(error)
             }
         }
     }

@@ -83,6 +83,9 @@ struct PreferencesView: View {
                     .onChange(of: selectedNotificaitonCheckFrequency) { value in
                         self.userPreferences.checkNotifsEverySeconds = value.seconds
                     }
+                    Text("Note: Notifications are not checked when app is closed.")
+                        .frame(maxWidth: .infinity, alignment:.leading)
+                        .lineLimit(nil)
                 case self.preferenceOptions[1]:
                     Picker("Default post sort method", selection: self.userPreferences.$postSortMethod) {
                         ForEach(self.userPreferences.sortTypes, id: \.self) { method in

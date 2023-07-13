@@ -38,4 +38,10 @@ class RepliesService: Service {
             self.respond(result, completion)
         }
     }
+    
+    func markAllAsRead(completion: @escaping(Result<GetRepliesResponse, Error>) -> Void) {
+        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/user/mark_all_as_read", method: .post) { result in
+            self.respond(result, completion)
+        }
+    }
 }
