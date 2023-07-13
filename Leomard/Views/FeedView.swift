@@ -10,7 +10,6 @@ import SwiftUI
 import MarkdownUI
 
 struct FeedView: View {
-    let sessionService: SessionService
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
     

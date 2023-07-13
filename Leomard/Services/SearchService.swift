@@ -15,7 +15,7 @@ class SearchService: Service {
     }
     
     public func search(query: String, searchType: SearchType, page: Int, completion: @escaping (Result<SearchResponse, Error>) -> Void) {
-        var host = SessionService().getLemmyInstance()
+        var host = SessionStorage.getInstance.getLemmyInstance()
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
         // Experimental cross-instance search.

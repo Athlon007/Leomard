@@ -20,21 +20,21 @@ class PrivateMessageService: Service {
             request += "&unread_only=true"
         }
         
-        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: request, method: .get) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
             self.respond(result, completion)
         }
     }
     
     func sendPrivateMessage(content: String, recipient: Person, completion: @escaping(Result<PrivateMessageResponse, Error>) -> Void) {
         let body = CreatePrivateMessage(content: content, recipientId: recipient.id)
-        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/private_message", method: .post, body: body) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/private_message", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }
     
     func markAsRead(privateMessage: PrivateMessage, read: Bool, completion: @escaping (Result<PrivateMessageResponse, Error>) -> Void) {
         let body = MarkPrivateMessageAsRead(privateMessageId: privateMessage.id, read: read)
-        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/private_message/mark_as_read", method: .post, body: body) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/private_message/mark_as_read", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }

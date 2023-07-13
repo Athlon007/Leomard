@@ -19,7 +19,7 @@ class PersonService: Service {
         if savedOnly {
             request += "&saved_only=true"
         }
-        requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: request, method: .get) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
             self.respond(result, completion)
         }
     }

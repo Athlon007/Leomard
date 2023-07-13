@@ -1,5 +1,5 @@
 //
-//  SessionService.swift
+//  SessionStorage.swift
 //  Leomard
 //
 //  Created by Konrad Figura on 02/07/2023.
@@ -9,7 +9,7 @@ import Foundation
 import Security
 import LocalAuthentication
 
-class SessionService {
+class SessionStorage {
     private static var sessionKey = "key"
     private static let defaultLemmy = "lemmy.world"
     private static let root = "Leomard"
@@ -17,14 +17,17 @@ class SessionService {
     
     var currentSession: SessionInfo? = nil
     
-    init() {
+    private static var instance = SessionStorage()
+    public static var getInstance = instance
+    
+    private init() {
         self.currentSession = self.load()
     }
     
     private func getUrl(file: String) throws -> URL {
         let fileManager = FileManager.default
         let supportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let output = supportDirectory.appendingPathComponent("\(SessionService.root)/\(file)")
+        let output = supportDirectory.appendingPathComponent("\(SessionStorage.root)/\(file)")
 
         try fileManager.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
         
@@ -103,7 +106,7 @@ class SessionService {
     
     public func getLemmyInstance() -> String {
         if self.currentSession == nil {
-            return SessionService.defaultLemmy
+            return SessionStorage.defaultLemmy
         }
         
         return self.currentSession!.lemmyInstance

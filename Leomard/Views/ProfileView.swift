@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct ProfileView: View {
-    let sessionService: SessionService
     let commentService: CommentService
     let contentView: ContentView
     let person: Person
@@ -185,7 +184,7 @@ struct ProfileView: View {
     }
     
     func logout() {
-        _ = SessionService().destroy()
+        _ = SessionStorage.getInstance.destroy()
         contentView.navigateToFeed()
         contentView.logout()
     }

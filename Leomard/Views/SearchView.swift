@@ -10,7 +10,6 @@ import SwiftUI
 import MarkdownUI
 
 struct SearchView: View {
-    let sessionService: SessionService
     let postService: PostService
     let commentService: CommentService
     let contentView: ContentView

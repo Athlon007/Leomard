@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CommunityUIView: View {
     let community: Community
-    let sessionService: SessionService
     let postService: PostService
     let commentService: CommentService
     let contentView: ContentView

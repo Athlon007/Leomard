@@ -22,7 +22,6 @@ struct ContentView: View {
     @State var myUser: MyUserInfo? = nil
     @State var siteView: SiteView? = nil
     
-    let sessionService = SessionService()
     @State var requestHandler: RequestHandler?
     @State var siteService: SiteService?
     @State var commentService: CommentService?
@@ -64,26 +63,26 @@ struct ContentView: View {
                     VStack {
                         switch currentSelection.id {
                         case 1:
-                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, sessionService: self.sessionService, myself: $myUser, contentView: self, commentService: self.commentService!)
+                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, myself: $myUser, contentView: self, commentService: self.commentService!)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 2:
-                            SearchView(sessionService: sessionService, postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+                            SearchView(postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 3:
-                            if self.sessionService.isSessionActive() && myUser != nil {
-                                ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
+                            if SessionStorage.getInstance.isSessionActive() && myUser != nil {
+                                ProfileView(commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
                                     .listStyle(SidebarListStyle())
                                     .scrollContentBackground(.hidden)
                             } else {
-                                LoginView(sessionService: sessionService, requestHandler: requestHandler!, contentView: self)
+                                LoginView(requestHandler: requestHandler!, contentView: self)
                                     .frame(maxWidth: .infinity)
                                     .listStyle(SidebarListStyle())
                                     .scrollContentBackground(.hidden)
                             }
                         default:
-                            FeedView(sessionService: sessionService, contentView: self, myself: $myUser, siteView: $siteView)
+                            FeedView(contentView: self, myself: $myUser, siteView: $siteView)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         }
@@ -91,7 +90,7 @@ struct ContentView: View {
                     
                     if openedPerson != nil {
                         VStack {
-                            ProfileView(sessionService: sessionService, commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
+                            ProfileView(commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         }
@@ -102,7 +101,7 @@ struct ContentView: View {
                     
                     if openedCommunity != nil {
                         VStack {
-                            CommunityUIView(community: openedCommunity!, sessionService: self.sessionService, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
+                            CommunityUIView(community: openedCommunity!, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
                         }
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)

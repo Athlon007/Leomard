@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct LoginView: View {
-    var sessionService: SessionService
     let requestHandler: RequestHandler
     var contentView: ContentView
     
@@ -125,7 +124,7 @@ struct LoginView: View {
             switch (result) {
             case .success(let loginResponse):
                 let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url)
-                _ = self.sessionService.save(response: sessionInfo)
+                _ = SessionStorage.getInstance.save(response: sessionInfo)
                 self.isLoginFailed = false
                 self.contentView.navigateToFeed()
                 self.contentView.loadUserData()

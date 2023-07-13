@@ -11,7 +11,6 @@ import SwiftUI
 struct InboxView: View {
     let repliesService: RepliesService
     let requestHandler: RequestHandler
-    let sessionService: SessionService
     @Binding var myself: MyUserInfo?
     let contentView: ContentView
     let commentService: CommentService

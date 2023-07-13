@@ -14,8 +14,8 @@ class SiteService: Service {
         self.requestHandler = requestHandler
     }
     
-    public func getSite(Ca completion: @escaping (Result<GetSiteResponse, Error>) -> Void) {
-        self.requestHandler.makeApiRequest(host: SessionService().getLemmyInstance(), request: "/site", method: .get) { result in
+    public func getSite(Ca completion: @escaping (Result<GetSiteResponse, Error>) -> Void) {        
+        self.requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/site", method: .get) { result in
             self.respond(result, completion)
         }
     }
