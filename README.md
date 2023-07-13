@@ -37,6 +37,13 @@ Start the app, you can login by clicking "Profile" in the bottom left corner.
 
 If you want to contribute to this project, you can do so by forking the repository, and then creating a pull request. You can also create an issue if you find a bug or have a feature request. Please see [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
+## Support
+
+You can support me through here:
+
+- [Ko-fi](https://ko-fi.com/athlon)
+- [PayPal](https://www.paypal.com/donate/?hosted_button_id=8VASR9RLLS76Y)
+
 ## License
 
 This project is licensed under GPL-3.0. See [LICENSE](LICENSE.md) for more information.
