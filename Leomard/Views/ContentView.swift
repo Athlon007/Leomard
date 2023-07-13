@@ -42,6 +42,8 @@ struct ContentView: View {
     @Binding var columnStatus: NavigationSplitViewVisibility
     @State var unreadMessages: Int = 0
     
+    var appIconBadge = AppAlertBadge()
+    
     var body: some View {
         ZStack {
             NavigationSplitView(columnVisibility: $columnStatus) {
@@ -269,6 +271,13 @@ struct ContentView: View {
             switch result {
             case .success(let unreadCountsResponse):
                 self.unreadMessages = unreadCountsResponse.total()
+                DispatchQueue.main.sync {
+                    if self.unreadMessages == 0 {
+                        self.appIconBadge.resetBadge()
+                    } else {
+                        self.appIconBadge.setBadge(number: self.unreadMessages)
+                    }
+                }
             case .failure(let error):
                 print(error)
             }

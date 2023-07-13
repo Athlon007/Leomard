@@ -7,6 +7,7 @@
 
 import Foundation
 import Security
+import LocalAuthentication
 
 class SessionService {
     private static var sessionKey = "key"
@@ -31,6 +32,9 @@ class SessionService {
     }
     
     public func save(response: SessionInfo) -> Bool {
+        let context = LAContext()
+        context.interactionNotAllowed = true
+        
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         guard let data = try? encoder.encode(response) else {
@@ -41,7 +45,8 @@ class SessionService {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "LeomardApp",
             kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessible
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+            kSecUseAuthenticationContext as String: context
         ]
         
         let status = SecItemAdd(keychainItemQuery as CFDictionary, nil)
@@ -56,11 +61,15 @@ class SessionService {
             return self.currentSession
         }
         
+        let context = LAContext()
+        context.interactionNotAllowed = true
+        
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "LeomardApp",
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecUseAuthenticationContext as String: context
         ]
         
         var retrievedData: AnyObject?

@@ -638,8 +638,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293">
+            startingLineNumber = "299"
+            endingLineNumber = "299">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -652,8 +652,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "loadUserData()"
             landmarkType = "7">
             <Locations>
@@ -700,8 +700,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "logout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -716,8 +716,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "logout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -732,8 +732,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "logout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -748,8 +748,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "loadUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -764,8 +764,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "loadUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -796,8 +796,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
             landmarkName = "logout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -812,8 +812,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "logout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -860,8 +860,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "loadUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -876,8 +876,8 @@
             filePath = "Leomard/views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "loadUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -886,38 +886,6 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "55E3355E-77C5-4DEE-8C63-E367160CC81A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Leomard/services/SessionService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "save(response:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "00BEC7CA-F04B-45D8-A9E7-EE2477488A89"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Leomard/services/SessionService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "save(response:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6A09E5E0-4177-4327-A379-AC699F4FB915"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -933,6 +901,38 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "00BEC7CA-F04B-45D8-A9E7-EE2477488A89"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/services/SessionService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "save(response:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6A09E5E0-4177-4327-A379-AC699F4FB915"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/services/SessionService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "save(response:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
             uuid = "22644744-556E-48B1-A31E-13DF8FA1E820"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -940,8 +940,8 @@
             filePath = "Leomard/services/SessionService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
             landmarkName = "load()"
             landmarkType = "7">
          </BreakpointContent>
@@ -956,8 +956,8 @@
             filePath = "Leomard/services/SessionService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "load()"
             landmarkType = "7">
          </BreakpointContent>

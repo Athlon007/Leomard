@@ -185,7 +185,7 @@ struct ProfileView: View {
     }
     
     func logout() {
-        SessionService().destroy()
+        _ = SessionService().destroy()
         contentView.navigateToFeed()
         contentView.logout()
     }
