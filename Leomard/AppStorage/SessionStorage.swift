@@ -9,29 +9,18 @@ import Foundation
 import Security
 import LocalAuthentication
 
-class SessionStorage {
+final class SessionStorage {
     private static var sessionKey = "key"
     private static let defaultLemmy = "lemmy.world"
-    private static let root = "Leomard"
-    private static let loginResponseFile = "LoginResponse.json"
+    private static let root = "LeomardApp"
     
-    var currentSession: SessionInfo? = nil
+    private var currentSession: SessionInfo? = nil
     
-    private static var instance = SessionStorage()
-    public static var getInstance = instance
+    private static let instance = SessionStorage()
+    public static let getInstance = instance
     
     private init() {
         self.currentSession = self.load()
-    }
-    
-    private func getUrl(file: String) throws -> URL {
-        let fileManager = FileManager.default
-        let supportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let output = supportDirectory.appendingPathComponent("\(SessionStorage.root)/\(file)")
-
-        try fileManager.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-        
-        return output
     }
     
     public func save(response: SessionInfo) -> Bool {
@@ -46,7 +35,7 @@ class SessionStorage {
         
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "LeomardApp",
+            kSecAttrAccount as String: SessionStorage.root,
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
             kSecUseAuthenticationContext as String: context
@@ -69,7 +58,7 @@ class SessionStorage {
         
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "LeomardApp",
+            kSecAttrAccount as String: SessionStorage.root,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecUseAuthenticationContext as String: context
@@ -96,7 +85,7 @@ class SessionStorage {
     public func destroy() -> Bool {
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "LeomardApp"
+            kSecAttrAccount as String: SessionStorage.root
         ]
         
         let status = SecItemDelete(keychainItemQuery as CFDictionary)
