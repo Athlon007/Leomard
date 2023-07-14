@@ -37,7 +37,9 @@ Always prefer `struct` over `class`, unless you need inheritance or reference se
 
 Always prefer `let` over `var`, unless you need to mutate the variable.
 
-Do not use abbreviations in variable and method names, unless the abbreviation is well known (e.g. `URL`). Names should be descriptive. Do not use `m` as a variable name, use `message` instead.
+Do not use abbreviations in variable and method names, unless the abbreviation is well known (e.g. `URL`). Names should be descriptive. Do not use `m` as a variable name, use `message` instead
+
+Feel free to refactor the code, if you think it can be improved, but don't overcomplicate it. The code should be easy to read and understand.
 
 I sometimes may not follow my own guidelines (sorry!). If you find any violations, please feel free to open a pull request.
 
