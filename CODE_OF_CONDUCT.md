@@ -1,5 +1,7 @@
 # Code of Conduct
 
+_Last updated: 2023-07-14_
+
 1. Be respectful and considerate.
 2. Do not harass others. Always assume that at the other end there is a psychopath with a gun.
 3. Do not post spam.
