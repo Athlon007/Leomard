@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 final class UserPreferences: ObservableObject {
-    private static let instance = UserPreferences()
-    public static let getInstance = UserPreferences.instance
+    private static var instance = UserPreferences()
+    @ObservedObject public static var getInstance = UserPreferences.instance
     
     private init() {}
     

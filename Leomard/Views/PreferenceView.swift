@@ -30,6 +30,8 @@ struct PreferencesView: View {
         .init(name: "10 minutes", seconds: 60 * 10)
     ]
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
+    
+    @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
 
     
     var body: some View {
