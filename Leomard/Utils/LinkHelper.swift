@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LinkHelper {
+struct LinkHelper {
     static func stripToHost(link: String) -> String {
         guard let url = URL(string: link) else {
             return ""
@@ -73,5 +73,13 @@ class LinkHelper {
     
     static func isYouTubeLink(link: String) -> Bool {
         return link.contains("youtube.com") || link.contains("youtu.be")
+    }
+    
+    static func isLemmyCommunityLink(link: String) -> Bool {
+        return link.range(of: "^![^\\s]*@[^\\s]*$", options: .regularExpression, range: nil, locale: nil) != nil
+    }
+    
+    static func isLemmyUserLink(link: String) -> Bool {
+        return link.range(of: "^@[^\\s]*@[^\\s]*$", options: .regularExpression, range: nil, locale: nil) != nil
     }
 }

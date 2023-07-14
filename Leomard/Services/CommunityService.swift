@@ -28,4 +28,12 @@ class CommunityService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func getCommunityFromLink(link: String, completion: @escaping (Result<GetCommunityResponse, Error>) -> Void) {
+        let community = link.components(separatedBy: "@")[0].replacingOccurrences(of: "!", with: "")
+        let host = link.components(separatedBy: "@")[1]
+        requestHandler.makeApiRequest(host: host, request: "/community?name=\(community)", method: .get) { result in
+            self.respond(result, completion)
+        }
+    }
 }

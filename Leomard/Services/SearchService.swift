@@ -19,7 +19,7 @@ class SearchService: Service {
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
         // Experimental cross-instance search.
-        if UserPreferences.getInstance.experimentXInstanceSearch && searchQuery.range(of: "@[\\w-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
+        if UserPreferences.getInstance.experimentXInstanceSearch && searchQuery.range(of: "@[^\\s-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
             host = searchQuery.components(separatedBy: "@").last!
             searchQuery = searchQuery.replacingOccurrences(of: "@\(host)", with: "")
         }

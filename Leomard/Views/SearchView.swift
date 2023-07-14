@@ -240,7 +240,7 @@ struct SearchView: View {
         if self.searchQuery == "" {
             return
         }
-
+        
         self.searchedOnce = true
 
         if page == 1 {
@@ -266,8 +266,8 @@ struct SearchView: View {
             }
         }
     }
-
+    
     func loadPostFromComment(commentView: CommentView) {
-
+        self.contentView.openPostForComment(comment: commentView.comment)
     }
 }
