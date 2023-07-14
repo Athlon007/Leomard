@@ -57,7 +57,7 @@ struct CommentUIView: View {
                 Divider()
             }
         } else {
-            VStack {
+            LazyVStack {
                 HStack {
                     HStack {
                         PersonDisplay(person: commentView.creator, myself: $myself)
@@ -191,18 +191,25 @@ struct CommentUIView: View {
                             }
                             .frame(
                                 maxWidth: .infinity,
+                                maxHeight: .infinity,
                                 alignment: .leading
                             )
                         }
+                        .frame(
+                            maxHeight: .infinity,
+                            alignment: .leading
+                        )
                     }
                     if (subComments.count > 0 || commentView.counts.childCount > 0) && !profileViewMode {
                         Spacer()
                         ForEach(subComments, id: \.self) { commentView in
                             CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
+                                .frame(maxHeight: .infinity, alignment: .leading)
                             if commentView != self.subComments.last {
                                 Divider()
                                     .padding(.leading, 20)
                             }
+                            Spacer()
                         }
                         if !lastResultEmpty {
                             Divider()
@@ -218,6 +225,7 @@ struct CommentUIView: View {
             .frame(
                 minWidth: 0,
                 maxWidth: .infinity,
+                maxHeight: .infinity,
                 alignment: .leading
             )
             .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
@@ -320,6 +328,7 @@ struct CommentUIView: View {
                     DispatchQueue.main.sync {
                         commentView = commentResponse.commentView
                         commentText = ""
+                        isReplying = false
                         isSendingComment = false
                         isEditingComment = false
                     }
@@ -334,7 +343,9 @@ struct CommentUIView: View {
                     DispatchQueue.main.sync {
                         subComments.insert(commentResponse.commentView, at: 0)
                         commentText = ""
+                        isReplying = false
                         isSendingComment = false
+                        isEditingComment = false
                     }
                 case .failure(let error):
                     print(error)
