@@ -2,7 +2,7 @@
 
 _Last updated: 2023-07-14_
 
-Befere contributing, please read the [Code of Conduct](CODE_OF_CONDUCT.md).
+Befere contributing, you must read the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## General
 
@@ -41,7 +41,30 @@ Do not use abbreviations in variable and method names, unless the abbreviation i
 
 Feel free to refactor the code, if you think it can be improved, but don't overcomplicate it. The code should be easy to read and understand.
 
+While the code should explain itself, if something is not clear, please add a comment explaining what the code does.
+
 I sometimes may not follow my own guidelines (sorry!). If you find any violations, please feel free to open a pull request.
+
+## Artwork
+
+Any artwork you create must be licensed under CC-BY-SA-4.0. See [LICENSE](LICENSE.md) for more information. If your art will be used in the app, you will be credited in the app and in README.md.
+
+While not necessary, it's recommended to also include art's source file (e.g. .afdesign, .xcf, .psd, etc.) in the pull request.
+
+Do not plagiarize other people's work. Do not use someone else's work without their permission. Inspiration is fine, but do not do the "can I copy your homework" thing.
+
+Trying to pass someone else's work as your own will result in a ban from the project.
+
+No generally offensive content is allowed. No NSFW content is allowed. No noninclusive content is allowed. No illegal content is allowed. No content that is not related to the project is allowed.
+
+If you want to contribute artwork, please open an issue first, so we can discuss it, or contact me via email: [mail@kfigura.nl](mail@kfigura.nl)
+
+You can submit app icons, screenshots, or any other artwork you think would be useful. (It would be cool to have installer artwork, or perhaps login screen artwork. Although it's not something I am actively chasing.)
+
+Specifications:
+- App Installer Art: 800x600px, 72dpi, PNG
+- App Icon: 1024x1024px, 72dpi, PNG/SVG, must follow [macOS App Icon Guidelines](https://developer.apple.com/design/human-interface-guidelines/app-icons)
+- Login Screen Art: TBD
 
 ## What to work on
 
