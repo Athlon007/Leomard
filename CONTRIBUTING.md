@@ -79,3 +79,7 @@ As for now, only English is supported and no translations are planned, until the
 ## Conclusion
 
 Thank you for reading this, and thank you for contributing to this project! If you have any questions, feel free to open an issue, or contact me via email: [mail@kfigura.nl](mail@kfigura.nl)
+
+## Legal
+
+This project is bound to laws of the Netherlands. Any disputes will be settled in the court of the Netherlands.
