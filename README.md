@@ -24,7 +24,7 @@ Download the .dmg file from the releases page, and drag the app to your Applicat
 
 Start the app, you can login by clicking "Profile" in the bottom left corner.
 
-*Note: You may be prompted to allow the app to access your Keychain. This is required to store your authorization token.*
+*Note: You may be prompted to allow the app to access your Keychain. This is required to store your authorization token. It's recommended to press "Always Allow" to avoid having to enter your password every time you start the app.*
 
 ## Screenshots
 
