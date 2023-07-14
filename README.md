@@ -57,8 +57,5 @@ This project is licensed under GPL-3.0. See [LICENSE](LICENSE.md) for more infor
 
 ## Credits
 
-- App Icon: [vintprox](https://github.com/vintprox) licensed under CC-BY-SA
-
-## Libraries used
-
+- App Icon by [vintprox](https://github.com/vintprox) licensed under CC-BY-SA
 - [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) licensed under MIT License
