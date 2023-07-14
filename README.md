@@ -5,7 +5,7 @@
 [![](https://img.shields.io/github/license/Athlon007/Leomard?style=for-the-badge)](LICENSE.md)
 
 
-<img align="right" src="Assets/Icon/mac.iconset/icon_128x128.png" alt="icon" width="128" />
+<img align="right" src="Assets/Icon/mac.iconset/icon_512x512.png" alt="icon" width="128" />
 
 Leomard is a Lemmy client for macOS, written in Swift using SwiftUI. Leomard allows you to browse Lemmy instances, view posts and comments, and create new posts and comments, read replies, and more.
 
