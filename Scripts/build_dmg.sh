@@ -1,7 +1,7 @@
 #!/bin/sh
 if ! command -v create-dmg &> /dev/null
 then
-    echo "create-dmg could not be found"
+    echo "create-dmg could not be found. Install it with 'brew install create-dmg'"
     exit 1
 fi
 
