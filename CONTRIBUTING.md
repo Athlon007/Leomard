@@ -1,5 +1,7 @@
 # Contributing
 
+_Last updated: 2023-07-14_
+
 Befere contributing, please read the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## General
@@ -23,21 +25,23 @@ The main project folder is divided into following subfolders:
 - Utils: Various utilities used in the app.
 - Views: Contains the source code of the views used in the app.
 
+Only store one struct/class per file, unless the struct/class is a substruct/subclass of another struct/class, or that struct/class is only used within the file. If that's the case, mark the struct/class as `fileprivate`.
+
+Never create a new instance of `UserPreferences` or `SessionStorage` structs, always use the shared instance.
+
+Please pass services from `ContentView` into the other views (aka: dependency injection), instead of creating new instances of the services in the other views.
+
+Remember to use `LazyVStack` instead of `VStack` when loading a lot of elements.
+
+Always prefer `struct` over `class`, unless you need inheritance or reference semantics.
+
+Always prefer `let` over `var`, unless you need to mutate the variable.
+
 I sometimes may not follow my own guidelines (sorry!). If you find any violations, please feel free to open a pull request.
-
-Only store one struct/class per file, unless the struct/class is a substruct/subclass of another struct/class, or that struct/class is only used within the file.
-
-Never create a new instance of UserPreferences or SessionStorage structs, always use the shared instance.
-
-Please pass services from ContentView into the other views (aka: dependency injection), instead of creating new instances of the services in the other views.
-
-Remember to use LazyVStack instead of VStack when loading a lot of elements.
-
-Always prefer struct over class, unless you need inheritance or reference semantics.
 
 ## What to work on
 
-You can work on whatever you want from [Projects/Leomard](https://github.com/users/Athlon007/projects/3/views/1). If something is in the "In progress" column, please do not work on it, unless you have been assigned to it. First table is for the current version, those features are the most important. Please avoid working on features that are in the "Future" column or the next update column, unless you have been assigned to it.
+You can work on whatever you want from [Projects/Leomard](https://github.com/users/Athlon007/projects/3/views/1). If something is in the "In progress" column, please do not work on it, unless you have been assigned to it. First table is for the current version, those features are the most important. Please avoid working on features that are in the "Future" column or the next update column, unless you have been assigned to it. You can also work on stuff from the "Bugs" column.
 
 If you want to work on something that is not in the project, please create an issue first. Your idea will be discussed, and if it is accepted, it will be added to the project.
 
