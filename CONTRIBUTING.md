@@ -1,6 +1,6 @@
 # Contributing
 
-_Last updated: 2023-07-14_
+_Last updated: 2023-07-15_
 
 Befere contributing, you must read the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -9,6 +9,20 @@ Befere contributing, you must read the [Code of Conduct](CODE_OF_CONDUCT.md).
 If you want to contribute to this project, you can do so by forking the repository, and then creating a pull request. You can also create an issue if you find a bug or have a feature request.
 
 Any code you write must be licensed under GPL-3.0. See [LICENSE](LICENSE.md) for more information.
+
+## What to work on
+
+You can work on whatever you want from [Projects/Leomard](https://github.com/users/Athlon007/projects/3/views/1). If something is in the "In progress" column, please do not work on it, unless you have been assigned to it. First table is for the current version, those features are the most important. Please avoid working on features that are in the "Future" column or the next update column, unless you have been assigned to it. You can also work on stuff from the "Bugs" column.
+
+If you want to work on something that is not in the project, please create an issue first. Your idea will be discussed, and if it is accepted, it will be added to the project.
+
+## Branches
+
+The project is divided into three branches:
+
+- `master`: The main branch. This branch is used for releases only. Do not commit directly to this branch.
+- `dev`: The development branch. This branch reflects the currently worked on version in the project's table. Do not commit directly to this branch.
+- `hotfix`: The hotfix branch. This branch is used to fix bugs in the current version. Do not commit directly to this branch.
 
 ## Code style
 
@@ -65,12 +79,6 @@ Specifications:
 - App Installer Art: 800x600px, 72dpi, PNG
 - App Icon: 1024x1024px, 72dpi, PNG/SVG, must follow [macOS App Icon Guidelines](https://developer.apple.com/design/human-interface-guidelines/app-icons)
 - Login Screen Art: TBD
-
-## What to work on
-
-You can work on whatever you want from [Projects/Leomard](https://github.com/users/Athlon007/projects/3/views/1). If something is in the "In progress" column, please do not work on it, unless you have been assigned to it. First table is for the current version, those features are the most important. Please avoid working on features that are in the "Future" column or the next update column, unless you have been assigned to it. You can also work on stuff from the "Bugs" column.
-
-If you want to work on something that is not in the project, please create an issue first. Your idea will be discussed, and if it is accepted, it will be added to the project.
 
 ## Translations
 
