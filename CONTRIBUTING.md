@@ -61,7 +61,7 @@ I sometimes may not follow my own guidelines (sorry!). If you find any violation
 
 ## Artwork
 
-Any artwork you create must be licensed under CC-BY-SA-4.0. See [LICENSE](LICENSE.md) for more information. If your art will be used in the app, you will be credited in the app and in README.md.
+Any artwork you create must be licensed under CC-BY-SA-4.0. If your art will be used in the app, you will be credited in the app and in README.md.
 
 While not necessary, it's recommended to also include art's source file (e.g. .afdesign, .xcf, .psd, etc.) in the pull request.
 
@@ -86,7 +86,7 @@ As for now, only English is supported and no translations are planned, until the
 
 ## Conclusion
 
-Thank you for reading this, and thank you for contributing to this project! If you have any questions, feel free to open an issue, or contact me via email: [mail@kfigura.nl](mail@kfigura.nl)
+Thank you for reading this, and thank you for contributing to this project! If you have any questions, feel free to open an issue, or contact me via email: [mail @kfigura.nl](mail@kfigura.nl)
 
 ## Legal
 
