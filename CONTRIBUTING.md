@@ -30,14 +30,16 @@ Please follow the [Swift API Design Guidelines](https://swift.org/documentation/
 
 The main project folder is divided into following subfolders:
 
-- Assets: Contains the assets used in the app.
-- AppStorage: Contains the source code of whatever is saved in the app storage.
-- Models: Contains the source code of the models used in the app.
-- Models/Leomard: Used only by Leomard
-- Models/Lemmy: Models provided by the Lemmy API.
-- Services: Contains the source code of the services used in the app.
-- Utils: Various utilities used in the app.
-- Views: Contains the source code of the views used in the app.
+- `Assets`: Contains the assets used in the app.
+- `AppStorage`: Contains the source code of whatever is saved in the app storage.
+- `Models`: Contains the source code of the models used in the app.
+- `Models/Leomard`: Used only by Leomard
+- `Models/Lemmy`: Models provided by the Lemmy API.
+- `Services`: Contains the source code of the services used in the app.
+- `Utils`: Various utilities used in the app.
+- `Views`: Contains the source code of the views used in the app.
+
+The code is build around LemmyHttp API. The API is documented [here](https://join-lemmy.org/api/classes/LemmyHttp.html).
 
 Only store one struct/class per file, unless the struct/class is a substruct/subclass of another struct/class, or that struct/class is only used within the file. If that's the case, mark the struct/class as `fileprivate`.
 
