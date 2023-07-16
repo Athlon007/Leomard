@@ -120,8 +120,6 @@ struct ContentView: View {
                 self.repliesService = RepliesService(requestHandler: self.requestHandler!)
                 
                 self.loadUserData()
-                self.updateUnreadMessagesCount()
-                self.startPeriodicUnreadMessageCheck()
             }
             
             if self.openedPostView != nil {
@@ -151,6 +149,9 @@ struct ContentView: View {
                     if self.myUser!.localUserView.person.avatar != nil {
                         self.profileOption.externalLink = self.myUser!.localUserView.person.avatar!
                     }
+                    
+                    self.updateUnreadMessagesCount()
+                    self.startPeriodicUnreadMessageCheck()
                 }
             case .failure(let error):
                 print(error)
