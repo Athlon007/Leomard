@@ -5,6 +5,7 @@
 ### Added
 
 - Added status indicator when sending a post (#7)
+- Added alert when sending/editing post/comment fails
 
 ### Bug Fixes
 
