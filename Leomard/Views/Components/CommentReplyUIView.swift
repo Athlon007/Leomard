@@ -257,6 +257,8 @@ struct CommentReplyUIView: View {
                     commentText = ""
                     isSendingComment = false
                     isReplied = true
+                    
+                    self.contentView.updateUnreadMessagesCount()
                 }
             case .failure(let error):
                 print(error)
