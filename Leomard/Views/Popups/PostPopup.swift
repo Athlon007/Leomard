@@ -85,6 +85,10 @@ struct PostPopup: View {
                                     alignment: .leading
                                 )
                                 .disabled(isTextFieldEmpty())
+                            if isSendingComment {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            }
                         }
                         Spacer()
                         Picker("Sort By", selection: $sortType) {
@@ -135,15 +139,15 @@ struct PostPopup: View {
             .task {
                 self.loadComments()
             }
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("Error"),
-                    message: Text("Unable to send a comment. Try again."),
-                    primaryButton: .destructive(Text("Retry")) {
-                        self.createComment()
-                        showingAlert = false
-                    }, secondaryButton: .cancel())
-            }
+            .alert("Error", isPresented: $showingAlert, actions: {
+                Button("Retry", role: .destructive) {
+                    self.createComment()
+                    showingAlert = false
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("Failed to send a comment. Try again.")
+             })
         }
         .frame(
             minWidth: 0,
@@ -177,6 +181,10 @@ struct PostPopup: View {
     
     func createComment() {
         let comment = commentText
+        
+        if isSendingComment {
+            return
+        }
         
         isSendingComment = true
         

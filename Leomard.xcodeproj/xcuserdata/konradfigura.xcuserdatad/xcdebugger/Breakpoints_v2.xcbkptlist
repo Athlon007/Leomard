@@ -350,8 +350,8 @@
             filePath = "Leomard/views/Popups/PostCreationPopup.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "PostCreationPopup"
             landmarkType = "14">
          </BreakpointContent>
@@ -384,8 +384,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "179"
             endingLineNumber = "179"
-            landmarkName = "sendPost()"
-            landmarkType = "7">
+            landmarkName = "body"
+            landmarkType = "24">
             <Locations>
                <Location
                   uuid = "EB67C4F0-BDE7-4343-8916-A3F6BCD8AAD9 - a7854d4d2f1c5189"
