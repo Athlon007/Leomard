@@ -542,8 +542,8 @@
             filePath = "Leomard/views/InboxView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "loadContent()"
             landmarkType = "7">
          </BreakpointContent>
@@ -558,8 +558,8 @@
             filePath = "Leomard/views/InboxView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "loadContent()"
             landmarkType = "7">
          </BreakpointContent>
@@ -574,8 +574,8 @@
             filePath = "Leomard/views/InboxView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
             landmarkName = "loadContent()"
             landmarkType = "7">
             <Locations>

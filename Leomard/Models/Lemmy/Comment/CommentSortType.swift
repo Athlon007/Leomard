@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CommentSortType: String, Codable, CustomStringConvertible {
+enum CommentSortType: String, Codable, CustomStringConvertible, Hashable {
     case hot
     case top
     case new
@@ -33,5 +33,14 @@ enum CommentSortType: String, Codable, CustomStringConvertible {
         let firstCharacter = String(lowercasedString.prefix(1)).capitalized
         let remainingCharacters = String(lowercasedString.dropFirst())
         return firstCharacter + remainingCharacters
+    }
+    
+    var image: String {
+        switch self {
+        case .hot: return "flame"
+        case .top: return "trophy"
+        case .new: return "clock"
+        case .old: return "clock.arrow.circlepath"
+        }
     }
 }

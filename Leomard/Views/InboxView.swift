@@ -22,6 +22,7 @@ struct InboxView: View {
         .init(id: 1, title: "Private Messages", imageName: "mail")
     ]
     @State var selectedView: Option = .init(id: 0, title: "Replies", imageName: "ellipsis.message")
+    @State var selectedCommentSortType: CommentSortType = .new
     
     @State var commentReplies: [CommentReplyView] = []
     @State var privateMessages: [PrivateMessageView] = []
@@ -47,6 +48,21 @@ struct InboxView: View {
                 .onChange(of: selectedView) { value in
                     self.page = 1
                     self.loadContent()
+                }
+                if selectedView == views[0] {
+                    Image(systemName: selectedCommentSortType.image)
+                        .padding(.trailing, 0)
+                    Picker("", selection: $selectedCommentSortType) {
+                        ForEach(CommentSortType.allCases, id: \.self) { method in
+                            Text(String(describing: method))
+                        }
+                    }
+                    .frame(maxWidth: 80)
+                    .padding(.leading, -10)
+                    .onChange(of: selectedCommentSortType) { value in
+                        self.page = 1
+                        self.loadContent()
+                    }
                 }
                 Button(action: {
                     self.page = 1
@@ -158,7 +174,7 @@ struct InboxView: View {
                 }
             }
         default:
-            self.repliesService.getReplies(unreadOnly: self.unreadOnly, sortType: .new, page: page) { result in
+            self.repliesService.getReplies(unreadOnly: self.unreadOnly, sortType: self.selectedCommentSortType, page: page) { result in
                 switch result {
                 case .success(let repliesResponse):
                     self.isLoading = false
