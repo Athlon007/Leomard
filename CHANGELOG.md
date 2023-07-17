@@ -7,6 +7,7 @@
 - Added status indicator when sending a post (#7)
 - Added alert when sending/editing post/comment fails
 - Refreh button in the inbox
+- Replies sort method for inbox
 
 ### Bug Fixes
 
