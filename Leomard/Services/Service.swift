@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 class Service {
     internal func decode<T: Decodable>(type: T.Type, data: Data) throws -> T {
@@ -44,4 +45,6 @@ class Service {
             completion(.failure(error))
         }
     }
+    
+    internal let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: Service.self))
 }
