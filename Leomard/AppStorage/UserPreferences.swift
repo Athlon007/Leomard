@@ -26,4 +26,5 @@ final class UserPreferences: ObservableObject {
     @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
+    let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]
 }

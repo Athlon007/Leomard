@@ -23,8 +23,6 @@ struct ProfileView: View {
         .init(id: 1, title: "Posts", imageName: "doc.plaintext"),
     ]
     @State var selectedBrowseOption: Option = Option(id: 0, title: "Comments", imageName: "message")
-    
-    let sortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]
     @State var selectedSort: SortType = UserPreferences.getInstance.profileSortMethod
     
     @State var page: Int = 1
@@ -53,7 +51,7 @@ struct ProfileView: View {
                     Image(systemName: selectedSort.image)
                         .padding(.trailing, 0)
                     Picker("", selection: $selectedSort) {
-                        ForEach(sortTypes, id: \.self) { method in
+                        ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
                             Text(String(describing: method))
                         }
                     }
