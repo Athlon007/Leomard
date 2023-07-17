@@ -202,7 +202,7 @@ struct PostCreationPopup: View {
                     print(error)
                     alertMessage = "Unable to edit post. Try again later."
                     isAlertShown = true
-                    isSendingPost = fals
+                    isSendingPost = false
                 }
             }
         } else {
