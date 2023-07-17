@@ -48,6 +48,12 @@ struct InboxView: View {
                     self.page = 1
                     self.loadContent()
                 }
+                Button(action: {
+                    self.page = 1
+                    self.loadContent()
+                }) {
+                    Image(systemName: "arrow.clockwise")
+                }
                 Toggle("Unread Only", isOn: $unreadOnly)
                     .onChange(of: unreadOnly) { value in
                         self.page = 1
