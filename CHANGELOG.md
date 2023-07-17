@@ -8,6 +8,7 @@
 - Added alert when sending/editing post/comment fails
 - Refreh button in the inbox
 - Replies sort method for inbox
+- Profile view sort method
 
 ### Bug Fixes
 
