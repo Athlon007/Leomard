@@ -1,6 +1,10 @@
 # Changelog
 
-## TBA
+## 0.2 (TBA)
+
+### Added
+
+- Added status indicator when sending a post (#7)
 
 ### Bug Fixes
 
