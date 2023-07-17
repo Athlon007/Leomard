@@ -23,6 +23,8 @@ struct PostCreationPopup: View {
     @State var isNsfw: Bool = false
     
     @State var isUrlValid: Bool = true
+    @State var isAlertShown: Bool = false
+    @State var alertMessage: String = ""
     
     var body: some View {
         ZStack {
@@ -152,6 +154,14 @@ struct PostCreationPopup: View {
             minHeight: 0,
             maxHeight: .infinity
         )
+        .alert("Failed to send post", isPresented: $isAlertShown, actions: {
+            Button("Retry", role: .destructive) {
+                sendPost()
+                isAlertShown = false
+            }
+        }, message: {
+            Text("Unable to send post. Try again later.")
+        })
         .task {
             if self.editedPost != nil {
                 self.title = self.editedPost!.post.name
@@ -179,6 +189,8 @@ struct PostCreationPopup: View {
                     contentView.closePostEdit()
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to edit post. Try again later."
+                    isAlertShown = true
                 }
             }
         } else {
@@ -189,6 +201,8 @@ struct PostCreationPopup: View {
                     self.onPostAdded(response.postView)
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to send post. Try again later."
+                    isAlertShown = true
                 }
             }
         }

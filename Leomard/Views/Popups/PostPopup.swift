@@ -22,6 +22,8 @@ struct PostPopup: View {
     
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool
+    
+    @State var showingAlert: Bool = false
 
     
     var body: some View {
@@ -133,6 +135,15 @@ struct PostPopup: View {
             .task {
                 self.loadComments()
             }
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("Unable to send a comment. Try again."),
+                    primaryButton: .destructive(Text("Retry")) {
+                        self.createComment()
+                        showingAlert = false
+                    }, secondaryButton: .cancel())
+            }
         }
         .frame(
             minWidth: 0,
@@ -179,6 +190,7 @@ struct PostPopup: View {
                 }
             case .failure(let error):
                 print(error)
+                showingAlert = true
             }
         }
     }
