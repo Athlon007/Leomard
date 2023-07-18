@@ -34,68 +34,13 @@ struct ProfileView: View {
     @State var sessionChangeFail: Bool = false
     
     var body: some View {
-        HStack {
-            if person != myself?.localUserView.person {
-                Button("Dismiss", action: contentView.dismissProfileView)
-                    .buttonStyle(.link)
-            }
-            Spacer()
-            HStack {
-                HStack {
-                    Image(systemName: selectedBrowseOption.imageName)
-                        .padding(.trailing, 0)
-                    Picker("", selection: $selectedBrowseOption) {
-                        ForEach(browseOptions, id: \.self) { method in
-                            Text(method.title)
-                        }
-                    }
-                    .frame(maxWidth: 120)
-                    .padding(.leading, -10)
-                    .onChange(of: selectedBrowseOption) { value in
-                        self.reloadFeed()
-                    }
-                    Image(systemName: selectedSort.image)
-                        .padding(.trailing, 0)
-                    Picker("", selection: $selectedSort) {
-                        ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                            Text(String(describing: method))
-                        }
-                    }
-                    .frame(maxWidth: 80)
-                    .padding(.leading, -10)
-                    .onChange(of: selectedSort) { value in
-                        self.reloadFeed()
-                    }
-                }
-                Button(action: reloadFeed) {
-                    Image(systemName: "arrow.clockwise")
-                }
-            }
-            Spacer()
-            HStack {
-                if person == myself?.localUserView.person {
-                    Picker("", selection: $selectededSession) {
-                        ForEach(sessions, id: \.self) { session in
-                            if sessions.last == session {
-                                Divider()
-                            }
-                            Text(session.title)
-                        }
-                    }
-                    .frame(maxWidth: 120)
-                    .onChange(of: selectededSession) { change in
-                        performSwitch(change)
-                    }
-                    Button("Logout", action: logout)
-                }
-            }
-        }
-        .frame(
-            minWidth: 0,
-            maxWidth: .infinity
-        )
-        .padding(.leading)
-        .padding(.trailing)
+        toolbar
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity
+            )
+            .padding(.leading)
+            .padding(.trailing)
         VStack {
             GeometryReader { proxy in
                 HStack {
@@ -218,6 +163,84 @@ struct ProfileView: View {
         }
         Spacer()
     }
+    
+    @ViewBuilder
+    private var toolbar: some View {
+        HStack(spacing: 10) {
+            dismissButton
+            Spacer()
+            profileToolbarItems
+            Spacer()
+            sessionPicker
+        }
+    }
+    
+    @ViewBuilder
+    private var dismissButton: some View {
+        if person != myself?.localUserView.person {
+            Button("Dismiss", action: contentView.dismissProfileView)
+                .buttonStyle(.link)
+        }
+    }
+    
+    @ViewBuilder
+    private var profileToolbarItems: some View {
+        HStack {
+            HStack {
+                Image(systemName: selectedBrowseOption.imageName)
+                    .padding(.trailing, 0)
+                Picker("", selection: $selectedBrowseOption) {
+                    ForEach(browseOptions, id: \.self) { method in
+                        Text(method.title)
+                    }
+                }
+                .frame(maxWidth: 120)
+                .padding(.leading, -10)
+                .onChange(of: selectedBrowseOption) { value in
+                    self.reloadFeed()
+                }
+                Image(systemName: selectedSort.image)
+                    .padding(.trailing, 0)
+                Picker("", selection: $selectedSort) {
+                    ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
+                        Text(String(describing: method))
+                    }
+                }
+                .frame(maxWidth: 80)
+                .padding(.leading, -10)
+                .onChange(of: selectedSort) { value in
+                    self.reloadFeed()
+                }
+            }
+            Button(action: reloadFeed) {
+                Image(systemName: "arrow.clockwise")
+            }
+        }
+    }
+    
+    /// Select a user/instance, or logout.
+    @ViewBuilder
+    private var sessionPicker: some View {
+        HStack {
+            if person == myself?.localUserView.person {
+                Picker("", selection: $selectededSession) {
+                    ForEach(sessions, id: \.self) { session in
+                        if sessions.last == session {
+                            Divider()
+                        }
+                        Text(session.title)
+                    }
+                }
+                .frame(maxWidth: 120)
+                .onChange(of: selectededSession) { change in
+                    performSwitch(change)
+                }
+                Button("Logout", action: logout)
+            }
+        }
+    }
+    
+    // MARK: -
     
     func logout() {
         _ = SessionStorage.getInstance.endSession()
