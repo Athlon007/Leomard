@@ -123,7 +123,7 @@ struct LoginView: View {
         loginService.login(lemmyInstance: self.url, login: login) { result in
             switch (result) {
             case .success(let loginResponse):
-                let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url)
+                let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url, name: self.username)
                 _ = SessionStorage.getInstance.save(response: sessionInfo)
                 self.isLoginFailed = false
                 self.contentView.navigateToFeed()

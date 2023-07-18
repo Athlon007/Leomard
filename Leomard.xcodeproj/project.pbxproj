@@ -54,6 +54,7 @@
 		B05B21502A5F2DF500BA8FB2 /* CreatePrivateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B214F2A5F2DF500BA8FB2 /* CreatePrivateMessage.swift */; };
 		B05B21522A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21512A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift */; };
 		B05B215D2A5FF67000BA8FB2 /* AppAlertBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B215C2A5FF67000BA8FB2 /* AppAlertBadge.swift */; };
+		B082141B2A66A50F00CD3DB4 /* SessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE472A519E0A00982D4D /* SessionStorage.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
 		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
@@ -94,7 +95,6 @@
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
 		B0CEBE442A519A1600982D4D /* NavbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE432A519A1600982D4D /* NavbarItem.swift */; };
 		B0CEBE462A519BEF00982D4D /* NavbarItemContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE452A519BEF00982D4D /* NavbarItemContainer.swift */; };
-		B0CEBE482A519E0A00982D4D /* SessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE472A519E0A00982D4D /* SessionStorage.swift */; };
 		B0CEBE4C2A519F3300982D4D /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE4B2A519F3300982D4D /* Login.swift */; };
 		B0CEBE4E2A519F7300982D4D /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE4D2A519F7300982D4D /* LoginResponse.swift */; };
 		B0CEBE502A51A90700982D4D /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE4F2A51A90700982D4D /* LoginService.swift */; };
@@ -870,7 +870,6 @@
 				B05B212F2A5EA80E00BA8FB2 /* GetRepliesResponse.swift in Sources */,
 				B05B21322A5EA84600BA8FB2 /* PrivateMessage.swift in Sources */,
 				B0D7A1582A531E5600FE2852 /* LinkHelper.swift in Sources */,
-				B0CEBE482A519E0A00982D4D /* SessionStorage.swift in Sources */,
 				B00695D12A50C23400206C77 /* Post.swift in Sources */,
 				B05B21272A5DB68500BA8FB2 /* CommentContextMenu.swift in Sources */,
 				B0D7A1612A53524A00FE2852 /* CommentView.swift in Sources */,
@@ -890,6 +889,7 @@
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
 				B05B212D2A5EA6CC00BA8FB2 /* CommentReply.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,
+				B082141B2A66A50F00CD3DB4 /* SessionStorage.swift in Sources */,
 				B0CEBE612A52C60B00982D4D /* PersonView.swift in Sources */,
 				B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */,
 				B0CEBE8B2A52D34400982D4D /* SiteView.swift in Sources */,
