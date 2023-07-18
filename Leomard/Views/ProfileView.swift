@@ -27,6 +27,12 @@ struct ProfileView: View {
     
     @State var page: Int = 1
     
+    @State fileprivate var selectededSession: SessionPickerOption = SessionPickerOption(title: "", sessionInfo: nil)
+    @State fileprivate var sessions: [SessionPickerOption] = []
+    @State fileprivate var addNewOption: SessionPickerOption = SessionPickerOption(title: "Add New", sessionInfo: nil)
+    
+    @State var sessionChangeFail: Bool = false
+    
     var body: some View {
         HStack {
             if person != myself?.localUserView.person {
@@ -66,13 +72,27 @@ struct ProfileView: View {
                 }
             }
             Spacer()
-            if person == myself?.localUserView.person {
-                Button("Logout", action: logout)
+            HStack {
+                if person == myself?.localUserView.person {
+                    Picker("", selection: $selectededSession) {
+                        ForEach(sessions, id: \.self) { session in
+                            if sessions.last == session {
+                                Divider()
+                            }
+                            Text(session.title)
+                        }
+                    }
+                    .frame(maxWidth: 120)
+                    .onChange(of: selectededSession) { change in
+                        performSwitch(change)
+                    }
+                    Button("Logout", action: logout)
+                }
             }
         }
         .frame(
             minWidth: 0,
-            idealWidth: .infinity
+            maxWidth: .infinity
         )
         .padding(.leading)
         .padding(.trailing)
@@ -181,6 +201,9 @@ struct ProfileView: View {
                     alignment: .center
                 )
             }
+            .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
+                Button("OK", role: .cancel) {}
+            }, message: { Text("Failed to change the session") })
         }
         .cornerRadius(4)
         .task {
@@ -197,7 +220,7 @@ struct ProfileView: View {
     }
     
     func logout() {
-        _ = SessionStorage.getInstance.destroy()
+        _ = SessionStorage.getInstance.endSession()
         contentView.navigateToFeed()
         contentView.logout()
     }
@@ -217,6 +240,9 @@ struct ProfileView: View {
                         self.personDetails!.comments += personDetails.comments
                     } else {
                         self.personDetails = personDetails
+                    }
+                    if self.personDetails?.personView.person == myself?.localUserView.person {
+                        loadSessions()
                     }
                 }
                 
@@ -242,4 +268,48 @@ struct ProfileView: View {
             }
         }
     }
+    
+    func loadSessions() {
+        if self.sessions.count == 0 {
+            for session in SessionStorage.getInstance.getAllSessions() {
+                let sessionPickerOption = SessionPickerOption(title: "\(session.name)@\(session.lemmyInstance)", sessionInfo: session)
+                self.sessions.append(sessionPickerOption)
+                
+                if SessionStorage.getInstance.getCurrentSession() == session {
+                    self.selectededSession = sessionPickerOption
+                }
+            }
+            self.sessions.append(SessionPickerOption(title: "Add New", sessionInfo: nil))
+        }
+    }
+    
+    fileprivate func performSwitch(_ selection: SessionPickerOption) {        
+        if let sessionInfo = selection.sessionInfo {
+            let sessionNameAndInstance = (sessionInfo.name + "@" + sessionInfo.lemmyInstance).lowercased()
+            if let myself = self.myself {
+                let myselfSessionAndInstance = (myself.localUserView.person.name + "@" + LinkHelper.stripToHost(link: myself.localUserView.person.actorId)).lowercased()
+                // Do not do anything, if selected is the same as current logged in user.
+                if myselfSessionAndInstance == sessionNameAndInstance {
+                    return
+                }
+                
+                let sessionChanged = SessionStorage.getInstance.setCurrentSession(sessionInfo)
+                if !sessionChanged {
+                    sessionChangeFail = true
+                    return
+                }
+                
+                self.contentView.navigateToFeed()
+                self.contentView.loadUserData()
+            }
+        } else {
+            // Add user.
+            self.contentView.addNewUserLogin()
+        }
+    }
+}
+
+fileprivate struct SessionPickerOption: Hashable {
+    let title: String
+    let sessionInfo: SessionInfo?
 }

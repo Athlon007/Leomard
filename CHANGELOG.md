@@ -10,6 +10,7 @@
 - Replies sort method for inbox
 - Profile view sort method
 - Added status indicator when sending a reply
+- Multi-account support (#22)
 
 ### Changes
 

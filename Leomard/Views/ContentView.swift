@@ -41,6 +41,8 @@ struct ContentView: View {
     @Binding var columnStatus: NavigationSplitViewVisibility
     @State var unreadMessages: Int = 0
     
+    @State var addingNewUser: Bool = false
+    
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
@@ -71,7 +73,7 @@ struct ContentView: View {
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 3:
-                            if SessionStorage.getInstance.isSessionActive() && myUser != nil {
+                            if SessionStorage.getInstance.isSessionActive() && myUser != nil && !addingNewUser {
                                 ProfileView(commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
                                     .listStyle(SidebarListStyle())
                                     .scrollContentBackground(.hidden)
@@ -148,6 +150,8 @@ struct ContentView: View {
                     self.profileOption.title = self.myUser!.localUserView.person.name
                     if self.myUser!.localUserView.person.avatar != nil {
                         self.profileOption.externalLink = self.myUser!.localUserView.person.avatar!
+                    } else {
+                        self.profileOption.externalLink = nil
                     }
                     
                     self.updateUnreadMessagesCount()
@@ -298,5 +302,13 @@ struct ContentView: View {
             self.updateUnreadMessagesCount()
             self.startPeriodicUnreadMessageCheck()
         }
+    }
+    
+    func addNewUserLogin() {
+        addingNewUser = true
+    }
+    
+    func endNewUserLogin() {
+        addingNewUser = false
     }
 }
