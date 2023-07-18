@@ -9,6 +9,11 @@
 - Refreh button in the inbox
 - Replies sort method for inbox
 - Profile view sort method
+- Added status indicator when sending a reply
+
+### Changes
+
+- Post views are now a bit prettier (thanks to boscojwho on GitHub)
 
 ### Bug Fixes
 

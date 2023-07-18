@@ -21,6 +21,7 @@ struct CommentReplyUIView: View {
     @FocusState var isSendingComment: Bool
     @State var updatedTimeAsString: String = ""
     @State var isReplied: Bool = false
+    @State var sendingReplyFailed: Bool = false
     
     var body: some View {
         if isReplied {
@@ -152,6 +153,7 @@ struct CommentReplyUIView: View {
                                     .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
                                 HStack {
                                     Button("Send", action: onSaveSendCommentClick)
+                                        .disabled(!isSendable())
                                         .buttonStyle(.borderedProminent)
                                         .frame(
                                             alignment: .leading
@@ -162,6 +164,9 @@ struct CommentReplyUIView: View {
                                         .frame(
                                             alignment: .leading
                                         )
+                                    if isSendingComment {
+                                        ProgressView().progressViewStyle(.circular)
+                                    }
                                 }
                                 .frame(
                                     maxWidth: .infinity,
@@ -193,6 +198,15 @@ struct CommentReplyUIView: View {
             .onTapGesture {
                 contentView.openPostForComment(comment: commentReplyView.comment)
             }
+            .alert("Reply send fail", isPresented: $sendingReplyFailed, actions: {
+                Button("Retry", role: .destructive) {
+                    self.onSaveSendCommentClick()
+                    sendingReplyFailed = false
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("Unable to send a reply. Try again later.")
+            })
         }
     }
     
@@ -234,6 +248,7 @@ struct CommentReplyUIView: View {
                 self.commentReplyView.counts = commentResponse.commentView.counts
             case .failure(let error):
                 print(error)
+                self.sendingReplyFailed = true
             }
         }
     }
