@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Sidebar root view for this app's `NavigationSplitView`.
 struct NavbarView: View {
     let options: [Option]
     @Binding var profileOption: Option
