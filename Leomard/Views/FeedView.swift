@@ -88,8 +88,10 @@ struct FeedView: View {
     @ViewBuilder
     private var feedContent: some View {
         VStack {
+            // - TODO: GeometryReader is used to dynamically show/hide site sidebar. This proxy is expensive, could be replaced with `.preference(key...)` view modifier instead?
             GeometryReader { proxy in
                 HStack {
+                    // - TODO: `scrollProxy` is expensive and isn't being used, remove?
                     ScrollViewReader { scrollProxy in
                         List {
                             ForEach(postsResponse.posts, id: \.self) { postView in
