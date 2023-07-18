@@ -114,6 +114,9 @@ struct LoginView: View {
             }
             .background(Color(.textBackgroundColor))
             .cornerRadius(4)
+            .onDisappear {
+                self.contentView.endNewUserLogin()
+            }
         }
     }
     
@@ -127,6 +130,7 @@ struct LoginView: View {
                 _ = SessionStorage.getInstance.setCurrentSession(sessionInfo)
                 self.isLoginFailed = false
                 self.contentView.navigateToFeed()
+                self.contentView.endNewUserLogin()
                 self.contentView.loadUserData()
             case .failure(let error):
                 if error.tryGetErrorMessage() == "incorrect_totp_token" || error.tryGetErrorMessage() == "missing_totp_token" {

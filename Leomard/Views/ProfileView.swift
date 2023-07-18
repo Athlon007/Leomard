@@ -26,8 +26,9 @@ struct ProfileView: View {
     
     @State var page: Int = 1
     
-    @State var currentSessionId: UUID = SessionStorage.getInstance.getCurrentSession()?.id ?? UUID()
-    @State var sessions: [SessionInfo] = []
+    @State fileprivate var selectededSession: SessionPickerOption = SessionPickerOption(title: "", sessionInfo: nil)
+    @State fileprivate var sessions: [SessionPickerOption] = []
+    @State fileprivate var addNewOption: SessionPickerOption = SessionPickerOption(title: "Add New", sessionInfo: nil)
     
     var body: some View {
         HStack {
@@ -58,17 +59,18 @@ struct ProfileView: View {
             Spacer()
             HStack {
                 if person == myself?.localUserView.person {
-                    Picker("", selection: $currentSessionId ) {
-                        ForEach(sessions, id: \.self.id) { session in
-                            Text("\(session.name)@\(session.lemmyInstance)")
+                    Picker("", selection: $selectededSession) {
+                        ForEach(sessions, id: \.self) { session in
+                            if sessions.last == session {
+                                Divider()
+                            }
+                            Text(session.title)
                         }
-                        Divider()
-                        Text("Add New")
-                    }
-                    .onChange(of: $currentSessionId) { change in
-                        self.performSwitch(change)
                     }
                     .frame(maxWidth: 120)
+                    .onChange(of: selectededSession) { change in
+                        performSwitch(change)
+                    }
                     Button("Logout", action: logout)
                 }
             }
@@ -251,11 +253,36 @@ struct ProfileView: View {
     
     func loadSessions() {
         if self.sessions.count == 0 {
-            self.sessions = SessionStorage.getInstance.getAllSessions()
+            for session in SessionStorage.getInstance.getAllSessions() {
+                let sessionPickerOption = SessionPickerOption(title: "\(session.name)@\(session.lemmyInstance)", sessionInfo: session)
+                self.sessions.append(sessionPickerOption)
+                
+                if SessionStorage.getInstance.getCurrentSession() == session {
+                    self.selectededSession = sessionPickerOption
+                }
+            }
+            self.sessions.append(SessionPickerOption(title: "Add New", sessionInfo: nil))
         }
     }
     
-    func performSwitch(_ sel: SessionInfo) {
-        print(sel)
+    fileprivate func performSwitch(_ selection: SessionPickerOption) {        
+        if let sessionInfo = selection.sessionInfo {
+            let sessionNameAndInstance = (sessionInfo.name + "@" + sessionInfo.lemmyInstance).lowercased()
+            if let myself = self.myself {
+                let myselfSessionAndInstance = (myself.localUserView.person.name + "@" + LinkHelper.stripToHost(link: myself.localUserView.person.actorId)).lowercased()
+                // Do not do anything, if selected is the same as current logged in user.
+                if myselfSessionAndInstance == sessionNameAndInstance {
+                    return
+                }
+            }
+        } else {
+            // Add user.
+            self.contentView.addNewUserLogin()
+        }
     }
+}
+
+fileprivate struct SessionPickerOption: Hashable {
+    let title: String
+    let sessionInfo: SessionInfo?
 }
