@@ -23,6 +23,9 @@ struct PostCreationPopup: View {
     @State var isNsfw: Bool = false
     
     @State var isUrlValid: Bool = true
+    @State var isAlertShown: Bool = false
+    @State var alertMessage: String = ""
+    @State var isSendingPost: Bool = false
     
     var body: some View {
         ZStack {
@@ -101,12 +104,12 @@ struct PostCreationPopup: View {
                                 let content = MarkdownContent(bodyText)
                                 Markdown(content)
                                     .frame(
-                                    minWidth: 0,
-                                    maxWidth: .infinity,
-                                    minHeight: 0,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
+                                        minWidth: 0,
+                                        maxWidth: .infinity,
+                                        minHeight: 0,
+                                        maxHeight: .infinity,
+                                        alignment: .leading
+                                    )
                             }
                         }
                         .frame(
@@ -120,13 +123,19 @@ struct PostCreationPopup: View {
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
-                        Button("Send", action: sendPost)
-                            .buttonStyle(.borderedProminent)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .disabled(!canSendPost())
+                        HStack(spacing: 20) {
+                            Button("Send", action: sendPost)
+                                .buttonStyle(.borderedProminent)
+                                .frame(
+                                    alignment: .leading
+                                )
+                                .disabled(!canSendPost())
+                            if isSendingPost {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            }
+                            Spacer()
+                        }.frame(alignment: .leading)
                     }
                     .padding()
                 }
@@ -152,6 +161,15 @@ struct PostCreationPopup: View {
             minHeight: 0,
             maxHeight: .infinity
         )
+        .alert("Error", isPresented: $isAlertShown, actions: {
+            Button("Retry", role: .destructive) {
+                sendPost()
+                isAlertShown = false
+            }
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text(alertMessage)
+        })
         .task {
             if self.editedPost != nil {
                 self.title = self.editedPost!.post.name
@@ -171,14 +189,20 @@ struct PostCreationPopup: View {
             return
         }
         
+        isSendingPost = true
+        
         if self.editedPost != nil {
             self.postService.editPost(post: editedPost!.post, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
                 switch result {
                 case .success(let response):
                     self.onPostAdded(response.postView)
                     contentView.closePostEdit()
+                    isSendingPost = false
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to edit post. Try again later."
+                    isAlertShown = true
+                    isSendingPost = false
                 }
             }
         } else {
@@ -187,15 +211,19 @@ struct PostCreationPopup: View {
                 case .success(let response):
                     contentView.closePostCreation()
                     self.onPostAdded(response.postView)
+                    isSendingPost = false
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to send post. Try again later."
+                    isAlertShown = true
+                    isSendingPost = false
                 }
             }
         }
     }
     
     func canSendPost() -> Bool {
-        return title.count > 0 && self.isUrlValid
+        return title.count > 0 && self.isUrlValid && !isSendingPost
     }
     
     func checkUrlValidity() {
@@ -204,7 +232,7 @@ struct PostCreationPopup: View {
             return
         }
         
-         let urlText = url
+        let urlText = url
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             if urlText != url {

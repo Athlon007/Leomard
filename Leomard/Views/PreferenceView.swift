@@ -32,7 +32,6 @@ struct PreferencesView: View {
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
     
     @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
-
     
     var body: some View {
         NavigationSplitView {
@@ -107,6 +106,11 @@ struct PreferencesView: View {
                             }
                             Picker("Default listing type", selection: UserPreferences.getInstance.$listType) {
                                 ForEach(ListingType.allCases, id: \.self) { method in
+                                    Text(String(describing: method))
+                                }
+                            }
+                            Picker("Default profile sort method", selection: UserPreferences.getInstance.$profileSortMethod) {
+                                ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
                                     Text(String(describing: method))
                                 }
                             }

@@ -22,6 +22,8 @@ struct PostPopup: View {
     
     @State var commentText: String = ""
     @FocusState var isSendingComment: Bool
+    
+    @State var showingAlert: Bool = false
 
     
     var body: some View {
@@ -83,6 +85,10 @@ struct PostPopup: View {
                                     alignment: .leading
                                 )
                                 .disabled(isTextFieldEmpty())
+                            if isSendingComment {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            }
                         }
                         Spacer()
                         Picker("Sort By", selection: $sortType) {
@@ -133,6 +139,15 @@ struct PostPopup: View {
             .task {
                 self.loadComments()
             }
+            .alert("Error", isPresented: $showingAlert, actions: {
+                Button("Retry", role: .destructive) {
+                    self.createComment()
+                    showingAlert = false
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("Failed to send a comment. Try again.")
+             })
         }
         .frame(
             minWidth: 0,
@@ -167,6 +182,10 @@ struct PostPopup: View {
     func createComment() {
         let comment = commentText
         
+        if isSendingComment {
+            return
+        }
+        
         isSendingComment = true
         
         commentService.createComment(content: comment, post: postView.post) { result in
@@ -179,6 +198,7 @@ struct PostPopup: View {
                 }
             case .failure(let error):
                 print(error)
+                showingAlert = true
             }
         }
     }

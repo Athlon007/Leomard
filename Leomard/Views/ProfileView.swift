@@ -23,6 +23,7 @@ struct ProfileView: View {
         .init(id: 1, title: "Posts", imageName: "doc.plaintext"),
     ]
     @State var selectedBrowseOption: Option = Option(id: 0, title: "Comments", imageName: "message")
+    @State var selectedSort: SortType = UserPreferences.getInstance.profileSortMethod
     
     @State var page: Int = 1
     
@@ -51,6 +52,18 @@ struct ProfileView: View {
                     .frame(maxWidth: 120)
                     .padding(.leading, -10)
                     .onChange(of: selectedBrowseOption) { value in
+                        self.reloadFeed()
+                    }
+                    Image(systemName: selectedSort.image)
+                        .padding(.trailing, 0)
+                    Picker("", selection: $selectedSort) {
+                        ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
+                            Text(String(describing: method))
+                        }
+                    }
+                    .frame(maxWidth: 80)
+                    .padding(.leading, -10)
+                    .onChange(of: selectedSort) { value in
                         self.reloadFeed()
                     }
                 }
@@ -218,7 +231,7 @@ struct ProfileView: View {
             self.personDetails!.posts = []
         }
         
-        self.personService?.getPersonDetails(person: person, page: page, savedOnly: selectedBrowseOption.id == 2) { result in
+        self.personService?.getPersonDetails(person: person, page: page, savedOnly: selectedBrowseOption.id == 2, sortType: selectedSort) { result in
             switch result {
             case .success(let personDetails):
                 DispatchQueue.main.sync {
