@@ -27,6 +27,26 @@ struct FeedView: View {
     @Binding var siteView: SiteView?
 
     var body: some View {
+        feedToolbar
+            .frame(
+                minWidth: 0,
+                idealWidth: .infinity
+            )
+        feedContent
+            .cornerRadius(4)
+            .task {
+                self.postService = PostService(requestHandler: RequestHandler())
+                loadPosts()
+            }
+            .onDisappear {
+                self.postsResponse = GetPostsResponse()
+            }
+        Spacer()
+    }
+    
+    /// For commonly-used button actions like sort and reload.
+    @ViewBuilder
+    private var feedToolbar: some View {
         HStack {
             HStack {
                 Image(systemName: selectedListing.image)
@@ -62,10 +82,11 @@ struct FeedView: View {
                 Image(systemName: "arrow.clockwise")
             }
         }
-        .frame(
-            minWidth: 0,
-            idealWidth: .infinity
-        )
+    }
+    
+    /// Infinite scrolling view for this feed's content
+    @ViewBuilder
+    private var feedContent: some View {
         VStack {
             GeometryReader { proxy in
                 HStack {
@@ -117,15 +138,6 @@ struct FeedView: View {
                 )
             }
         }
-        .cornerRadius(4)
-        .task {
-            self.postService = PostService(requestHandler: RequestHandler())
-            loadPosts()
-        }
-        .onDisappear {
-            self.postsResponse = GetPostsResponse()
-        }
-        Spacer()
     }
     
     func loadPosts() {
