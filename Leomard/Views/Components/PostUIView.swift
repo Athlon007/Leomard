@@ -20,6 +20,8 @@ struct PostUIView: View {
     
     private static let maxPostLength: Int = 400
     private static let blurStrength: CGFloat = 50
+    private static let cornerRadius: CGFloat = 8
+    private static let padding: CGFloat = 12
     
     @State var postBody: String? = nil
     @State var url: URL? = nil
@@ -257,12 +259,9 @@ struct PostUIView: View {
                     maxHeight: .infinity
                 )
             }
-            .padding(.leading, 5)
-            .padding(.trailing, 5)
-            .padding(.top, 5)
-            .padding(.bottom, 5)
+            .padding(Self.padding)
             .background(Color(.textBackgroundColor))
-            .cornerRadius(4)
+            .cornerRadius(Self.cornerRadius)
             .frame(
                 minWidth: 0,
                 maxWidth: .infinity,
