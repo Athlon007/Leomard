@@ -30,6 +30,8 @@ struct ProfileView: View {
     @State fileprivate var sessions: [SessionPickerOption] = []
     @State fileprivate var addNewOption: SessionPickerOption = SessionPickerOption(title: "Add New", sessionInfo: nil)
     
+    @State var sessionChangeFail: Bool = false
+    
     var body: some View {
         HStack {
             if person != myself?.localUserView.person {
@@ -186,6 +188,9 @@ struct ProfileView: View {
                     alignment: .center
                 )
             }
+            .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
+                Button("OK", action: <#T##() -> Void#>)
+            }, message: { Text("Failed to change the session") })
         }
         .cornerRadius(4)
         .task {
@@ -274,6 +279,15 @@ struct ProfileView: View {
                 if myselfSessionAndInstance == sessionNameAndInstance {
                     return
                 }
+                
+                let sessionChanged = SessionStorage.getInstance.setCurrentSession(sessionInfo)
+                if !sessionChanged {
+                    sessionChangeFail = true
+                    return
+                }
+                
+                self.contentView.navigateToFeed()
+                self.contentView.loadUserData()
             }
         } else {
             // Add user.
