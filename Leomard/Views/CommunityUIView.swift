@@ -33,6 +33,175 @@ struct CommunityUIView: View {
     @State var page: Int = 1
     
     var body: some View {
+        toolbar
+            .frame(
+                minWidth: 0,
+                idealWidth: .infinity
+            )
+            .padding(.leading)
+            .padding(.trailing)
+        VStack {
+            GeometryReader { proxy in
+                HStack {
+                    communityContent(
+                        communityResponse,
+                        sidebarVisible: proxy.size.width < 1000)
+                    communitySidebar(visible: proxy.size.width > 1000)
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .center
+                )
+            }
+        }
+        .cornerRadius(4)
+        .task {
+            let requestHandler = RequestHandler()
+            self.communityService = CommunityService(requestHandler: requestHandler)
+            self.selectedBrowseOption = browseOptions[0]
+            loadCommunity()
+        }
+        Spacer()
+    }
+    
+    // MARK: -
+    
+    @ViewBuilder
+    private func communityContent(_ communityResponse: GetCommunityResponse?, sidebarVisible: Bool) -> some View {
+        ScrollViewReader { scrollProxy in
+            List {
+                if let communityResponse {
+                    if sidebarVisible {
+                        VStack {
+                            CommunityUISidebarView(
+                                communityResponse: communityResponse,
+                                communityService: communityService!,
+                                contentView: contentView,
+                                myself: $myself,
+                                onPostAdded: addNewPost)
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .center
+                        )
+                        .cornerRadius(4)
+                        .padding(.bottom, 15)
+                    }
+                    switch selectedBrowseOption.id {
+                    case 1:
+                        commentsList
+                    default:
+                        postsList
+                    }
+                }
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 600,
+                maxHeight: .infinity,
+                alignment: .center
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private func communitySidebar(visible: Bool) -> some View {
+        if visible {
+            List {
+                VStack {
+                    if communityResponse != nil {
+                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
+                    }
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity
+                )
+                .cornerRadius(4)
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 400,
+                maxHeight: .infinity,
+                alignment: .center
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var commentsList: some View {
+        if self.comments == [] {
+            Text("No comments found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(comments, id: \.self) { commentView in
+                VStack {
+                    CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
+                        .onAppear {
+                            if commentView == comments.last {
+                                self.loadComments()
+                            }
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity
+                        )
+                        .padding(.top, 15)
+                        .padding(.bottom, 15)
+                        .padding(.trailing, 15)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.textBackgroundColor))
+                .cornerRadius(4)
+                .onTapGesture {
+                    self.loadPostFromComment(commentView: commentView)
+                }
+                Spacer()
+                    .frame(height: 0)
+                
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 600,
+                maxHeight: .infinity,
+                alignment: .center
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var postsList: some View {
+        if self.posts == [] {
+            Text("No posts found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(posts, id: \.self) { postView in
+                PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
+                    .onAppear {
+                        if postView == self.posts.last {
+                            self.loadPosts()
+                        }
+                    }
+                    .onTapGesture {
+                        self.contentView.openPost(postView: postView)
+                    }
+                    .contextMenu {
+                        PostContextMenu(postView: postView)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Spacer()
+                    .frame(height: 0)
+            }
+        }
+    }
+    
+    // MARK: - Toolbar
+    
+    @ViewBuilder
+    private var toolbar: some View {
         HStack {
             if showDismissInCommunityView {
                 Button("Dismiss", action: contentView.dismissCommunity)
@@ -74,139 +243,9 @@ struct CommunityUIView: View {
             }
             Spacer()
         }
-        .frame(
-            minWidth: 0,
-            idealWidth: .infinity
-        )
-        .padding(.leading)
-        .padding(.trailing)
-        VStack {
-            GeometryReader { proxy in
-                HStack {
-                    ScrollViewReader { scrollProxy in
-                        List {
-                            if communityResponse != nil {
-                                if proxy.size.width < 1000 {
-                                    VStack {
-                                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
-                                    }
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: .infinity,
-                                        alignment: .center
-                                    )
-                                    .cornerRadius(4)
-                                    .padding(.bottom, 15)
-                                }
-                                switch selectedBrowseOption.id {
-                                case 1:
-                                    if self.comments == [] {
-                                        Text("No comments found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(comments, id: \.self) { commentView in
-                                        VStack {
-                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
-                                                .onAppear {
-                                                    if commentView == comments.last {
-                                                        self.loadComments()
-                                                    }
-                                                }
-                                                .frame(
-                                                    maxWidth: .infinity,
-                                                    maxHeight: .infinity
-                                                )
-                                                .padding(.top, 15)
-                                                .padding(.bottom, 15)
-                                                .padding(.trailing, 15)
-                                        }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .background(Color(.textBackgroundColor))
-                                        .cornerRadius(4)
-                                        .onTapGesture {
-                                            self.loadPostFromComment(commentView: commentView)
-                                        }
-                                        Spacer()
-                                            .frame(height: 0)
-                                        
-                                    }
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: 600,
-                                        maxHeight: .infinity,
-                                        alignment: .center
-                                    )
-                                default:
-                                    if self.posts == [] {
-                                        Text("No posts found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(posts, id: \.self) { postView in
-                                        PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
-                                            .onAppear {
-                                                if postView == self.posts.last {
-                                                    self.loadPosts()
-                                                }
-                                            }
-                                            .onTapGesture {
-                                                self.contentView.openPost(postView: postView)
-                                            }
-                                            .contextMenu {
-                                                PostContextMenu(postView: postView)
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        Spacer()
-                                            .frame(height: 0)
-                                    }
-                                }
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
-                    
-                    if proxy.size.width > 1000 {
-                        List {
-                            VStack {
-                                if communityResponse != nil {
-                                    CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
-                                }
-                            }
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity
-                            )
-                            .cornerRadius(4)
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 400,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .center
-                )
-            }
-        }
-        .cornerRadius(4)
-        .task {
-            let requestHandler = RequestHandler()
-            self.communityService = CommunityService(requestHandler: requestHandler)
-            self.selectedBrowseOption = browseOptions[0]
-            loadCommunity()
-        }
-        Spacer()
     }
+    
+    // MARK: -
     
     func loadCommunity() {
         self.communityService?.getCommunity(id: self.community.id) { result in
