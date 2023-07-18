@@ -150,6 +150,8 @@ struct ContentView: View {
                     self.profileOption.title = self.myUser!.localUserView.person.name
                     if self.myUser!.localUserView.person.avatar != nil {
                         self.profileOption.externalLink = self.myUser!.localUserView.person.avatar!
+                    } else {
+                        self.profileOption.externalLink = nil
                     }
                     
                     self.updateUnreadMessagesCount()

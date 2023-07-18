@@ -202,7 +202,7 @@ struct ProfileView: View {
                 )
             }
             .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
-                Button("OK", action: <#T##() -> Void#>)
+                Button("OK", role: .cancel) {}
             }, message: { Text("Failed to change the session") })
         }
         .cornerRadius(4)
