@@ -46,6 +46,7 @@ struct ContentView: View {
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
+        // - TODO: We're using this ZStack so we can add modal popups over our navigation split view. Perhaps using the `.overlay()` modifier on the split view might be more appropriate?
         ZStack {
             NavigationSplitView(columnVisibility: $columnStatus) {
                 NavbarView(
@@ -73,16 +74,9 @@ struct ContentView: View {
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 3:
-                            if SessionStorage.getInstance.isSessionActive() && myUser != nil && !addingNewUser {
-                                ProfileView(commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            } else {
-                                LoginView(requestHandler: requestHandler!, contentView: self)
-                                    .frame(maxWidth: .infinity)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            }
+                            profileOrLoginView()
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
                         default:
                             FeedView(contentView: self, myself: $myUser, siteView: $siteView)
                                 .listStyle(SidebarListStyle())
@@ -90,25 +84,14 @@ struct ContentView: View {
                         }
                     }
                     
-                    if openedPerson != nil {
-                        VStack {
-                            ProfileView(commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        }
+                    profileView(openedPerson)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                         .background(.thickMaterial)
-                    }
-                    
-                    if openedCommunity != nil {
-                        VStack {
-                            CommunityUIView(community: openedCommunity!, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
-                        }
+                    communityView(openedCommunity)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                         .background(.thickMaterial)
-                    }
                 }
                 .frame(minWidth: 600, minHeight: 400)
             }
@@ -124,16 +107,79 @@ struct ContentView: View {
                 self.loadUserData()
             }
             
-            if self.openedPostView != nil {
-                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
-                    .opacity(postHidden ? 0 : 1)
-            }
-            
-            if self.openedPostMakingForCommunity != nil {
-                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser, onPostAdded: self.onPostAdded!, editedPost: editedPost)
+            postPopup(openedPostView)
+                .opacity(postHidden ? 0 : 1)
+            postCreationPopup(openedPostMakingForCommunity)
+        }
+    }
+    
+    /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
+    @ViewBuilder
+    private func profileOrLoginView() -> some View {
+        if SessionStorage.getInstance.isSessionActive() && myUser != nil && !addingNewUser {
+            ProfileView(
+                commentService: commentService!,
+                contentView: self,
+                person: myUser!.localUserView.person,
+                myself: $myUser)
+        } else {
+            LoginView(requestHandler: requestHandler!, contentView: self)
+                .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder
+    private func profileView(_ openedPerson: Person?) -> some View {
+        if let openedPerson {
+            VStack {
+                ProfileView(commentService: commentService!, contentView: self, person: openedPerson, myself: $myUser)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
             }
         }
     }
+    
+    @ViewBuilder
+    private func communityView(_ openedCommunity: Community?) -> some View {
+        if let openedCommunity {
+            VStack {
+                CommunityUIView(
+                    community: openedCommunity,
+                    postService: self.postService!,
+                    commentService: self.commentService!,
+                    contentView: self,
+                    myself: myUser,
+                    showDismissInCommunityView: $showDismissInCommunityView)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func postPopup(_ openedPostView: PostView?) -> some View {
+        if let openedPostView {
+            PostPopup(
+                postView: openedPostView,
+                contentView: self,
+                commentService: commentService!,
+                postService: postService!,
+                myself: $myUser)
+        }
+    }
+    
+    @ViewBuilder
+    private func postCreationPopup(_ openedPostMakingForCommunity: Community?) -> some View {
+        if let openedPostMakingForCommunity {
+            PostCreationPopup(
+                contentView: self,
+                community: openedPostMakingForCommunity,
+                postService: postService!,
+                myself: $myUser,
+                onPostAdded: self.onPostAdded!,
+                editedPost: editedPost)
+        }
+    }
+    
+    // MARK: -
     
     func navigateToFeed() {
         self.currentSelection = self.options[0]
