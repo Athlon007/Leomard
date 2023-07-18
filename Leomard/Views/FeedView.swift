@@ -84,61 +84,68 @@ struct FeedView: View {
         }
     }
     
-    /// Infinite scrolling view for this feed's content
     @ViewBuilder
     private var feedContent: some View {
         VStack {
             // - TODO: GeometryReader is used to dynamically show/hide site sidebar. This proxy is expensive, could be replaced with `.preference(key...)` view modifier instead?
             GeometryReader { proxy in
                 HStack {
-                    // - TODO: `scrollProxy` is expensive and isn't being used, remove?
-                    ScrollViewReader { scrollProxy in
-                        List {
-                            ForEach(postsResponse.posts, id: \.self) { postView in
-                                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
-                                    .onAppear {
-                                        if postView == self.postsResponse.posts.last {
-                                            self.loadPosts()
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                Spacer()
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
-                    
-                    if proxy.size.width > 1000 {
-                        List {
-                            VStack {
-                                if siteView != nil {
-                                    PageSidebarUIView(siteView: $siteView)
-                                }
-                            }
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity
-                            )
-                            .cornerRadius(4)
-                        }
+                    feedPostsList
+                    feedPageSidebar(visible: proxy.size.width > 1000)
                         .frame(
                             minWidth: 0,
                             maxWidth: 400,
                             maxHeight: .infinity,
                             alignment: .center
                         )
-                    }
                 }
                 .frame(
                     maxWidth: .infinity,
                     alignment: .center
                 )
             }
+        }
+    }
+    
+    /// Infinite scrolling view for this feed's content
+    @ViewBuilder
+    private var feedPostsList: some View {
+        // - TODO: `scrollProxy` is expensive and isn't being used, remove?
+        ScrollViewReader { scrollProxy in
+            List {
+                ForEach(postsResponse.posts, id: \.self) { postView in
+                    PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                        .onAppear {
+                            if postView == self.postsResponse.posts.last {
+                                self.loadPosts()
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Spacer()
+                }
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 600,
+                maxHeight: .infinity,
+                alignment: .center
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private func feedPageSidebar(visible: Bool) -> some View {
+        List {
+            VStack {
+                if siteView != nil {
+                    PageSidebarUIView(siteView: $siteView)
+                }
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity
+            )
+            .cornerRadius(4)
         }
     }
     
