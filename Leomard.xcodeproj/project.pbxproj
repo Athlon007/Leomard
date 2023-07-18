@@ -55,6 +55,7 @@
 		B05B21522A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B21512A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift */; };
 		B05B215D2A5FF67000BA8FB2 /* AppAlertBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B215C2A5FF67000BA8FB2 /* AppAlertBadge.swift */; };
 		B082141B2A66A50F00CD3DB4 /* SessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE472A519E0A00982D4D /* SessionStorage.swift */; };
+		B082141D2A66AC6D00CD3DB4 /* Sessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082141C2A66AC6D00CD3DB4 /* Sessions.swift */; };
 		B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8372A5432A900F0DA32 /* PostContextMenu.swift */; };
 		B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */; };
 		B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F83B2A54708800F0DA32 /* Avatar.swift */; };
@@ -210,6 +211,7 @@
 		B05B214F2A5F2DF500BA8FB2 /* CreatePrivateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePrivateMessage.swift; sourceTree = "<group>"; };
 		B05B21512A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkPrivateMessageAsRead.swift; sourceTree = "<group>"; };
 		B05B215C2A5FF67000BA8FB2 /* AppAlertBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertBadge.swift; sourceTree = "<group>"; };
+		B082141C2A66AC6D00CD3DB4 /* Sessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sessions.swift; sourceTree = "<group>"; };
 		B091F8372A5432A900F0DA32 /* PostContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContextMenu.swift; sourceTree = "<group>"; };
 		B091F8392A544BFC00F0DA32 /* PageSidebarUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSidebarUIView.swift; sourceTree = "<group>"; };
 		B091F83B2A54708800F0DA32 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -582,6 +584,7 @@
 				B0CEBE542A51D2F100982D4D /* SessionInfo.swift */,
 				B0D7A16A2A53929200FE2852 /* ElapsedTime.swift */,
 				B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */,
+				B082141C2A66AC6D00CD3DB4 /* Sessions.swift */,
 			);
 			path = Leomard;
 			sourceTree = "<group>";
@@ -834,6 +837,7 @@
 				B0CEBE922A52F15300982D4D /* PostUIView.swift in Sources */,
 				B0D7A15B2A533BCB00FE2852 /* Comment.swift in Sources */,
 				B05B21232A5DB41A00BA8FB2 /* PersonContextMenu.swift in Sources */,
+				B082141D2A66AC6D00CD3DB4 /* Sessions.swift in Sources */,
 				B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */,
 				B091F8542A55EE9200F0DA32 /* PersonService.swift in Sources */,
 				B05B211A2A5C6D0000BA8FB2 /* Error.swift in Sources */,

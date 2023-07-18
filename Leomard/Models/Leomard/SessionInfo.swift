@@ -7,13 +7,8 @@
 
 import Foundation
 
-struct SessionInfo: Codable, Equatable {
-    static func == (lhs: SessionInfo, rhs: SessionInfo) -> Bool {
-        return lhs.name == rhs.name
-        && lhs.lemmyInstance == rhs.lemmyInstance
-        && lhs.loginResponse.jwt == rhs.loginResponse.jwt
-    }
-    
+struct SessionInfo: Codable, Equatable, Hashable, Identifiable {
+    var id = UUID()
     public let loginResponse: LoginResponse
     public let lemmyInstance: String
     public let name: String
@@ -27,5 +22,16 @@ struct SessionInfo: Codable, Equatable {
         
         self.lemmyInstance = correctedLink
         self.name = name
+    }
+    
+    static func == (lhs: SessionInfo, rhs: SessionInfo) -> Bool {
+        return lhs.name == rhs.name
+        && lhs.lemmyInstance == rhs.lemmyInstance
+        && lhs.loginResponse.jwt == rhs.loginResponse.jwt
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(lemmyInstance)
     }
 }

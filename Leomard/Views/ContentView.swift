@@ -139,7 +139,7 @@ struct ContentView: View {
         self.currentSelection = self.options[0]
     }
     
-    func loadUserData() {
+    func loadUserData() {        
         self.siteService!.getSite { result in
             switch (result) {
             case .success(let getSiteResponse):

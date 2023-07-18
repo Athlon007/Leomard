@@ -8,132 +8,82 @@
 import Foundation
 import Security
 import LocalAuthentication
+import SwiftUI
 
 final class SessionStorage {
     private static let defaultLemmy: String = "lemmy.world" // TODO: Maybe that should be changeable when in guest-mode?
-    private static let currentSessionKey: String = "LeomardApp"
-    private static let allSessionsKey: String = "LeomardAppSessions"
+    private static let key: String = "LeomardApp"
    
-    private var currentSession: SessionInfo? = nil
-    private var sessions: [SessionInfo] = []
+    private var sessions: Sessions
     
     private static let instance = SessionStorage()
     public static let getInstance = instance
     
     private init() {
-        self.currentSession = self.load()
-        self.sessions = self.loadAll()
+        self.sessions = Sessions()
+        self.sessions = load()
     }
     
-    /// Saves the current sesssion into sessions storage.
-    public func save(response: SessionInfo) -> Bool {
+    /// Updates the Keychain entry of Leomard.
+    private func updateKeychain() -> Bool {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        guard let data = try? encoder.encode(response) else {
+        guard let data = try? encoder.encode(sessions) else {
             return false
         }
         
         // Remove the existing one first.
-        _ = self.destroy()
-        
-        let keychainItemQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.currentSessionKey,
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-            kSecUseAuthenticationContext as String: self.contextBuilder()
-        ]
-        
-        let status = SecItemAdd(keychainItemQuery as CFDictionary, nil)
-        
-        self.currentSession = response
-        
-        let addedToAll = self.addToAll(session: self.currentSession!)
-        
-        return status == errSecSuccess && addedToAll
-    }
-    
-    /// Loads the current session
-    public func load() -> SessionInfo? {
-        if self.currentSession != nil {
-            return self.currentSession
-        }
-        
-        let keychainItemQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.currentSessionKey,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecUseAuthenticationContext as String: self.contextBuilder()
-        ]
-        
-        var retrievedData: AnyObject?
-        let status = SecItemCopyMatching(keychainItemQuery as CFDictionary, &retrievedData)
-        
-        if status == errSecSuccess {
-            if let data = retrievedData as? Data {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                return try? decoder.decode(SessionInfo.self, from: data)
-            }
-        }
-        
-        return nil
-    }
-    
-    public func destroy() -> Bool {
-        let keychainItemQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.currentSessionKey
-        ]
-        
-        let status = SecItemDelete(keychainItemQuery as CFDictionary)
-        self.currentSession = nil
-        return status == errSecSuccess
-    }
-    
-    public func addToAll(session: SessionInfo) -> Bool {
-        if self.sessions.count > 0 {
-            let containsSession = self.sessions.contains { stored in
-                return stored == session
-            }
-            if containsSession {
-                // Sessions array already has this session? Do not add it to the array.
-                return true
-            }
-        }
-        
-        sessions.append(session)
-        
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        guard let data = try? encoder.encode(sessions) else {
-            return false
-        }
-        
-        // Before executing, we must delete the existing key.
         _ = self.deleteAll()
         
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.allSessionsKey,
+            kSecAttrAccount as String: SessionStorage.key,
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
             kSecUseAuthenticationContext as String: self.contextBuilder()
         ]
         
         let status = SecItemAdd(keychainItemQuery as CFDictionary, nil)
+        
+        self.sessions = self.load()
+        
         return status == errSecSuccess
     }
     
-    public func loadAll() -> [SessionInfo] {
-        if self.sessions.count > 0 {
-            return self.sessions
+    /// Saves the current sesssion into sessions storage.
+    public func setCurrentSession(_ session: SessionInfo) -> Bool {
+        sessions.currentSession = session
+        
+        let sessionStored = sessions.allSessions.contains { storedSession in
+            session == storedSession
         }
         
+        if !sessionStored {
+            sessions.allSessions.append(session)
+        }
+        
+        return self.updateKeychain()
+    }
+    
+    /// Returns the current session
+    public func getCurrentSession() -> SessionInfo? {
+        return self.sessions.currentSession
+    }
+    
+    public func getAllSessions() -> [SessionInfo] {
+        return self.sessions.allSessions
+    }
+    
+    /// Ends the current session.
+    public func endSession() -> Bool {
+        sessions.currentSession = nil
+        return updateKeychain()
+    }
+    
+    public func load() -> Sessions {
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.allSessionsKey,
+            kSecAttrAccount as String: SessionStorage.key,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecUseAuthenticationContext as String: self.contextBuilder()
@@ -146,73 +96,47 @@ final class SessionStorage {
             if let data = retrievedData as? Data {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                return try! decoder.decode([SessionInfo].self, from: data)
+                let response = try? decoder.decode(Sessions.self, from: data)
+                return response ?? Sessions()
             }
         }
         
-        return []
+        return Sessions()
     }
     
     /// Removes the session from all sessions.
     public func remove(session: SessionInfo) -> Bool {
-        if self.sessions.count == 0 {
-            // Nothing to delete!
+        if sessions.allSessions.count == 0 {
             return true
         }
         
-        let containsSession = self.sessions.contains { stored in
-            return stored == session
-        }
-        if !containsSession {
-            // Session is not in stored. Nothing to remove.
-            return true
+        if session == sessions.currentSession {
+            sessions.currentSession = nil
         }
         
-        sessions = sessions.filter { $0 != session }
+        sessions.allSessions = sessions.allSessions.filter { $0 != session }
         
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        guard let data = try? encoder.encode(sessions) else {
-            return false
-        }
-        
-        // Before executing, we must delete the existing key.
-        _ = self.deleteAll()
-        
-        let keychainItemQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.allSessionsKey,
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-            kSecUseAuthenticationContext as String: self.contextBuilder()
-        ]
-        
-        let status = SecItemAdd(keychainItemQuery as CFDictionary, nil)
-        return status == errSecSuccess
+        return updateKeychain()
     }
     
     /// Removes all stored sessions.
     public func deleteAll() -> Bool {
         let keychainItemQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: SessionStorage.allSessionsKey
+            kSecAttrAccount as String: SessionStorage.key
         ]
         
         let status = SecItemDelete(keychainItemQuery as CFDictionary)
-        self.currentSession = nil
+        self.sessions = Sessions()
         return status == errSecSuccess
     }
     
     public func isSessionActive() -> Bool {
-        return self.currentSession != nil
+        return self.sessions.currentSession != nil
     }
     
     public func getLemmyInstance() -> String {
-        if self.currentSession == nil {
-            return SessionStorage.defaultLemmy
-        }
-        
-        return self.currentSession!.lemmyInstance
+        return self.getCurrentSession()?.lemmyInstance ?? SessionStorage.defaultLemmy
     }
     
     private func contextBuilder() -> LAContext {

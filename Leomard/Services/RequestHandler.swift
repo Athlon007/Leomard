@@ -35,7 +35,7 @@ final class RequestHandler {
         }
         
         if SessionStorage.getInstance.isSessionActive() && method == .get {
-            let jwt = SessionStorage.getInstance.load()?.loginResponse.jwt
+            let jwt = SessionStorage.getInstance.getCurrentSession()?.loginResponse.jwt
             if !urlString.contains("?") {
                 urlString += "?auth=\(jwt!)"
             } else {
@@ -67,7 +67,7 @@ final class RequestHandler {
                     }
                 
                 if SessionStorage.getInstance.isSessionActive() {
-                    jsonDictionary["auth"] = SessionStorage.getInstance.load()?.loginResponse.jwt
+                    jsonDictionary["auth"] = SessionStorage.getInstance.getCurrentSession()?.loginResponse.jwt
                     jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
                 }
                 request.httpBody = jsonData
@@ -76,12 +76,12 @@ final class RequestHandler {
                 completion(.failure(error))
                 return
             }
-        } else if method != .get && SessionStorage.getInstance.load()?.loginResponse.jwt != nil {
+        } else if method != .get && SessionStorage.getInstance.getCurrentSession()?.loginResponse.jwt != nil {
             // If no body is set, but the method is **NOT** GET, then add the "NoBodyPost" object with auth key.
             let encoder = JSONEncoder()
             encoder.keyEncodingStrategy = .convertToSnakeCase
             do {
-                let jsonData = try encoder.encode(NoBodyPost(auth: SessionStorage.getInstance.load()!.loginResponse.jwt!))
+                let jsonData = try encoder.encode(NoBodyPost(auth: SessionStorage.getInstance.getCurrentSession()!.loginResponse.jwt!))
                 request.httpBody = jsonData
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {

@@ -26,6 +26,9 @@ struct ProfileView: View {
     
     @State var page: Int = 1
     
+    @State var currentSessionId: UUID = SessionStorage.getInstance.getCurrentSession()?.id ?? UUID()
+    @State var sessions: [SessionInfo] = []
+    
     var body: some View {
         HStack {
             if person != myself?.localUserView.person {
@@ -53,13 +56,26 @@ struct ProfileView: View {
                 }
             }
             Spacer()
-            if person == myself?.localUserView.person {
-                Button("Logout", action: logout)
+            HStack {
+                if person == myself?.localUserView.person {
+                    Picker("", selection: $currentSessionId ) {
+                        ForEach(sessions, id: \.self.id) { session in
+                            Text("\(session.name)@\(session.lemmyInstance)")
+                        }
+                        Divider()
+                        Text("Add New")
+                    }
+                    .onChange(of: $currentSessionId) { change in
+                        self.performSwitch(change)
+                    }
+                    .frame(maxWidth: 120)
+                    Button("Logout", action: logout)
+                }
             }
         }
         .frame(
             minWidth: 0,
-            idealWidth: .infinity
+            maxWidth: .infinity
         )
         .padding(.leading)
         .padding(.trailing)
@@ -184,7 +200,7 @@ struct ProfileView: View {
     }
     
     func logout() {
-        _ = SessionStorage.getInstance.destroy()
+        _ = SessionStorage.getInstance.endSession()
         contentView.navigateToFeed()
         contentView.logout()
     }
@@ -204,6 +220,9 @@ struct ProfileView: View {
                         self.personDetails!.comments += personDetails.comments
                     } else {
                         self.personDetails = personDetails
+                    }
+                    if self.personDetails?.personView.person == myself?.localUserView.person {
+                        loadSessions()
                     }
                 }
                 
@@ -228,5 +247,15 @@ struct ProfileView: View {
                 print(error)
             }
         }
+    }
+    
+    func loadSessions() {
+        if self.sessions.count == 0 {
+            self.sessions = SessionStorage.getInstance.getAllSessions()
+        }
+    }
+    
+    func performSwitch(_ sel: SessionInfo) {
+        print(sel)
     }
 }
