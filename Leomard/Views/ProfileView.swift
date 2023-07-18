@@ -41,77 +41,32 @@ struct ProfileView: View {
             )
             .padding(.leading)
             .padding(.trailing)
+        profileContent
+            .cornerRadius(4)
+            .task {
+                if person == myself?.localUserView.person {
+                    browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
+                }
+                
+                let requestHandler = RequestHandler()
+                self.postService = PostService(requestHandler: requestHandler)
+                self.personService = PersonService(requestHandler: requestHandler)
+                loadPersonDetails()
+            }
+        Spacer()
+    }
+    
+    // MARK: -
+    
+    @ViewBuilder
+    private var profileContent: some View {
         VStack {
             GeometryReader { proxy in
                 HStack {
                     ScrollViewReader { scrollProxy in
-                        List {
-                            if personDetails != nil {
-                                if proxy.size.width < 1000 {
-                                    VStack {
-                                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
-                                    }
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: .infinity
-                                    )
-                                    .cornerRadius(4)
-                                    .padding(.bottom, 15)
-                                }
-                                switch selectedBrowseOption.id {
-                                case 0:
-                                    if personDetails?.comments == [] {
-                                        Text("No comments found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(personDetails!.comments, id: \.self) { commentView in
-                                        VStack {
-                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView, profileViewMode: true)
-                                                .onAppear {
-                                                    if commentView == personDetails!.comments.last {
-                                                        self.loadPersonDetails()
-                                                    }
-                                                }
-                                                .frame(
-                                                    maxWidth: .infinity,
-                                                    maxHeight: .infinity
-                                                )
-                                                .padding(.top, 15)
-                                                .padding(.bottom, 15)
-                                                .padding(.trailing, 15)
-                                        }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .background(Color(.textBackgroundColor))
-                                        .cornerRadius(4)
-                                        .onTapGesture {
-                                            self.loadPostFromComment(commentView: commentView)
-                                        }
-                                        Spacer()
-                                            .frame(height: 0)
-                                        
-                                    }
-                                default:
-                                    if personDetails?.posts == [] {
-                                        Text("No posts found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(personDetails!.posts, id: \.self) { postView in
-                                        PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
-                                            .onAppear {
-                                                if postView == personDetails!.posts.last {
-                                                    self.loadPersonDetails()
-                                                }
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        Spacer()
-                                            .frame(height: 0)
-                                    }
-                                    
-                                }
-                            }
-                        }
+                        profileContentList(
+                            personDetails,
+                            sidebarVisible: proxy.size.width < 1000)
                         .frame(
                             minWidth: 0,
                             maxWidth: 600,
@@ -120,26 +75,13 @@ struct ProfileView: View {
                         )
                     }
                     
-                    if proxy.size.width > 1000 {
-                        List {
-                            VStack {
-                                if personDetails != nil {
-                                    ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
-                                }
-                            }
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity
-                            )
-                            .cornerRadius(4)
-                        }
+                    profileSidebar(visible: proxy.size.width > 1000)
                         .frame(
                             minWidth: 0,
                             maxWidth: 400,
                             maxHeight: .infinity,
                             alignment: .center
                         )
-                    }
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -150,19 +92,109 @@ struct ProfileView: View {
                 Button("OK", role: .cancel) {}
             }, message: { Text("Failed to change the session") })
         }
-        .cornerRadius(4)
-        .task {
-            if person == myself?.localUserView.person {
-                browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
-            }
-            
-            let requestHandler = RequestHandler()
-            self.postService = PostService(requestHandler: requestHandler)
-            self.personService = PersonService(requestHandler: requestHandler)
-            loadPersonDetails()
-        }
-        Spacer()
     }
+    
+    @ViewBuilder
+    private func profileContentList(_ personDetails: GetPersonDetailsResponse?, sidebarVisible: Bool) -> some View {
+        List {
+            if let personDetails {
+                /// Why are we showing another profile sidebar here?
+                if sidebarVisible {
+                    VStack {
+                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself)
+                    }
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity
+                    )
+                    .cornerRadius(4)
+                    .padding(.bottom, 15)
+                }
+                switch selectedBrowseOption.id {
+                case 0:
+                    commentsList(personDetails)
+                default:
+                    postsList(personDetails)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func commentsList(_ personDetails: GetPersonDetailsResponse) -> some View {
+        if personDetails.comments == [] {
+            Text("No comments found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(personDetails.comments, id: \.self) { commentView in
+                VStack {
+                    CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView, profileViewMode: true)
+                        .onAppear {
+                            if commentView == personDetails.comments.last {
+                                self.loadPersonDetails()
+                            }
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity
+                        )
+                        .padding(.top, 15)
+                        .padding(.bottom, 15)
+                        .padding(.trailing, 15)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.textBackgroundColor))
+                .cornerRadius(4)
+                .onTapGesture {
+                    self.loadPostFromComment(commentView: commentView)
+                }
+                Spacer()
+                    .frame(height: 0)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func postsList(_ personDetails: GetPersonDetailsResponse) -> some View {
+        if personDetails.posts == [] {
+            Text("No posts found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(personDetails.posts, id: \.self) { postView in
+                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                    .onAppear {
+                        if postView == personDetails.posts.last {
+                            self.loadPersonDetails()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Spacer()
+                    .frame(height: 0)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func profileSidebar(visible: Bool) -> some View {
+        if visible {
+            List {
+                VStack {
+                    if personDetails != nil {
+                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
+                    }
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity
+                )
+                .cornerRadius(4)
+            }
+        }
+    }
+    
+    // MARK: - Toolbar
     
     @ViewBuilder
     private var toolbar: some View {
