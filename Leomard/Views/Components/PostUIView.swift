@@ -41,43 +41,12 @@ struct PostUIView: View {
     var body: some View {
         if !postView.post.deleted && !postView.post.removed {
             LazyVStack {
-                HStack {
-                    if postView.post.featuredCommunity {
-                        Image(systemName: "pin.fill")
-                            .foregroundColor(.red)
-                    }
-                    Text(postView.post.name)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 24))
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    self.titleHeight = geometry.size.height
-                                }
-                        })
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                if self.postBody != nil {
-                    let content = MarkdownContent(self.postBody!)
-                    Markdown(content)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
-                        .lineLimit(nil)
-                        .textSelection(.enabled)
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    self.bodyHeight = geometry.size.height
-                                }
-                        })
-                }
+                postTitle
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+                postBodyMarkdown
                 if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
                     if LinkHelper.isYouTubeLink(link: postView.post.url!) {
                         YoutubePlayer(link: postView.post.url!, imageHeight: $gifHeight)
@@ -181,91 +150,17 @@ struct PostUIView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 Spacer(minLength: 6)
-                LazyHStack(spacing: 4) {
-                    HStack(spacing: 4) {
-                        Text("in")
-                        CommunityAvatar(community: postView.community)
-                        Text(self.postView.community.name)
-                            .fontWeight(.semibold)
-                    }
-                    .onTapGesture {
-                        self.contentView.openCommunity(community: postView.community)
-                    }
-                    HStack(spacing: 4) {
-                        Text("by")
-                        PersonDisplay(person: postView.creator, myself: $myself)
-                            .onTapGesture {
-                                self.contentView.openPerson(profile: postView.creator)
-                            }
-                    }
-                    DateDisplayView(date: self.postView.post.published)
-                    if postView.post.updated != nil {
-                        HStack {
-                            Image(systemName: "pencil")
-                            
-                        }.help(updatedTimeAsString)
-                    }
-                }
-                .frame (
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
+                communityPersonDate
+                    .frame (
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                 Spacer(minLength: 6)
-                HStack {
-                    HStack {
-                        Image(systemName: "arrow.up")
-                        Text(String(postView.counts.upvotes))
-                    }
-                    .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-                    .onTapGesture {
-                        likePost()
-                    }
-                    HStack {
-                        Image(systemName: "arrow.down")
-                        Text(String(postView.counts.downvotes))
-                    }
-                    .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-                    .onTapGesture {
-                        dislikePost()
-                    }
-                    HStack {
-                        Image(systemName: "ellipsis.message")
-                        Text(String(postView.counts.comments))
-                    }
-                    Spacer()
-                    if myself != nil {
-                        if postView.creator.actorId == myself?.localUserView.person.actorId {
-                            Button(action: startEditPost) {
-                                Image(systemName: "pencil")
-                            }
-                            .buttonStyle(.link)
-                            .foregroundColor(.primary)
-                            Button(action: { showConfirmDelete = true }) {
-                                Image(systemName: "trash")
-                            }
-                            .buttonStyle(.link)
-                            .foregroundColor(.primary)
-                            .alert("Confirm", isPresented: $showConfirmDelete, actions: {
-                                Button("Delete", role: .destructive) { deletePost() }
-                                Button("Cancel", role: .cancel) {}
-                            }, message: {
-                                Text("Are you sure you want to delete a post?")
-                            })
-                        }
-                        HStack {
-                            Image(systemName: "bookmark")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(postView.saved ? .green : .primary)
-                        .onTapGesture {
-                            savePost()
-                        }
-                    }
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
-                )
+                postActionsToolbar
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity
+                    )
             }
             .padding(Self.padding)
             .background(Color(.textBackgroundColor))
@@ -320,6 +215,136 @@ struct PostUIView: View {
             }
         }
     }
+    
+    // MARK: -
+    
+    @ViewBuilder
+    private var postTitle: some View {
+        HStack {
+            if postView.post.featuredCommunity {
+                Image(systemName: "pin.fill")
+                    .foregroundColor(.red)
+            }
+            Text(postView.post.name)
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 24))
+                .background(GeometryReader { geometry in
+                    Color.clear
+                        .onAppear {
+                            self.titleHeight = geometry.size.height
+                        }
+                })
+        }
+    }
+    
+    @ViewBuilder
+    private var postBodyMarkdown: some View {
+        if self.postBody != nil {
+            let content = MarkdownContent(self.postBody!)
+            Markdown(content)
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .lineLimit(nil)
+                .textSelection(.enabled)
+                .background(GeometryReader { geometry in
+                    Color.clear
+                        .onAppear {
+                            self.bodyHeight = geometry.size.height
+                        }
+                })
+        }
+    }
+    
+    @ViewBuilder
+    private var communityPersonDate: some View {
+        LazyHStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Text("in")
+                CommunityAvatar(community: postView.community)
+                Text(self.postView.community.name)
+                    .fontWeight(.semibold)
+            }
+            .onTapGesture {
+                self.contentView.openCommunity(community: postView.community)
+            }
+            HStack(spacing: 4) {
+                Text("by")
+                PersonDisplay(person: postView.creator, myself: $myself)
+                    .onTapGesture {
+                        self.contentView.openPerson(profile: postView.creator)
+                    }
+            }
+            DateDisplayView(date: self.postView.post.published)
+            if postView.post.updated != nil {
+                HStack {
+                    Image(systemName: "pencil")
+                    
+                }.help(updatedTimeAsString)
+            }
+        }
+    }
+    
+    /// Upvote, downvote, reply, bookmark, etc.
+    @ViewBuilder
+    private var postActionsToolbar: some View {
+        HStack {
+            HStack {
+                Image(systemName: "arrow.up")
+                Text(String(postView.counts.upvotes))
+            }
+            .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+            .onTapGesture {
+                likePost()
+            }
+            HStack {
+                Image(systemName: "arrow.down")
+                Text(String(postView.counts.downvotes))
+            }
+            .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+            .onTapGesture {
+                dislikePost()
+            }
+            HStack {
+                Image(systemName: "ellipsis.message")
+                Text(String(postView.counts.comments))
+            }
+            Spacer()
+            if myself != nil {
+                if postView.creator.actorId == myself?.localUserView.person.actorId {
+                    Button(action: startEditPost) {
+                        Image(systemName: "pencil")
+                    }
+                    .buttonStyle(.link)
+                    .foregroundColor(.primary)
+                    Button(action: { showConfirmDelete = true }) {
+                        Image(systemName: "trash")
+                    }
+                    .buttonStyle(.link)
+                    .foregroundColor(.primary)
+                    .alert("Confirm", isPresented: $showConfirmDelete, actions: {
+                        Button("Delete", role: .destructive) { deletePost() }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: {
+                        Text("Are you sure you want to delete a post?")
+                    })
+                }
+                HStack {
+                    Image(systemName: "bookmark")
+                }
+                .frame(alignment: .trailing)
+                .foregroundColor(postView.saved ? .green : .primary)
+                .onTapGesture {
+                    savePost()
+                }
+            }
+        }
+    }
+    
+    // MARK: -
     
     func likePost() {
         if myself == nil {
