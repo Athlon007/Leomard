@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Sidebar root view for this app's `NavigationSplitView`.
 struct NavbarView: View {
     let options: [Option]
     @Binding var profileOption: Option
@@ -21,13 +22,30 @@ struct NavbarView: View {
     @State var followedVisible: Bool = true
     
     var body: some View {
+        sidebarItems(options: options)
+            .padding(.top, 24)
+        followedCommunitiesList
+            .frame(
+                minHeight: 0,
+                maxHeight: .infinity
+            )
+        userProfileItem
+    }
+
+    // MARK: -
+    
+    @ViewBuilder
+    private func sidebarItems(options: [Option]) -> some View {
         VStack {
             ForEach(options, id: \.self) { option in
                 NavbarItem(option: option, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity, badgeCount: option.id == 1 ? $unreadMessagesCount : $emptyCounter)
             }
         }
         .NavBarItemContainer()
-        .padding(.top, 24)
+    }
+    
+    @ViewBuilder
+    private var followedCommunitiesList: some View {
         List {
             HStack(spacing: 14) {
                 Text("Followed")
@@ -44,14 +62,13 @@ struct NavbarView: View {
                 }
             }
         }
-        .frame(
-            minHeight: 0,
-            maxHeight: .infinity
-        )
+    }
+    
+    @ViewBuilder
+    private var userProfileItem: some View {
         VStack {
             NavbarItem(option: profileOption, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity, badgeCount: $emptyCounter)
         }
         .NavBarItemContainer()
     }
-
 }

@@ -35,112 +35,16 @@ struct PreferencesView: View {
     
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(preferenceOptions, id: \.self) { option in
-                    HStack {
-                        VStack {
-                            Image(systemName: option.icon)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(
-                                    width: 14,
-                                    height: 14
-                                )
-                                .foregroundColor(.white)
-                                .padding(3)
-                        }
-                        .background(option.color)
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-                        .frame(
-                            width: 20, height: 20
-                            )
-                        Text(option.name)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
-                        Spacer()
-                    }
-                    .padding(.bottom, 10)
-                    .onTapGesture {
-                        self.currentSelection = option
-                    }
-                }
-            }
-            .listStyle(SidebarListStyle())
-            .navigationBarBackButtonHidden(true)
+            preferencesSidebar
+                .listStyle(SidebarListStyle())
+                .navigationBarBackButtonHidden(true)
         } detail: {
-            List {
-                VStack(alignment: .leading, spacing: 20) {
-                    switch currentSelection {
-                    case self.preferenceOptions[0]:
-                        VStack{
-                            Picker("Check notifications every", selection: $selectedNotificaitonCheckFrequency) {
-                                ForEach(self.notificationCheckFrequencies, id: \.self) { option in
-                                    /*@START_MENU_TOKEN@*/Text(option.name)/*@END_MENU_TOKEN@*/
-                                }
-                            }
-                            .onChange(of: selectedNotificaitonCheckFrequency) { value in
-                                UserPreferences.getInstance.checkNotifsEverySeconds = value.seconds
-                            }
-                            Text("Note: Notifications are not checked when app is closed.")
-                                .frame(maxWidth: .infinity, alignment:.leading)
-                                .lineLimit(nil)
-                        }
-                        VStack(alignment: .leading) {
-                            Text("Inbox")
-                            Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
-                        }
-                    case self.preferenceOptions[1]:
-                        VStack(alignment: .leading) {
-                            Picker("Default post sort method", selection: UserPreferences.getInstance.$postSortMethod) {
-                                ForEach(UserPreferences.getInstance.sortTypes, id: \.self) { method in
-                                    Text(String(describing: method))
-                                }
-                            }
-                            Picker("Default comment sort method", selection: UserPreferences.getInstance.$commentSortMethod) {
-                                ForEach(CommentSortType.allCases, id: \.self) { method in
-                                    Text(String(describing: method))
-                                }
-                            }
-                            Picker("Default listing type", selection: UserPreferences.getInstance.$listType) {
-                                ForEach(ListingType.allCases, id: \.self) { method in
-                                    Text(String(describing: method))
-                                }
-                            }
-                            Picker("Default profile sort method", selection: UserPreferences.getInstance.$profileSortMethod) {
-                                ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                                    Text(String(describing: method))
-                                }
-                            }
-                        }
-                        VStack(alignment: .leading) {
-                            Text("NSFW")
-                            Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
-                            Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
-                        }
-                    case preferenceOptions[2]:
-                        VStack(alignment: .leading) {
-                            Toggle("Cross Instance Search", isOn: UserPreferences.getInstance.$experimentXInstanceSearch)
-                            Text("""
-                         Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
-                         Example: 'awesome post @lemmy.world'
-                         """)
-                            .frame(maxWidth: .infinity)
-                            .lineLimit(nil)
-                        }
-                    default:
-                        Text("")
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.leading)
-            .padding(.trailing)
-            .listStyle(SidebarListStyle())
-            .scrollContentBackground(.hidden)
-            .frame(maxWidth: .infinity)
+            preferencePanel(for: currentSelection)
+                .padding(.leading)
+                .padding(.trailing)
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+                .frame(maxWidth: .infinity)
         }
         .task {
             self.currentSelection = self.preferenceOptions[0]
@@ -154,6 +58,136 @@ struct PreferencesView: View {
             if selectedNotificaitonCheckFrequency.name == "Err" {
                 selectedNotificaitonCheckFrequency = notificationCheckFrequencies[3]
             }
+        }
+    }
+    
+    // MARK: - Sidebar
+    
+    @ViewBuilder
+    private var preferencesSidebar: some View {
+        List {
+            ForEach(preferenceOptions, id: \.self) { option in
+                preferenceSidebarItem(option: option)
+                    .padding(.bottom, 10)
+                    .onTapGesture {
+                        self.currentSelection = option
+                    }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func preferenceSidebarItem(option: PreferenceOption) -> some View {
+        HStack {
+            VStack {
+                Image(systemName: option.icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(
+                        width: 14,
+                        height: 14
+                    )
+                    .foregroundColor(.white)
+                    .padding(3)
+            }
+            .background(option.color)
+            .clipShape(RoundedRectangle(cornerRadius: 4))
+            .frame(
+                width: 20, height: 20
+            )
+            Text(option.name)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .foregroundColor(currentSelection == option ? Color(.linkColor) : Color(.labelColor))
+            Spacer()
+        }
+    }
+    
+    // MARK: - Detail
+    
+    @ViewBuilder
+    private func preferencePanel(for currentSelection: PreferenceOption?) -> some View {
+        List {
+            VStack(alignment: .leading, spacing: 20) {
+                switch currentSelection {
+                case self.preferenceOptions[0]:
+                    generalPreferences
+                case self.preferenceOptions[1]:
+                    contentPreferences
+                case preferenceOptions[2]:
+                    experimentalPreferences
+                default:
+                    Text("")
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    @ViewBuilder
+    private var generalPreferences: some View {
+        VStack{
+            Picker("Check notifications every", selection: $selectedNotificaitonCheckFrequency) {
+                ForEach(self.notificationCheckFrequencies, id: \.self) { option in
+                    Text(option.name)
+                }
+            }
+            .onChange(of: selectedNotificaitonCheckFrequency) { value in
+                UserPreferences.getInstance.checkNotifsEverySeconds = value.seconds
+            }
+            Text("Note: Notifications are not checked when app is closed.")
+                .frame(maxWidth: .infinity, alignment:.leading)
+                .lineLimit(nil)
+        }
+        VStack(alignment: .leading) {
+            Text("Inbox")
+            Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
+        }
+    }
+    
+    @ViewBuilder
+    private var contentPreferences: some View {
+        VStack(alignment: .leading) {
+            Picker("Default post sort method", selection: UserPreferences.getInstance.$postSortMethod) {
+                ForEach(UserPreferences.getInstance.sortTypes, id: \.self) { method in
+                    Text(String(describing: method))
+                }
+            }
+            Picker("Default comment sort method", selection: UserPreferences.getInstance.$commentSortMethod) {
+                ForEach(CommentSortType.allCases, id: \.self) { method in
+                    Text(String(describing: method))
+                }
+            }
+            Picker("Default listing type", selection: UserPreferences.getInstance.$listType) {
+                ForEach(ListingType.allCases, id: \.self) { method in
+                    Text(String(describing: method))
+                }
+            }
+            Picker("Default profile sort method", selection: UserPreferences.getInstance.$profileSortMethod) {
+                ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
+                    Text(String(describing: method))
+                }
+            }
+        }
+        VStack(alignment: .leading) {
+            Text("NSFW")
+            Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
+            Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
+        }
+    }
+    
+    @ViewBuilder
+    private var experimentalPreferences: some View {
+        VStack(alignment: .leading) {
+            Toggle("Cross Instance Search", isOn: UserPreferences.getInstance.$experimentXInstanceSearch)
+            Text("""
+                         Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
+                         Example: 'awesome post @lemmy.world'
+                         """)
+            .frame(maxWidth: .infinity)
+            .lineLimit(nil)
         }
     }
 }

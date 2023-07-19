@@ -34,139 +34,39 @@ struct ProfileView: View {
     @State var sessionChangeFail: Bool = false
     
     var body: some View {
-        HStack {
-            if person != myself?.localUserView.person {
-                Button("Dismiss", action: contentView.dismissProfileView)
-                    .buttonStyle(.link)
-            }
-            Spacer()
-            HStack {
-                HStack {
-                    Image(systemName: selectedBrowseOption.imageName)
-                        .padding(.trailing, 0)
-                    Picker("", selection: $selectedBrowseOption) {
-                        ForEach(browseOptions, id: \.self) { method in
-                            Text(method.title)
-                        }
-                    }
-                    .frame(maxWidth: 120)
-                    .padding(.leading, -10)
-                    .onChange(of: selectedBrowseOption) { value in
-                        self.reloadFeed()
-                    }
-                    Image(systemName: selectedSort.image)
-                        .padding(.trailing, 0)
-                    Picker("", selection: $selectedSort) {
-                        ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                            Text(String(describing: method))
-                        }
-                    }
-                    .frame(maxWidth: 80)
-                    .padding(.leading, -10)
-                    .onChange(of: selectedSort) { value in
-                        self.reloadFeed()
-                    }
-                }
-                Button(action: reloadFeed) {
-                    Image(systemName: "arrow.clockwise")
-                }
-            }
-            Spacer()
-            HStack {
+        toolbar
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity
+            )
+            .padding(.leading)
+            .padding(.trailing)
+        profileContent
+            .cornerRadius(4)
+            .task {
                 if person == myself?.localUserView.person {
-                    Picker("", selection: $selectededSession) {
-                        ForEach(sessions, id: \.self) { session in
-                            if sessions.last == session {
-                                Divider()
-                            }
-                            Text(session.title)
-                        }
-                    }
-                    .frame(maxWidth: 120)
-                    .onChange(of: selectededSession) { change in
-                        performSwitch(change)
-                    }
-                    Button("Logout", action: logout)
+                    browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
                 }
+                
+                let requestHandler = RequestHandler()
+                self.postService = PostService(requestHandler: requestHandler)
+                self.personService = PersonService(requestHandler: requestHandler)
+                loadPersonDetails()
             }
-        }
-        .frame(
-            minWidth: 0,
-            maxWidth: .infinity
-        )
-        .padding(.leading)
-        .padding(.trailing)
+        Spacer()
+    }
+    
+    // MARK: -
+    
+    @ViewBuilder
+    private var profileContent: some View {
         VStack {
             GeometryReader { proxy in
                 HStack {
                     ScrollViewReader { scrollProxy in
-                        List {
-                            if personDetails != nil {
-                                if proxy.size.width < 1000 {
-                                    VStack {
-                                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
-                                    }
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: .infinity
-                                    )
-                                    .cornerRadius(4)
-                                    .padding(.bottom, 15)
-                                }
-                                switch selectedBrowseOption.id {
-                                case 0:
-                                    if personDetails?.comments == [] {
-                                        Text("No comments found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(personDetails!.comments, id: \.self) { commentView in
-                                        VStack {
-                                            CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView, profileViewMode: true)
-                                                .onAppear {
-                                                    if commentView == personDetails!.comments.last {
-                                                        self.loadPersonDetails()
-                                                    }
-                                                }
-                                                .frame(
-                                                    maxWidth: .infinity,
-                                                    maxHeight: .infinity
-                                                )
-                                                .padding(.top, 15)
-                                                .padding(.bottom, 15)
-                                                .padding(.trailing, 15)
-                                        }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .background(Color(.textBackgroundColor))
-                                        .cornerRadius(4)
-                                        .onTapGesture {
-                                            self.loadPostFromComment(commentView: commentView)
-                                        }
-                                        Spacer()
-                                            .frame(height: 0)
-                                        
-                                    }
-                                default:
-                                    if personDetails?.posts == [] {
-                                        Text("No posts found!")
-                                            .italic()
-                                            .foregroundColor(.secondary)
-                                    }
-                                    ForEach(personDetails!.posts, id: \.self) { postView in
-                                        PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
-                                            .onAppear {
-                                                if postView == personDetails!.posts.last {
-                                                    self.loadPersonDetails()
-                                                }
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        Spacer()
-                                            .frame(height: 0)
-                                    }
-                                    
-                                }
-                            }
-                        }
+                        profileContentList(
+                            personDetails,
+                            sidebarVisible: proxy.size.width < 1000)
                         .frame(
                             minWidth: 0,
                             maxWidth: 600,
@@ -175,26 +75,13 @@ struct ProfileView: View {
                         )
                     }
                     
-                    if proxy.size.width > 1000 {
-                        List {
-                            VStack {
-                                if personDetails != nil {
-                                    ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
-                                }
-                            }
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity
-                            )
-                            .cornerRadius(4)
-                        }
+                    profileSidebar(visible: proxy.size.width > 1000)
                         .frame(
                             minWidth: 0,
                             maxWidth: 400,
                             maxHeight: .infinity,
                             alignment: .center
                         )
-                    }
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -205,19 +92,187 @@ struct ProfileView: View {
                 Button("OK", role: .cancel) {}
             }, message: { Text("Failed to change the session") })
         }
-        .cornerRadius(4)
-        .task {
-            if person == myself?.localUserView.person {
-                browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
-            }
-            
-            let requestHandler = RequestHandler()
-            self.postService = PostService(requestHandler: requestHandler)
-            self.personService = PersonService(requestHandler: requestHandler)
-            loadPersonDetails()
-        }
-        Spacer()
     }
+    
+    @ViewBuilder
+    private func profileContentList(_ personDetails: GetPersonDetailsResponse?, sidebarVisible: Bool) -> some View {
+        List {
+            if let personDetails {
+                /// Why are we showing another profile sidebar here?
+                if sidebarVisible {
+                    VStack {
+                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself)
+                    }
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity
+                    )
+                    .cornerRadius(4)
+                    .padding(.bottom, 15)
+                }
+                switch selectedBrowseOption.id {
+                case 0:
+                    commentsList(personDetails)
+                default:
+                    postsList(personDetails)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func commentsList(_ personDetails: GetPersonDetailsResponse) -> some View {
+        if personDetails.comments == [] {
+            Text("No comments found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(personDetails.comments, id: \.self) { commentView in
+                VStack {
+                    CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView, profileViewMode: true)
+                        .onAppear {
+                            if commentView == personDetails.comments.last {
+                                self.loadPersonDetails()
+                            }
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity
+                        )
+                        .padding(.top, 15)
+                        .padding(.bottom, 15)
+                        .padding(.trailing, 15)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.textBackgroundColor))
+                .cornerRadius(4)
+                .onTapGesture {
+                    self.loadPostFromComment(commentView: commentView)
+                }
+                Spacer()
+                    .frame(height: 0)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func postsList(_ personDetails: GetPersonDetailsResponse) -> some View {
+        if personDetails.posts == [] {
+            Text("No posts found!")
+                .italic()
+                .foregroundColor(.secondary)
+        } else {
+            ForEach(personDetails.posts, id: \.self) { postView in
+                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                    .onAppear {
+                        if postView == personDetails.posts.last {
+                            self.loadPersonDetails()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Spacer()
+                    .frame(height: 0)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func profileSidebar(visible: Bool) -> some View {
+        if visible {
+            List {
+                VStack {
+                    if personDetails != nil {
+                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
+                    }
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity
+                )
+                .cornerRadius(4)
+            }
+        }
+    }
+    
+    // MARK: - Toolbar
+    
+    @ViewBuilder
+    private var toolbar: some View {
+        HStack(spacing: 10) {
+            dismissButton
+            Spacer()
+            profileToolbarItems
+            Spacer()
+            sessionPicker
+        }
+    }
+    
+    @ViewBuilder
+    private var dismissButton: some View {
+        if person != myself?.localUserView.person {
+            Button("Dismiss", action: contentView.dismissProfileView)
+                .buttonStyle(.link)
+        }
+    }
+    
+    @ViewBuilder
+    private var profileToolbarItems: some View {
+        HStack {
+            HStack {
+                Image(systemName: selectedBrowseOption.imageName)
+                    .padding(.trailing, 0)
+                Picker("", selection: $selectedBrowseOption) {
+                    ForEach(browseOptions, id: \.self) { method in
+                        Text(method.title)
+                    }
+                }
+                .frame(maxWidth: 120)
+                .padding(.leading, -10)
+                .onChange(of: selectedBrowseOption) { value in
+                    self.reloadFeed()
+                }
+                Image(systemName: selectedSort.image)
+                    .padding(.trailing, 0)
+                Picker("", selection: $selectedSort) {
+                    ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
+                        Text(String(describing: method))
+                    }
+                }
+                .frame(maxWidth: 80)
+                .padding(.leading, -10)
+                .onChange(of: selectedSort) { value in
+                    self.reloadFeed()
+                }
+            }
+            Button(action: reloadFeed) {
+                Image(systemName: "arrow.clockwise")
+            }
+        }
+    }
+    
+    /// Select a user/instance, or logout.
+    @ViewBuilder
+    private var sessionPicker: some View {
+        HStack {
+            if person == myself?.localUserView.person {
+                Picker("", selection: $selectededSession) {
+                    ForEach(sessions, id: \.self) { session in
+                        if sessions.last == session {
+                            Divider()
+                        }
+                        Text(session.title)
+                    }
+                }
+                .frame(maxWidth: 120)
+                .onChange(of: selectededSession) { change in
+                    performSwitch(change)
+                }
+                Button("Logout", action: logout)
+            }
+        }
+    }
+    
+    // MARK: -
     
     func logout() {
         _ = SessionStorage.getInstance.endSession()
