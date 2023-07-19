@@ -11,10 +11,12 @@
 - Profile view sort method
 - Added status indicator when sending a reply
 - Multi-account support (#22)
+- Confirm delete post/comment
 
 ### Changes
 
-- Post views are now a bit prettier (thanks to boscojwho on GitHub)
+- **Massive** refactoring of UI code, thanks to [boscojwho](https://github.com/boscojwho) on GitHub
+- Post views are now a bit prettier (thanks to boscojwho)
 
 ### Bug Fixes
 
