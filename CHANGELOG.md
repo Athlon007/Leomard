@@ -23,6 +23,7 @@
 
 - Fixed notification counter not updating (#9)
 - Unread message count should update, as soon as you reply to a message from the inbox
+- Post creation popup content never gets cleared (#6)
 
 ## 0.1 (2023-07-17)
 

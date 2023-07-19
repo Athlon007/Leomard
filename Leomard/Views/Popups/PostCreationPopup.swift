@@ -196,8 +196,9 @@ struct PostCreationPopup: View {
                 switch result {
                 case .success(let response):
                     self.onPostAdded(response.postView)
-                    contentView.closePostEdit()
+                    cleanWindow()
                     isSendingPost = false
+                    contentView.closePostEdit()
                 case .failure(let error):
                     print(error)
                     alertMessage = "Unable to edit post. Try again later."
@@ -209,9 +210,10 @@ struct PostCreationPopup: View {
             self.postService.createPost(community: community, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
                 switch result {
                 case .success(let response):
-                    contentView.closePostCreation()
                     self.onPostAdded(response.postView)
+                    cleanWindow()
                     isSendingPost = false
+                    contentView.closePostCreation()
                 case .failure(let error):
                     print(error)
                     alertMessage = "Unable to send post. Try again later."
@@ -220,6 +222,13 @@ struct PostCreationPopup: View {
                 }
             }
         }
+    }
+    
+    func cleanWindow() {
+        title = ""
+        bodyText = ""
+        url = ""
+        isNsfw = false
     }
     
     func canSendPost() -> Bool {
