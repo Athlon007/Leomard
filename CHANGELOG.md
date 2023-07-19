@@ -13,6 +13,7 @@
 - Multi-account support (#22)
 - Confirm delete post/comment
 - Blocking users
+- Blocking communities
 
 ### Changes
 

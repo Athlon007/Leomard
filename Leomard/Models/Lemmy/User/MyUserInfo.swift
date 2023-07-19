@@ -8,7 +8,7 @@
 import Foundation
 
 struct MyUserInfo: Codable {
-    public let communityBlocks: [CommunityBlockView]
+    public var communityBlocks: [CommunityBlockView]
     public let discussionLanguages: [Int]
     public let follows: [CommunityFollowerView]
     public let localUserView: LocalUserView
