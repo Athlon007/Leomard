@@ -27,6 +27,8 @@ struct PostUIView: View {
     @State var url: URL? = nil
     @State var updatedTimeAsString: String = ""
     
+    @State var showConfirmDelete: Bool = false
+    
     @State var gifHeight: CGFloat = 400
     
     // Height retention variables
@@ -238,11 +240,17 @@ struct PostUIView: View {
                             }
                             .buttonStyle(.link)
                             .foregroundColor(.primary)
-                            Button(action: deletePost) {
+                            Button(action: { showConfirmDelete = true }) {
                                 Image(systemName: "trash")
                             }
                             .buttonStyle(.link)
                             .foregroundColor(.primary)
+                            .alert("Confirm", isPresented: $showConfirmDelete, actions: {
+                                Button("Delete", role: .destructive) { deletePost() }
+                                Button("Cancel", role: .cancel) {}
+                            }, message: {
+                                Text("Are you sure you want to delete a post?")
+                            })
                         }
                         HStack {
                             Image(systemName: "bookmark")
