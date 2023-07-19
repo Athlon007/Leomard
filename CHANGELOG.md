@@ -12,6 +12,7 @@
 - Added status indicator when sending a reply
 - Multi-account support (#22)
 - Confirm delete post/comment
+- Blocking users
 
 ### Changes
 

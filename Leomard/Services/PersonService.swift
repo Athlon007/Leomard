@@ -25,7 +25,7 @@ class PersonService: Service {
     }
     
     public func block(person: Person, block: Bool, completion: @escaping (Result<BlockPersonResponse, Error>) -> Void) {
-        var body = BlockPerson(block: block, personId: person.id)
+        let body = BlockPerson(block: block, personId: person.id)
         requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/user/block", method: .post, body: body) { result in
             self.respond(result, completion)
         }

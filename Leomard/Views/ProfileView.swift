@@ -101,7 +101,7 @@ struct ProfileView: View {
                 /// Why are we showing another profile sidebar here?
                 if sidebarVisible {
                     VStack {
-                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself)
+                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself, personService: personService!)
                     }
                     .frame(
                         minWidth: 0,
@@ -182,7 +182,7 @@ struct ProfileView: View {
             List {
                 VStack {
                     if personDetails != nil {
-                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself)
+                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself, personService: personService!)
                     }
                 }
                 .frame(

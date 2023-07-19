@@ -13,6 +13,6 @@ struct MyUserInfo: Codable {
     public let follows: [CommunityFollowerView]
     public let localUserView: LocalUserView
     public let moderates: [CommunityModeratorView]
-    public let personBlocks: [PersonBlockView]
+    public var personBlocks: [PersonBlockView]
     
 }
