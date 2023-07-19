@@ -47,108 +47,7 @@ struct PostUIView: View {
                         alignment: .leading
                     )
                 postBodyMarkdown
-                if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
-                    if LinkHelper.isYouTubeLink(link: postView.post.url!) {
-                        YoutubePlayer(link: postView.post.url!, imageHeight: $gifHeight)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
-                            .textSelection(.enabled)
-                    } else {
-                        // Article View
-                        VStack {
-                            Spacer()
-                            
-                            AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
-                                       content: { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .cornerRadius(4)
-                                        .background(GeometryReader { geometry in
-                                            Color.clear
-                                                .onAppear {
-                                                    self.imageHeight = geometry.size.height
-                                                }
-                                        })
-                                        .blur(radius:(postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
-                                default:
-                                    Text("Failed to load image.")
-                                        .italic()
-                                }
-                            })
-                            .padding(.leading, 4)
-                            .padding(.trailing, 4)
-                            .padding(.top, 4)
-                            if LinkHelper.isWebp(link: postView.post.thumbnailUrl!) {
-                                Spacer()
-                            }
-                            Text(postView.post.url!)
-                                .foregroundColor(Color(.linkColor))
-                                .fixedSize(horizontal: false, vertical: false)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-                            
-                        }
-                        .background(.ultraThickMaterial)
-                        .cornerRadius(4)
-                        .onTapGesture {
-                            openURL(url!)
-                        }
-                    }
-                }
-                else if postView.post.url != nil && postView.post.embedTitle == nil {
-                    // Image-only view.
-                    if LinkHelper.isAnimatedLink(link: postView.post.url!) {
-                        // GIF
-                        AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
-                            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
-                    } else if LinkHelper.isImageLink(link: postView.post.url!) {
-                        // Static Images
-                        Spacer()
-                        Text("")
-                        if LinkHelper.isWebp(link: postView.post.url!) {
-                            Spacer()
-                        }
-                        AsyncImage(url: URL(string: postView.post.url!),
-                                   content: { phase in
-                            switch phase {
-                            case .success(let image):
-                                image.resizable()
-                                    .scaledToFit()
-                                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                    .background(GeometryReader { geometry in
-                                        Color.clear
-                                            .onAppear {
-                                                self.imageHeight = geometry.size.height
-                                            }
-                                    })
-                            case .failure(_):
-                                // Can't load image? Fallback to link.
-                                Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
-                            default:
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                            }
-                        })
-                        .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
-                        if LinkHelper.isWebp(link: postView.post.url!) {
-                            Spacer()
-                        }
-                    } else {
-                        // Simple external link.
-                        let url = URL(string: postView.post.url!)!
-                        Link(url.absoluteString, destination: url)
-                    }
-                    Spacer()
-                } else if postView.post.embedVideoUrl != nil && LinkHelper.isVideosLink(link: postView.post.embedVideoUrl!) {
-                    VideoPlayer(player: AVPlayer(url: URL(string: postView.post.embedVideoUrl!)!))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
+                postBodyContent
                 Spacer(minLength: 6)
                 communityPersonDate
                     .frame (
@@ -256,6 +155,118 @@ struct PostUIView: View {
                             self.bodyHeight = geometry.size.height
                         }
                 })
+        }
+    }
+    
+    @ViewBuilder
+    private var postBodyContent: some View {
+        if postView.post.embedTitle != nil && postView.post.thumbnailUrl != nil {
+            if LinkHelper.isYouTubeLink(link: postView.post.url!) {
+                YoutubePlayer(link: postView.post.url!, imageHeight: $gifHeight)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+                    .textSelection(.enabled)
+            } else {
+                articleView
+                    .onTapGesture {
+                        openURL(url!)
+                    }
+            }
+        } else if postView.post.url != nil && postView.post.embedTitle == nil {
+            gifOrImage
+            Spacer()
+        } else if postView.post.embedVideoUrl != nil && LinkHelper.isVideosLink(link: postView.post.embedVideoUrl!) {
+            VideoPlayer(player: AVPlayer(url: URL(string: postView.post.embedVideoUrl!)!))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    @ViewBuilder
+    private var articleView: some View {
+        VStack {
+            Spacer()
+            AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
+                       content: { phase in
+                switch phase {
+                case .success(let image):
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .cornerRadius(4)
+                        .background(GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    self.imageHeight = geometry.size.height
+                                }
+                        })
+                        .blur(radius:(postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+                default:
+                    Text("Failed to load image.")
+                        .italic()
+                }
+            })
+            .padding(.leading, 4)
+            .padding(.trailing, 4)
+            .padding(.top, 4)
+            if LinkHelper.isWebp(link: postView.post.thumbnailUrl!) {
+                Spacer()
+            }
+            Text(postView.post.url!)
+                .foregroundColor(Color(.linkColor))
+                .fixedSize(horizontal: false, vertical: false)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .leading
+                )
+        }
+        .background(.ultraThickMaterial)
+        .cornerRadius(4)
+    }
+    
+    @ViewBuilder
+    private var gifOrImage: some View {
+        // Image-only view.
+        if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+            // GIF
+            AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+                .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+        } else if LinkHelper.isImageLink(link: postView.post.url!) {
+            // Static Images
+            Spacer()
+            Text("")
+            if LinkHelper.isWebp(link: postView.post.url!) {
+                Spacer()
+            }
+            AsyncImage(url: URL(string: postView.post.url!),
+                       content: { phase in
+                switch phase {
+                case .success(let image):
+                    image.resizable()
+                        .scaledToFit()
+                        .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .background(GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    self.imageHeight = geometry.size.height
+                                }
+                        })
+                case .failure(_):
+                    // Can't load image? Fallback to link.
+                    Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
+                default:
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
+            })
+            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+            if LinkHelper.isWebp(link: postView.post.url!) {
+                Spacer()
+            }
+        } else {
+            // Simple external link.
+            let url = URL(string: postView.post.url!)!
+            Link(url.absoluteString, destination: url)
         }
     }
     
