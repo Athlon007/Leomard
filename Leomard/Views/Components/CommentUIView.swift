@@ -30,6 +30,7 @@ struct CommentUIView: View {
     @FocusState var isSendingComment: Bool
     @State var isEditingComment: Bool = false
     @State var updatedTimeAsString: String = ""
+    @State var showConfirmDelete: Bool = false
     
     @State var profileViewMode: Bool = false
     
@@ -108,11 +109,17 @@ struct CommentUIView: View {
                                 }
                                 .buttonStyle(.link)
                                 .foregroundColor(.primary)
-                                Button(action: deleteComment) {
+                                Button(action: { showConfirmDelete = true }) {
                                     Image(systemName: "trash")
                                 }
                                 .buttonStyle(.link)
                                 .foregroundColor(.primary)
+                                .alert("Confirm", isPresented: $showConfirmDelete, actions: {
+                                    Button("Delete", role: .destructive) { deleteComment() }
+                                    Button("Cancel", role: .cancel) {}
+                                }, message: {
+                                    Text("Are you sure you want to delete a comment?")
+                                })
                             }
                             Button(action: savePost) {
                                 Image(systemName: "bookmark")
