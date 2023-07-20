@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Nuke
 
 @main
 struct LeomardApp: App {
@@ -16,7 +17,16 @@ struct LeomardApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(columnStatus: $mainWindowNavSplitStatus)
-                .frame(minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800, minHeight: 800)
+                .frame(
+                    minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800,
+                    minHeight: 800)
+                .onAppear {
+                    ImageCache.shared.costLimit = 300 * (1024 * 1024)
+                    ImageCache.shared.countLimit = 250
+                    
+                    DataLoader.sharedUrlCache.diskCapacity = 500 * (1024 * 1024)
+                    DataLoader.sharedUrlCache.memoryCapacity = 0
+                }
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
