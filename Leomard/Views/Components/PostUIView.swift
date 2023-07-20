@@ -10,7 +10,9 @@ import SwiftUI
 import MarkdownUI
 import Combine
 import AVKit
+import NukeUI
 
+@MainActor
 struct PostUIView: View {
     @State var postView: PostView
     let shortBody: Bool
@@ -184,26 +186,19 @@ struct PostUIView: View {
     private var articleView: some View {
         VStack {
             Spacer()
-            AsyncImage(url: URL(string: postView.post.thumbnailUrl!),
-                       content: { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .cornerRadius(4)
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    self.imageHeight = geometry.size.height
-                                }
-                        })
-                        .blur(radius:(postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
-                default:
-                    Text("Failed to load image.")
-                        .italic()
-                }
-            })
+            staticImage(postView.post.thumbnailUrl) { image in
+                image
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .cornerRadius(4)
+                    .background(GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                self.imageHeight = geometry.size.height
+                            }
+                    })
+                    .blur(radius:(postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+            }
             .padding(.leading, 4)
             .padding(.trailing, 4)
             .padding(.top, 4)
@@ -223,6 +218,24 @@ struct PostUIView: View {
         .cornerRadius(4)
     }
     
+    /// - Parameter imageBlock: Use this to modify the `Image` instance.
+    /// - Returns: A wrapper view that contains an `Image` instance.
+    @ViewBuilder
+    private func staticImage(_ thumbnailUrl: String?, @ViewBuilder imageBlock: @escaping (Image) -> some View) -> some View {
+        if let thumbnailUrl {
+            LazyImage(url: .init(string: thumbnailUrl)) { state in
+                if let image = state.image {
+                    imageBlock(image)
+                } else if state.error != nil {
+                    Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
+            }
+        }
+    }
+    
     @ViewBuilder
     private var gifOrImage: some View {
         // Image-only view.
@@ -238,27 +251,18 @@ struct PostUIView: View {
             if LinkHelper.isWebp(link: postView.post.url!) {
                 Spacer()
             }
-            AsyncImage(url: URL(string: postView.post.url!),
-                       content: { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable()
-                        .scaledToFit()
-                        .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    self.imageHeight = geometry.size.height
-                                }
-                        })
-                case .failure(_):
-                    // Can't load image? Fallback to link.
-                    Link("\(postView.post.url!)", destination: URL(string: postView.post.url!)!)
-                default:
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                }
-            })
+            staticImage(postView.post.url) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .background(GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                self.imageHeight = geometry.size.height
+                            }
+                    })
+            }
             .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
             if LinkHelper.isWebp(link: postView.post.url!) {
                 Spacer()
