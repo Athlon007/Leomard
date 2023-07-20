@@ -187,13 +187,13 @@ struct PreferencesView: View {
     @ViewBuilder
     private var updatesPreferences: some View {
         VStack(alignment: .leading) {
-            Picker("Check for updates every", selection: UserPreferences.getInstance.$checkForUpdateFrequency) {
+            Picker("Check for updates", selection: UserPreferences.getInstance.$checkForUpdateFrequency) {
                 ForEach(UpdateFrequency.allCases, id: \.self) { option in
                     Text(String(describing: option))
                 }
             }
             HStack(spacing: 10) {
-                Button("Check for updates", action: {
+                Button("Check for update", action: {
                     self.checkForUpdateMethod()
                     manuallyCheckedForUpdate = true
                 })
