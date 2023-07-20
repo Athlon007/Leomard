@@ -99,6 +99,7 @@ struct PreferencesView: View {
             .frame(
                 width: 20, height: 20
             )
+            .shadow(radius: 0.5)
             Text(option.name)
                 .frame(
                     maxWidth: .infinity,
