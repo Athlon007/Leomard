@@ -28,7 +28,7 @@ struct DmgHelper {
         return nil
     }
     
-    func openMountedDMG(mountedPath: String) {
+    static func openMountedDMG(mountedPath: String) {
         NSWorkspace.shared.open(URL(string: mountedPath)!)
     }
 }

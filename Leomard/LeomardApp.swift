@@ -68,7 +68,7 @@ struct LeomardApp: App {
             switch result {
             case .success(let release):
                 if let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String, let localVersion = try? TagNameVersion(textVersion: appVersionString) {
-                    if release.tagName < localVersion {
+                    if release.tagName > localVersion && String(describing: release.tagName) != UserPreferences.getInstance.skippedUpdateVersion {
                         print("Newer version available.")
                         self.latestRelease = release
                         DispatchQueue.main.sync {
