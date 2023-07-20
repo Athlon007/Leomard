@@ -63,17 +63,15 @@ struct ProfileView: View {
         VStack {
             GeometryReader { proxy in
                 HStack {
-                    ScrollViewReader { scrollProxy in
-                        profileContentList(
-                            personDetails,
-                            sidebarVisible: proxy.size.width < 1000)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
+                    profileContentList(
+                        personDetails,
+                        sidebarVisible: proxy.size.width < 1000)
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: 600,
+                        maxHeight: .infinity,
+                        alignment: .center
+                    )
                     
                     profileSidebar(visible: proxy.size.width > 1000)
                         .frame(
