@@ -22,6 +22,7 @@ final class UserPreferences: ObservableObject {
     @AppStorage("check_notifs_every", store: .standard) var checkNotifsEverySeconds: Int = 60
     @AppStorage("unreadonly_when_opening_inbox", store: .standard) var unreadonlyWhenOpeningInbox: Bool = true
     @AppStorage("profile_sort_method", store: .standard) var profileSortMethod: SortType = .new
+    @AppStorage("check_for_updates", store: .standard) var checkForUpdates: Bool = true
     
     @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
     

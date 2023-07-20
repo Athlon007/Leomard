@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TagNameVersion: Codable, Comparable {
+struct TagNameVersion: Codable, Comparable, CustomStringConvertible {
     let major: Int
     let minor: Int
     let build: Int
@@ -97,5 +97,9 @@ struct TagNameVersion: Codable, Comparable {
         }
         
         return false
+    }
+    
+    var description: String {
+        return "\(major).\(minor)" + (build != 0 ? ".\(build)" : "")
     }
 }

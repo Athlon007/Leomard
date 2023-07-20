@@ -19,16 +19,15 @@ struct APIResponse {
     let data: Data?
 }
 
-struct NoBodyPost: Codable {
+fileprivate struct NoBodyPost: Codable {
     let auth: String
 }
 
 final class RequestHandler {
     public final let VERSION = "v3"
 
-
     public func makeApiRequest(host: String, request: String, method: HTTPMethod, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
-        var urlString = "\(host)/api/\(self.VERSION)\(request)"
+        var urlString = host.contains("github.com") ? "\(host)\(request)" : "\(host)/api/\(self.VERSION)\(request)"
     
         if !urlString.starts(with: "http") {
             urlString = "https://\(urlString)"

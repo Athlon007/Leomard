@@ -291,5 +291,69 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2DD66154-5FF1-499F-A134-60709CC80CEE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/GithubService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "getLatestReleases(completion:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1832AA22-70C7-4DAC-9360-834E06E0B230"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/RequestHandler.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "makeApiRequest(host:request:method:body:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1832AA22-70C7-4DAC-9360-834E06E0B230 - 90868b1bf6deb84f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "3616">
+               </Location>
+               <Location
+                  uuid = "1832AA22-70C7-4DAC-9360-834E06E0B230 - 90868b1bf6deb84f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "3716">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
