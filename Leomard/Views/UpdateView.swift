@@ -11,6 +11,11 @@ import MarkdownUI
 
 struct UpdateView: View {
     let release: Release?
+    @Environment(\.openURL) var openURL
+    
+    @State var isDownloading: Bool = false
+    @State var downloadProgress: Float = 0
+    @State var downloadStatus: String = ""
     
     var body: some View {
         if release == nil {
@@ -37,11 +42,17 @@ struct UpdateView: View {
                     maxWidth: .infinity,
                     maxHeight: .infinity
                 )
+                if isDownloading {
+                    ProgressView("Downloading...", value: downloadProgress, total: 100)
+                }
                 HStack {
-                    Button("Download Now", action: download)
+                    Button("Download & Update", action: download)
+                        .buttonStyle(.borderedProminent)
+                    Button("Visit Release Page", action: openReleasesPage)
                         .buttonStyle(.borderedProminent)
                     Button("Later", role: .cancel, action: closeWindow)
                 }
+                .disabled(isDownloading)
             }
             .padding()
             .listStyle(SidebarListStyle())
@@ -54,7 +65,18 @@ struct UpdateView: View {
         NSApplication.shared.keyWindow?.close()
     }
     
-    func download() {
+    func openReleasesPage() {
+        self.openURL(URL(string: release!.htmlUrl)!)
         closeWindow()
+    }
+    
+    func download() {
+        isDownloading = true
+                
+        for asset in release!.assets {
+            if asset.browserDownloadUrl.hasSuffix(".dmg") {
+                break
+            }
+        }
     }
 }
