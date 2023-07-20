@@ -51,4 +51,15 @@ final class TagNameVersionTests: XCTestCase {
         
         XCTAssertLessThan(versionA, versionB)
     }
+    
+    func testDecoding100FromStringEquals100() throws {
+        let versionA = try TagNameVersion(textVersion: "1.0")
+        let versionB = TagNameVersion(major: 1, minor: 0, build: 0)
+        
+        XCTAssertEqual(versionA, versionB)
+    }
+    
+    func testDecodingInvalidTextThrowsVersionFromStringDecodeErrorError() {
+        XCTAssertThrowsError(try TagNameVersion(textVersion: "invalid"))
+    }
 }

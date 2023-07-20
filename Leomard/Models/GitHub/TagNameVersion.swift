@@ -16,8 +16,9 @@ struct TagNameVersion: Codable, Comparable {
         let container = try decoder.singleValueContainer()
         let tagString = try container.decode(String.self)
         let versionComponents = tagString.split(separator: ".")
+        let first = Int(versionComponents[0])
         
-        if versionComponents.count == 0 {
+        if versionComponents.count == 0, first == nil {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid tag_name format")
         }
         
@@ -43,6 +44,35 @@ struct TagNameVersion: Codable, Comparable {
     }
     
     init(major: Int, minor: Int, build: Int) {
+        self.major = major
+        self.minor = minor
+        self.build = build
+    }
+    
+    init(textVersion: String) throws {
+        let versionComponents = textVersion.split(separator: ".")
+        let first = Int(versionComponents[0])
+        
+        if versionComponents.count == 0 || first == nil {
+            throw LeomardExceptions.versionFromStringDecodeError("Failed to decode \(textVersion)")
+        }
+        
+        var major = 0
+        var minor = 0
+        var build = 0
+        
+        if versionComponents.count >= 1 {
+            major = Int(versionComponents[0]) ?? 0
+        }
+        
+        if versionComponents.count >= 2 {
+            minor = Int(versionComponents[1]) ?? 0
+        }
+        
+        if versionComponents.count >= 3 {
+            build = Int(versionComponents[2]) ?? 0
+        }
+        
         self.major = major
         self.minor = minor
         self.build = build
