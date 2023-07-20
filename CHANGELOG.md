@@ -14,6 +14,7 @@
 - Confirm delete post/comment
 - Blocking users
 - Blocking communities
+- Added update checking on launch
 
 ### Changes
 
