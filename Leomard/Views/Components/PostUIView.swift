@@ -330,7 +330,7 @@ struct PostUIView: View {
             Spacer()
             if myself != nil {
                 if postView.creator.actorId == myself?.localUserView.person.actorId {
-                    Button(action: startEditPost) {
+                    Button(action: { startEditPost() } ) {
                         Image(systemName: "pencil")
                     }
                     .buttonStyle(.link)
