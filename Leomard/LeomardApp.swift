@@ -34,7 +34,7 @@ struct LeomardApp: App {
         }
         
         Window("Preferences", id: "preferences") {
-            PreferencesView()
+            PreferencesView(checkForUpdateMethod: checkForUpdates)
                 .frame(minWidth: 600, maxWidth: 600, maxHeight: 800)
         }
         .windowStyle(HiddenTitleBarWindowStyle())

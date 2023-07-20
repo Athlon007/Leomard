@@ -14,6 +14,8 @@ fileprivate struct FrequencyOption: Hashable, Equatable {
 }
 
 struct PreferencesView: View {
+    let checkForUpdateMethod: () -> Void
+    
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
@@ -31,6 +33,7 @@ struct PreferencesView: View {
         .init(name: "10 minutes", seconds: 60 * 10)
     ]
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
+    @State var manuallyCheckedForUpdate: Bool = false
     
     @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
     
@@ -189,6 +192,18 @@ struct PreferencesView: View {
                     Text(String(describing: option))
                 }
             }
+            HStack(spacing: 10) {
+                Button("Check for updates", action: {
+                    self.checkForUpdateMethod()
+                    manuallyCheckedForUpdate = true
+                })
+                .disabled(manuallyCheckedForUpdate)
+                if manuallyCheckedForUpdate {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.green)
+                }
+            }
+            .padding(.top)
         }
     }
     
