@@ -22,11 +22,12 @@ final class UserPreferences: ObservableObject {
     @AppStorage("check_notifs_every", store: .standard) var checkNotifsEverySeconds: Int = 60
     @AppStorage("unreadonly_when_opening_inbox", store: .standard) var unreadonlyWhenOpeningInbox: Bool = true
     @AppStorage("profile_sort_method", store: .standard) var profileSortMethod: SortType = .new
-    @AppStorage("check_for_updates", store: .standard) var checkForUpdates: Bool = true
+    @AppStorage("check_for_update_frequency", store: .standard) var checkForUpdateFrequency: UpdateFrequency = .onceADay
     
     @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
     
     @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
+    @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]

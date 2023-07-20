@@ -17,6 +17,7 @@ struct PreferencesView: View {
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
+        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green),
         .init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
     @State fileprivate var currentSelection: PreferenceOption?
@@ -112,11 +113,13 @@ struct PreferencesView: View {
         List {
             VStack(alignment: .leading, spacing: 20) {
                 switch currentSelection {
-                case self.preferenceOptions[0]:
+                case preferenceOptions[0]:
                     generalPreferences
-                case self.preferenceOptions[1]:
+                case preferenceOptions[1]:
                     contentPreferences
                 case preferenceOptions[2]:
+                    updatesPreferences
+                case preferenceOptions[3]:
                     experimentalPreferences
                 default:
                     Text("")
@@ -175,6 +178,17 @@ struct PreferencesView: View {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
+        }
+    }
+    
+    @ViewBuilder
+    private var updatesPreferences: some View {
+        VStack(alignment: .leading) {
+            Picker("Check for updates every", selection: UserPreferences.getInstance.$checkForUpdateFrequency) {
+                ForEach(UpdateFrequency.allCases, id: \.self) { option in
+                    Text(String(describing: option))
+                }
+            }
         }
     }
     
