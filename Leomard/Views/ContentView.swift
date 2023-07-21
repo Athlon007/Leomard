@@ -114,6 +114,7 @@ struct ContentView: View {
             postCreationPopup(openedPostMakingForCommunity)
         }
         .allowsHitTesting(interactionEnabled)
+        .overlay(Color.gray.opacity(interactionEnabled ? 0 : 0.5))
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.

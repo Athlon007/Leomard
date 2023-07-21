@@ -30,6 +30,7 @@ struct PostCreationPopup: View {
     
     @State var imageUploadFail: Bool = false
     @State var imageUploadFailReason: String = ""
+    @State var isUploadingImage: Bool = false
     
     var body: some View {
         ZStack {
@@ -81,6 +82,9 @@ struct PostCreationPopup: View {
                                 }
                                 .border(!isUrlValid ? .red : .clear, width: 4)
                             Button("Add Image", action: addImage)
+                            if isUploadingImage {
+                                ProgressView().progressViewStyle(.circular)
+                            }
                             if LinkHelper.isImageLink(link: url) {
                                 LazyImage(url: .init(string: url)) { state in
                                     if let image = state.image {
@@ -302,9 +306,11 @@ struct PostCreationPopup: View {
             self.contentView.toggleInteraction(true)
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
                 let imageService = ImageService(requestHandler: RequestHandler())
+                isUploadingImage = true
                 imageService.uploadImage(url: url) { result in
                     switch result {
                     case .success(let imageUploadResponse):
+                        isUploadingImage = false
                         if self.url == "" {
                             // URL not set? Set the image as URL.
                             self.url = imageUploadResponse.data.link
@@ -316,9 +322,9 @@ struct PostCreationPopup: View {
                             }
                             
                             bodyText += "![](\(imageUploadResponse.data.link))\n\n"
-                            
                         }
                     case .failure(let error):
+                        isUploadingImage = false
                         if error is LeomardExceptions, let failReason = (error as! LeomardExceptions).tryGetErrorMessage() {
                             self.imageUploadFailReason = failReason
                         } else {
