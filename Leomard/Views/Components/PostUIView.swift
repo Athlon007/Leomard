@@ -75,39 +75,9 @@ struct PostUIView: View {
             )
             
             .task {
-                self.postBody = self.postView.post.body
-                self.postBody = await postBodyTask()
-//                if self.postBody != nil {
-//                    self.postBody = postBody!.replacingOccurrences(of: "\r", with: "<br>")
-//                    let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
-//                    let range = NSRange(location: 0, length: postBody!.utf16.count)
-//
-//                    let matches = regex.matches(in: postBody!, options: [], range: range)
-//
-//                    var imageUrls: [String] = []
-//
-//                    for match in matches {
-//                        if let urlRange = Range(match.range(at: 1), in: postBody!) {
-//                            let imageUrl = String(postBody![urlRange])
-//                            imageUrls.append(imageUrl)
-//                        }
-//                    }
-//                }
-//                if shortBody && postBody != nil && postBody!.count > PostUIView.maxPostLength {
-//                    postBody = String(postBody!.prefix(PostUIView.maxPostLength))
-//                    postBody = postBody!.trimmingCharacters(in: .whitespacesAndNewlines)
-//                    postBody = postBody! + "... **Read More**"
-//                }
-                
-                if postView.post.url != nil {
-                    url = URL(string: postView.post.url!)
-                }
-                
-                if postView.post.updated != nil {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    updatedTimeAsString = dateFormatter.string(from: postView.post.updated!)
-                }
+                postBody = await postBodyTask()
+                url = await postUrlTask()
+                updatedTimeAsString = await updatedTimeAsStringTask()
             }
             .onTapGesture {
                 self.contentView.openPost(postView: self.postView)
@@ -122,10 +92,7 @@ struct PostUIView: View {
     private func postBodyTask() async -> String? {
         return await withCheckedContinuation { continuation in
             Task(priority: .background) {
-                if Thread.isMainThread {
-                    print("WARNING: running on main thread")
-                }
-                var newPostBody = await self.postBody
+                var newPostBody = await self.postView.post.body
                 if newPostBody != nil {
                     newPostBody = newPostBody!.replacingOccurrences(of: "\r", with: "<br>")
                     let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
@@ -148,6 +115,34 @@ struct PostUIView: View {
                     newPostBody = newPostBody! + "... **Read More**"
                 }
                 return continuation.resume(returning: newPostBody)
+            }
+        }
+    }
+    
+    nonisolated
+    private func postUrlTask() async -> URL? {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                guard let postUrl = await self.postView.post.url else {
+                    return continuation.resume(returning: nil)
+                }
+                return continuation.resume(returning: URL(string: postUrl))
+            }
+        }
+    }
+    
+    nonisolated
+    private func updatedTimeAsStringTask() async -> String {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                guard let updatedDate = await self.postView.post.updated else {
+                    return continuation.resume(returning: "")
+                }
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                let dateString = dateFormatter.string(from: updatedDate)
+                return continuation.resume(returning: dateString)
             }
         }
     }
