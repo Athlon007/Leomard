@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>IMGUR_KEY</key>
-	<string>$(IMGUR_KEY)</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -79,6 +77,25 @@
 				<key>public.mime-type</key>
 				<array>
 					<string>image/webp</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeDescription</key>
+			<string>Image Upload Types GIF</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>leomard.supported.image.types.gif</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gif</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/gif</string>
 				</array>
 			</dict>
 		</dict>

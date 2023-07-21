@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import MarkdownUI
+import NukeUI
 
 struct PostCreationPopup: View {
     let contentView: ContentView
@@ -80,6 +81,17 @@ struct PostCreationPopup: View {
                                 }
                                 .border(!isUrlValid ? .red : .clear, width: 4)
                             Button("Add Image", action: addImage)
+                            if LinkHelper.isImageLink(link: url) {
+                                LazyImage(url: .init(string: url)) { state in
+                                    if let image = state.image {
+                                        image.resizable().aspectRatio(contentMode: .fit)
+                                    } else {
+                                        ProgressView()
+                                            .progressViewStyle(.circular)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
                         }
                         Text("Body")
                             .frame(
@@ -283,7 +295,8 @@ struct PostCreationPopup: View {
             .init(importedAs: "leomard.supported.image.types.jpg"),
             .init(importedAs: "leomard.supported.image.types.jpeg"),
             .init(importedAs: "leomard.supported.image.types.png"),
-            .init(importedAs: "leomard.supported.image.types.webp")
+            .init(importedAs: "leomard.supported.image.types.webp"),
+            .init(importedAs: "leomard.supported.image.types.gif")
         ]
         panel.begin { (result) -> Void in
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
