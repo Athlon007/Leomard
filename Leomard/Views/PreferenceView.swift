@@ -199,7 +199,7 @@ struct PreferencesView: View {
                     manuallyCheckedForUpdate = true
                 })
                 .disabled(manuallyCheckedForUpdate)
-                Text("Last updated: ")
+                Text("Last updated:")
                 DateDisplayView(date: UserPreferences.getInstance.lastUpdateCheckDate, showRealTime: true, noBrackets: true, noTapAction: true)
                 if manuallyCheckedForUpdate {
                     Image(systemName: "checkmark")
