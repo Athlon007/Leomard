@@ -130,17 +130,19 @@ struct FeedView: View {
     
     @ViewBuilder
     private func feedPageSidebar(visible: Bool) -> some View {
-        List {
-            VStack {
-                if siteView != nil {
-                    PageSidebarUIView(siteView: $siteView)
+        if visible {
+            List {
+                VStack {
+                    if siteView != nil {
+                        PageSidebarUIView(siteView: $siteView)
+                    }
                 }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity
+                )
+                .cornerRadius(4)
             }
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity
-            )
-            .cornerRadius(4)
         }
     }
     

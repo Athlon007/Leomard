@@ -27,6 +27,7 @@ struct SearchView: View {
     @State var page: Int = 1
     @State var searchedOnce: Bool = false
     @FocusState var searchFocused: Bool
+    @State var error: String = ""
 
     var body: some View {
         searchBar
@@ -135,6 +136,11 @@ struct SearchView: View {
             Text("No comments found!")
                 .italic()
                 .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             List {
                 ForEach(searchResponse.comments, id: \.self) { commentView in
@@ -173,6 +179,11 @@ struct SearchView: View {
             Text("No communities found!")
                 .italic()
                 .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             List {
                 ForEach(searchResponse.communities, id: \.self) { communityView in
@@ -208,6 +219,11 @@ struct SearchView: View {
             Text("No users found!")
                 .italic()
                 .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             List {
                 ForEach(searchResponse.users, id: \.self) { personView in
@@ -243,6 +259,11 @@ struct SearchView: View {
             Text("No posts found!")
                 .italic()
                 .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             List {
                 ForEach(searchResponse.posts, id: \.self) { postView in
@@ -267,6 +288,8 @@ struct SearchView: View {
             return
         }
         
+        self.error = ""
+        
         self.searchedOnce = true
 
         if page == 1 {
@@ -289,6 +312,12 @@ struct SearchView: View {
                 self.searching = false
             case .failure(let error):
                 print(error)
+                self.searching = false
+                if let errorResponse = error as? ErrorResponse {
+                    self.error = errorResponse.error
+                } else {
+                    self.error = "Your Lemmy instance is down, or took to long to respond. Try again later."
+                }
             }
         }
     }
