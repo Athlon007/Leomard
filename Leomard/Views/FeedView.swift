@@ -149,22 +149,20 @@ struct FeedView: View {
     private var feedPostsList: some View {
         // - TODO: `scrollProxy` is expensive and isn't being used, remove?
         ScrollViewReader { scrollProxy in
-            List {
-                ForEach(viewModel.postsResponse.posts, id: \.self) { postView in
-                    PostUIView(
-                        postView: postView,
-                        shortBody: true,
-                        postService: viewModel.postService,
-                        myself: $myself,
-                        contentView: contentView)
-                    .onAppear {
-                        if postView == viewModel.postsResponse.posts.last {
-                            viewModel.loadPosts()
-                        }
+            List(viewModel.postsResponse.posts, id: \.post.id) { postView in
+                PostUIView(
+                    postView: postView,
+                    shortBody: true,
+                    postService: viewModel.postService,
+                    myself: $myself,
+                    contentView: contentView)
+                .onAppear {
+                    if postView == viewModel.postsResponse.posts.last {
+                        viewModel.loadPosts()
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    Spacer()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Spacer()
             }
             .frame(
                 minWidth: 0,
