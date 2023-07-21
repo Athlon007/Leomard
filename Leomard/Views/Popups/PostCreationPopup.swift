@@ -27,6 +27,9 @@ struct PostCreationPopup: View {
     @State var alertMessage: String = ""
     @State var isSendingPost: Bool = false
     
+    @State var imageUploadFail: Bool = false
+    @State var imageUploadFailReason: String = ""
+    
     var body: some View {
         ZStack {
             VStack {  }
@@ -173,6 +176,11 @@ struct PostCreationPopup: View {
         }, message: {
             Text(alertMessage)
         })
+        .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
+            Button("OK") {}
+        }, message: {
+            Text(imageUploadFailReason)
+        })
         .task {
             if self.editedPost != nil {
                 self.title = self.editedPost!.post.name
@@ -281,7 +289,30 @@ struct PostCreationPopup: View {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
                 let imageService = ImageService(requestHandler: RequestHandler())
                 imageService.uploadImage(url: url) { result in
-                    
+                    switch result {
+                    case .success(let imageUploadResponse):
+                        if self.url == "" {
+                            // URL not set? Set the image as URL.
+                            self.url = imageUploadResponse.data.link
+                        } else {
+                            // Otherwise add it to content of the bodyText.
+                            if bodyText.count > 0 {
+                                // If there already is some text, add new line.
+                                bodyText += "\n\n"
+                            }
+                            
+                            bodyText += "![](\(imageUploadResponse.data.link))\n\n"
+                            
+                        }
+                    case .failure(let error):
+                        if error is LeomardExceptions, let failReason = (error as! LeomardExceptions).tryGetErrorMessage() {
+                            self.imageUploadFailReason = failReason
+                        } else {
+                            self.imageUploadFailReason = "Unable to upload the image :("
+                        }
+                        
+                        self.imageUploadFail = true
+                    }
                 }
             }
         }

@@ -8,6 +8,6 @@
 import Foundation
 
 struct ImgurImage: Codable {
-    let id: Int
+    let id: String
     let link: String
 }
