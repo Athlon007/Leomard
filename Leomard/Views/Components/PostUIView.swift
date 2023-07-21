@@ -76,27 +76,28 @@ struct PostUIView: View {
             
             .task {
                 self.postBody = self.postView.post.body
-                if self.postBody != nil {
-                    self.postBody = postBody!.replacingOccurrences(of: "\r", with: "<br>")
-                    let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
-                    let range = NSRange(location: 0, length: postBody!.utf16.count)
-                    
-                    let matches = regex.matches(in: postBody!, options: [], range: range)
-                    
-                    var imageUrls: [String] = []
-                    
-                    for match in matches {
-                        if let urlRange = Range(match.range(at: 1), in: postBody!) {
-                            let imageUrl = String(postBody![urlRange])
-                            imageUrls.append(imageUrl)
-                        }
-                    }
-                }
-                if shortBody && postBody != nil && postBody!.count > PostUIView.maxPostLength {
-                    postBody = String(postBody!.prefix(PostUIView.maxPostLength))
-                    postBody = postBody!.trimmingCharacters(in: .whitespacesAndNewlines)
-                    postBody = postBody! + "... **Read More**"
-                }
+                self.postBody = await postBodyTask()
+//                if self.postBody != nil {
+//                    self.postBody = postBody!.replacingOccurrences(of: "\r", with: "<br>")
+//                    let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
+//                    let range = NSRange(location: 0, length: postBody!.utf16.count)
+//
+//                    let matches = regex.matches(in: postBody!, options: [], range: range)
+//
+//                    var imageUrls: [String] = []
+//
+//                    for match in matches {
+//                        if let urlRange = Range(match.range(at: 1), in: postBody!) {
+//                            let imageUrl = String(postBody![urlRange])
+//                            imageUrls.append(imageUrl)
+//                        }
+//                    }
+//                }
+//                if shortBody && postBody != nil && postBody!.count > PostUIView.maxPostLength {
+//                    postBody = String(postBody!.prefix(PostUIView.maxPostLength))
+//                    postBody = postBody!.trimmingCharacters(in: .whitespacesAndNewlines)
+//                    postBody = postBody! + "... **Read More**"
+//                }
                 
                 if postView.post.url != nil {
                     url = URL(string: postView.post.url!)
@@ -113,6 +114,40 @@ struct PostUIView: View {
             }
             .contextMenu {
                 PostContextMenu(postView: self.postView)
+            }
+        }
+    }
+    
+    nonisolated
+    private func postBodyTask() async -> String? {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                if Thread.isMainThread {
+                    print("WARNING: running on main thread")
+                }
+                var newPostBody = await self.postBody
+                if newPostBody != nil {
+                    newPostBody = newPostBody!.replacingOccurrences(of: "\r", with: "<br>")
+                    let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
+                    let range = NSRange(location: 0, length: newPostBody!.utf16.count)
+                    
+                    let matches = regex.matches(in: newPostBody!, options: [], range: range)
+                    
+                    var imageUrls: [String] = []
+                    
+                    for match in matches {
+                        if let urlRange = Range(match.range(at: 1), in: newPostBody!) {
+                            let imageUrl = String(newPostBody![urlRange])
+                            imageUrls.append(imageUrl)
+                        }
+                    }
+                }
+                if shortBody && newPostBody != nil && newPostBody!.count > PostUIView.maxPostLength {
+                    newPostBody = String(newPostBody!.prefix(PostUIView.maxPostLength))
+                    newPostBody = newPostBody!.trimmingCharacters(in: .whitespacesAndNewlines)
+                    newPostBody = newPostBody! + "... **Read More**"
+                }
+                return continuation.resume(returning: newPostBody)
             }
         }
     }
