@@ -26,8 +26,8 @@ fileprivate struct NoBodyPost: Codable {
 final class RequestHandler {
     public final let VERSION = "v3"
 
-    public func makeApiRequest(host: String, request: String, method: HTTPMethod, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
-        var urlString = host.contains("github.com") ? "\(host)\(request)" : "\(host)/api/\(self.VERSION)\(request)"
+    public func makeApiRequest(host: String, request: String, method: HTTPMethod, headers: [String:String]? = nil, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
+        var urlString = host.containsAny("github.com", "imgur.com") ? "\(host)\(request)" : "\(host)/api/\(self.VERSION)\(request)"
     
         if !urlString.starts(with: "http") {
             urlString = "https://\(urlString)"
@@ -86,6 +86,12 @@ final class RequestHandler {
             } catch {
                 completion(.failure(error))
                 return
+            }
+        }
+        
+        if let _headers = headers {
+            for header in _headers {
+                request.setValue(header.value, forHTTPHeaderField: header.key)
             }
         }
         
