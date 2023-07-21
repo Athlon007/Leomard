@@ -17,6 +17,7 @@
 - Update checking on launch
 - Image uploading
 - Search within community
+- OP indicator in the comments
 
 ### Changes
 
