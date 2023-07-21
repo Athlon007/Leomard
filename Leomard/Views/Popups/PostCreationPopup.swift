@@ -299,6 +299,7 @@ struct PostCreationPopup: View {
             .init(importedAs: "leomard.supported.image.types.gif")
         ]
         panel.begin { (result) -> Void in
+            self.contentView.toggleInteraction(true)
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
                 let imageService = ImageService(requestHandler: RequestHandler())
                 imageService.uploadImage(url: url) { result in
@@ -330,5 +331,6 @@ struct PostCreationPopup: View {
             }
         }
         panel.orderFrontRegardless()
+        self.contentView.toggleInteraction(false)
     }
 }

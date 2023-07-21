@@ -43,6 +43,8 @@ struct ContentView: View {
     
     @State var addingNewUser: Bool = false
     
+    @State var interactionEnabled: Bool = true
+    
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
@@ -111,6 +113,7 @@ struct ContentView: View {
                 .opacity(postHidden ? 0 : 1)
             postCreationPopup(openedPostMakingForCommunity)
         }
+        .allowsHitTesting(interactionEnabled)
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -356,5 +359,9 @@ struct ContentView: View {
     
     func endNewUserLogin() {
         addingNewUser = false
+    }
+    
+    func toggleInteraction(_ enabled: Bool) {
+        interactionEnabled = enabled
     }
 }
