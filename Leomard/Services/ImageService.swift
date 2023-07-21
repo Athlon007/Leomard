@@ -30,9 +30,15 @@ class ImageService: Service {
             return
         }
         
+        let apiKey = Bundle.main.infoDictionary?["IMGUR_KEY"] as? String
+        if apiKey == nil || apiKey == "" || apiKey == "api_key_goes_here" {
+            completion(.failure(LeomardExceptions.missingApiKey("Imgur API Key is missing")))
+            return
+        }
+        
         let body = ImgurImageUploadForm(image: base64)
         let headers: [String:String] = [
-            "Authorization": "Client-Id " // TODO: Add key here.
+            "Authorization": "Client-Id \(apiKey!)"
         ]
         
         requestHandler.makeApiRequest(host: "https://api.imgur.com", request: "/3/image", method: .post, headers: headers, body: body) {

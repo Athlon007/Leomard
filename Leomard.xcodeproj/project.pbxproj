@@ -158,6 +158,7 @@
 		B0D948742A6AA6E20039D0D6 /* ImgurImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948732A6AA6E20039D0D6 /* ImgurImage.swift */; };
 		B0D948762A6AA72F0039D0D6 /* ImgurImageUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948752A6AA72F0039D0D6 /* ImgurImageUploadResponse.swift */; };
 		B0D948782A6AABF50039D0D6 /* ImgurImageUploadForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948772A6AABF50039D0D6 /* ImgurImageUploadForm.swift */; };
+		B0D9487A2A6AB1850039D0D6 /* Keys.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -864,6 +865,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0D9487A2A6AB1850039D0D6 /* Keys.xcconfig in Resources */,
 				B01ECC5F2A505357005ECF36 /* Preview Assets.xcassets in Resources */,
 				B0D6E94B2A603A60008C6F0F /* Credits.rtf in Resources */,
 				B01ECC5C2A505357005ECF36 /* Assets.xcassets in Resources */,
@@ -1186,6 +1188,7 @@
 		};
 		B01ECC7A2A505357005ECF36 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1215,6 +1218,7 @@
 		};
 		B01ECC7B2A505357005ECF36 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
