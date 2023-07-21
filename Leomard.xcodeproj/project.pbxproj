@@ -154,6 +154,7 @@
 		B0D7A1692A5356B900FE2852 /* CommentUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D7A1682A5356B900FE2852 /* CommentUIView.swift */; };
 		B0D7A16B2A53929200FE2852 /* ElapsedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D7A16A2A53929200FE2852 /* ElapsedTime.swift */; };
 		B0D7A16F2A5420E600FE2852 /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D7A16E2A5420E600FE2852 /* AnimatedImage.swift */; };
+		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -333,6 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B00695E12A50E56500206C77 /* MarkdownUI in Frameworks */,
+				E45A506A2A69E263008ED437 /* NukeUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,6 +746,7 @@
 			name = Leomard;
 			packageProductDependencies = (
 				B00695E02A50E56500206C77 /* MarkdownUI */,
+				E45A50692A69E263008ED437 /* NukeUI */,
 			);
 			productName = Leomard;
 			productReference = B01ECC542A505356005ECF36 /* Leomard.app */;
@@ -819,6 +822,7 @@
 			mainGroup = B01ECC4B2A505356005ECF36;
 			packageReferences = (
 				B00695DF2A50E56500206C77 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				E45A50682A69E262008ED437 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = B01ECC552A505356005ECF36 /* Products */;
 			projectDirPath = "";
@@ -1326,6 +1330,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		E45A50682A69E262008ED437 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1333,6 +1345,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B00695DF2A50E56500206C77 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		E45A50692A69E263008ED437 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E45A50682A69E262008ED437 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

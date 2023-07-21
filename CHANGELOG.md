@@ -20,6 +20,8 @@
 
 - **Massive** refactoring of UI code, thanks to [boscojwho](https://github.com/boscojwho) on GitHub
 - Post views are now a bit prettier (thanks to boscojwho)
+- Replaced stock AsyncImage with Nuke
+- Improved load time of the app (both from cold start and from background)
 
 ### Bug Fixes
 

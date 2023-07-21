@@ -110,27 +110,22 @@ struct FeedView: View {
     /// Infinite scrolling view for this feed's content
     @ViewBuilder
     private var feedPostsList: some View {
-        // - TODO: `scrollProxy` is expensive and isn't being used, remove?
-        ScrollViewReader { scrollProxy in
-            List {
-                ForEach(postsResponse.posts, id: \.self) { postView in
-                    PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
-                        .onAppear {
-                            if postView == self.postsResponse.posts.last {
-                                self.loadPosts()
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    Spacer()
+        List(postsResponse.posts, id: \.post.id) { postView in
+            PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                .onAppear {
+                    if postView == self.postsResponse.posts.last {
+                        self.loadPosts()
+                    }
                 }
-            }
-            .frame(
-                minWidth: 0,
-                maxWidth: 600,
-                maxHeight: .infinity,
-                alignment: .center
-            )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Spacer()
         }
+        .frame(
+            minWidth: 0,
+            maxWidth: 600,
+            maxHeight: .infinity,
+            alignment: .center
+        )
     }
     
     @ViewBuilder
