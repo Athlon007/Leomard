@@ -149,7 +149,7 @@ struct CommentUIView: View {
                         .foregroundColor(Color(.secondaryLabelColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    let content = MarkdownContent(commentView.comment.content)
+                    let content = MarkdownContent(commentView.comment.content.formatMarkdown())
                     Markdown(content)
                         .lineLimit(nil)
                         .frame(
