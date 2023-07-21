@@ -223,7 +223,7 @@ struct PostUIView: View {
     @ViewBuilder
     private func staticImage(_ thumbnailUrl: String?, @ViewBuilder imageBlock: @escaping (Image) -> some View) -> some View {
         if let thumbnailUrl {
-            LazyImage(url: .init(string: thumbnailUrl)) { state in
+            LazyImage(url: .init(string: thumbnailUrl), transaction: .init(animation: .easeOut(duration: 0.2))) { state in
                 if let image = state.image {
                     imageBlock(image)
                 } else if state.error != nil {
@@ -232,7 +232,7 @@ struct PostUIView: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                 }
-            }
+            }.onDisappear(.lowerPriority)
         }
     }
     
