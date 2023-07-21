@@ -104,6 +104,7 @@
 		B091F87C2A5AA56C00F0DA32 /* SavePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87B2A5AA56C00F0DA32 /* SavePost.swift */; };
 		B091F87E2A5AA84F00F0DA32 /* SaveComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87D2A5AA84F00F0DA32 /* SaveComment.swift */; };
 		B091F8802A5AE3A300F0DA32 /* LemmyInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */; };
+		B0CBC65C2A6A8E8B006E3A43 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CBC65B2A6A8E8B006E3A43 /* ImageService.swift */; };
 		B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */; };
 		B0CEBE3F2A51982E00982D4D /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE3E2A51982E00982D4D /* Option.swift */; };
 		B0CEBE412A51989D00982D4D /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CEBE402A51989D00982D4D /* FeedView.swift */; };
@@ -274,6 +275,8 @@
 		B091F87B2A5AA56C00F0DA32 /* SavePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavePost.swift; sourceTree = "<group>"; };
 		B091F87D2A5AA84F00F0DA32 /* SaveComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveComment.swift; sourceTree = "<group>"; };
 		B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LemmyInstance.swift; sourceTree = "<group>"; };
+		B0CBC65B2A6A8E8B006E3A43 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		B0CBC65D2A6A9089006E3A43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B0CEBE3B2A5197AC00982D4D /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		B0CEBE3E2A51982E00982D4D /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B0CEBE402A51989D00982D4D /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -405,6 +408,7 @@
 		B01ECC562A505356005ECF36 /* Leomard */ = {
 			isa = PBXGroup;
 			children = (
+				B0CBC65D2A6A9089006E3A43 /* Info.plist */,
 				B05B21532A5F32FD00BA8FB2 /* AppStorage */,
 				B01ECC5B2A505357005ECF36 /* Assets.xcassets */,
 				B0D6E94A2A603A60008C6F0F /* Credits.rtf */,
@@ -539,6 +543,7 @@
 				B05B213D2A5EAB6000BA8FB2 /* RepliesService.swift */,
 				B05B213F2A5EADF700BA8FB2 /* PrivateMessageService.swift */,
 				B059982C2A693A0400267636 /* GithubService.swift */,
+				B0CBC65B2A6A8E8B006E3A43 /* ImageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -880,6 +885,7 @@
 				B091F8712A58769100F0DA32 /* SearchView.swift in Sources */,
 				B05998372A698AC000267636 /* UpdateFrequency.swift in Sources */,
 				B091F8402A547A7E00F0DA32 /* CreatePostLike.swift in Sources */,
+				B0CBC65C2A6A8E8B006E3A43 /* ImageService.swift in Sources */,
 				B091F86F2A5832D700F0DA32 /* SearchType.swift in Sources */,
 				B091F87A2A59C5AE00F0DA32 /* UserPreferences.swift in Sources */,
 				B0CEBE7D2A52CFA600982D4D /* MyUserInfo.swift in Sources */,
@@ -1169,6 +1175,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Leomard/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Leomard/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Leomard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -1197,6 +1204,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Leomard/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Leomard/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Leomard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

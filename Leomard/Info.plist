@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeDescription</key>
+			<string>Image Upload Types</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>leomard.supported.image.types</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>png</string>
+					<string>jpg</string>
+					<string>jpeg</string>
+					<string>webp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/jpeg</string>
+					<string>image/png</string>
+					<string>image/png</string>
+					<string>image/webp</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -57,24 +57,27 @@ struct PostCreationPopup: View {
                     .padding(.bottom, 0)
                     
                     VStack {
-                        Text("Title")
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .fontWeight(.semibold)
-                        TextField("", text: $title)
-                        Text("URL")
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .fontWeight(.semibold)
-                        TextField("", text: $url)
-                            .onChange(of: url) { _ in
-                                checkUrlValidity()
-                            }
-                            .border(!isUrlValid ? .red : .clear, width: 4)
+                        VStack(alignment: .leading) {
+                            Text("Title")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            TextField("", text: $title)
+                            Text("URL")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            TextField("", text: $url)
+                                .onChange(of: url) { _ in
+                                    checkUrlValidity()
+                                }
+                                .border(!isUrlValid ? .red : .clear, width: 4)
+                            Button("Add Image", action: addImage)
+                        }
                         Text("Body")
                             .frame(
                                 maxWidth: .infinity,
@@ -259,5 +262,24 @@ struct PostCreationPopup: View {
                 self.isUrlValid = success
             }
         }
+    }
+    
+    func addImage() {
+        let panel = NSOpenPanel()
+        panel.prompt = "Select file"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [ .init(importedAs: "leomard.supported.image.types") ]
+        panel.begin { (result) -> Void in
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
+                let imageService = ImageService(requestHandler: RequestHandler())
+                imageService.uploadImage(url: url) { result in
+                    
+                }
+            }
+        }
+        panel.orderFrontRegardless()
     }
 }
