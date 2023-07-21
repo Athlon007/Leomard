@@ -9,4 +9,5 @@ import Foundation
 
 enum LeomardExceptions: Error {
     case versionFromStringDecodeError(String)
+    case fileSizeTooLarge(String)
 }

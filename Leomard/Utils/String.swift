@@ -32,4 +32,14 @@ extension String {
         
         return String(mutableMarkdownText)
     }
+    
+    func containsAny(_ haystack: String...) -> Bool {
+        for needle in haystack {
+            if self.contains(needle) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
