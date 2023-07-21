@@ -105,6 +105,7 @@ struct CommunityUISidebarView: View {
                     Button(action: openPostCreator) {
                         Image(systemName: "square.and.pencil")
                     }
+                    .buttonStyle(.borderedProminent)
                     .frame(
                         alignment: .leading
                     )
