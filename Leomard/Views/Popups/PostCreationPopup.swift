@@ -271,7 +271,12 @@ struct PostCreationPopup: View {
         panel.canChooseDirectories = false
         panel.canCreateDirectories = false
         panel.canChooseFiles = true
-        panel.allowedContentTypes = [ .init(importedAs: "leomard.supported.image.types") ]
+        panel.allowedContentTypes = [
+            .init(importedAs: "leomard.supported.image.types.jpg"),
+            .init(importedAs: "leomard.supported.image.types.jpeg"),
+            .init(importedAs: "leomard.supported.image.types.png"),
+            .init(importedAs: "leomard.supported.image.types.webp")
+        ]
         panel.begin { (result) -> Void in
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
                 let imageService = ImageService(requestHandler: RequestHandler())
