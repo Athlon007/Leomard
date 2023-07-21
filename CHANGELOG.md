@@ -16,6 +16,7 @@
 - Blocking communities
 - Update checking on launch
 - Image uploading
+- Search within community
 
 ### Changes
 
