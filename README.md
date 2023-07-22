@@ -1,7 +1,7 @@
 #  Leomard
 
 [![](https://img.shields.io/github/downloads/Athlon007/Leomard/total)](https://github.com/Athlon007/Leomard/releases)
-[![](https://img.shields.io/github/v/release/Athlon007/Leomard?include_prereleases&label=Latest)](https://github.com/Athlon007/Leomard/releases)
+[![](https://img.shields.io/github/v/release/Athlon007/Leomard?include_prereleases)](https://github.com/Athlon007/Leomard/releases)
 [![](https://img.shields.io/github/license/Athlon007/Leomard)](LICENSE.md)
 [![](https://img.shields.io/lemmy/leomard%40lemm.ee)](https://lemm.ee/c/leomard)
 
