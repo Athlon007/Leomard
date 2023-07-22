@@ -170,6 +170,7 @@ struct FeedView: View {
                 maxHeight: .infinity,
                 alignment: .center
             )
+        }
     }
     
     @ViewBuilder
