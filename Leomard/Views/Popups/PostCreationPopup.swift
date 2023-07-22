@@ -325,8 +325,8 @@ struct PostCreationPopup: View {
                         }
                     case .failure(let error):
                         isUploadingImage = false
-                        if error is LeomardExceptions, let failReason = (error as! LeomardExceptions).tryGetErrorMessage() {
-                            self.imageUploadFailReason = failReason
+                        if error is LeomardExceptions {
+                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
                         } else {
                             self.imageUploadFailReason = "Unable to upload the image :("
                         }
