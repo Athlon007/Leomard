@@ -314,8 +314,8 @@ struct ProfileView: View {
             case .success(let personDetails):
                 DispatchQueue.main.sync {
                     if self.personDetails != nil {
-                        self.personDetails!.posts += personDetails.posts
-                        self.personDetails!.comments += personDetails.comments
+                        self.personDetails!.posts += personDetails.posts.filter { !self.personDetails!.posts.contains($0) }
+                        self.personDetails!.comments += personDetails.comments.filter { !self.personDetails!.comments.contains($0) }
                     } else {
                         self.personDetails = personDetails
                     }

@@ -39,9 +39,14 @@ final class FeedViewModel: ObservableObject {
             listingType: selectedListing) { result in
                 Task { @MainActor in
                     switch result {
-                    case .success(let postsResponse) :
-                        self.postsResponse.posts += postsResponse.posts
+                    case .success(let postsResponse):
+                        let initialCount = self.postsResponse.posts.count
+                        self.postsResponse.posts += postsResponse.posts.filter { !self.postsResponse.posts.contains($0) }
                         self.isLoadingPosts = false
+                        if initialCount == self.postsResponse.posts.count {
+                            // No posts were added. Call loadPosts() again.
+                            self.loadPosts()
+                        }
                     case .failure(let error):
                         print(error)
                         self.isLoadingPosts = false

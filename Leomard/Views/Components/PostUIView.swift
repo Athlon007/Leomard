@@ -218,6 +218,7 @@ struct PostUIView: View {
             Spacer()
             staticImage(postView.post.thumbnailUrl) { image in
                 image
+                    .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .cornerRadius(4)
