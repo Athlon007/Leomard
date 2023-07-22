@@ -110,4 +110,11 @@ class PostService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func report(post: Post, reason: String, completion: @escaping (Result<PostReportResponse, Error>) -> Void) {
+        let body = CreatePostReport(postId: post.id, reason: reason)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/report", method: .post) { result in
+            self.respond(result, completion)
+        }
+    }
 }
