@@ -23,6 +23,7 @@ struct CommunityUIView: View {
     ]
     
     @State var communityService: CommunityService?
+    @State var searchService: SearchService?
     
     @State var selectedSortType: SortType = .active
     @State var selectedBrowseOption: Option = Option(id: 0, title: "Posts", imageName: "doc.plaintext")
@@ -31,6 +32,13 @@ struct CommunityUIView: View {
     @State var posts: [PostView] = []
     @State var comments: [CommentView] = []
     @State var page: Int = 1
+    
+    @State var searchVisible: Bool = false
+    @State var searchQuery: String = ""
+    @State var lastQuery: String = ""
+    @State var showSearchPosts: Bool = false
+    
+    @State var isLoading: Bool = false
     
     var body: some View {
         toolbar
@@ -94,6 +102,7 @@ struct CommunityUIView: View {
                     default:
                         postsList
                     }
+                    
                 }
             }
             .frame(
@@ -132,9 +141,15 @@ struct CommunityUIView: View {
     @ViewBuilder
     private var commentsList: some View {
         if self.comments == [] {
-            Text("No comments found!")
-                .italic()
-                .foregroundColor(.secondary)
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity)
+            } else {
+                Text("No comments found!")
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             ForEach(comments, id: \.self) { commentView in
                 VStack {
@@ -174,9 +189,15 @@ struct CommunityUIView: View {
     @ViewBuilder
     private var postsList: some View {
         if self.posts == [] {
-            Text("No posts found!")
-                .italic()
-                .foregroundColor(.secondary)
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity)
+            } else {
+                Text("No posts found!")
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
         } else {
             ForEach(posts, id: \.self) { postView in
                 PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
@@ -208,7 +229,7 @@ struct CommunityUIView: View {
                     .buttonStyle(.link)
             }
             Spacer()
-            HStack {
+            HStack(alignment: .center) {
                 HStack {
                     Image(systemName: selectedBrowseOption.imageName)
                         .padding(.trailing, 0)
@@ -240,15 +261,30 @@ struct CommunityUIView: View {
                 Button(action: reloadFeed) {
                     Image(systemName: "arrow.clockwise")
                 }
-            }
+            }.disabled(searchVisible)
             Spacer()
+            HStack {
+                if searchVisible {
+                    TextField("Search", text: $searchQuery)
+                        .frame(maxWidth: 200)
+                        .onSubmit {
+                            search()
+                        }
+                }
+                Button(action: toggleSearch) {
+                    Image(systemName: "magnifyingglass")
+                }
+                .buttonStyle(.link)
+            }
         }
     }
     
     // MARK: -
     
     func loadCommunity() {
+        isLoading = true
         self.communityService?.getCommunity(id: self.community.id) { result in
+            isLoading = false
             switch result {
             case .success(let response):
                 self.communityResponse = response
@@ -260,8 +296,16 @@ struct CommunityUIView: View {
         }
     }
     
-    func loadPosts() {        
+    func loadPosts() {
+        if showSearchPosts {
+            self.search()
+            return
+        }
+        
+        isLoading = true
+        
         self.postService.getPostsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
+            isLoading = false
             switch result {
             case .success(let postsResponse):
                 self.posts += postsResponse.posts
@@ -273,7 +317,9 @@ struct CommunityUIView: View {
     }
     
     func loadComments() {
+        isLoading = true
         self.commentService.getCommentsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
+            isLoading = false
             switch result {
             case .success(let commentsResponse):
                 self.comments += commentsResponse.comments
@@ -310,6 +356,48 @@ struct CommunityUIView: View {
     func addNewPost(postView: PostView) {
         DispatchQueue.main.async {
             self.posts.insert(postView, at: 0)
+        }
+    }
+    
+    func toggleSearch() {
+        searchVisible = !searchVisible
+        
+        if !searchVisible && showSearchPosts {
+            page = 1
+            showSearchPosts = false
+            posts.removeAll()
+            loadPosts()
+        }
+        
+        if searchVisible {
+            searchQuery = ""
+        }
+    }
+    
+    func search() {
+        if self.searchService == nil {
+            self.searchService = SearchService(requestHandler: RequestHandler())
+        }
+        
+        isLoading = true
+        
+        if !showSearchPosts || searchQuery != lastQuery {
+            showSearchPosts = true
+            page = 1
+            selectedBrowseOption = browseOptions[0]
+            lastQuery = searchQuery
+            self.posts.removeAll()
+        }
+        
+        self.searchService!.search(community: community, query: searchQuery, searchType: .posts, page: page) { result in
+            isLoading = false
+            switch result {
+            case .success(let response):
+                self.posts += response.posts
+                page += 1
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }

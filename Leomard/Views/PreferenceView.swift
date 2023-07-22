@@ -14,9 +14,12 @@ fileprivate struct FrequencyOption: Hashable, Equatable {
 }
 
 struct PreferencesView: View {
+    let checkForUpdateMethod: () -> Void
+    
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
+        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green),
         .init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
     @State fileprivate var currentSelection: PreferenceOption?
@@ -30,6 +33,7 @@ struct PreferencesView: View {
         .init(name: "10 minutes", seconds: 60 * 10)
     ]
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
+    @State var manuallyCheckedForUpdate: Bool = false
     
     @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
     
@@ -95,6 +99,7 @@ struct PreferencesView: View {
             .frame(
                 width: 20, height: 20
             )
+            .shadow(radius: 0.5)
             Text(option.name)
                 .frame(
                     maxWidth: .infinity,
@@ -112,11 +117,13 @@ struct PreferencesView: View {
         List {
             VStack(alignment: .leading, spacing: 20) {
                 switch currentSelection {
-                case self.preferenceOptions[0]:
+                case preferenceOptions[0]:
                     generalPreferences
-                case self.preferenceOptions[1]:
+                case preferenceOptions[1]:
                     contentPreferences
                 case preferenceOptions[2]:
+                    updatesPreferences
+                case preferenceOptions[3]:
                     experimentalPreferences
                 default:
                     Text("")
@@ -175,6 +182,31 @@ struct PreferencesView: View {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
+        }
+    }
+    
+    @ViewBuilder
+    private var updatesPreferences: some View {
+        VStack(alignment: .leading) {
+            Picker("Check for updates", selection: UserPreferences.getInstance.$checkForUpdateFrequency) {
+                ForEach(UpdateFrequency.allCases, id: \.self) { option in
+                    Text(String(describing: option))
+                }
+            }
+            HStack(spacing: 10) {
+                Button("Check for update", action: {
+                    self.checkForUpdateMethod()
+                    manuallyCheckedForUpdate = true
+                })
+                .disabled(manuallyCheckedForUpdate)
+                Text("Last updated:")
+                DateDisplayView(date: UserPreferences.getInstance.lastUpdateCheckDate, showRealTime: true, noBrackets: true, noTapAction: true)
+                if manuallyCheckedForUpdate {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.green)
+                }
+            }
+            .padding(.top)
         }
     }
     

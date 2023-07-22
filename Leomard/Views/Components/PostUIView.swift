@@ -171,8 +171,8 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var postBodyMarkdown: some View {
-        if self.postBody != nil {
-            let content = MarkdownContent(self.postBody!)
+        if let body = self.postBody {
+            let content = MarkdownContent(body)
             Markdown(content)
                 .frame(
                     minWidth: 0,

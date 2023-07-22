@@ -19,20 +19,27 @@ struct APIResponse {
     let data: Data?
 }
 
-struct NoBodyPost: Codable {
+fileprivate struct NoBodyPost: Codable {
     let auth: String
 }
 
 final class RequestHandler {
     public final let VERSION = "v3"
 
-
-    public func makeApiRequest(host: String, request: String, method: HTTPMethod, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
-        Task(priority: .userInitiated) {
-            var urlString = "\(host)/api/\(self.VERSION)\(request)"
-            
-            if !urlString.starts(with: "http") {
-                urlString = "https://\(urlString)"
+    public func makeApiRequest(host: String, request: String, method: HTTPMethod, headers: [String:String]? = nil, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
+      Task(priority: .userInitiated) {
+        var urlString = host.containsAny("github.com", "imgur.com") ? "\(host)\(request)" : "\(host)/api/\(self.VERSION)\(request)"
+    
+        if !urlString.starts(with: "http") {
+            urlString = "https://\(urlString)"
+        }
+        
+        if SessionStorage.getInstance.isSessionActive() && method == .get {
+            let jwt = SessionStorage.getInstance.getCurrentSession()?.loginResponse.jwt
+            if !urlString.contains("?") {
+                urlString += "?auth=\(jwt!)"
+            } else {
+                urlString += "&auth=\(jwt!)"
             }
             
             if SessionStorage.getInstance.isSessionActive() && method == .get {
@@ -46,6 +53,17 @@ final class RequestHandler {
             
             guard let url = URL(string: urlString) else {
                 completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+        }
+        
+        if let _headers = headers {
+            for header in _headers {
+                request.setValue(header.value, forHTTPHeaderField: header.key)
+            }
+        }
+        
+        URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
                 return
             }
             

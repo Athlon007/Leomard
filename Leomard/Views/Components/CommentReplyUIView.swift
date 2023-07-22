@@ -315,6 +315,5 @@ struct CommentReplyUIView: View {
                 print(error)
             }
         }
-                                                    
     }
 }

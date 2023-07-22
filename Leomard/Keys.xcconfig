@@ -1,0 +1,11 @@
+//
+//  Keys.xcconfig
+//  Leomard
+//
+//  Created by Konrad Figura on 21/07/2023.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+IMGUR_KEY = api_key_goes_here

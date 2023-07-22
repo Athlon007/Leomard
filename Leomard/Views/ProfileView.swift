@@ -33,6 +33,8 @@ struct ProfileView: View {
     
     @State var sessionChangeFail: Bool = false
     
+    @State var showLogoutAlert: Bool = false
+    
     var body: some View {
         toolbar
             .frame(
@@ -63,17 +65,15 @@ struct ProfileView: View {
         VStack {
             GeometryReader { proxy in
                 HStack {
-                    ScrollViewReader { scrollProxy in
-                        profileContentList(
-                            personDetails,
-                            sidebarVisible: proxy.size.width < 1000)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
+                    profileContentList(
+                        personDetails,
+                        sidebarVisible: proxy.size.width < 1000)
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: 600,
+                        maxHeight: .infinity,
+                        alignment: .center
+                    )
                     
                     profileSidebar(visible: proxy.size.width > 1000)
                         .frame(
@@ -267,7 +267,13 @@ struct ProfileView: View {
                 .onChange(of: selectededSession) { change in
                     performSwitch(change)
                 }
-                Button("Logout", action: logout)
+                Button("Logout", action: { showLogoutAlert = true })
+                    .alert("Logout", isPresented: $showLogoutAlert, actions: {
+                        Button("Logout", role: .destructive) { logout() }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: {
+                        Text("Are you sure you want to logout?")
+                    })
             }
         }
     }
@@ -275,9 +281,26 @@ struct ProfileView: View {
     // MARK: -
     
     func logout() {
-        _ = SessionStorage.getInstance.endSession()
-        contentView.navigateToFeed()
-        contentView.logout()
+        let toDestroy = SessionStorage.getInstance.getCurrentSession()
+        if SessionStorage.getInstance.getAllSessions().count > 1 {
+            // Is there more than 1 session stored? Switch to the one that's not used
+            if SessionStorage.getInstance.getAllSessions()[0] == toDestroy {
+                _ = SessionStorage.getInstance.setCurrentSession(SessionStorage.getInstance.getAllSessions()[1])
+            } else {
+                _ = SessionStorage.getInstance.setCurrentSession(SessionStorage.getInstance.getAllSessions()[0])
+            }
+            
+            // Destroy the session
+            _ = SessionStorage.getInstance.remove(session: toDestroy!)
+            
+            self.contentView.navigateToFeed()
+            self.contentView.loadUserData()
+        } else {
+            _ = SessionStorage.getInstance.endSession()
+            _ = SessionStorage.getInstance.remove(session: toDestroy!)
+            contentView.navigateToFeed()
+            contentView.logout()
+        }
     }
     
     func loadPersonDetails() {

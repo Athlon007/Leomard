@@ -66,6 +66,16 @@ struct CommentUIView: View {
                                 contentView.openPerson(profile: commentView.creator)
 
                             }
+                        if commentView.post.creatorId == commentView.creator.id {
+                            HStack {
+                                Text("OP")
+                                    .padding(2)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 8))
+                            }
+                            .background(Color(.linkColor))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                        }
                         HStack {
                             Image(systemName: "arrow.up")
                             Text(String(commentView.counts.upvotes))
@@ -149,7 +159,7 @@ struct CommentUIView: View {
                         .foregroundColor(Color(.secondaryLabelColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    let content = MarkdownContent(commentView.comment.content)
+                    let content = MarkdownContent(commentView.comment.content.formatMarkdown())
                     Markdown(content)
                         .lineLimit(nil)
                         .frame(
