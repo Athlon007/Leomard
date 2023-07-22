@@ -28,19 +28,14 @@ struct CommentContextMenu: View {
                 .padding()
         }
         Divider()
-        Button(action: {
-            contentView.startReport(commentView.comment)
-        }) {
-            Text("Report")
-                .padding()
+        if commentView.creator != contentView.myUser?.localUserView.person {
+            Button(action: {
+                contentView.startReport(commentView.comment)
+            }) {
+                Text("Report")
+                    .padding()
+            }
         }
-        Button(action: {
-            
-        }) {
-            Text("Block User")
-                .padding()
-        }
-        .disabled(true)
     }
 }
 
