@@ -32,21 +32,6 @@ struct PersonContextMenu: View {
             Text("Copy Handle")
                 .padding()
         }
-        Divider()
-        Button(action: {
-            
-        }) {
-            Text("Report")
-                .padding()
-        }
-        .disabled(true)
-        Button(action: {
-            
-        }) {
-            Text("Block")
-                .padding()
-        }
-        .disabled(true)
     }
 }
 
