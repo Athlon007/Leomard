@@ -154,6 +154,9 @@ struct FeedView: View {
     private var feedPostsList: some View {
         // - TODO: `scrollProxy` is expensive and isn't being used, remove?
         ScrollViewReader { scrollProxy in
+            if viewModel.isLoadingPosts && viewModel.postsResponse.posts.count == 0 {
+                ProgressView().progressViewStyle(.circular).padding(.top, 20)
+            }
             List(viewModel.postsResponse.posts, id: \.post.id) { postView in
                 PostUIView(
                     postView: postView,
