@@ -38,6 +38,8 @@ struct PostUIView: View {
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
 
+    @State private var performedTasksWillAppear = false
+    
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -73,11 +75,14 @@ struct PostUIView: View {
                 maxHeight: .infinity,
                 alignment: .top
             )
-            
+
             .task {
-                postBody = await postBodyTask()
-                url = await postUrlTask()
-                updatedTimeAsString = await updatedTimeAsStringTask()
+                if performedTasksWillAppear == false {
+                    performedTasksWillAppear = true
+                    postBody = await postBodyTask()
+                    url = await postUrlTask()
+                    updatedTimeAsString = await updatedTimeAsStringTask()
+                }
             }
             .onTapGesture {
                 self.contentView.openPost(postView: self.postView)
