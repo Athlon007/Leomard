@@ -134,4 +134,11 @@ class CommentService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func report(comment: Comment, reason: String, completion: @escaping (Result<CommentReportResponse, Error>) -> Void) {
+        let body = CreateCommentReport(commentId: comment.id, reason: reason)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/comment/report", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CommentContextMenu: View {
+    let contentView: ContentView
     let commentView: CommentView
     @Environment(\.openURL) var openURL
     
@@ -28,12 +29,11 @@ struct CommentContextMenu: View {
         }
         Divider()
         Button(action: {
-            
+            contentView.startReport(commentView.comment)
         }) {
             Text("Report")
                 .padding()
         }
-        .disabled(true)
         Button(action: {
             
         }) {

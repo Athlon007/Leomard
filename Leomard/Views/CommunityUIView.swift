@@ -210,7 +210,7 @@ struct CommunityUIView: View {
                         self.contentView.openPost(postView: postView)
                     }
                     .contextMenu {
-                        PostContextMenu(postView: postView)
+                        PostContextMenu(contentView: self.contentView, postView: postView)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Spacer()
