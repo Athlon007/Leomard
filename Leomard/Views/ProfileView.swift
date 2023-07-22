@@ -44,7 +44,7 @@ struct ProfileView: View {
             .padding(.leading)
             .padding(.trailing)
         profileContent
-            .cornerRadius(4)
+            .cornerRadius(8)
             .task {
                 if person == myself?.localUserView.person {
                     browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
@@ -107,7 +107,7 @@ struct ProfileView: View {
                         minWidth: 0,
                         maxWidth: .infinity
                     )
-                    .cornerRadius(4)
+                    .cornerRadius(8)
                     .padding(.bottom, 15)
                 }
                 switch selectedBrowseOption.id {
@@ -145,7 +145,7 @@ struct ProfileView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.textBackgroundColor))
-                .cornerRadius(4)
+                .cornerRadius(8)
                 .onTapGesture {
                     self.loadPostFromComment(commentView: commentView)
                 }
@@ -189,7 +189,7 @@ struct ProfileView: View {
                     minWidth: 0,
                     maxWidth: .infinity
                 )
-                .cornerRadius(4)
+                .cornerRadius(8)
             }
         }
     }
