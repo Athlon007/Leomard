@@ -78,7 +78,7 @@ struct FeedView: View {
                 idealWidth: .infinity
             )
         feedContent
-            .cornerRadius(4)
+            .cornerRadius(8)
             .task {
                 viewModel.loadPosts()
             }
@@ -191,7 +191,7 @@ struct FeedView: View {
                     minWidth: 0,
                     maxWidth: .infinity
                 )
-                .cornerRadius(4)
+                .cornerRadius(8)
             }
         }
     }
