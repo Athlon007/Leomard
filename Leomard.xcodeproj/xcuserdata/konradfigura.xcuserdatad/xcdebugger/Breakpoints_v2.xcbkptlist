@@ -750,8 +750,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "gifOrImage"
             landmarkType = "24">
             <Locations>
@@ -798,8 +798,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "postBodyMarkdown"
             landmarkType = "24">
          </BreakpointContent>
@@ -814,8 +814,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "postBodyMarkdown"
             landmarkType = "24">
          </BreakpointContent>

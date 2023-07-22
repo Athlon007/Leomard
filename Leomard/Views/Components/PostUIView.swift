@@ -92,23 +92,7 @@ struct PostUIView: View {
     private func postBodyTask() async -> String? {
         return await withCheckedContinuation { continuation in
             Task(priority: .background) {
-                var newPostBody = await self.postView.post.body
-                if newPostBody != nil {
-                    newPostBody = newPostBody!.replacingOccurrences(of: "\r", with: "<br>")
-                    let regex = try! NSRegularExpression(pattern: #"!\[\]\((.*?)\)"#, options: .caseInsensitive)
-                    let range = NSRange(location: 0, length: newPostBody!.utf16.count)
-                    
-                    let matches = regex.matches(in: newPostBody!, options: [], range: range)
-                    
-                    var imageUrls: [String] = []
-                    
-                    for match in matches {
-                        if let urlRange = Range(match.range(at: 1), in: newPostBody!) {
-                            let imageUrl = String(newPostBody![urlRange])
-                            imageUrls.append(imageUrl)
-                        }
-                    }
-                }
+                var newPostBody = await self.postView.post.body?.formatMarkdown()
                 if shortBody && newPostBody != nil && newPostBody!.count > PostUIView.maxPostLength {
                     newPostBody = String(newPostBody!.prefix(PostUIView.maxPostLength))
                     newPostBody = newPostBody!.trimmingCharacters(in: .whitespacesAndNewlines)
