@@ -58,7 +58,7 @@ struct PostContextMenu: View {
         Divider()
         ShareLink(item: URL(string: postView.post .apId)!) {
             Text("Share")
-        }
+        }        
         Button(action: {
             contentView.startReport(postView.post)
         }) {

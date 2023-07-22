@@ -25,6 +25,10 @@
 		B017A3B52A6C3511001949A8 /* PostReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3B42A6C3511001949A8 /* PostReportResponse.swift */; };
 		B017A3B72A6C3537001949A8 /* PostReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3B62A6C3537001949A8 /* PostReportView.swift */; };
 		B017A3B92A6C3595001949A8 /* PostReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3B82A6C3595001949A8 /* PostReport.swift */; };
+		B017A3BB2A6C4F86001949A8 /* CreateCommentReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3BA2A6C4F86001949A8 /* CreateCommentReport.swift */; };
+		B017A3BD2A6C5079001949A8 /* CommentReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3BC2A6C5079001949A8 /* CommentReportResponse.swift */; };
+		B017A3BF2A6C5092001949A8 /* CommentReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3BE2A6C5092001949A8 /* CommentReportView.swift */; };
+		B017A3C12A6C5107001949A8 /* CommentReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3C02A6C5107001949A8 /* CommentReport.swift */; };
 		B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC572A505356005ECF36 /* LeomardApp.swift */; };
 		B01ECC5A2A505356005ECF36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC592A505356005ECF36 /* ContentView.swift */; };
 		B01ECC5C2A505357005ECF36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B01ECC5B2A505357005ECF36 /* Assets.xcassets */; };
@@ -201,6 +205,10 @@
 		B017A3B42A6C3511001949A8 /* PostReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReportResponse.swift; sourceTree = "<group>"; };
 		B017A3B62A6C3537001949A8 /* PostReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReportView.swift; sourceTree = "<group>"; };
 		B017A3B82A6C3595001949A8 /* PostReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReport.swift; sourceTree = "<group>"; };
+		B017A3BA2A6C4F86001949A8 /* CreateCommentReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommentReport.swift; sourceTree = "<group>"; };
+		B017A3BC2A6C5079001949A8 /* CommentReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReportResponse.swift; sourceTree = "<group>"; };
+		B017A3BE2A6C5092001949A8 /* CommentReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReportView.swift; sourceTree = "<group>"; };
+		B017A3C02A6C5107001949A8 /* CommentReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReport.swift; sourceTree = "<group>"; };
 		B01ECC542A505356005ECF36 /* Leomard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Leomard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B01ECC572A505356005ECF36 /* LeomardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardApp.swift; sourceTree = "<group>"; };
 		B01ECC592A505356005ECF36 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -407,6 +415,9 @@
 				B017A3B42A6C3511001949A8 /* PostReportResponse.swift */,
 				B017A3B62A6C3537001949A8 /* PostReportView.swift */,
 				B017A3B82A6C3595001949A8 /* PostReport.swift */,
+				B017A3BC2A6C5079001949A8 /* CommentReportResponse.swift */,
+				B017A3BE2A6C5092001949A8 /* CommentReportView.swift */,
+				B017A3C02A6C5107001949A8 /* CommentReport.swift */,
 			);
 			path = Report;
 			sourceTree = "<group>";
@@ -654,6 +665,7 @@
 				B059981B2A67E55D00267636 /* BlockPerson.swift */,
 				B059981F2A67F9F100267636 /* BlockCommunity.swift */,
 				B017A3B22A6C34CA001949A8 /* CreatePostReport.swift */,
+				B017A3BA2A6C4F86001949A8 /* CreateCommentReport.swift */,
 			);
 			path = Forms;
 			sourceTree = "<group>";
@@ -959,6 +971,7 @@
 				B05B21252A5DB51600BA8FB2 /* Clipboard.swift in Sources */,
 				B05B21202A5D941F00BA8FB2 /* EditPost.swift in Sources */,
 				B0CEBE592A51E8F700982D4D /* ProfileView.swift in Sources */,
+				B017A3BD2A6C5079001949A8 /* CommentReportResponse.swift in Sources */,
 				B0CEBE5D2A52C2CD00982D4D /* GetSiteResponse.swift in Sources */,
 				B091F8692A57716500F0DA32 /* CommunityResponse.swift in Sources */,
 				B05B214E2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift in Sources */,
@@ -976,12 +989,14 @@
 				B017A3B72A6C3537001949A8 /* PostReportView.swift in Sources */,
 				B0D7A16B2A53929200FE2852 /* ElapsedTime.swift in Sources */,
 				B05B211C2A5CAE8900BA8FB2 /* URL.swift in Sources */,
+				B017A3BF2A6C5092001949A8 /* CommentReportView.swift in Sources */,
 				B0D7A15F2A5351CF00FE2852 /* SubscribedType.swift in Sources */,
 				B05B212F2A5EA80E00BA8FB2 /* GetRepliesResponse.swift in Sources */,
 				B05998272A69322700267636 /* ReleaseAsset.swift in Sources */,
 				B0D948782A6AABF50039D0D6 /* ImgurImageUploadForm.swift in Sources */,
 				B05B21322A5EA84600BA8FB2 /* PrivateMessage.swift in Sources */,
 				B0D7A1582A531E5600FE2852 /* LinkHelper.swift in Sources */,
+				B017A3C12A6C5107001949A8 /* CommentReport.swift in Sources */,
 				B00695D12A50C23400206C77 /* Post.swift in Sources */,
 				B05B21272A5DB68500BA8FB2 /* CommentContextMenu.swift in Sources */,
 				B0D7A1612A53524A00FE2852 /* CommentView.swift in Sources */,
@@ -992,6 +1007,7 @@
 				B0CEBE552A51D2F100982D4D /* SessionInfo.swift in Sources */,
 				B0CEBE6D2A52C93400982D4D /* CommunityFollowerView.swift in Sources */,
 				B05B213E2A5EAB6000BA8FB2 /* RepliesService.swift in Sources */,
+				B017A3BB2A6C4F86001949A8 /* CreateCommentReport.swift in Sources */,
 				B0CEBE7A2A52CF6D00982D4D /* PersonBlockView.swift in Sources */,
 				B091F83A2A544BFC00F0DA32 /* PageSidebarUIView.swift in Sources */,
 				B091F84C2A55791C00F0DA32 /* CreateComment.swift in Sources */,

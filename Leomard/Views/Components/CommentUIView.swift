@@ -258,7 +258,7 @@ struct CommentUIView: View {
                 }
             }
             .contextMenu {
-                CommentContextMenu(commentView: self.commentView)
+                CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
             }
         }
     }

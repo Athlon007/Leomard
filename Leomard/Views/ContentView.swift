@@ -8,7 +8,7 @@
 import SwiftUI
 import MarkdownUI
 
-struct ContentView: View {    
+struct ContentView: View {
     @State var currentSelection: Option = Option(id: 0, title: "Home", imageName: "house")
     var options: [Option] = [
         .init(id: 0, title: "Feed", imageName: "house"),
@@ -45,7 +45,12 @@ struct ContentView: View {
     
     @State var reportingPost: Bool = false
     @State var reportedPost: Post? = nil
+    @State var reportingComment: Bool = false
+    @State var reportedComment: Comment? = nil
+    
     @State var reportReason: String = ""
+    @State var reportSent: Bool = false
+    @State var reportSuccess: Bool = false
     
     var appIconBadge = AppAlertBadge()
     
@@ -117,18 +122,51 @@ struct ContentView: View {
         }
         .allowsHitTesting(interactionEnabled)
         .overlay(Color.gray.opacity(interactionEnabled ? 0 : 0.5))
-        .alert("Report", isPresented: $reportingPost, actions: {
+        .alert("Report Post", isPresented: $reportingPost, actions: {
             TextField("Reason", text: $reportReason)
             Spacer()
             Button("Report", role: .destructive) {
-                let postService = PostService(requestHandler: RequestHandler())
-                postService.report(post: reportedPost!, reason: reportReason) { result in
+                self.postService!.report(post: reportedPost!, reason: reportReason) { result in
+                    switch result {
+                    case .success(_):
+                        reportSuccess = true
+                        reportSent = true
+                    case .failure(let error):
+                        print(error)
+                        reportSuccess = false
+                        reportSent = true
+                    }
                 }
             }
+            .disabled(reportReason.count == 0)
             Button("Cancel", role: .cancel) {}
         }, message: {
             Text("State the reason of your report:")
         })
+        .alert("Report Comment", isPresented: $reportingComment, actions: {
+            TextField("Reason", text: $reportReason)
+            Spacer()
+            Button("Report", role: .destructive) {
+                self.commentService!.report(comment: reportedComment!, reason: reportReason) { result in
+                    switch result {
+                    case .success(_):
+                        reportSuccess = true
+                        reportSent = true
+                    case .failure(let error):
+                        print(error)
+                        reportSuccess = false
+                        reportSent = true
+                    }
+                }
+            }
+            .disabled(reportReason.count == 0)
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text("State the reason of your report:")
+        })
+        .alert(reportSuccess ? "Success!" : "Error",
+               isPresented: $reportSent, actions: {},
+               message: { Text(reportSuccess ? "Your report has been sent." : "Failed to send report. Try again later.") })
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -383,5 +421,10 @@ struct ContentView: View {
     func startReport(_ post: Post) {
         self.reportedPost = post
         reportingPost = true
+    }
+    
+    func startReport(_ comment: Comment) {
+        self.reportedComment = comment
+        reportingComment = true
     }
 }
