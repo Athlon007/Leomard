@@ -2,6 +2,8 @@
 
 ## 0.2 (TBA)
 
+*Note: You will have to log in again, because the app now uses a different method of storing the authorization tokens. Sorry for the inconvenience.*
+
 ### Added
 
 - Added status indicator when sending a post (#7)
