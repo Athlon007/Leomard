@@ -11,6 +11,7 @@ import Nuke
 @main
 struct LeomardApp: App {
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openURL) private var openURL
     
     @State private var mainWindowNavSplitStatus = NavigationSplitViewVisibility.automatic
     
@@ -40,6 +41,7 @@ struct LeomardApp: App {
             CommandGroup(after: .appInfo) {
                 Button("Preferences", action: showPreferences)
                     .keyboardShortcut(",", modifiers: .command)
+                Button("Donate", action: { openURL(URL(string: "https://ko-fi.com/athlon")!) })
             }
         }
         
