@@ -9,20 +9,60 @@ import Foundation
 import SwiftUI
 import MarkdownUI
 
+@MainActor
+final class FeedViewModel: ObservableObject {
+    
+    @Published var selectedListing: ListingType = UserPreferences.getInstance.listType
+    @Published var selectedSort: SortType = UserPreferences.getInstance.postSortMethod
+  
+    @Published private(set) var isLoadingPosts = false
+    
+    let postService: PostService = .init(requestHandler: RequestHandler())
+    @Published private(set) var page: Int = 1
+    @Published var postsResponse: GetPostsResponse = .init()
+    
+    func loadPosts() {
+        if isLoadingPosts {
+            return
+        }
+        
+        isLoadingPosts = true
+        if postsResponse.posts == [] {
+            page = 1
+        } else {
+            page += 1
+        }
+        
+        postService.getAllPosts(
+            page: page,
+            sortType: selectedSort,
+            listingType: selectedListing) { result in
+                Task { @MainActor in
+                    switch result {
+                    case .success(let postsResponse) :
+                        self.postsResponse.posts += postsResponse.posts
+                        self.isLoadingPosts = false
+                    case .failure(let error):
+                        print(error)
+                        self.isLoadingPosts = false
+                    }
+                }
+            }
+    }
+    
+    func reload() {
+        postsResponse.posts.removeAll()
+        loadPosts()
+    }
+}
+
 struct FeedView: View {
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     
-    @State var selectedListing: ListingType = UserPreferences.getInstance.listType
-    @State var selectedSort: SortType = UserPreferences.getInstance.postSortMethod
-    @State var postsResponse: GetPostsResponse = GetPostsResponse()
-    
-    @State var page: Int = 1
-    @State var postService: PostService? = nil
-    
-    @State var isLoadingPosts: Bool = false
+    @StateObject private var viewModel: FeedViewModel = .init()
     
     @Binding var siteView: SiteView?
 
@@ -35,11 +75,10 @@ struct FeedView: View {
         feedContent
             .cornerRadius(4)
             .task {
-                self.postService = PostService(requestHandler: RequestHandler())
-                loadPosts()
+                viewModel.loadPosts()
             }
             .onDisappear {
-                self.postsResponse = GetPostsResponse()
+                viewModel.postsResponse = GetPostsResponse()
             }
         Spacer()
     }
@@ -49,36 +88,34 @@ struct FeedView: View {
     private var feedToolbar: some View {
         HStack {
             HStack {
-                Image(systemName: selectedListing.image)
+                Image(systemName: viewModel.selectedListing.image)
                     .padding(.trailing, 0)
-                Picker("", selection: $selectedListing) {
+                Picker("", selection: $viewModel.selectedListing) {
                     ForEach(ListingType.allCases, id: \.self) { method in
                         Text(String(describing: method))
                     }
                 }
                 .frame(maxWidth: 80)
                 .padding(.leading, -10)
-                .onChange(of: selectedListing) { value in
-                    self.reload()
-                    self.loadPosts()
+                .onChange(of: viewModel.selectedListing) { value in
+                    viewModel.reload()
                 }
             }
             HStack {
-                Image(systemName: selectedSort.image)
+                Image(systemName: viewModel.selectedSort.image)
                     .padding(.trailing, 0)
-                Picker("", selection: $selectedSort) {
+                Picker("", selection: $viewModel.selectedSort) {
                     ForEach(sortTypes, id: \.self) { method in
                         Text(String(describing: method))
                     }
                 }
                 .frame(maxWidth: 80)
                 .padding(.leading, -10)
-                .onChange(of: selectedSort) { value in
-                    self.reload()
-                    self.loadPosts()
+                .onChange(of: viewModel.selectedSort) { value in
+                    viewModel.reload()
                 }
             }
-            Button(action: reload) {
+            Button(action: { viewModel.reload() }) {
                 Image(systemName: "arrow.clockwise")
             }
         }
@@ -110,22 +147,30 @@ struct FeedView: View {
     /// Infinite scrolling view for this feed's content
     @ViewBuilder
     private var feedPostsList: some View {
-        List(postsResponse.posts, id: \.post.id) { postView in
-            PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+        // - TODO: `scrollProxy` is expensive and isn't being used, remove?
+        ScrollViewReader { scrollProxy in
+            List(viewModel.postsResponse.posts, id: \.post.id) { postView in
+                PostUIView(
+                    postView: postView,
+                    shortBody: true,
+                    postService: viewModel.postService,
+                    myself: $myself,
+                    contentView: contentView)
                 .onAppear {
-                    if postView == self.postsResponse.posts.last {
-                        self.loadPosts()
+                    if postView == viewModel.postsResponse.posts.last {
+                        viewModel.loadPosts()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Spacer()
+                Spacer()
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 600,
+                maxHeight: .infinity,
+                alignment: .center
+            )
         }
-        .frame(
-            minWidth: 0,
-            maxWidth: 600,
-            maxHeight: .infinity,
-            alignment: .center
-        )
     }
     
     @ViewBuilder
@@ -144,34 +189,5 @@ struct FeedView: View {
                 .cornerRadius(4)
             }
         }
-    }
-    
-    func loadPosts() {
-        if self.isLoadingPosts {
-            return
-        }
-        
-        self.isLoadingPosts = true
-        if self.postsResponse.posts == [] {
-            self.page = 1
-        } else {
-            self.page += 1
-        }
-        
-        postService!.getAllPosts(page: self.page, sortType: self.selectedSort, listingType: self.selectedListing) { result in
-            switch result {
-            case .success(let postsResponse) :
-                self.postsResponse.posts += postsResponse.posts
-                self.isLoadingPosts = false
-            case .failure(let error):
-                print(error)
-                self.isLoadingPosts = false
-            }
-        }
-    }
-    
-    func reload() {
-        self.postsResponse.posts.removeAll()
-        loadPosts()
     }
 }
