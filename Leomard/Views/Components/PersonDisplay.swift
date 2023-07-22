@@ -16,8 +16,25 @@ struct PersonDisplay: View {
 
     var body: some View {
         PersonAvatar(person: person)
-        Text(person.name)
+        Text(getDisplayName())
             .PersonNameFormat(person: person, myself: myself)
+            .help(getHelpText())
+    }
+    
+    func getDisplayName() -> String {
+        var output = person.name
+        if person.botAccount {
+            output += " 🤖"
+        }
+        return output
+    }
+    
+    func getHelpText() -> String {
+        if person.botAccount {
+            return "This account belongs to a bot."
+        }
+        
+        return ""
     }
 }
 

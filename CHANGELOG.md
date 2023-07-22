@@ -20,6 +20,7 @@
 - OP indicator in the comments
 - Post reporting
 - Comment reporting
+- Bots are now marked with "🤖" emoji
 
 ### Changes
 
