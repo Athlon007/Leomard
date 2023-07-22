@@ -21,10 +21,12 @@
 
 ### Changes
 
-- **Massive** refactoring of UI code, thanks to [boscojwho](https://github.com/boscojwho) on GitHub
-- Post views are now a bit prettier (thanks to boscojwho)
-- Replaced stock AsyncImage with Nuke
-- Improved load time of the app (both from cold start and from background)
+- **Massive** refactoring of code and general optimization, thanks to [boscojwho](https://github.com/boscojwho) on GitHub
+    - Post views are now a bit prettier
+    - Replaced stock AsyncImage with Nuke
+    - Improved load time of the app (both from cold start and from background)
+    - API request handler is now running in separate thread, which should speed up the app
+- 2FA key field is now always present in the login view (seems like some Lemmy instances change the response text when 2FA is enabled, so the app can't reliably detect if 2FA is enabled)
 
 ### Bug Fixes
 
