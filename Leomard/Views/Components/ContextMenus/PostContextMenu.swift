@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PostContextMenu: View {
+    let contentView: ContentView
     let postView: PostView
     @Environment(\.openURL) var openURL
     
@@ -59,12 +60,11 @@ struct PostContextMenu: View {
             Text("Share")
         }
         Button(action: {
-            
+            contentView.startReport(postView.post)
         }) {
             Text("Report")
                 .padding()
         }
-        .disabled(true)
     }
     
     func saveImage(imageLink: String) {

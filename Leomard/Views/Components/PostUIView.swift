@@ -83,7 +83,7 @@ struct PostUIView: View {
                 self.contentView.openPost(postView: self.postView)
             }
             .contextMenu {
-                PostContextMenu(postView: self.postView)
+                PostContextMenu(contentView: contentView, postView: self.postView)
             }
         }
     }

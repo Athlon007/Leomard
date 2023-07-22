@@ -8,9 +8,7 @@
 import SwiftUI
 import MarkdownUI
 
-struct ContentView: View {
-    //@StateObject var userPreferences: UserPreferences
-    
+struct ContentView: View {    
     @State var currentSelection: Option = Option(id: 0, title: "Home", imageName: "house")
     var options: [Option] = [
         .init(id: 0, title: "Feed", imageName: "house"),
@@ -44,6 +42,10 @@ struct ContentView: View {
     @State var addingNewUser: Bool = false
     
     @State var interactionEnabled: Bool = true
+    
+    @State var reportingPost: Bool = false
+    @State var reportedPost: Post? = nil
+    @State var reportReason: String = ""
     
     var appIconBadge = AppAlertBadge()
     
@@ -115,6 +117,18 @@ struct ContentView: View {
         }
         .allowsHitTesting(interactionEnabled)
         .overlay(Color.gray.opacity(interactionEnabled ? 0 : 0.5))
+        .alert("Report", isPresented: $reportingPost, actions: {
+            TextField("Reason", text: $reportReason)
+            Spacer()
+            Button("Report", role: .destructive) {
+                let postService = PostService(requestHandler: RequestHandler())
+                postService.report(post: reportedPost!, reason: reportReason) { result in
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text("State the reason of your report:")
+        })
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -364,5 +378,10 @@ struct ContentView: View {
     
     func toggleInteraction(_ enabled: Bool) {
         interactionEnabled = enabled
+    }
+    
+    func startReport(_ post: Post) {
+        self.reportedPost = post
+        reportingPost = true
     }
 }

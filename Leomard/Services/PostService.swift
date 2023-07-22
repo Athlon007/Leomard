@@ -113,7 +113,7 @@ class PostService: Service {
     
     public func report(post: Post, reason: String, completion: @escaping (Result<PostReportResponse, Error>) -> Void) {
         let body = CreatePostReport(postId: post.id, reason: reason)
-        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/report", method: .post) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/report", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }

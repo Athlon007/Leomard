@@ -18,6 +18,7 @@
 - Image uploading
 - Search within community
 - OP indicator in the comments
+- Post reporting
 
 ### Changes
 
