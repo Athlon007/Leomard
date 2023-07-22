@@ -57,7 +57,7 @@ struct SearchView: View {
                     alignment: .center
                 )
             }
-            .cornerRadius(4)
+            .cornerRadius(8)
             Spacer()
         }
         .task {
@@ -161,7 +161,7 @@ struct SearchView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.textBackgroundColor))
-                    .cornerRadius(4)
+                    .cornerRadius(8)
                     .onTapGesture {
                         self.loadPostFromComment(commentView: commentView)
                     }
@@ -204,7 +204,7 @@ struct SearchView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.textBackgroundColor))
-                    .cornerRadius(4)
+                    .cornerRadius(8)
                     Spacer()
                         .frame(height: 0)
                     

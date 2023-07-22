@@ -20,6 +20,8 @@ struct CommentUIView: View {
     static let intentOffset: Int = 15
     static let limit: Int = 10
     
+    @State var commentBody: String = ""
+    
     @State var subComments: [CommentView] = []
     @State var page: Int = 1
     @State var lastResultEmpty: Bool = false
@@ -159,7 +161,7 @@ struct CommentUIView: View {
                         .foregroundColor(Color(.secondaryLabelColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    let content = MarkdownContent(commentView.comment.content.formatMarkdown())
+                    let content = MarkdownContent(commentBody)
                     Markdown(content)
                         .lineLimit(nil)
                         .frame(
@@ -256,6 +258,8 @@ struct CommentUIView: View {
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                     updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
                 }
+                
+                self.commentBody = await commentView.comment.content.formatMarkdown()
             }
             .contextMenu {
                 CommentContextMenu(contentView: self.contentView, commentView: self.commentView)

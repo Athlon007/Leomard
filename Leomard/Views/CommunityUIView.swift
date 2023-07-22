@@ -62,7 +62,7 @@ struct CommunityUIView: View {
                 )
             }
         }
-        .cornerRadius(4)
+        .cornerRadius(8)
         .task {
             let requestHandler = RequestHandler()
             self.communityService = CommunityService(requestHandler: requestHandler)
@@ -93,7 +93,7 @@ struct CommunityUIView: View {
                             maxWidth: .infinity,
                             alignment: .center
                         )
-                        .cornerRadius(4)
+                        .cornerRadius(8)
                         .padding(.bottom, 15)
                     }
                     switch selectedBrowseOption.id {
@@ -127,7 +127,7 @@ struct CommunityUIView: View {
                     minWidth: 0,
                     maxWidth: .infinity
                 )
-                .cornerRadius(4)
+                .cornerRadius(8)
             }
             .frame(
                 minWidth: 0,
@@ -169,7 +169,7 @@ struct CommunityUIView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.textBackgroundColor))
-                .cornerRadius(4)
+                .cornerRadius(8)
                 .onTapGesture {
                     self.loadPostFromComment(commentView: commentView)
                 }
@@ -270,6 +270,7 @@ struct CommunityUIView: View {
                         .onSubmit {
                             search()
                         }
+                        .cornerRadius(8)
                 }
                 Button(action: toggleSearch) {
                     Image(systemName: "magnifyingglass")
