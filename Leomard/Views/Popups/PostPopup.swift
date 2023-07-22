@@ -166,13 +166,8 @@ struct PostPopup: View {
         self.commentService.getAllComments(post: postView.post, page: page, sortType: sortType) { result in
             switch result {
             case .success(let getCommentView) :
-                self.comments += getCommentView.comments
+                self.comments += getCommentView.comments.filter { !self.comments.contains($0) }
                 page += 1
-                
-                if getCommentView.comments == [] {
-                    self.lastPage = true
-                }
-                
             case .failure(let error):
                 print(error)
             }

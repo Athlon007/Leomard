@@ -304,10 +304,10 @@ struct SearchView: View {
         searchService!.search(query: self.searchQuery, searchType: self.selectedSearchType, page: self.page) { result in
             switch result {
             case .success(let searchResponse):
-                self.searchResponse.communities += searchResponse.communities
-                self.searchResponse.comments += searchResponse.comments
-                self.searchResponse.posts += searchResponse.posts
-                self.searchResponse.users += searchResponse.users
+                self.searchResponse.communities += searchResponse.communities.filter { !searchResponse.communities.contains($0) }
+                self.searchResponse.comments += searchResponse.comments.filter { !searchResponse.comments.contains($0) }
+                self.searchResponse.posts += searchResponse.posts.filter { !searchResponse.posts.contains($0) }
+                self.searchResponse.users += searchResponse.users.filter { !searchResponse.users.contains($0) }
                 self.page += 1
                 self.searching = false
             case .failure(let error):

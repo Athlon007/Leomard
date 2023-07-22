@@ -267,7 +267,7 @@ struct CommentUIView: View {
         self.commentService.getSubcomments(comment: self.commentView.comment, page: page, level: self.indentLevel + 1) { result in
             switch result {
             case .success(let getCommentView):
-                self.subComments = self.subComments + getCommentView.comments
+                self.subComments += getCommentView.comments.filter { !self.subComments.contains($0) }
                 page += 1
                 if getCommentView.comments.count == 0 || getCommentView.comments.count < CommentUIView.limit {
                     self.lastResultEmpty = true

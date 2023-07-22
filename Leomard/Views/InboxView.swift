@@ -201,7 +201,7 @@ struct InboxView: View {
                 switch result {
                 case .success(let privateMessagesResponse):
                     self.isLoading = false
-                    self.privateMessages += privateMessagesResponse.privateMessages
+                    self.privateMessages += privateMessagesResponse.privateMessages.filter { !self.privateMessages.contains($0) }
                     
                     if privateMessagesResponse.privateMessages.count == 0 {
                         reachedEnd = true
@@ -217,7 +217,7 @@ struct InboxView: View {
                 switch result {
                 case .success(let repliesResponse):
                     self.isLoading = false
-                    self.commentReplies += repliesResponse.replies
+                    self.commentReplies += repliesResponse.replies.filter { !self.commentReplies.contains($0) }
                     
                     if repliesResponse.replies.count == 0 {
                         reachedEnd = true
