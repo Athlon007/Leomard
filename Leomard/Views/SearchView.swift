@@ -288,6 +288,12 @@ struct SearchView: View {
             return
         }
         
+        if searchQuery.starts(with: "@") && searchQuery.components(separatedBy: "@").count > 2 {
+            self.selectedSearchType = .users
+        } else if searchQuery.starts(with: "!") {
+            self.selectedSearchType = .communities
+        }
+        
         self.error = ""
         
         self.searchedOnce = true
