@@ -43,6 +43,10 @@
 - Fixed images in comments overflowing the comment box, if the image was placed in line with text
 - Fixed duplicate posts and comments
 
+### Removed
+
+- Experimental settings
+
 ## 0.1 (2023-07-17)
 
 - Initial release
