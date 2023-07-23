@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2 (TBA)
+## 0.2 (2023-07-24)
 
 *Note: You will have to log in again, because the app now uses a different method of storing the authorization tokens. Sorry for the inconvenience.*
 
