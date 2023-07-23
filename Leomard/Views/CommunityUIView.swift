@@ -38,7 +38,11 @@ struct CommunityUIView: View {
     @State var lastQuery: String = ""
     @State var showSearchPosts: Bool = false
     
-    @State var isLoading: Bool = false
+    @State private var isSearching: Bool = false
+    
+    @State private var isLoadingCommunity: Bool = false
+    @State private var isLoadingPosts: Bool = false
+    @State private var isLoadingComments: Bool = false
     
     var body: some View {
         toolbar
@@ -141,7 +145,7 @@ struct CommunityUIView: View {
     @ViewBuilder
     private var commentsList: some View {
         if self.comments == [] {
-            if isLoading {
+            if isLoadingComments {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity)
@@ -189,7 +193,7 @@ struct CommunityUIView: View {
     @ViewBuilder
     private var postsList: some View {
         if self.posts == [] {
-            if isLoading {
+            if isLoadingPosts {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity)
@@ -283,9 +287,12 @@ struct CommunityUIView: View {
     // MARK: -
     
     func loadCommunity() {
-        isLoading = true
+        guard isLoadingCommunity == false else {
+            return
+        }
+        isLoadingCommunity = true
         self.communityService?.getCommunity(id: self.community.id) { result in
-            isLoading = false
+            isLoadingCommunity = false
             switch result {
             case .success(let response):
                 self.communityResponse = response
@@ -303,14 +310,14 @@ struct CommunityUIView: View {
             return
         }
         
-        guard isLoading == false else {
+        guard isLoadingPosts == false else {
             return
         }
         
-        isLoading = true
+        isLoadingPosts = true
         
         self.postService.getPostsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
-            isLoading = false
+            isLoadingPosts = false
             switch result {
             case .success(let postsResponse):
                 self.posts += postsResponse.posts
@@ -322,14 +329,14 @@ struct CommunityUIView: View {
     }
     
     func loadComments() {
-        guard isLoading == false else {
+        guard isLoadingComments == false else {
             return
         }
         
-        isLoading = true
+        isLoadingComments = true
         
         self.commentService.getCommentsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
-            isLoading = false
+            isLoadingComments = false
             switch result {
             case .success(let commentsResponse):
                 self.comments += commentsResponse.comments
@@ -389,7 +396,11 @@ struct CommunityUIView: View {
             self.searchService = SearchService(requestHandler: RequestHandler())
         }
         
-        isLoading = true
+        guard isSearching == false else {
+            return
+        }
+        
+        isSearching = true
         
         if !showSearchPosts || searchQuery != lastQuery {
             showSearchPosts = true
@@ -400,7 +411,7 @@ struct CommunityUIView: View {
         }
         
         self.searchService!.search(community: community, query: searchQuery, searchType: .posts, page: page) { result in
-            isLoading = false
+            isSearching = false
             switch result {
             case .success(let response):
                 self.posts += response.posts
