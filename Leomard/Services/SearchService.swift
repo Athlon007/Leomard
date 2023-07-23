@@ -18,10 +18,13 @@ class SearchService: Service {
         var host = SessionStorage.getInstance.getLemmyInstance()
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
-        // Experimental cross-instance search.
-        if UserPreferences.getInstance.experimentXInstanceSearch && searchQuery.range(of: "@[^\\s-]+\\.[\\w-]+$", options: .regularExpression, range: nil, locale: nil) != nil {
-            host = searchQuery.components(separatedBy: "@").last!
-            searchQuery = searchQuery.replacingOccurrences(of: "@\(host)", with: "")
+        var instanceSearch: Bool = false
+        var searchedInstance: String = ""
+        
+        if searchQuery.containsAny("@", "!") {
+            instanceSearch = true
+            searchedInstance = searchQuery.components(separatedBy: "@").last!
+            searchQuery = searchQuery.dropFirst().components(separatedBy: "@").first!
         }
         
         var request = "/search?q=\(searchQuery)&type_=\(String(describing: searchType))&page=\(String(page))"
@@ -41,8 +44,12 @@ class SearchService: Service {
                         }
                         
                         response.communities.forEach { communityView in
-                            if communityView.community.nsfw && !UserPreferences.getInstance.showNsfw {
-                                response.communities = response.communities.filter { $0 != communityView }
+                            if (communityView.community.nsfw && !UserPreferences.getInstance.showNsfw)
+                                || (instanceSearch && !communityView.community.actorId.contains(searchedInstance))
+                                || (instanceSearch && communityView.community.name != searchQuery.lowercased()) {
+                                response.communities = response.communities.filter {
+                                    $0 != communityView
+                                }
                             }
                         }
                         
@@ -50,6 +57,10 @@ class SearchService: Service {
                             if commentView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
                                 response.comments = response.comments.filter { $0 != commentView }
                             }
+                        }
+                        
+                        if instanceSearch {
+                            response.users = response.users.filter { $0.person.actorId.contains(searchedInstance) }
                         }
                         
                         completion(.success(response))

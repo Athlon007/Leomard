@@ -23,6 +23,7 @@
 - Post reporting
 - Comment reporting
 - Bots are now marked with "🤖" emoji
+- Support for "!community@instance" and "@user@instance" in Search
 
 ### Changes
 
