@@ -303,6 +303,10 @@ struct CommunityUIView: View {
             return
         }
         
+        guard isLoading == false else {
+            return
+        }
+        
         isLoading = true
         
         self.postService.getPostsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
@@ -318,7 +322,12 @@ struct CommunityUIView: View {
     }
     
     func loadComments() {
+        guard isLoading == false else {
+            return
+        }
+        
         isLoading = true
+        
         self.commentService.getCommentsForCommunity(community: self.communityResponse!.communityView.community, page: page) { result in
             isLoading = false
             switch result {
