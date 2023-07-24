@@ -26,6 +26,7 @@ struct PostUIView: View {
     private static let padding: CGFloat = 12
     
     @State var postBody: String? = nil
+    @State private var postBodyMarkdownContent: MarkdownContent? = nil
     @State var url: URL? = nil
     @State var updatedTimeAsString: String = ""
     
@@ -80,6 +81,7 @@ struct PostUIView: View {
                 if performedTasksWillAppear == false {
                     performedTasksWillAppear = true
                     postBody = await postBodyTask()
+                    postBodyMarkdownContent = await postBodyMarkdownContentTask()
                     url = await postUrlTask()
                     updatedTimeAsString = await updatedTimeAsStringTask()
                 }
@@ -89,6 +91,20 @@ struct PostUIView: View {
             }
             .contextMenu {
                 PostContextMenu(contentView: contentView, postView: self.postView)
+            }
+        }
+    }
+    
+    nonisolated
+    private func postBodyMarkdownContentTask() async -> MarkdownContent? {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                if let body = await self.postBody {
+                    let content = MarkdownContent(body)
+                    continuation.resume(returning: content)
+                } else {
+                    continuation.resume(returning: nil)
+                }
             }
         }
     }
@@ -160,23 +176,20 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var postBodyMarkdown: some View {
-        if let body = self.postBody {
-            let content = MarkdownContent(body)
-            Markdown(content)
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                .lineLimit(nil)
-                .textSelection(.enabled)
-                .background(GeometryReader { geometry in
-                    Color.clear
-                        .onAppear {
-                            self.bodyHeight = geometry.size.height
-                        }
-                })
-        }
+        Markdown(postBodyMarkdownContent ?? .init(""))
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                alignment: .leading
+            )
+            .lineLimit(nil)
+            .textSelection(.enabled)
+            .background(GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.bodyHeight = geometry.size.height
+                    }
+            })
     }
     
     @ViewBuilder
