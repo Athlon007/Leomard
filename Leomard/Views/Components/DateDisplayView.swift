@@ -8,6 +8,20 @@
 import Foundation
 import SwiftUI
 
+extension DateFormatter {
+    
+    static let standardDate: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter
+    }()
+    
+    static let prettyDate: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        return dateFormatter
+    }()
+}
+
 struct DateDisplayView: View {
     let date: Date
     @State var showRealTime: Bool = false
@@ -16,17 +30,10 @@ struct DateDisplayView: View {
     @State var prettyFormat: Bool = false
     
     var body: some View {
-        if showRealTime {
-            Text(formatDate())
-                .onTapGesture {
-                    toggleShowRealTime()
-                }
-        } else {
-            Text(getNiceText())
-                .onTapGesture {
-                    toggleShowRealTime()
-                }
-        }
+        Text(showRealTime ? formatDate() : getNiceText())
+            .onTapGesture {
+                toggleShowRealTime()
+            }
     }
     
     func toggleShowRealTime() {
@@ -42,9 +49,7 @@ struct DateDisplayView: View {
             return formatDatePretty()
         }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        var output = dateFormatter.string(from: self.date)
+        var output = DateFormatter.standardDate.string(from: self.date)
         
         if !noBrackets {
             output = "(\(output))"
@@ -54,19 +59,20 @@ struct DateDisplayView: View {
     }
     
     func formatDatePretty() -> String {
-        let dateFormatter = DateFormatter()
+        let dateFormatter = DateFormatter.prettyDate
+        dateFormatter.dateFormat = {
+            let day = Calendar.current.dateComponents([.day], from: date).day
+            var suffix = "th"
+            if day == 1 || day == 21 || day == 31 {
+                suffix = "st"
+            } else if day == 2 || day == 22 {
+                suffix = "nd"
+            } else if day == 3 || day == 23 {
+                suffix = "rd"
+            }
+            return "d'\(suffix)' MMMM yyyy"
+        }()
 
-        let day = Calendar.current.dateComponents([.day], from: date).day
-        var suffix = "th"
-        if day == 1 || day == 21 || day == 31 {
-            suffix = "st"
-        } else if day == 2 || day == 22 {
-            suffix = "nd"
-        } else if day == 3 || day == 23 {
-            suffix = "rd"
-        }
-        
-        dateFormatter.dateFormat = "d'\(suffix)' MMMM yyyy"
         var output = dateFormatter.string(from: self.date)
         
         if !noBrackets {
