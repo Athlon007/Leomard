@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import NukeUI
 
 extension Image {
     func AvatarFormatting(size: CGFloat) -> some View {
@@ -26,22 +27,17 @@ struct PersonAvatar: View {
     var size: CGFloat = 20
     
     var body: some View {
-        if person.avatar != nil {
-            AsyncImage(url: URL(string: person.avatar!),
-                       content: { phase in
-                switch phase {
-                case .success(let image):
-                    image.AvatarFormatting(size: size)
-                default:
-                    Image(systemName: "person.circle")
-                        .AvatarFormatting(size: size)
-                        .foregroundColor(.black)
-                }
-            })
-        } else {
-            Image(systemName: "person.circle")
-                .AvatarFormatting(size: size)
-                .foregroundColor(.black)
+        LazyImage(
+            url: .init(string: person.avatar ?? ""),
+            transaction: .init(animation: .easeOut)
+        ) { state in
+            if let image = state.image {
+                image.AvatarFormatting(size: size)
+            } else {
+                Image(systemName: "person.circle")
+                    .AvatarFormatting(size: size)
+                    .foregroundColor(.black)
+            }
         }
     }
 }
@@ -51,22 +47,17 @@ struct CommunityAvatar: View {
     var size: CGFloat = 20
     
     var body: some View {
-        if community.icon != nil {
-            AsyncImage(url: URL(string: community.icon!),
-                       content: { phase in
-                switch phase {
-                case .success(let image):
-                    image.AvatarFormatting(size: size)
-                default:
-                    Image(systemName: "person.2.circle")
-                        .AvatarFormatting(size: size)
-                        .foregroundColor(.black)
-                }
-            })
-        } else {
-            Image(systemName: "person.2.circle")
-                .AvatarFormatting(size: size)
-                .foregroundColor(.black)
+        LazyImage(
+            url: .init(string: community.icon ?? ""),
+            transaction: .init(animation: .easeOut)
+        ) { state in
+            if let image = state.image {
+                image.AvatarFormatting(size: size)
+            } else {
+                Image(systemName: "person.circle")
+                    .AvatarFormatting(size: size)
+                    .foregroundColor(.black)
+            }
         }
     }
 }
@@ -76,22 +67,17 @@ struct SiteAvatar: View {
     var size: CGFloat = 20
     
     var body: some View {
-        if let icon = site.icon {
-            AsyncImage(url: URL(string: icon),
-                       content: { phase in
-                switch phase {
-                case .success(let image):
-                    image.AvatarFormatting(size: size)
-                default:
-                    Image(systemName: "person.2.circle")
-                        .AvatarFormatting(size: size)
-                        .foregroundColor(.black)
-                }
-            })
-        } else {
-            Image(systemName: "person.2.circle")
-                .AvatarFormatting(size: size)
-                .foregroundColor(.black)
+        LazyImage(
+            url: .init(string: site.icon ?? ""),
+            transaction: .init(animation: .easeOut)
+        ) { state in
+            if let image = state.image {
+                image.AvatarFormatting(size: size)
+            } else {
+                Image(systemName: "person.circle")
+                    .AvatarFormatting(size: size)
+                    .foregroundColor(.black)
+            }
         }
     }
 }
