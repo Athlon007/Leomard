@@ -310,7 +310,7 @@ struct PostUIView: View {
     @ViewBuilder
     private var communityPersonDate: some View {
         LazyHStack(spacing: 4) {
-            HStack(spacing: 4) {
+            Group {
                 Text("in")
                 CommunityAvatar(community: postView.community)
                 Text(self.postView.community.name)
@@ -319,7 +319,7 @@ struct PostUIView: View {
             .onTapGesture {
                 self.contentView.openCommunity(community: postView.community)
             }
-            HStack(spacing: 4) {
+            Group {
                 Text("by")
                 PersonDisplay(person: postView.creator, myself: $myself)
                     .onTapGesture {
@@ -327,13 +327,10 @@ struct PostUIView: View {
                     }
             }
             DateDisplayView(date: self.postView.post.published)
-            if postView.post.updated != nil {
-                HStack {
-                    Image(systemName: "pencil")
-                    
-                }.help(updatedTimeAsString)
-            }
-        }
+            Image(systemName: "pencil")
+                .opacity(postView.post.updated != nil ? 1 : 0)
+                .help(updatedTimeAsString)
+        }.padding(.vertical, 2)
     }
     
     /// Upvote, downvote, reply, bookmark, etc.
