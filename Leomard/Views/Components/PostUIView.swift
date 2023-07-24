@@ -265,7 +265,7 @@ struct PostUIView: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                 }
-            }.onDisappear(.lowerPriority)
+            }.onDisappear(.cancel)
         }
     }
     
