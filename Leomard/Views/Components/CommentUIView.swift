@@ -20,6 +20,8 @@ struct CommentUIView: View {
     static let intentOffset: Int = 15
     static let limit: Int = 10
     
+    @State var commentBody: String = ""
+    
     @State var subComments: [CommentView] = []
     @State var page: Int = 1
     @State var lastResultEmpty: Bool = false
@@ -30,6 +32,7 @@ struct CommentUIView: View {
     @FocusState var isSendingComment: Bool
     @State var isEditingComment: Bool = false
     @State var updatedTimeAsString: String = ""
+    @State var showConfirmDelete: Bool = false
     
     @State var profileViewMode: Bool = false
     
@@ -65,6 +68,16 @@ struct CommentUIView: View {
                                 contentView.openPerson(profile: commentView.creator)
 
                             }
+                        if commentView.post.creatorId == commentView.creator.id {
+                            HStack {
+                                Text("OP")
+                                    .padding(2)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 8))
+                            }
+                            .background(Color(.linkColor))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                        }
                         HStack {
                             Image(systemName: "arrow.up")
                             Text(String(commentView.counts.upvotes))
@@ -108,11 +121,17 @@ struct CommentUIView: View {
                                 }
                                 .buttonStyle(.link)
                                 .foregroundColor(.primary)
-                                Button(action: deleteComment) {
+                                Button(action: { showConfirmDelete = true }) {
                                     Image(systemName: "trash")
                                 }
                                 .buttonStyle(.link)
                                 .foregroundColor(.primary)
+                                .alert("Confirm", isPresented: $showConfirmDelete, actions: {
+                                    Button("Delete", role: .destructive) { deleteComment() }
+                                    Button("Cancel", role: .cancel) {}
+                                }, message: {
+                                    Text("Are you sure you want to delete a comment?")
+                                })
                             }
                             Button(action: savePost) {
                                 Image(systemName: "bookmark")
@@ -142,7 +161,7 @@ struct CommentUIView: View {
                         .foregroundColor(Color(.secondaryLabelColor))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    let content = MarkdownContent(commentView.comment.content)
+                    let content = MarkdownContent(commentBody)
                     Markdown(content)
                         .lineLimit(nil)
                         .frame(
@@ -239,9 +258,11 @@ struct CommentUIView: View {
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                     updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
                 }
+                
+                self.commentBody = await commentView.comment.content.formatMarkdown()
             }
             .contextMenu {
-                CommentContextMenu(commentView: self.commentView)
+                CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
             }
         }
     }
@@ -250,7 +271,7 @@ struct CommentUIView: View {
         self.commentService.getSubcomments(comment: self.commentView.comment, page: page, level: self.indentLevel + 1) { result in
             switch result {
             case .success(let getCommentView):
-                self.subComments = self.subComments + getCommentView.comments
+                self.subComments += getCommentView.comments.filter { !self.subComments.contains($0) }
                 page += 1
                 if getCommentView.comments.count == 0 || getCommentView.comments.count < CommentUIView.limit {
                     self.lastResultEmpty = true

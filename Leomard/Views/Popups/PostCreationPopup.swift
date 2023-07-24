@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import MarkdownUI
+import NukeUI
 
 struct PostCreationPopup: View {
     let contentView: ContentView
@@ -23,6 +24,13 @@ struct PostCreationPopup: View {
     @State var isNsfw: Bool = false
     
     @State var isUrlValid: Bool = true
+    @State var isAlertShown: Bool = false
+    @State var alertMessage: String = ""
+    @State var isSendingPost: Bool = false
+    
+    @State var imageUploadFail: Bool = false
+    @State var imageUploadFailReason: String = ""
+    @State var isUploadingImage: Bool = false
     
     var body: some View {
         ZStack {
@@ -54,24 +62,41 @@ struct PostCreationPopup: View {
                     .padding(.bottom, 0)
                     
                     VStack {
-                        Text("Title")
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .fontWeight(.semibold)
-                        TextField("", text: $title)
-                        Text("URL")
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .fontWeight(.semibold)
-                        TextField("", text: $url)
-                            .onChange(of: url) { _ in
-                                checkUrlValidity()
+                        VStack(alignment: .leading) {
+                            Text("Title")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            TextField("", text: $title)
+                            Text("URL")
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                                .fontWeight(.semibold)
+                            TextField("", text: $url)
+                                .onChange(of: url) { _ in
+                                    checkUrlValidity()
+                                }
+                                .border(!isUrlValid ? .red : .clear, width: 4)
+                            Button("Add Image", action: addImage)
+                            if isUploadingImage {
+                                ProgressView().progressViewStyle(.circular)
                             }
-                            .border(!isUrlValid ? .red : .clear, width: 4)
+                            if LinkHelper.isImageLink(link: url) {
+                                LazyImage(url: .init(string: url)) { state in
+                                    if let image = state.image {
+                                        image.resizable().aspectRatio(contentMode: .fit)
+                                    } else {
+                                        ProgressView()
+                                            .progressViewStyle(.circular)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                        }
                         Text("Body")
                             .frame(
                                 maxWidth: .infinity,
@@ -101,12 +126,12 @@ struct PostCreationPopup: View {
                                 let content = MarkdownContent(bodyText)
                                 Markdown(content)
                                     .frame(
-                                    minWidth: 0,
-                                    maxWidth: .infinity,
-                                    minHeight: 0,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
+                                        minWidth: 0,
+                                        maxWidth: .infinity,
+                                        minHeight: 0,
+                                        maxHeight: .infinity,
+                                        alignment: .leading
+                                    )
                             }
                         }
                         .frame(
@@ -120,13 +145,19 @@ struct PostCreationPopup: View {
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
-                        Button("Send", action: sendPost)
-                            .buttonStyle(.borderedProminent)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .disabled(!canSendPost())
+                        HStack(spacing: 20) {
+                            Button("Send", action: sendPost)
+                                .buttonStyle(.borderedProminent)
+                                .frame(
+                                    alignment: .leading
+                                )
+                                .disabled(!canSendPost())
+                            if isSendingPost {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            }
+                            Spacer()
+                        }.frame(alignment: .leading)
                     }
                     .padding()
                 }
@@ -152,6 +183,20 @@ struct PostCreationPopup: View {
             minHeight: 0,
             maxHeight: .infinity
         )
+        .alert("Error", isPresented: $isAlertShown, actions: {
+            Button("Retry", role: .destructive) {
+                sendPost()
+                isAlertShown = false
+            }
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text(alertMessage)
+        })
+        .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
+            Button("OK") {}
+        }, message: {
+            Text(imageUploadFailReason)
+        })
         .task {
             if self.editedPost != nil {
                 self.title = self.editedPost!.post.name
@@ -171,31 +216,50 @@ struct PostCreationPopup: View {
             return
         }
         
+        isSendingPost = true
+        
         if self.editedPost != nil {
             self.postService.editPost(post: editedPost!.post, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
                 switch result {
                 case .success(let response):
                     self.onPostAdded(response.postView)
+                    cleanWindow()
+                    isSendingPost = false
                     contentView.closePostEdit()
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to edit post. Try again later."
+                    isAlertShown = true
+                    isSendingPost = false
                 }
             }
         } else {
             self.postService.createPost(community: community, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
                 switch result {
                 case .success(let response):
-                    contentView.closePostCreation()
                     self.onPostAdded(response.postView)
+                    cleanWindow()
+                    isSendingPost = false
+                    contentView.closePostCreation()
                 case .failure(let error):
                     print(error)
+                    alertMessage = "Unable to send post. Try again later."
+                    isAlertShown = true
+                    isSendingPost = false
                 }
             }
         }
     }
     
+    func cleanWindow() {
+        title = ""
+        bodyText = ""
+        url = ""
+        isNsfw = false
+    }
+    
     func canSendPost() -> Bool {
-        return title.count > 0 && self.isUrlValid
+        return title.count > 0 && self.isUrlValid && !isSendingPost
     }
     
     func checkUrlValidity() {
@@ -204,7 +268,7 @@ struct PostCreationPopup: View {
             return
         }
         
-         let urlText = url
+        let urlText = url
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             if urlText != url {
@@ -222,5 +286,57 @@ struct PostCreationPopup: View {
                 self.isUrlValid = success
             }
         }
+    }
+    
+    func addImage() {
+        let panel = NSOpenPanel()
+        panel.prompt = "Select file"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [
+            .init(importedAs: "leomard.supported.image.types.jpg"),
+            .init(importedAs: "leomard.supported.image.types.jpeg"),
+            .init(importedAs: "leomard.supported.image.types.png"),
+            .init(importedAs: "leomard.supported.image.types.webp"),
+            .init(importedAs: "leomard.supported.image.types.gif")
+        ]
+        panel.begin { (result) -> Void in
+            self.contentView.toggleInteraction(true)
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
+                let imageService = ImageService(requestHandler: RequestHandler())
+                isUploadingImage = true
+                imageService.uploadImage(url: url) { result in
+                    switch result {
+                    case .success(let imageUploadResponse):
+                        isUploadingImage = false
+                        if self.url == "" {
+                            // URL not set? Set the image as URL.
+                            self.url = imageUploadResponse.data.link
+                        } else {
+                            // Otherwise add it to content of the bodyText.
+                            if bodyText.count > 0 {
+                                // If there already is some text, add new line.
+                                bodyText += "\n\n"
+                            }
+                            
+                            bodyText += "![](\(imageUploadResponse.data.link))\n\n"
+                        }
+                    case .failure(let error):
+                        isUploadingImage = false
+                        if error is LeomardExceptions {
+                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
+                        } else {
+                            self.imageUploadFailReason = "Unable to upload the image :("
+                        }
+                        
+                        self.imageUploadFail = true
+                    }
+                }
+            }
+        }
+        panel.orderFrontRegardless()
+        self.contentView.toggleInteraction(false)
     }
 }

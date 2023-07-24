@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PostContextMenu: View {
+    let contentView: ContentView
     let postView: PostView
     @Environment(\.openURL) var openURL
     
@@ -58,13 +59,14 @@ struct PostContextMenu: View {
         ShareLink(item: URL(string: postView.post .apId)!) {
             Text("Share")
         }
-        Button(action: {
-            
-        }) {
-            Text("Report")
-                .padding()
+        if postView.creator != contentView.myUser?.localUserView.person {
+            Button(action: {
+                contentView.startReport(postView.post)
+            }) {
+                Text("Report")
+                    .padding()
+            }
         }
-        .disabled(true)
     }
     
     func saveImage(imageLink: String) {

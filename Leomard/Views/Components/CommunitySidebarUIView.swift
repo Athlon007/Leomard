@@ -16,6 +16,9 @@ struct CommunityUISidebarView: View {
     @Binding var myself: MyUserInfo?
     var onPostAdded: (PostView) -> Void
     
+    @State var showConfirmCommunityBlock: Bool = false
+    @State var showBlockFailure: Bool = false
+    
     var body: some View {
         LazyVStack {
             ZStack() {
@@ -61,7 +64,7 @@ struct CommunityUISidebarView: View {
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 24))
-                Text(communityResponse.communityView.community.name + "@" + LinkHelper.stripToHost(link: communityResponse.communityView.community.actorId))
+                Text("!" + communityResponse.communityView.community.name + "@" + LinkHelper.stripToHost(link: communityResponse.communityView.community.actorId))
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)
@@ -102,12 +105,29 @@ struct CommunityUISidebarView: View {
                     Button(action: openPostCreator) {
                         Image(systemName: "square.and.pencil")
                     }
+                    .buttonStyle(.borderedProminent)
                     .frame(
-                        maxWidth: .infinity,
                         alignment: .leading
                     )
                     .padding(.top, -20)
                     .padding(.bottom, -20)
+                    Button(action: {
+                        if isCommunityBlocked() {
+                            blockCommunity()
+                        } else {
+                            showConfirmCommunityBlock = true
+                        }
+                        
+                    } ) {
+                        Image(systemName: "person.fill.xmark")
+                            .foregroundColor(isCommunityBlocked() ? .red : .primary)
+                    }
+                    .padding(.top, -20)
+                    .padding(.bottom, -20)
+                    .alert("Confirm", isPresented: $showConfirmCommunityBlock, actions: {
+                        Button("Block", role: .destructive) { blockCommunity() }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: { Text("Are you sure you want to block this community?") })
                 }
                 Spacer()
             }
@@ -135,6 +155,9 @@ struct CommunityUISidebarView: View {
         .contextMenu {
             CommunityContextMenu(communityView: self.communityResponse.communityView)
         }
+        .alert("Blocking Failed", isPresented: $showBlockFailure, actions: {
+            Button("OK", role: .cancel) {}
+        }, message: { Text("Failed to block the community. Try again later.")})
     }
     
     func onSubscribeButtonClick() {
@@ -156,5 +179,35 @@ struct CommunityUISidebarView: View {
     
     func openPostCreator() {
         contentView.openPostCreation(community: communityResponse.communityView.community, onPostAdded: onPostAdded)
+    }
+    
+    func isCommunityBlocked() -> Bool {
+        if myself == nil {
+            return false
+        }
+        
+        for communityBlockView in myself!.communityBlocks {
+            if communityBlockView.community.actorId == communityResponse.communityView.community.actorId {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func blockCommunity() {
+        communityService.block(community: communityResponse.communityView.community, block: !isCommunityBlocked()) { result in
+            switch result {
+            case .success(let blockCommunityResponse):
+                if blockCommunityResponse.blocked {
+                    myself!.communityBlocks.append(CommunityBlockView(community: communityResponse.communityView.community, person: myself!.localUserView.person))
+                } else {
+                    myself!.communityBlocks = myself!.communityBlocks.filter { $0.community != communityResponse.communityView.community }
+                }
+            case .failure(let error):
+                print(error)
+                showBlockFailure = true
+            }
+        }
     }
 }

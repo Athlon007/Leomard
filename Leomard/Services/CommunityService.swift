@@ -36,4 +36,11 @@ class CommunityService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func block(community: Community, block: Bool, completion: @escaping (Result<BlockCommunityResponse, Error>) -> Void) {
+        let body = BlockCommunity(block: block, communityId: community.id)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community/block", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

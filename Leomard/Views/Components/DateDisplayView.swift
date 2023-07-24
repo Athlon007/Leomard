@@ -80,14 +80,16 @@ struct DateDisplayView: View {
         let elapsed = DateFormatConverter.getElapsedTime(from: self.date)
         var output = ""
         if elapsed.days == 0 && elapsed.hours == 0 && elapsed.minutes == 0 {
-            output = "\(elapsed.seconds) second\(elapsed.seconds > 1 ? "s" : "") ago"
+            output = "\(elapsed.seconds) second\(elapsed.seconds > 1 ? "s" : "")"
         } else if elapsed.days == 0 && elapsed.hours == 0 {
-            output = "\(elapsed.minutes) minute\(elapsed.minutes > 1 ? "s" : "") ago"
+            output = "\(elapsed.minutes) minute\(elapsed.minutes > 1 ? "s" : "")"
         } else if elapsed.days == 0 {
-            output = "\(elapsed.hours) hour\(elapsed.hours > 1 ? "s" : "") ago"
+            output = "\(elapsed.hours) hour\(elapsed.hours > 1 ? "s" : "")"
         } else {
-            output = "\(elapsed.days) day\(elapsed.days > 1 ? "s" : "") ago"
+            output = "\(elapsed.days) day\(elapsed.days > 1 ? "s" : "")"
         }
+        
+        output += output.starts(with: "-") ? " in the future" : " ago"
         
         if !noBrackets {
             output = "(\(output))"

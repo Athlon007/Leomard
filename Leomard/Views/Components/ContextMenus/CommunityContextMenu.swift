@@ -26,13 +26,11 @@ struct CommunityContextMenu: View {
             Text("Copy Community Link")
                 .padding()
         }
-        Divider()
         Button(action: {
-            
+            Clipboard.copyToClipboard(text: "!" + communityView.community.name + "@" + LinkHelper.stripToHost(link: communityView.community.actorId))
         }) {
-            Text("Block Community")
+            Text("Copy Handle")
                 .padding()
         }
-        .disabled(true)
     }
 }

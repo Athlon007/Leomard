@@ -34,6 +34,7 @@ struct UserSearchUIView: View {
                 VStack(spacing: 10) {
                     VStack {
                         Text(personView.person.displayName ?? personView.person.name)
+                            .PersonNameFormat(person: personView.person, myself: contentView.myUser)
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 18))

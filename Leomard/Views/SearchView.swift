@@ -27,8 +27,52 @@ struct SearchView: View {
     @State var page: Int = 1
     @State var searchedOnce: Bool = false
     @FocusState var searchFocused: Bool
+    @State var error: String = ""
 
     var body: some View {
+        searchBar
+            .frame(
+                minWidth: 0,
+                idealWidth: .infinity
+            )
+            .padding(.leading)
+            .padding(.trailing)
+            .task {
+                searchFocused = true
+            }
+        VStack {
+            HStack {
+                ScrollViewReader { _ in
+                    searchProgressView(visible: self.searching && page == 1)
+                    searchResultsList(selectedSearchType: selectedSearchType)
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 600,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .center
+                )
+            }
+            .cornerRadius(8)
+            Spacer()
+        }
+        .task {
+            self.searchQuery = ""
+            self.selectedSearchType = .communities
+
+            let requestHandler = RequestHandler()
+            self.searchService = SearchService(requestHandler: requestHandler)
+        }
+    }
+    
+    // MARK: - Search Form
+    
+    @ViewBuilder
+    private var searchBar: some View {
         HStack {
             Spacer()
             VStack {
@@ -60,186 +104,197 @@ struct SearchView: View {
             }
             Spacer()
         }
-        .frame(
-            minWidth: 0,
-            idealWidth: .infinity
-        )
-        .padding(.leading)
-        .padding(.trailing)
-        .task {
-            searchFocused = true
-        }
-        VStack {
-            HStack {
-                ScrollViewReader { _ in
-                    if self.searching && page == 1 {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                    }
-
-                    switch selectedSearchType {
-                    case .comments:
-                        if searchResponse.comments == [] && !self.searching && self.searchedOnce {
-                            Text("No comments found!")
-                                .italic()
-                                .foregroundColor(.secondary)
-                        }
-                        List {
-                            ForEach(searchResponse.comments, id: \.self) { commentView in
-                                VStack {
-                                    CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
-                                        .onAppear {
-                                            if commentView == searchResponse.comments.last {
-                                                self.search()
-                                            }
-                                        }
-                                        .frame(
-                                            maxWidth: .infinity,
-                                            maxHeight: .infinity
-                                        )
-                                        .padding(.top, 15)
-                                        .padding(.bottom, 15)
-                                        .padding(.trailing, 15)
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color(.textBackgroundColor))
-                                .cornerRadius(4)
-                                .onTapGesture {
-                                    self.loadPostFromComment(commentView: commentView)
-                                }
-                                Spacer()
-                                    .frame(height: 0)
-
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    case .communities:
-                        if searchResponse.communities == [] && !self.searching && self.searchedOnce {
-                            Text("No communities found!")
-                                .italic()
-                                .foregroundColor(.secondary)
-                        }
-                        List {
-                            ForEach(searchResponse.communities, id: \.self) { communityView in
-                                VStack {
-                                    CommunitySearchUIView(communityView: communityView, contentView: contentView)
-                                        .onAppear {
-                                            if communityView == searchResponse.communities.last {
-                                                self.search()
-                                            }
-                                        }
-                                        .frame(
-                                            maxWidth: .infinity,
-                                            maxHeight: .infinity
-                                        )
-                                        .padding(.top, 15)
-                                        .padding(.bottom, 15)
-                                        .padding(.trailing, 15)
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color(.textBackgroundColor))
-                                .cornerRadius(4)
-                                Spacer()
-                                    .frame(height: 0)
-
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    case .users:
-                        if searchResponse.users == [] && !self.searching && self.searchedOnce {
-                            Text("No users found!")
-                                .italic()
-                                .foregroundColor(.secondary)
-                        }
-                        List {
-                            ForEach(searchResponse.users, id: \.self) { personView in
-                                VStack {
-                                    UserSearchUIView(personView: personView, contentView: contentView)
-                                        .onAppear {
-                                            if personView == searchResponse.users.last {
-                                                self.search()
-                                            }
-                                        }
-                                        .frame(
-                                            maxWidth: .infinity,
-                                            maxHeight: .infinity
-                                        )
-                                        .padding(.top, 15)
-                                        .padding(.bottom, 15)
-                                        .padding(.trailing, 15)
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color(.textBackgroundColor))
-                                .cornerRadius(4)
-                                Spacer()
-                                    .frame(height: 0)
-
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    default:
-                        if searchResponse.posts == [] && !self.searching && self.searchedOnce {
-                            Text("No posts found!")
-                                .italic()
-                                .foregroundColor(.secondary)
-                        }
-                        List {
-                            ForEach(searchResponse.posts, id: \.self) { postView in
-                                PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
-                                    .onAppear {
-                                        if postView == searchResponse.posts.last {
-                                            self.search()
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                Spacer()
-                                    .frame(height: 0)
-                            }
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 600,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                    }
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .center
-                )
-            }
-            .cornerRadius(4)
-            Spacer()
-        }
-        .task {
-            self.searchQuery = ""
-            self.selectedSearchType = .communities
-
-            let requestHandler = RequestHandler()
-            self.searchService = SearchService(requestHandler: requestHandler)
+    }
+    
+    // MARK: - Search Results
+    
+    @ViewBuilder
+    private func searchProgressView(visible: Bool) -> some View {
+        if visible {
+            ProgressView()
+                .progressViewStyle(.circular)
         }
     }
+    
+    @ViewBuilder
+    private func searchResultsList(selectedSearchType: SearchType) -> some View {
+        switch selectedSearchType {
+        case .comments:
+            commentsList
+        case .communities:
+            communitiesList
+        case .users:
+            usersList
+        default:
+            postsList
+        }
+    }
+    
+    @ViewBuilder
+    private var commentsList: some View {
+        if searchResponse.comments == [] && !self.searching && self.searchedOnce {
+            Text("No comments found!")
+                .italic()
+                .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            List {
+                ForEach(searchResponse.comments, id: \.self) { commentView in
+                    VStack {
+                        CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
+                            .onAppear {
+                                if commentView == searchResponse.comments.last {
+                                    self.search()
+                                }
+                            }
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity
+                            )
+                            .padding(.top, 15)
+                            .padding(.bottom, 15)
+                            .padding(.trailing, 15)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.textBackgroundColor))
+                    .cornerRadius(8)
+                    .onTapGesture {
+                        self.loadPostFromComment(commentView: commentView)
+                    }
+                    Spacer()
+                        .frame(height: 0)
+                    
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var communitiesList: some View {
+        if searchResponse.communities == [] && !self.searching && self.searchedOnce {
+            Text("No communities found!")
+                .italic()
+                .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            List {
+                ForEach(searchResponse.communities, id: \.self) { communityView in
+                    VStack {
+                        CommunitySearchUIView(communityView: communityView, contentView: contentView)
+                            .onAppear {
+                                if communityView == searchResponse.communities.last {
+                                    self.search()
+                                }
+                            }
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity
+                            )
+                            .padding(.top, 15)
+                            .padding(.bottom, 15)
+                            .padding(.trailing, 15)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.textBackgroundColor))
+                    .cornerRadius(8)
+                    Spacer()
+                        .frame(height: 0)
+                    
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var usersList: some View {
+        if searchResponse.users == [] && !self.searching && self.searchedOnce {
+            Text("No users found!")
+                .italic()
+                .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            List {
+                ForEach(searchResponse.users, id: \.self) { personView in
+                    VStack {
+                        UserSearchUIView(personView: personView, contentView: contentView)
+                            .onAppear {
+                                if personView == searchResponse.users.last {
+                                    self.search()
+                                }
+                            }
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity
+                            )
+                            .padding(.top, 15)
+                            .padding(.bottom, 15)
+                            .padding(.trailing, 15)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.textBackgroundColor))
+                    .cornerRadius(4)
+                    Spacer()
+                        .frame(height: 0)
+                    
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var postsList: some View {
+        if searchResponse.posts == [] && !self.searching && self.searchedOnce {
+            Text("No posts found!")
+                .italic()
+                .foregroundColor(.secondary)
+            if self.error != "" {
+                Text(self.error)
+                    .italic()
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            List {
+                ForEach(searchResponse.posts, id: \.self) { postView in
+                    PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
+                        .onAppear {
+                            if postView == searchResponse.posts.last {
+                                self.search()
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Spacer()
+                        .frame(height: 0)
+                }
+            }
+        }
+    }
+    
+    // MARK: -
 
     func search() {
         if self.searchQuery == "" {
             return
         }
+        
+        if searchQuery.starts(with: "@") && searchQuery.components(separatedBy: "@").count > 2 {
+            self.selectedSearchType = .users
+        } else if searchQuery.starts(with: "!") {
+            self.selectedSearchType = .communities
+        }
+        
+        self.error = ""
         
         self.searchedOnce = true
 
@@ -255,14 +310,20 @@ struct SearchView: View {
         searchService!.search(query: self.searchQuery, searchType: self.selectedSearchType, page: self.page) { result in
             switch result {
             case .success(let searchResponse):
-                self.searchResponse.communities += searchResponse.communities
-                self.searchResponse.comments += searchResponse.comments
-                self.searchResponse.posts += searchResponse.posts
-                self.searchResponse.users += searchResponse.users
+                self.searchResponse.communities += searchResponse.communities.filter { !self.searchResponse.communities.contains($0) }
+                self.searchResponse.comments += searchResponse.comments.filter { !self.searchResponse.comments.contains($0) }
+                self.searchResponse.posts += searchResponse.posts.filter { !self.searchResponse.posts.contains($0) }
+                self.searchResponse.users += searchResponse.users.filter { !self.searchResponse.users.contains($0) }
                 self.page += 1
                 self.searching = false
             case .failure(let error):
                 print(error)
+                self.searching = false
+                if let errorResponse = error as? ErrorResponse {
+                    self.error = errorResponse.error
+                } else {
+                    self.error = "Your Lemmy instance is down, or took to long to respond. Try again later."
+                }
             }
         }
     }

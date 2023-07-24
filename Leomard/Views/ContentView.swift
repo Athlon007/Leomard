@@ -9,8 +9,6 @@ import SwiftUI
 import MarkdownUI
 
 struct ContentView: View {
-    //@StateObject var userPreferences: UserPreferences
-    
     @State var currentSelection: Option = Option(id: 0, title: "Home", imageName: "house")
     var options: [Option] = [
         .init(id: 0, title: "Feed", imageName: "house"),
@@ -41,9 +39,23 @@ struct ContentView: View {
     @Binding var columnStatus: NavigationSplitViewVisibility
     @State var unreadMessages: Int = 0
     
+    @State var addingNewUser: Bool = false
+    
+    @State var interactionEnabled: Bool = true
+    
+    @State var reportingPost: Bool = false
+    @State var reportedPost: Post? = nil
+    @State var reportingComment: Bool = false
+    @State var reportedComment: Comment? = nil
+    
+    @State var reportReason: String = ""
+    @State var reportSent: Bool = false
+    @State var reportSuccess: Bool = false
+    
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
+        // - TODO: We're using this ZStack so we can add modal popups over our navigation split view. Perhaps using the `.overlay()` modifier on the split view might be more appropriate?
         ZStack {
             NavigationSplitView(columnVisibility: $columnStatus) {
                 NavbarView(
@@ -71,16 +83,9 @@ struct ContentView: View {
                                 .listStyle(SidebarListStyle())
                                 .scrollContentBackground(.hidden)
                         case 3:
-                            if SessionStorage.getInstance.isSessionActive() && myUser != nil {
-                                ProfileView(commentService: commentService!, contentView: self, person: myUser!.localUserView.person, myself: $myUser)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            } else {
-                                LoginView(requestHandler: requestHandler!, contentView: self)
-                                    .frame(maxWidth: .infinity)
-                                    .listStyle(SidebarListStyle())
-                                    .scrollContentBackground(.hidden)
-                            }
+                            profileOrLoginView()
+                                .listStyle(SidebarListStyle())
+                                .scrollContentBackground(.hidden)
                         default:
                             FeedView(contentView: self, myself: $myUser, siteView: $siteView)
                                 .listStyle(SidebarListStyle())
@@ -88,25 +93,14 @@ struct ContentView: View {
                         }
                     }
                     
-                    if openedPerson != nil {
-                        VStack {
-                            ProfileView(commentService: commentService!, contentView: self, person: openedPerson!, myself: $myUser)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        }
+                    profileView(openedPerson)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                         .background(.thickMaterial)
-                    }
-                    
-                    if openedCommunity != nil {
-                        VStack {
-                            CommunityUIView(community: openedCommunity!, postService: self.postService!, commentService: self.commentService!, contentView: self, myself: myUser, showDismissInCommunityView: $showDismissInCommunityView)
-                        }
+                    communityView(openedCommunity)
                         .listStyle(SidebarListStyle())
                         .scrollContentBackground(.hidden)
                         .background(.thickMaterial)
-                    }
                 }
                 .frame(minWidth: 600, minHeight: 400)
             }
@@ -120,20 +114,128 @@ struct ContentView: View {
                 self.repliesService = RepliesService(requestHandler: self.requestHandler!)
                 
                 self.loadUserData()
-                self.updateUnreadMessagesCount()
-                self.startPeriodicUnreadMessageCheck()
             }
             
-            if self.openedPostView != nil {
-                PostPopup(postView: openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
-                    .opacity(postHidden ? 0 : 1)
+            postPopup(openedPostView)
+                .opacity(postHidden ? 0 : 1)
+            postCreationPopup(openedPostMakingForCommunity)
+        }
+        .allowsHitTesting(interactionEnabled)
+        .overlay(Color.gray.opacity(interactionEnabled ? 0 : 0.5))
+        .alert("Report Post", isPresented: $reportingPost, actions: {
+            TextField("Reason", text: $reportReason)
+            Spacer()
+            Button("Report", role: .destructive) {
+                self.postService!.report(post: reportedPost!, reason: reportReason) { result in
+                    switch result {
+                    case .success(_):
+                        reportSuccess = true
+                        reportSent = true
+                    case .failure(let error):
+                        print(error)
+                        reportSuccess = false
+                        reportSent = true
+                    }
+                }
             }
-            
-            if self.openedPostMakingForCommunity != nil {
-                PostCreationPopup(contentView: self, community: openedPostMakingForCommunity!, postService: postService!, myself: $myUser, onPostAdded: self.onPostAdded!, editedPost: editedPost)
+            .disabled(reportReason.count == 0)
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text("State the reason of your report:")
+        })
+        .alert("Report Comment", isPresented: $reportingComment, actions: {
+            TextField("Reason", text: $reportReason)
+            Spacer()
+            Button("Report", role: .destructive) {
+                self.commentService!.report(comment: reportedComment!, reason: reportReason) { result in
+                    switch result {
+                    case .success(_):
+                        reportSuccess = true
+                        reportSent = true
+                    case .failure(let error):
+                        print(error)
+                        reportSuccess = false
+                        reportSent = true
+                    }
+                }
+            }
+            .disabled(reportReason.count == 0)
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text("State the reason of your report:")
+        })
+        .alert(reportSuccess ? "Success!" : "Error",
+               isPresented: $reportSent, actions: {},
+               message: { Text(reportSuccess ? "Your report has been sent." : "Failed to send report. Try again later.") })
+    }
+    
+    /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
+    @ViewBuilder
+    private func profileOrLoginView() -> some View {
+        if SessionStorage.getInstance.isSessionActive() && myUser != nil && !addingNewUser {
+            ProfileView(
+                commentService: commentService!,
+                contentView: self,
+                person: myUser!.localUserView.person,
+                myself: $myUser)
+        } else {
+            LoginView(requestHandler: requestHandler!, contentView: self)
+                .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder
+    private func profileView(_ openedPerson: Person?) -> some View {
+        if let openedPerson {
+            VStack {
+                ProfileView(commentService: commentService!, contentView: self, person: openedPerson, myself: $myUser)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
             }
         }
     }
+    
+    @ViewBuilder
+    private func communityView(_ openedCommunity: Community?) -> some View {
+        if let openedCommunity {
+            VStack {
+                CommunityUIView(
+                    community: openedCommunity,
+                    postService: self.postService!,
+                    commentService: self.commentService!,
+                    contentView: self,
+                    myself: myUser,
+                    showDismissInCommunityView: $showDismissInCommunityView)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func postPopup(_ openedPostView: PostView?) -> some View {
+        if let openedPostView {
+            PostPopup(
+                postView: openedPostView,
+                contentView: self,
+                commentService: commentService!,
+                postService: postService!,
+                myself: $myUser)
+        }
+    }
+    
+    @ViewBuilder
+    private func postCreationPopup(_ openedPostMakingForCommunity: Community?) -> some View {
+        if let openedPostMakingForCommunity {
+            PostCreationPopup(
+                contentView: self,
+                community: openedPostMakingForCommunity,
+                postService: postService!,
+                myself: $myUser,
+                onPostAdded: self.onPostAdded!,
+                editedPost: editedPost)
+        }
+    }
+    
+    // MARK: -
     
     func navigateToFeed() {
         self.currentSelection = self.options[0]
@@ -150,7 +252,12 @@ struct ContentView: View {
                     self.profileOption.title = self.myUser!.localUserView.person.name
                     if self.myUser!.localUserView.person.avatar != nil {
                         self.profileOption.externalLink = self.myUser!.localUserView.person.avatar!
+                    } else {
+                        self.profileOption.externalLink = nil
                     }
+                    
+                    self.updateUnreadMessagesCount()
+                    self.startPeriodicUnreadMessageCheck()
                 }
             case .failure(let error):
                 print(error)
@@ -297,5 +404,27 @@ struct ContentView: View {
             self.updateUnreadMessagesCount()
             self.startPeriodicUnreadMessageCheck()
         }
+    }
+    
+    func addNewUserLogin() {
+        addingNewUser = true
+    }
+    
+    func endNewUserLogin() {
+        addingNewUser = false
+    }
+    
+    func toggleInteraction(_ enabled: Bool) {
+        interactionEnabled = enabled
+    }
+    
+    func startReport(_ post: Post) {
+        self.reportedPost = post
+        reportingPost = true
+    }
+    
+    func startReport(_ comment: Comment) {
+        self.reportedComment = comment
+        reportingComment = true
     }
 }

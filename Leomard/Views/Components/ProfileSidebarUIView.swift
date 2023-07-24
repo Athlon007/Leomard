@@ -12,10 +12,13 @@ import MarkdownUI
 struct ProfileSidebarUIView: View {
     let personView: PersonView
     @Binding var myself: MyUserInfo?
+    let personService: PersonService
     
     @State var writingMessage: Bool = false
     @State var messageText: String = ""
     @State var isSendingMessage: Bool = false
+    @State var showConfirmPersonBlock: Bool = false
+    @State var showBlockFailure: Bool = false
     
     var body: some View {
         LazyVStack {
@@ -64,7 +67,7 @@ struct ProfileSidebarUIView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 24))
-                    Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
+                    Text("@" + personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.secondary)
@@ -74,7 +77,7 @@ struct ProfileSidebarUIView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 24))
-                    Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
+                    Text("@" + personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.secondary)
@@ -132,6 +135,23 @@ struct ProfileSidebarUIView: View {
                 HStack {
                     Button(action: startWritePrivateMessage) {
                         Image(systemName: "envelope")
+                    }
+                    if personView.person != myself?.localUserView.person {
+                        Button(action: {
+                            if isPersonBlocked() {
+                                blockPerson()
+                            } else {
+                                showConfirmPersonBlock = true
+                            }
+                            
+                        } ) {
+                            Image(systemName: "person.fill.xmark")
+                                .foregroundColor(isPersonBlocked() ? .red : .primary)
+                        }
+                        .alert("Confirm", isPresented: $showConfirmPersonBlock, actions: {
+                            Button("Block", role: .destructive) { blockPerson() }
+                            Button("Cancel", role: .cancel) {}
+                        }, message: { Text("Are you sure you want to block this person?") })
                     }
                 }
                 .frame(
@@ -203,6 +223,9 @@ struct ProfileSidebarUIView: View {
         .contextMenu {
             PersonContextMenu(personView: self.personView)
         }
+        .alert("Blocking Failed", isPresented: $showBlockFailure, actions: {
+            Button("OK", role: .cancel) {}
+        }, message: { Text("Failed to block the person. Try again later.")})
         
     }
     
@@ -236,5 +259,35 @@ struct ProfileSidebarUIView: View {
     
     func isSendable() -> Bool {
         return messageText.count > 0 && !isSendingMessage
+    }
+    
+    func isPersonBlocked() -> Bool {
+        if myself == nil {
+            return false
+        }
+        
+        for blockedPersonView in myself!.personBlocks {
+            if blockedPersonView.target.actorId == personView.person.actorId {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func blockPerson() {
+        personService.block(person: personView.person, block: !isPersonBlocked()) { result in
+            switch result {
+            case .success(let blockPersonResponse):
+                if blockPersonResponse.blocked {
+                    myself!.personBlocks.append(PersonBlockView(person: myself!.localUserView.person, target: personView.person))
+                } else {
+                    myself!.personBlocks = myself!.personBlocks.filter { $0.target != personView.person }
+                }
+            case .failure(let error):
+                print(error)
+                showBlockFailure = true
+            }
+        }
     }
 }

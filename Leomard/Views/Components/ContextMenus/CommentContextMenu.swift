@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CommentContextMenu: View {
+    let contentView: ContentView
     let commentView: CommentView
     @Environment(\.openURL) var openURL
     
@@ -27,20 +28,14 @@ struct CommentContextMenu: View {
                 .padding()
         }
         Divider()
-        Button(action: {
-            
-        }) {
-            Text("Report")
-                .padding()
+        if commentView.creator != contentView.myUser?.localUserView.person {
+            Button(action: {
+                contentView.startReport(commentView.comment)
+            }) {
+                Text("Report")
+                    .padding()
+            }
         }
-        .disabled(true)
-        Button(action: {
-            
-        }) {
-            Text("Block User")
-                .padding()
-        }
-        .disabled(true)
     }
 }
 

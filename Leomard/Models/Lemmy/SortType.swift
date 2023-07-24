@@ -52,6 +52,7 @@ enum SortType: String, Codable, CustomStringConvertible {
         case .new: return "clock"
         case .mostComments: return "ellipsis.message"
         case .topHour, .topDay, .topWeek, .topMonth, .topYear, .topAll: return "calendar"
+        case .old: return "clock.arrow.circlepath"
         default: return ""
         }
     }

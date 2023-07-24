@@ -1,8 +1,9 @@
 #  Leomard
 
-[![](https://img.shields.io/github/downloads/Athlon007/Leomard/total?style=for-the-badge)](https://github.com/Athlon007/Leomard/releases)
-[![](https://img.shields.io/github/v/release/Athlon007/Leomard?include_prereleases&label=Latest&style=for-the-badge)](https://github.com/Athlon007/Leomard/releases)
-[![](https://img.shields.io/github/license/Athlon007/Leomard?style=for-the-badge)](LICENSE.md)
+[![](https://img.shields.io/github/downloads/Athlon007/Leomard/total)](https://github.com/Athlon007/Leomard/releases)
+[![](https://img.shields.io/github/v/release/Athlon007/Leomard?include_prereleases)](https://github.com/Athlon007/Leomard/releases)
+[![](https://img.shields.io/github/license/Athlon007/Leomard)](LICENSE.md)
+[![](https://img.shields.io/lemmy/leomard%40lemm.ee)](https://lemm.ee/c/leomard)
 
 
 <img align="right" src="Assets/Icon/mac.iconset/icon_512x512.png" alt="icon" width="128" />
@@ -59,6 +60,7 @@ This project is licensed under GPL-3.0. See [LICENSE](LICENSE.md) for more infor
 
 ## Credits
 
+- My friend **Fluffeline** for coming up with the whole Leopard thing
 - App Icon by [vintprox](https://github.com/vintprox) licensed under CC-BY-SA
 - [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) licensed under MIT License
-s
+- [Nuke](https://github.com/kean/Nuke) licensed under MIT License
