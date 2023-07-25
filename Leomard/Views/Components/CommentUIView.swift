@@ -65,7 +65,7 @@ struct CommentUIView: View {
             }
         } else {
             HStack {
-                if self.indentLevel > 0 {
+                if self.indentLevel > 0 && !self.profileViewMode {
                     VStack {
                         EmptyView()
                     }

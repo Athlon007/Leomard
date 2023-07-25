@@ -910,8 +910,8 @@
             filePath = "Leomard/Services/PostService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "feature(post:featureType:featured:completion:)"
             landmarkType = "7">
             <Locations>
@@ -1086,8 +1086,8 @@
             filePath = "Leomard/Services/PostService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "markAsRead(post:read:completion:)"
             landmarkType = "7">
          </BreakpointContent>

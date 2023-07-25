@@ -192,6 +192,9 @@ struct PreferencesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        VStack {
+            Toggle("Hide Read Posts", isOn: UserPreferences.getInstance.$hideReadPosts)
+        }
     }
     
     @ViewBuilder

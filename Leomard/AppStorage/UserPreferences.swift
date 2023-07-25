@@ -14,12 +14,17 @@ final class UserPreferences: ObservableObject {
     
     private init() {}
     
+    // MARK: - NSFW
     @AppStorage("show_nsfw", store: .standard) var showNsfw: Bool = false
     @AppStorage("show_nsfw_in_feed", store: .standard) var showNsfwInFeed: Bool = false
     @AppStorage("blur_nsfw", store: .standard) var blurNsfw: Bool = true
+    
+    // MARK: - Sort & List Type Settings
     @AppStorage("post_sort_method", store: .standard) var postSortMethod: SortType = .hot
     @AppStorage("listing_type", store: .standard) var listType: ListingType = .all
     @AppStorage("comment_sort_method", store: .standard) var commentSortMethod: CommentSortType = .top
+    
+    // MARK: - Notifs
     @AppStorage("check_notifs_every", store: .standard) var checkNotifsEverySeconds: Int = 60
     @AppStorage("unreadonly_when_opening_inbox", store: .standard) var unreadonlyWhenOpeningInbox: Bool = true
     @AppStorage("profile_sort_method", store: .standard) var profileSortMethod: SortType = .new
@@ -27,6 +32,7 @@ final class UserPreferences: ObservableObject {
     // MARK: - Mark as Read Stuff
     @AppStorage("mark_post_as_read_on_open", store: .standard) var markPostAsReadOnOpen: Bool = true
     @AppStorage("mark_post_as_read_on_vote", store: .standard) var markPostAsReadOnVote: Bool = true
+    @AppStorage("hide_read_posts", store: .standard) var hideReadPosts: Bool = false
     
     // MARK: - Not in Preferences.
     @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
