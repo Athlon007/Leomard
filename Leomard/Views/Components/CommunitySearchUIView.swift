@@ -38,7 +38,7 @@ struct CommunitySearchUIView: View {
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 18))
-                        Text(communityView.community.name + "@" + LinkHelper.stripToHost(link: communityView.community.actorId))
+                        Text("!" + communityView.community.name + "@" + LinkHelper.stripToHost(link: communityView.community.actorId))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.secondary)

@@ -52,6 +52,8 @@ struct ContentView: View {
     @State var reportSent: Bool = false
     @State var reportSuccess: Bool = false
     
+    @State var showUnrecognizedLinkError: Bool = false
+    
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
@@ -167,6 +169,13 @@ struct ContentView: View {
         .alert(reportSuccess ? "Success!" : "Error",
                isPresented: $reportSent, actions: {},
                message: { Text(reportSuccess ? "Your report has been sent." : "Failed to send report. Try again later.") })
+        .handlesExternalEvents(preferring: ["{path of URL?}"], allowing: ["*"])
+        .onOpenURL { url in
+            handleUrl(url)
+        }
+        .alert("Unrecognized Link", isPresented: $showUnrecognizedLinkError, actions: {
+            Button("OK", action: {})
+        }, message: { Text("Link could not be recognized neither as community nor person link.")})
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -426,5 +435,40 @@ struct ContentView: View {
     func startReport(_ comment: Comment) {
         self.reportedComment = comment
         reportingComment = true
+    }
+    
+    func handleUrl(_ url: URL) {
+        let main: String = url.absoluteString.components(separatedBy: ":")[1].replacingOccurrences(of: "//", with: "")
+        if main.starts(with: "@") {
+            // Handle Person link.
+            let searchService = SearchService(requestHandler: RequestHandler())
+            searchService.search(query: main, searchType: .users, page: 1) { result in
+                switch result {
+                case .success(let response):
+                    if response.users.count != 0 {
+                        openPerson(profile: response.users[0].person)
+                    }
+                case .failure(let error):
+                    print(error)
+                    // TODO: Show error message.
+                }
+            }
+        } else if (main.starts(with: "!")) {
+            // Handle Community Link
+            let searchService = SearchService(requestHandler: RequestHandler())
+            searchService.search(query: main, searchType: .communities, page: 1) { result in
+                switch result {
+                case .success(let response):
+                    if response.communities.count != 0 {
+                        openCommunity(community: response.communities[0].community)
+                    }
+                case .failure(let error):
+                    print(error)
+                    // TODO: Show error message.
+                }
+            }
+        } else {
+            showUnrecognizedLinkError = true
+        }
     }
 }

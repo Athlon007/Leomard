@@ -103,6 +103,10 @@ struct PostUIView: View {
         }
     }
     
+    func test() {
+        print("test")
+    }
+    
     nonisolated
     private func postUrlTask() async -> URL? {
         return await withCheckedContinuation { continuation in

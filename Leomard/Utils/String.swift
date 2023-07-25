@@ -14,25 +14,11 @@ extension String {
     func formatMarkdown() async -> String {
         return await withCheckedContinuation { continuation in
             Task(priority: .background) {
-                let pattern = #"!\[.*?\]\(.*?\)"#
-                let regex = try! NSRegularExpression(pattern: pattern, options: [])
+                var transformed = self.addSpacesBetweenImages(self)
+                transformed = self.convertPersonsLinks(input: transformed)
+                transformed = convertInstanceLinks(input: transformed)
                 
-                let mutableMarkdownText = NSMutableString(string: self)
-                var offset = 0
-                
-                regex.enumerateMatches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count)) { (match, _, _) in
-                    if let match = match {
-                        let range = match.range
-                        let location = range.location + offset
-                        // Insert two line breaks before and after the image
-                        let replacement = "\n\n\(self[Range(range, in: self)!])\n\n"
-                        
-                        mutableMarkdownText.replaceCharacters(in: NSRange(location: location, length: range.length), with: replacement)
-                        offset += replacement.utf16.count - range.length
-                    }
-                }
-                
-                return continuation.resume(returning: String(mutableMarkdownText))
+                return continuation.resume(returning: String(transformed))
             }
         }
     }
@@ -45,5 +31,61 @@ extension String {
         }
         
         return false
+    }
+    
+    private func addSpacesBetweenImages(_ text: String) -> String {
+        let pattern = #"!\[.*?\]\(.*?\)"#
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        let mutableMarkdownText = NSMutableString(string: text)
+        var offset = 0
+        
+        regex.enumerateMatches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count)) { (match, _, _) in
+            if let match = match {
+                let range = match.range
+                let location = range.location + offset
+                // Insert two line breaks before and after the image
+                let replacement = "\n\n\(text[Range(range, in: text)!])\n\n"
+                
+                mutableMarkdownText.replaceCharacters(in: NSRange(location: location, length: range.length), with: replacement)
+                offset += replacement.utf16.count - range.length
+            }
+        }
+        
+        return String(mutableMarkdownText)
+    }
+    
+    private func convertInstanceLinks(input: String) -> String {
+        let pattern = "@[a-zA-Z0-9\\.]+@[a-zA-Z0-9\\.]+" // Regular expression pattern to match "@<any text without spaces>@<hostname>"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        let matches = regex.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
+        
+        var result = input
+        
+        for match in matches.reversed() {
+            let matchedString = (input as NSString).substring(with: match.range)
+            let markdownLink = "[\(matchedString)](leomard:\(matchedString))"
+            result = (result as NSString).replacingCharacters(in: match.range, with: markdownLink)
+        }
+        
+        return result
+    }
+    
+    private func convertPersonsLinks(input: String) -> String {
+        let pattern = "![a-zA-Z0-9\\.]+@[a-zA-Z0-9\\.]+" // Regular expression pattern to match "@<any text without spaces>@<hostname>"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        let matches = regex.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
+        
+        var result = input
+        
+        for match in matches.reversed() {
+            let matchedString = (input as NSString).substring(with: match.range)
+            let markdownLink = "[\(matchedString)](leomard:\(matchedString))"
+            result = (result as NSString).replacingCharacters(in: match.range, with: markdownLink)
+        }
+        
+        return result
     }
 }
