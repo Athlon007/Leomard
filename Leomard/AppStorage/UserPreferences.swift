@@ -23,7 +23,11 @@ final class UserPreferences: ObservableObject {
     @AppStorage("unreadonly_when_opening_inbox", store: .standard) var unreadonlyWhenOpeningInbox: Bool = true
     @AppStorage("profile_sort_method", store: .standard) var profileSortMethod: SortType = .new
     @AppStorage("check_for_update_frequency", store: .standard) var checkForUpdateFrequency: UpdateFrequency = .onceADay
+    // MARK: - Mark as Read Stuff
+    @AppStorage("mark_post_as_read_on_open", store: .standard) var markPostAsReadOnOpen: Bool = true
+    @AppStorage("mark_post_as_read_on_vote", store: .standard) var markPostAsReadOnVote: Bool = true
     
+    // MARK: - Not in Preferences.
     @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
     @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
     

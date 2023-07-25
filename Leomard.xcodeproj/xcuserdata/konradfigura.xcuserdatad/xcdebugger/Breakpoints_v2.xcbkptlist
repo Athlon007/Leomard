@@ -366,8 +366,8 @@
             filePath = "Leomard/Views/Components/ContextMenus/PostContextMenu.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -878,8 +878,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "467"
-            endingLineNumber = "467"
+            startingLineNumber = "473"
+            endingLineNumber = "473"
             landmarkName = "featureCommunity()"
             landmarkType = "7">
          </BreakpointContent>
@@ -894,8 +894,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "469"
-            endingLineNumber = "469"
+            startingLineNumber = "475"
+            endingLineNumber = "475"
             landmarkName = "featureCommunity()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1074,6 +1074,102 @@
             endingLineNumber = "73"
             landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "35350712-8A26-4F50-B9A2-E5FBD3C61D64"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/PostService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "markAsRead(post:read:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A1DB13B9-74D2-4947-A25C-458A64D7DD9B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Popups/PostPopup.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "A1DB13B9-74D2-4947-A25C-458A64D7DD9B - 9d2dd5f0df5d2241"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #4 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.alert&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_1_0: SwiftUI.View, &#x3c4;_1_1: SwiftUI.View&gt;(_: SwiftUI.LocalizedStringKey, isPresented: SwiftUI.Binding&lt;Swift.Bool&gt;, actions: () -&gt; &#x3c4;_1_0, message: () -&gt; &#x3c4;_1_1) -&gt; some&gt;&gt;.0)&gt; in Leomard.PostPopup.body.getter : some"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Views/Popups/PostPopup.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "143"
+                  endingLineNumber = "143"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "A1DB13B9-74D2-4947-A25C-458A64D7DD9B - e44a870e7b93c2f7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Leomard.PostResponse, Swift.Error&gt;) -&gt; () in closure #4 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.alert&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_1_0: SwiftUI.View, &#x3c4;_1_1: SwiftUI.View&gt;(_: SwiftUI.LocalizedStringKey, isPresented: SwiftUI.Binding&lt;Swift.Bool&gt;, actions: () -&gt; &#x3c4;_1_0, message: () -&gt; &#x3c4;_1_1) -&gt; some&gt;&gt;.0)&gt; in Leomard.PostPopup.body.getter : some"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Views/Popups/PostPopup.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "364">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A74F7065-1767-43DA-AD2C-4B06881479FE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Popups/PostPopup.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "86F6B32B-4EF7-4750-94C2-647C9A58838C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Popups/PostPopup.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

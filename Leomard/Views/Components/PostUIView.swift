@@ -39,7 +39,7 @@ struct PostUIView: View {
     @State var imageHeight: CGFloat = 0
     
     @State var showFailedToFeatureAlert: Bool = false
-
+    
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -404,6 +404,9 @@ struct PostUIView: View {
             switch result {
             case .success(let postResponse):
                 self.postView = postResponse.postView
+                if UserPreferences.getInstance.markPostAsReadOnVote {
+                    markAsRead(true)
+                }
             case .failure(let error):
                 print(error)
             }
@@ -423,6 +426,9 @@ struct PostUIView: View {
             switch result {
             case .success(let postResponse):
                 self.postView = postResponse.postView
+                if UserPreferences.getInstance.markPostAsReadOnVote {
+                    markAsRead(true)
+                }
             case .failure(let error):
                 print(error)
             }
@@ -470,6 +476,22 @@ struct PostUIView: View {
             case .failure(let error):
                 print(error)
                 showFailedToFeatureAlert = true
+            }
+        }
+    }
+    
+    func markAsRead(_ read: Bool) {
+        if read == postView.read {
+            return
+        }
+        
+        postService.markAsRead(post: postView.post, read: read) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+                // TODO: Show error
             }
         }
     }
