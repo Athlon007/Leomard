@@ -15,4 +15,13 @@ struct MyUserInfo: Codable {
     public let moderates: [CommunityModeratorView]
     public var personBlocks: [PersonBlockView]
     
+    public func mods(community: Community) -> Bool {
+        for moderate in moderates {
+            if moderate.community == community {
+                return true
+            }
+        }
+        
+        return false
+    }
 }

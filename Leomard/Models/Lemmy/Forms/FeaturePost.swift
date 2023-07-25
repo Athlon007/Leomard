@@ -8,7 +8,7 @@
 import Foundation
 
 struct FeaturePost: Codable {
-    let featureType: PostFeatureType
+    let featureType: String
     let featured: Bool
     let postId: Int
 }

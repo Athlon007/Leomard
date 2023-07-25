@@ -11,6 +11,7 @@ import SwiftUI
 struct PostContextMenu: View {
     let contentView: ContentView
     let postView: PostView
+    let sender: PostUIView
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -64,6 +65,15 @@ struct PostContextMenu: View {
                 contentView.startReport(postView.post)
             }) {
                 Text("Report")
+                    .padding()
+            }
+        }
+        if contentView.myUser != nil && contentView.myUser!.mods(community: postView.community) {
+            Divider()
+            Button(action: {
+                sender.featureCommunity()
+            }) {
+                Text(postView.post.featuredCommunity ? "Unpin" : "Pin")
                     .padding()
             }
         }
