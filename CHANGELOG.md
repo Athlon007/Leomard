@@ -6,6 +6,7 @@
 
 - Added support for "!community@instance" and "@user@instance" in the text
 - Added protocol handler for `leomard://` links
+- You can now feature a post in community as a moderator (right-click and click "Pin")
 
 ## 0.2 (2023-07-24)
 

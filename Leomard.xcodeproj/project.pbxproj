@@ -29,6 +29,8 @@
 		B017A3BD2A6C5079001949A8 /* CommentReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3BC2A6C5079001949A8 /* CommentReportResponse.swift */; };
 		B017A3BF2A6C5092001949A8 /* CommentReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3BE2A6C5092001949A8 /* CommentReportView.swift */; };
 		B017A3C12A6C5107001949A8 /* CommentReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3C02A6C5107001949A8 /* CommentReport.swift */; };
+		B017A3C32A6FEAFE001949A8 /* PostFeatureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3C22A6FEAFE001949A8 /* PostFeatureType.swift */; };
+		B017A3C52A6FEC91001949A8 /* FeaturePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017A3C42A6FEC91001949A8 /* FeaturePost.swift */; };
 		B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC572A505356005ECF36 /* LeomardApp.swift */; };
 		B01ECC5A2A505356005ECF36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01ECC592A505356005ECF36 /* ContentView.swift */; };
 		B01ECC5C2A505357005ECF36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B01ECC5B2A505357005ECF36 /* Assets.xcassets */; };
@@ -209,6 +211,8 @@
 		B017A3BC2A6C5079001949A8 /* CommentReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReportResponse.swift; sourceTree = "<group>"; };
 		B017A3BE2A6C5092001949A8 /* CommentReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReportView.swift; sourceTree = "<group>"; };
 		B017A3C02A6C5107001949A8 /* CommentReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentReport.swift; sourceTree = "<group>"; };
+		B017A3C22A6FEAFE001949A8 /* PostFeatureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeatureType.swift; sourceTree = "<group>"; };
+		B017A3C42A6FEC91001949A8 /* FeaturePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturePost.swift; sourceTree = "<group>"; };
 		B01ECC542A505356005ECF36 /* Leomard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Leomard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B01ECC572A505356005ECF36 /* LeomardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeomardApp.swift; sourceTree = "<group>"; };
 		B01ECC592A505356005ECF36 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -525,6 +529,7 @@
 				B00695CE2A50C22200206C77 /* PostView.swift */,
 				B00695D02A50C23400206C77 /* Post.swift */,
 				B00695D62A50C58A00206C77 /* PostAggregates.swift */,
+				B017A3C22A6FEAFE001949A8 /* PostFeatureType.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -666,6 +671,7 @@
 				B059981F2A67F9F100267636 /* BlockCommunity.swift */,
 				B017A3B22A6C34CA001949A8 /* CreatePostReport.swift */,
 				B017A3BA2A6C4F86001949A8 /* CreateCommentReport.swift */,
+				B017A3C42A6FEC91001949A8 /* FeaturePost.swift */,
 			);
 			path = Forms;
 			sourceTree = "<group>";
@@ -969,6 +975,7 @@
 				B05998202A67F9F100267636 /* BlockCommunity.swift in Sources */,
 				B05998222A67FA0D00267636 /* BlockCommunityResponse.swift in Sources */,
 				B05B21252A5DB51600BA8FB2 /* Clipboard.swift in Sources */,
+				B017A3C32A6FEAFE001949A8 /* PostFeatureType.swift in Sources */,
 				B05B21202A5D941F00BA8FB2 /* EditPost.swift in Sources */,
 				B0CEBE592A51E8F700982D4D /* ProfileView.swift in Sources */,
 				B017A3BD2A6C5079001949A8 /* CommentReportResponse.swift in Sources */,
@@ -1060,6 +1067,7 @@
 				B00695D32A50C3DB00206C77 /* Person.swift in Sources */,
 				B0CEBE522A51CC2700982D4D /* Service.swift in Sources */,
 				B091F83E2A5476E000F0DA32 /* PostResponse.swift in Sources */,
+				B017A3C52A6FEC91001949A8 /* FeaturePost.swift in Sources */,
 				B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */,
 				B05B211E2A5D939B00BA8FB2 /* DeletePost.swift in Sources */,
 				B0CEBE8D2A52D37F00982D4D /* Tagline.swift in Sources */,

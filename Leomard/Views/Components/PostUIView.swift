@@ -37,6 +37,8 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
+    
+    @State var showFailedToFeatureAlert: Bool = false
 
     @Environment(\.openURL) var openURL
     
@@ -83,8 +85,13 @@ struct PostUIView: View {
                 self.contentView.openPost(postView: self.postView)
             }
             .contextMenu {
-                PostContextMenu(contentView: contentView, postView: self.postView)
+                PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
             }
+            .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
+                Button("OK", action: {})
+            }, message: {
+                Text("Failed to feature the post. Try again later.")
+            })
         }
     }
     
@@ -449,5 +456,17 @@ struct PostUIView: View {
     func onPostEdited(updatedPostView: PostView) {
         self.postView = updatedPostView
         self.postBody = updatedPostView.post.body
+    }
+    
+    func featureCommunity() {
+        postService.feature(post: postView.post, featureType: .community, featured: !postView.post.featuredCommunity) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+                showFailedToFeatureAlert = true
+            }
+        }
     }
 }
