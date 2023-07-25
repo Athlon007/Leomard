@@ -195,6 +195,13 @@ struct PreferencesView: View {
         VStack {
             Toggle("Hide Read Posts", isOn: UserPreferences.getInstance.$hideReadPosts)
         }
+        VStack(alignment: .leading) {
+            Text("Hidden Instances")
+            TextField("Hidden Instances", text: UserPreferences.getInstance.$blockedInstances, prompt: Text("ex.: instance1.com, instance2.org"))
+                .textFieldStyle(.roundedBorder)
+            Text("Any instances listed here will be filtered out. You won't see communities, posts, or comments from those instances. Simply type the hostname of the instance (comma-separated).")
+                .lineLimit(nil)
+        }
     }
     
     @ViewBuilder

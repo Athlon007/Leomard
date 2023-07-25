@@ -15,7 +15,6 @@ class SearchService: Service {
     }
     
     public func search(query: String, searchType: SearchType, page: Int, completion: @escaping (Result<SearchResponse, Error>) -> Void) {
-        var host = SessionStorage.getInstance.getLemmyInstance()
         var searchQuery = query.replacingOccurrences(of: " ", with: "%20")
         
         var instanceSearch: Bool = false
@@ -31,14 +30,15 @@ class SearchService: Service {
         if searchType == .communities {
             request += "&sort=TopAll"
         }
-        requestHandler.makeApiRequest(host: host, request: request, method: .get) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
             switch result {
             case .success(let apiResponse):
                 do {
                     if let data = apiResponse.data {
                         var response = try self.decode(type: SearchResponse.self, data: data)
                         response.posts.forEach { postView in
-                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw
+                                || UserPreferences.isBlockedInstance(postView.post.apId) {
                                 response.posts = response.posts.filter { $0 != postView }
                             }
                         }
@@ -46,7 +46,8 @@ class SearchService: Service {
                         response.communities.forEach { communityView in
                             if (communityView.community.nsfw && !UserPreferences.getInstance.showNsfw)
                                 || (instanceSearch && !communityView.community.actorId.contains(searchedInstance))
-                                || (instanceSearch && communityView.community.name != searchQuery.lowercased()) {
+                                || (instanceSearch && communityView.community.name != searchQuery.lowercased())
+                                || UserPreferences.isBlockedInstance(communityView.community.actorId) {
                                 response.communities = response.communities.filter {
                                     $0 != communityView
                                 }
@@ -54,7 +55,8 @@ class SearchService: Service {
                         }
                         
                         response.comments.forEach { commentView in
-                            if commentView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
+                            if commentView.post.nsfw && !UserPreferences.getInstance.showNsfw
+                                || UserPreferences.isBlockedInstance(commentView.community.actorId){
                                 response.comments = response.comments.filter { $0 != commentView }
                             }
                         }

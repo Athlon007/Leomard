@@ -25,7 +25,8 @@ class PostService: Service {
                         responses.posts.forEach { postView in
                             if postView.post.nsfw && !UserPreferences.getInstance.showNsfw ||
                                 postView.post.nsfw && !UserPreferences.getInstance.showNsfwInFeed ||
-                                postView.read && UserPreferences.getInstance.hideReadPosts {
+                                postView.read && UserPreferences.getInstance.hideReadPosts ||
+                                UserPreferences.isBlockedInstance(postView.community.actorId) {
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }

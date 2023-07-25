@@ -12,6 +12,7 @@
 - "Show NSFW Content in Feed" toggle
 - "Hide Read Posts" toggle
 - Cross-posting
+- Hide instances
 
 ### Changes
 
@@ -20,6 +21,7 @@
 ### Bug Fixes
 
 - Fixed verifying URLs in post creation. Sometimes the server would not allow "HEAD" requests. If that's the case, the app will send "GET", if 405 is returned
+- Fixed adding images, if they have a space in the name
 
 ## 0.2 (2023-07-24)
 
