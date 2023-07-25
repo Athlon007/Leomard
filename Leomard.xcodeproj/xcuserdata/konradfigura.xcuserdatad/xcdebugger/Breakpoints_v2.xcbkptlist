@@ -910,8 +910,8 @@
             filePath = "Leomard/Services/PostService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "feature(post:featureType:featured:completion:)"
             landmarkType = "7">
             <Locations>
@@ -1086,8 +1086,8 @@
             filePath = "Leomard/Services/PostService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "markAsRead(post:read:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1170,6 +1170,70 @@
             endingLineNumber = "147"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "817120CD-13DC-4243-9050-2DB223511130"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/PostService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "getAllPosts(page:sortType:listingType:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "817120CD-13DC-4243-9050-2DB223511130 - 38f30cf9d18fbb6a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Leomard.PostView) -&gt; () in closure #1 (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; () in Leomard.PostService.getAllPosts(page: Swift.Int, sortType: Leomard.SortType, listingType: Leomard.ListingType, completion: (Swift.Result&lt;Leomard.GetPostsResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/PostService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "632">
+               </Location>
+               <Location
+                  uuid = "817120CD-13DC-4243-9050-2DB223511130 - 14cfacfc008ffe2f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Leomard.PostView) -&gt; Swift.Bool in closure #1 (Leomard.PostView) -&gt; () in closure #1 (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; () in Leomard.PostService.getAllPosts(page: Swift.Int, sortType: Leomard.SortType, listingType: Leomard.ListingType, completion: (Swift.Result&lt;Leomard.GetPostsResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/PostService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E484C906-0063-408E-8A7B-9A8325366E5D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/PostService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "getAllPosts(page:sortType:listingType:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

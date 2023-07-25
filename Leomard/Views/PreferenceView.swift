@@ -181,6 +181,8 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
+            Toggle("Show NSFW content in Feed", isOn: UserPreferences.getInstance.$showNsfwInFeed)
+                .padding(.leading, 16)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
         }
         GroupBox("Mark Post As Read") {

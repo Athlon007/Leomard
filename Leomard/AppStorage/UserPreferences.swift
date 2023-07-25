@@ -15,6 +15,7 @@ final class UserPreferences: ObservableObject {
     private init() {}
     
     @AppStorage("show_nsfw", store: .standard) var showNsfw: Bool = false
+    @AppStorage("show_nsfw_in_feed", store: .standard) var showNsfwInFeed: Bool = false
     @AppStorage("blur_nsfw", store: .standard) var blurNsfw: Bool = true
     @AppStorage("post_sort_method", store: .standard) var postSortMethod: SortType = .hot
     @AppStorage("listing_type", store: .standard) var listType: ListingType = .all

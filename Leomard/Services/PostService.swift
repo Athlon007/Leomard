@@ -23,7 +23,8 @@ class PostService: Service {
                     do {
                         var responses = try self.decode(type: GetPostsResponse.self, data: data)
                         responses.posts.forEach { postView in
-                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw ||
+                                postView.post.nsfw && !UserPreferences.getInstance.showNsfwInFeed {
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }

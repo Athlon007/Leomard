@@ -9,6 +9,7 @@
 - You can now feature a post in community as a moderator (right-click and click "Pin")
 - Color coding to subcomments
 - Comments can now be marked as read manually, on post view, or vote
+- "Show NSFW Content in Feed" toggle
 
 ### Changes
 
