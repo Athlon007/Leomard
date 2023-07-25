@@ -63,6 +63,8 @@ While the code should explain itself, if something is not clear, please add a co
 
 I sometimes may not follow my own guidelines (sorry!). If you find any violations, please feel free to open a pull request.
 
+While creating Forms for API requests, **never** add "auth". This is handled by RequestHandler.
+
 ## Artwork
 
 Any artwork you create must be licensed under CC-BY-SA-4.0. If your art will be used in the app, you will be credited in the app and in README.md.
