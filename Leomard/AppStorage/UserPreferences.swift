@@ -41,6 +41,9 @@ final class UserPreferences: ObservableObject {
     // MARK: - Blocked instances
     @AppStorage("blocked_instances", store: .standard) var blockedInstances: String = ""
     
+    // MARK: - Post View
+    @AppStorage("use_post_compact_view", store: .standard) var usePostCompactView: Bool = false
+    
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]
     
