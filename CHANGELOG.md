@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3 (TBA)
+
+### Added
+
+- Added support for "!community@instance" and "@user@instance" in the text
+- Added protocol handler for `leomard://` links
+
 ## 0.2 (2023-07-24)
 
 *Note: You will have to log in again, because the app now uses a different method of storing the authorization tokens. Sorry for the inconvenience.*
