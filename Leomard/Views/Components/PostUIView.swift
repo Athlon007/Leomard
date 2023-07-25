@@ -99,11 +99,15 @@ struct PostUIView: View {
     private func postBodyTask() async -> String? {
         return await withCheckedContinuation { continuation in
             Task(priority: .background) {
-                var newPostBody = await self.postView.post.body?.formatMarkdown()
-                if shortBody && newPostBody != nil && newPostBody!.count > PostUIView.maxPostLength {
-                    newPostBody = String(newPostBody!.prefix(PostUIView.maxPostLength))
-                    newPostBody = newPostBody!.trimmingCharacters(in: .whitespacesAndNewlines)
-                    newPostBody = newPostBody! + "... **Read More**"
+                var newPostBody = await self.postView.post.body
+                if newPostBody != nil {
+                    if shortBody && newPostBody!.count > PostUIView.maxPostLength {
+                        newPostBody = String(newPostBody!.prefix(PostUIView.maxPostLength))
+                        newPostBody = newPostBody!.trimmingCharacters(in: .whitespacesAndNewlines)
+                        newPostBody = newPostBody! + "...\n\n**Read More**"
+                    }
+                    
+                    newPostBody = await newPostBody!.formatMarkdown()
                 }
                 return continuation.resume(returning: newPostBody)
             }
