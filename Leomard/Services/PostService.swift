@@ -117,4 +117,11 @@ class PostService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func feature(post: Post, featureType: PostFeatureType, featured: Bool, completion: @escaping(Result<PostResponse, Error>) -> Void) {
+        let body = FeaturePost(featureType: featureType, featured: featured, postId: post.id)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/feature", method: .post) { result in
+            self.respond(result, completion)
+        }
+    }
 }
