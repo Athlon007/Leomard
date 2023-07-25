@@ -179,6 +179,9 @@ struct PreferencesView: View {
             }
         }
         VStack(alignment: .leading) {
+            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
+        }
+        VStack(alignment: .leading) {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
             Toggle("Show NSFW content in Feed", isOn: UserPreferences.getInstance.$showNsfwInFeed)

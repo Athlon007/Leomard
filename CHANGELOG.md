@@ -13,6 +13,7 @@
 - "Hide Read Posts" toggle
 - Cross-posting
 - Hide instances
+- Compact View
 
 ### Changes
 

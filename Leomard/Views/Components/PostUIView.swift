@@ -44,54 +44,82 @@ struct PostUIView: View {
     
     var body: some View {
         if !postView.post.deleted && !postView.post.removed {
-            LazyVStack {
-                postTitle
-                    .frame(
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                postBodyMarkdown
-                postBodyContent
-                Spacer(minLength: 6)
-                communityPersonDate
-                    .frame (
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                Spacer(minLength: 6)
-                postActionsToolbar
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity
-                    )
+            HStack {
+                if UserPreferences.getInstance.usePostCompactView && shortBody {
+                    compactViewVotes
+                    compactViewImage
+                }
+                LazyVStack {
+                    postTitle
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    if UserPreferences.getInstance.usePostCompactView {
+                        if !shortBody {
+                            postBodyMarkdown
+                            postBodyContent
+                        }
+                    } else {
+                        postBodyMarkdown
+                        postBodyContent
+                    }
+                    Spacer(minLength: 6)
+                    if UserPreferences.getInstance.usePostCompactView {
+                        HStack {
+                            communityPersonDate
+                                .frame (
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                            postActionsToolbar
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity
+                                )
+                        }
+                    } else {
+                        communityPersonDate
+                            .frame (
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        Spacer(minLength: 6)
+                        postActionsToolbar
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity
+                            )
+                    }
+                }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: titleHeight + bodyHeight + imageHeight,
+                    maxHeight: .infinity,
+                    alignment: .top
+                )
+                
+                .task {
+                    postBody = await postBodyTask()
+                    url = await postUrlTask()
+                    updatedTimeAsString = await updatedTimeAsStringTask()
+                }
+                .onTapGesture {
+                    self.contentView.openPost(postView: self.postView)
+                }
+                .contextMenu {
+                    PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
+                }
+                .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
+                    Button("OK", action: {})
+                }, message: {
+                    Text("Failed to feature the post. Try again later.")
+                })
             }
             .padding(Self.padding)
             .background(Color(.textBackgroundColor))
             .cornerRadius(Self.cornerRadius)
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity,
-                minHeight: titleHeight + bodyHeight + imageHeight,
-                maxHeight: .infinity,
-                alignment: .top
-            )
-            
-            .task {
-                postBody = await postBodyTask()
-                url = await postUrlTask()
-                updatedTimeAsString = await updatedTimeAsStringTask()
-            }
-            .onTapGesture {
-                self.contentView.openPost(postView: self.postView)
-            }
-            .contextMenu {
-                PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
-            }
-            .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
-                Button("OK", action: {})
-            }, message: {
-                Text("Failed to feature the post. Try again later.")
-            })
         }
     }
     
@@ -337,21 +365,23 @@ struct PostUIView: View {
     @ViewBuilder
     private var postActionsToolbar: some View {
         HStack {
-            HStack {
-                Image(systemName: "arrow.up")
-                Text(String(postView.counts.upvotes))
-            }
-            .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-            .onTapGesture {
-                likePost()
-            }
-            HStack {
-                Image(systemName: "arrow.down")
-                Text(String(postView.counts.downvotes))
-            }
-            .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-            .onTapGesture {
-                dislikePost()
+            if !(shortBody && UserPreferences.getInstance.usePostCompactView) {
+                HStack {
+                    Image(systemName: "arrow.up")
+                    Text(String(postView.counts.upvotes))
+                }
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                .onTapGesture {
+                    likePost()
+                }
+                HStack {
+                    Image(systemName: "arrow.down")
+                    Text(String(postView.counts.downvotes))
+                }
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                .onTapGesture {
+                    dislikePost()
+                }
             }
             HStack {
                 Image(systemName: "ellipsis.message")
@@ -391,6 +421,47 @@ struct PostUIView: View {
                     savePost()
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var compactViewVotes: some View {
+        VStack {
+            Image(systemName: "arrow.up")
+            .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+            .onTapGesture {
+                likePost()
+            }
+            .font(Font.headline.weight(.bold))
+            Text(String(postView.counts.upvotes - postView.counts.downvotes))
+            Image(systemName: "arrow.down")
+            .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+            .onTapGesture {
+                dislikePost()
+            }
+            .font(Font.headline.weight(.bold))
+        }
+    }
+    
+    @ViewBuilder
+    private var compactViewImage: some View {
+        if postView.post.url != nil && LinkHelper.isImageLink(link: postView.post.url!) {
+            VStack {
+                LazyImage(url: URL(string: postView.post.url!)!) { result in
+                    if let image = result.image {
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+            }
+            .frame(width: 40, height: 40, alignment: .leading)
+            .cornerRadius(4)
+            .aspectRatio(1, contentMode: .fit)
+            .clipped()
         }
     }
     
