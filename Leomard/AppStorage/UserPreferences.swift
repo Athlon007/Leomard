@@ -38,6 +38,19 @@ final class UserPreferences: ObservableObject {
     @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
     @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
     
+    // MARK: - Blocked instances
+    @AppStorage("blocked_instances", store: .standard) var blockedInstances: String = ""
+    
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]
+    
+    static func isBlockedInstance(_ url: String) -> Bool {
+        for instance in self.getInstance.blockedInstances.components(separatedBy: ",") {
+            if url.contains(instance.replacingOccurrences(of: " ", with: "")) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
