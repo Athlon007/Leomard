@@ -11,10 +11,15 @@
 - Comments can now be marked as read manually, on post view, or vote
 - "Show NSFW Content in Feed" toggle
 - "Hide Read Posts" toggle
+- Cross-posting
 
 ### Changes
 
 - Decreased the indentation of the subcomments
+
+### Bug Fixes
+
+- Fixed verifying URLs in post creation. Sometimes the server would not allow "HEAD" requests. If that's the case, the app will send "GET", if 405 is returned
 
 ## 0.2 (2023-07-24)
 

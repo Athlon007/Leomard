@@ -17,6 +17,7 @@ struct PostCreationPopup: View {
     @Binding var myself: MyUserInfo?
     let onPostAdded: (PostView) -> Void
     let editedPost: PostView?
+    let crossPost: PostView?
     
     @State var title: String = ""
     @State var bodyText: String = ""
@@ -31,6 +32,11 @@ struct PostCreationPopup: View {
     @State var imageUploadFail: Bool = false
     @State var imageUploadFailReason: String = ""
     @State var isUploadingImage: Bool = false
+    
+    // Cross-post stuff
+    @State var searchCommunityText: String = ""
+    @State var communities: [CommunityView] = []
+    @State var selectedCrossCommunity: Community? = nil
     
     var body: some View {
         ZStack {
@@ -145,6 +151,32 @@ struct PostCreationPopup: View {
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
+                        if crossPost != nil {
+                            VStack {
+                                Text("Community")
+                                    .bold()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                TextField("Search Community", text: $searchCommunityText)
+                                    .onSubmit {
+                                        searchCommunity()
+                                    }
+                                List(communities, id: \.self) { community in
+                                    HStack {
+                                        CommunityAvatar(community: community.community)
+                                        Text(community.community.name)
+                                            .foregroundColor(selectedCrossCommunity == community.community ? .blue : .primary)
+                                    }
+                                    .onTapGesture {
+                                        self.selectedCrossCommunity = community.community
+                                    }
+                                    Divider()
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 20)
+                                .listStyle(.bordered)
+                                .cornerRadius(4)
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
                         HStack(spacing: 20) {
                             Button("Send", action: sendPost)
                                 .buttonStyle(.borderedProminent)
@@ -203,6 +235,17 @@ struct PostCreationPopup: View {
                 self.bodyText = self.editedPost!.post.body ?? ""
                 self.url = self.editedPost!.post.url ?? ""
                 self.isNsfw = self.editedPost!.post.nsfw
+            } else if let post = self.crossPost {
+                self.title = post.post.name
+                self.url = post.post.url ?? ""
+                self.isNsfw = post.post.nsfw
+                
+                self.bodyText += "cross-posted from: \(post.post.apId)\n\n"
+                if let body = post.post.body {
+                    for line in body.components(separatedBy: "\n") {
+                        self.bodyText += ">\(line)\n"
+                    }
+                }
             }
         }
     }
@@ -234,7 +277,8 @@ struct PostCreationPopup: View {
                 }
             }
         } else {
-            self.postService.createPost(community: community, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
+            let sendToCommuntiy = crossPost != nil ? selectedCrossCommunity! : self.community
+            self.postService.createPost(community: sendToCommuntiy, name: title, body: bodyText, url: url, nsfw: isNsfw) { result in
                 switch result {
                 case .success(let response):
                     self.onPostAdded(response.postView)
@@ -259,6 +303,10 @@ struct PostCreationPopup: View {
     }
     
     func canSendPost() -> Bool {
+        if crossPost != nil && selectedCrossCommunity == nil {
+            return false
+        }
+        
         return title.count > 0 && self.isUrlValid && !isSendingPost
     }
     
@@ -338,5 +386,18 @@ struct PostCreationPopup: View {
         }
         panel.orderFrontRegardless()
         self.contentView.toggleInteraction(false)
+    }
+    
+    func searchCommunity() {
+        let searchService = SearchService(requestHandler: RequestHandler())
+        searchService.search(query: searchCommunityText, searchType: .communities, page: 1) { result in
+            switch result {
+            case .success(let searchResponse):
+                self.communities = searchResponse.communities
+            case .failure(let error):
+                print(error)
+                // TODO: Show error.
+            }
+        }
     }
 }

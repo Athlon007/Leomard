@@ -35,6 +35,7 @@ struct ContentView: View {
     @State var openedPostMakingForCommunity: Community? = nil
     @State var onPostAdded: ((PostView) -> Void)? = nil
     @State var editedPost: PostView? = nil
+    @State var crossPost: PostView? = nil
     
     @Binding var columnStatus: NavigationSplitViewVisibility
     @State var unreadMessages: Int = 0
@@ -240,7 +241,8 @@ struct ContentView: View {
                 postService: postService!,
                 myself: $myUser,
                 onPostAdded: self.onPostAdded!,
-                editedPost: editedPost)
+                editedPost: editedPost,
+                crossPost: crossPost)
         }
     }
     
@@ -469,6 +471,14 @@ struct ContentView: View {
             }
         } else {
             showUnrecognizedLinkError = true
+        }
+    }
+    
+    func openCrossPost(post: PostView) {
+        self.crossPost = post
+        openedPostMakingForCommunity = post.community
+        self.onPostAdded = { post in
+            self.openPost(postView: post)
         }
     }
 }

@@ -377,6 +377,11 @@ struct PostUIView: View {
                         Text("Are you sure you want to delete a post?")
                     })
                 }
+                Button(action: crossPost) {
+                    Image(systemName: "point.3.connected.trianglepath.dotted")
+                }
+                .buttonStyle(.link)
+                .foregroundColor(.primary)
                 HStack {
                     Image(systemName: "bookmark")
                 }
@@ -494,5 +499,9 @@ struct PostUIView: View {
                 // TODO: Show error
             }
         }
+    }
+    
+    func crossPost() {
+        contentView.openCrossPost(post: postView)
     }
 }
