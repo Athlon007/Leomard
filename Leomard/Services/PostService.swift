@@ -124,4 +124,16 @@ class PostService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func markAsRead(post: Post, read: Bool, completion: @escaping(Result<PostResponse, Error>) -> Void) {
+        if !SessionStorage.getInstance.isSessionActive() {
+            completion(.failure(LeomardExceptions.notLoggedIn("You're not logged in.")))
+            return
+        }
+        
+        let body = MarkPostAsRead(postId: post.id, read: read)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/mark_as_read", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

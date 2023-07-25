@@ -183,6 +183,13 @@ struct PreferencesView: View {
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
         }
+        GroupBox("Mark Post As Read") {
+            Toggle("When opening the post", isOn: UserPreferences.getInstance.$markPostAsReadOnOpen)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("When voting on post", isOn: UserPreferences.getInstance.$markPostAsReadOnVote)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder

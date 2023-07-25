@@ -57,6 +57,12 @@ struct PostContextMenu: View {
             }
         }
         Divider()
+        Button(action: {
+            sender.markAsRead(!postView.read)
+        }) {
+            Text(postView.read ? "Mark as unread" : "Mark as read")
+        }
+        Divider()
         ShareLink(item: URL(string: postView.post .apId)!) {
             Text("Share")
         }
