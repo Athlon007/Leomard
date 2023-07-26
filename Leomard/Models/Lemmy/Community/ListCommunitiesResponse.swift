@@ -8,5 +8,5 @@
 import Foundation
 
 struct ListCommunitiesResponse: Codable {
-    let communities: [CommunityView]
+    var communities: [CommunityView]
 }
