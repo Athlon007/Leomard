@@ -4,21 +4,21 @@
 
 ### Added
 
-- Added support for "!community@instance" and "@user@instance" in the text
-- Added protocol handler for `leomard://` links
+- Added support for "!community@instance" and "@user@instance" in the text. You can now click on them to open the community or user profile
+- Added protocol handler for `leomard://` links. Communties or profiles can be opened by opening a link with such protocol (example: `leomard://!leomard@lemm.ee`)
 - You can now feature a post in community as a moderator (right-click and click "Pin")
 - Color coding to subcomments
 - Comments can now be marked as read manually, on post view, or vote
 - "Show NSFW Content in Feed" toggle
 - "Hide Read Posts" toggle
 - Cross-posting
-- Hide instances
+- Hide instances. Simply add an instance hostname to the list in settings, and posts, comments and profiles from that instance will not be shown in the feed and search
 - Compact View
 - Added profile editing
     - You can now change display name and banner in the profile view
     - You can view blocked communities and persons, as well as unblock them
     - To access, go into your profile and click the pen icon
-- Add "Trending" communities when opening Search
+- "Trending" communities when opening Search. You can also scroll down to see more trending communities
 - You can now select from saved sessions on login screen
 
 ### Changes
