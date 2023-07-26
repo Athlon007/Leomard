@@ -663,7 +663,7 @@ struct ProfileView: View {
     }
 }
 
-fileprivate struct SessionPickerOption: Hashable {
+struct SessionPickerOption: Hashable {
     let title: String
     let sessionInfo: SessionInfo?
 }
