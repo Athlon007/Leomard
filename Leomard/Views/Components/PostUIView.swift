@@ -105,12 +105,6 @@ struct PostUIView: View {
                     url = await postUrlTask()
                     updatedTimeAsString = await updatedTimeAsStringTask()
                 }
-                .onTapGesture {
-                    self.contentView.openPost(postView: self.postView)
-                }
-                .contextMenu {
-                    PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
-                }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
                     Button("OK", action: {})
                 }, message: {
@@ -120,6 +114,12 @@ struct PostUIView: View {
             .padding(Self.padding)
             .background(Color(.textBackgroundColor))
             .cornerRadius(Self.cornerRadius)
+            .onTapGesture {
+                self.contentView.openPost(postView: self.postView)
+            }
+            .contextMenu {
+                PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
+            }
         }
     }
     
@@ -410,6 +410,7 @@ struct PostUIView: View {
                 Button(action: crossPost) {
                     Image(systemName: "point.3.connected.trianglepath.dotted")
                 }
+                .help("Cross-Post")
                 .buttonStyle(.link)
                 .foregroundColor(.primary)
                 HStack {
