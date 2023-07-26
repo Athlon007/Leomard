@@ -25,6 +25,7 @@
 
 - Decreased the indentation of the subcomments
 - Decreased the minimum window height, so the window won't be too big on smaller screens or larger display scales
+- Slightly lowered system requirements to macOS 13.0 (previous version required was macOS 13.1)
 
 ### Bug Fixes
 
