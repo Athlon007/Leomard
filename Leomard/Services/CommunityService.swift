@@ -43,4 +43,12 @@ class CommunityService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func getCommunities(page: Int, showNsfw: Bool, sortType: SortType, listingType: ListingType, completion: @escaping (Result<ListCommunitiesResponse, Error>) -> Void) {
+        let nsfw = UserPreferences.getInstance.showNsfw == false ? false : showNsfw
+        let request = "/community/list?page=\(page)&show_nsfw=\(nsfw)&sort=\(String(describing: sortType))&type_=\(String(describing: listingType))"
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
+            self.respond(result, completion)
+        }
+    }
 }

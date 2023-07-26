@@ -446,8 +446,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -462,8 +462,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -510,8 +510,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -526,8 +526,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -574,8 +574,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "315"
-            endingLineNumber = "315"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -622,8 +622,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
             landmarkName = "communitiesList"
             landmarkType = "24">
          </BreakpointContent>
@@ -638,8 +638,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
+            startingLineNumber = "345"
+            endingLineNumber = "345"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -686,8 +686,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "316"
-            endingLineNumber = "316"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -734,8 +734,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "communitiesList"
             landmarkType = "24">
          </BreakpointContent>
