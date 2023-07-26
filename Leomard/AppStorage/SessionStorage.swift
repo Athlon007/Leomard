@@ -65,6 +65,25 @@ final class SessionStorage {
         return self.updateKeychain()
     }
     
+    public func updateCurrentSessionInfo(newInformation: LoginResponse) -> Bool {
+        if sessions.currentSession == nil {
+            return false
+        }
+        
+        var updated = sessions.currentSession!
+        updated.loginResponse = newInformation
+        
+        let index = sessions.allSessions.firstIndex(of: sessions.currentSession!)
+        if index == nil {
+            return false
+        }
+        
+        sessions.allSessions[index!] = updated
+        sessions.currentSession = updated
+        
+        return self.updateKeychain()
+    }
+    
     /// Returns the current session
     public func getCurrentSession() -> SessionInfo? {
         return self.sessions.currentSession
