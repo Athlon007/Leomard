@@ -45,7 +45,7 @@ class CommunityService: Service {
     }
     
     public func getCommunities(page: Int, showNsfw: Bool, sortType: SortType, listingType: ListingType, completion: @escaping (Result<ListCommunitiesResponse, Error>) -> Void) {
-        let nsfw = UserPreferences.getInstance.showNsfw == false ? false : showNsfw
+        let nsfw = !UserPreferences.getInstance.showNsfw ? false : showNsfw
         let request = "/community/list?page=\(page)&show_nsfw=\(nsfw)&sort=\(String(describing: sortType))&type_=\(String(describing: listingType))"
         requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
             switch result {
