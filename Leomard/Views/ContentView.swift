@@ -302,7 +302,7 @@ struct ContentView: View {
     }
 
     func closePost() {
-        self.openedPostView = nil
+        self.openedPostView = nil        
     }
     
     func logout() {
@@ -376,6 +376,8 @@ struct ContentView: View {
     
     func closePostCreation() {
         openedPostMakingForCommunity = nil
+        self.editedPost = nil
+        self.crossPost = nil
     }
     
     func openPostEdition(post: PostView, onPostEdited: @escaping (PostView) -> Void) {
@@ -387,6 +389,7 @@ struct ContentView: View {
     func closePostEdit() {
         openedPostMakingForCommunity = nil
         self.editedPost = nil
+        self.crossPost = nil
     }
     
     func updateUnreadMessagesCount() {
