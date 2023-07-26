@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2 (TBA)
+## 0.2 (2023-07-24)
 
 *Note: You will have to log in again, because the app now uses a different method of storing the authorization tokens. Sorry for the inconvenience.*
 
@@ -23,6 +23,7 @@
 - Post reporting
 - Comment reporting
 - Bots are now marked with "🤖" emoji
+- Support for "!community@instance" and "@user@instance" in Search
 
 ### Changes
 
@@ -41,6 +42,10 @@
 - Post creation popup content never gets cleared (#6)
 - Fixed images in comments overflowing the comment box, if the image was placed in line with text
 - Fixed duplicate posts and comments
+
+### Removed
+
+- Experimental settings
 
 ## 0.1 (2023-07-17)
 

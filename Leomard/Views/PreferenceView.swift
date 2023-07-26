@@ -19,8 +19,8 @@ struct PreferencesView: View {
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
-        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green),
-        .init(name: "Experimental", icon: "testtube.2", color: .red)
+        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green)
+        //.init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
     @State fileprivate var currentSelection: PreferenceOption?
     
@@ -123,8 +123,8 @@ struct PreferencesView: View {
                     contentPreferences
                 case preferenceOptions[2]:
                     updatesPreferences
-                case preferenceOptions[3]:
-                    experimentalPreferences
+                //case preferenceOptions[3]:
+                    //experimentalPreferences
                 default:
                     Text("")
                 }
@@ -213,13 +213,7 @@ struct PreferencesView: View {
     @ViewBuilder
     private var experimentalPreferences: some View {
         VStack(alignment: .leading) {
-            Toggle("Cross Instance Search", isOn: UserPreferences.getInstance.$experimentXInstanceSearch)
-            Text("""
-                         Use '@instance.name' at the end of the search query, to search using other Lemmy instance from your own.
-                         Example: 'awesome post @lemmy.world'
-                         """)
-            .frame(maxWidth: .infinity)
-            .lineLimit(nil)
+            // Unused for now.
         }
     }
 }

@@ -64,7 +64,7 @@ struct CommunityUISidebarView: View {
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 24))
-                Text(communityResponse.communityView.community.name + "@" + LinkHelper.stripToHost(link: communityResponse.communityView.community.actorId))
+                Text("!" + communityResponse.communityView.community.name + "@" + LinkHelper.stripToHost(link: communityResponse.communityView.community.actorId))
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)

@@ -14,6 +14,8 @@ Any code you write must be licensed under GPL-3.0. See [LICENSE](LICENSE.md) for
 
 You can work on whatever you want from [Projects/Leomard](https://github.com/users/Athlon007/projects/3/views/1). If something is in the "In progress" column, please do not work on it, unless you have been assigned to it. First table is for the current version, those features are the most important. Please avoid working on features that are in the "Future" column or the next update column, unless you have been assigned to it. You can also work on stuff from the "Bugs" column.
 
+You can also test stuff that is in the "Testing" column. If you find any bugs related to the stuff in the "Testing" column, please open an issue. If no issues have been reported regarding an item in this column in 7 days after the update containing that item has been released, the item will be moved to the "Done" column.
+
 If you want to work on something that is not in the project, please create an issue first. Your idea will be discussed, and if it is accepted, it will be added to the project.
 
 ## Branches

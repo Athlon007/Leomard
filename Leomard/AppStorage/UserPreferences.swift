@@ -24,8 +24,6 @@ final class UserPreferences: ObservableObject {
     @AppStorage("profile_sort_method", store: .standard) var profileSortMethod: SortType = .new
     @AppStorage("check_for_update_frequency", store: .standard) var checkForUpdateFrequency: UpdateFrequency = .onceADay
     
-    @AppStorage("experiment_x_instance_search", store: .standard) var experimentXInstanceSearch: Bool = false
-    
     @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
     @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
     
