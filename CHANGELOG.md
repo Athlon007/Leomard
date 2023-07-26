@@ -22,12 +22,13 @@
 ### Changes
 
 - Decreased the indentation of the subcomments
-- Decreased the minimum window height
+- Decreased the minimum window height, so the window won't be too big on smaller screens or larger display scales
 
 ### Bug Fixes
 
 - Fixed verifying URLs in post creation. Sometimes the server would not allow "HEAD" requests. If that's the case, the app will send "GET", if 405 is returned
 - Fixed adding images, if they have a space in the name
+- Window size is not restored correctly on launch
 
 ## 0.2 (2023-07-24)
 

@@ -17,6 +17,7 @@ struct LeomardApp: App {
     
     @State private var latestRelease: Release? = nil
 
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             ContentView(columnStatus: $mainWindowNavSplitStatus)
@@ -30,6 +31,9 @@ struct LeomardApp: App {
                     
                     DataLoader.sharedUrlCache.diskCapacity = 500 * (1024 * 1024)
                     DataLoader.sharedUrlCache.memoryCapacity = 0
+                }
+                .onDisappear {
+                    
                 }
                 .task {
                     checkForUpdateOnStart()
@@ -118,5 +122,23 @@ struct LeomardApp: App {
                 print(error)
             }
         }
+    }
+}
+
+// https://stackoverflow.com/questions/71506416/restoring-macos-window-size-after-close-using-swiftui-windowsgroup
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let mainWindow = NSApp.windows.first
+        mainWindow?.delegate = self
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        let mainWindow = NSApp.windows.first
+        if flag {
+            mainWindow?.orderFront(nil)
+        } else {
+            mainWindow?.makeKeyAndOrderFront(nil)
+        }
+        return true
     }
 }
