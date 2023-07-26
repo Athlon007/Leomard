@@ -24,7 +24,7 @@ struct CommentReplyUIView: View {
     @State var sendingReplyFailed: Bool = false
     
     var body: some View {
-        if isReplied {
+        if isReplied && unreadOnlyMode {
             EmptyView()
         } else {
             VStack {
@@ -272,6 +272,7 @@ struct CommentReplyUIView: View {
                     commentText = ""
                     isSendingComment = false
                     isReplied = true
+                    isReplying = false
                     
                     self.contentView.updateUnreadMessagesCount()
                 }

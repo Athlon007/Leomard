@@ -19,6 +19,7 @@
     - You can view blocked communities and persons, as well as unblock them
     - To access, go into your profile and click the pen icon
 - Add "Trending" communities when opening Search
+- You can now select from saved sessions on login screen
 
 ### Changes
 
@@ -31,6 +32,7 @@
 - Fixed adding images, if they have a space in the name
 - Window size is not restored correctly on launch
 - Fix duplicate call to updateUnreadMessagesCount() (#54)
+- When all replies are shown, when replying, the reply won't disappear (#57)
 
 ## 0.2 (2023-07-24)
 
