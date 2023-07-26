@@ -14,21 +14,23 @@ struct SearchView: View {
     let commentService: CommentService
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
-
+    
     @State var searchService: SearchService?
-
+    
     @State var searchResponse: SearchResponse = SearchResponse()
-
+    
     @State var searchQuery: String = ""
     @State var selectedSearchType: SearchType = .communities
     let availableSearchTypes: [SearchType] = [ .communities, .posts, .comments, .users ]
-
+    
     @State var searching: Bool = false
     @State var page: Int = 1
     @State var searchedOnce: Bool = false
     @FocusState var searchFocused: Bool
     @State var error: String = ""
-
+    
+    @State var trendingCommunities: [CommunityView] = []
+    
     var body: some View {
         searchBar
             .frame(
@@ -63,7 +65,7 @@ struct SearchView: View {
         .task {
             self.searchQuery = ""
             self.selectedSearchType = .communities
-
+            
             let requestHandler = RequestHandler()
             self.searchService = SearchService(requestHandler: requestHandler)
         }
@@ -175,40 +177,74 @@ struct SearchView: View {
     
     @ViewBuilder
     private var communitiesList: some View {
-        if searchResponse.communities == [] && !self.searching && self.searchedOnce {
-            Text("No communities found!")
-                .italic()
-                .foregroundColor(.secondary)
-            if self.error != "" {
-                Text(self.error)
+        if searchResponse.communities == [] && !self.searching {
+            if self.searchedOnce {
+                Text("No communities found!")
                     .italic()
                     .foregroundColor(.secondary)
+                if self.error != "" {
+                    Text(self.error)
+                        .italic()
+                        .foregroundColor(.secondary)
+                }
+            } else {
+                VStack {
+                    Text("Trending")
+                        .bold()
+                        .font(.system(size: 24))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .onAppear { loadTrendingCommunities() }
+                    if trendingCommunities == [] {
+                        ProgressView().progressViewStyle(.circular)
+                    } else {
+                        List (trendingCommunities, id: \.self) { communityView in
+                            VStack {
+                                CommunitySearchUIView(communityView: communityView, contentView: contentView)
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity
+                                    )
+                                    .padding(.top, 15)
+                                    .padding(.bottom, 15)
+                                    .padding(.trailing, 15)
+                                    .onAppear {
+                                        if communityView == trendingCommunities.last {
+                                            loadTrendingCommunities()
+                                        }
+                                    }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(Color(.textBackgroundColor))
+                            .cornerRadius(8)
+                            Spacer()
+                                .frame(height: 0)
+                            
+                        }
+                    }
+                }
             }
         } else {
-            List {
-                ForEach(searchResponse.communities, id: \.self) { communityView in
-                    VStack {
-                        CommunitySearchUIView(communityView: communityView, contentView: contentView)
-                            .onAppear {
-                                if communityView == searchResponse.communities.last {
-                                    self.search()
-                                }
+            List (searchResponse.communities, id: \.self) { communityView in
+                VStack {
+                    CommunitySearchUIView(communityView: communityView, contentView: contentView)
+                        .onAppear {
+                            if communityView == searchResponse.communities.last {
+                                self.search()
                             }
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: .infinity
-                            )
-                            .padding(.top, 15)
-                            .padding(.bottom, 15)
-                            .padding(.trailing, 15)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.textBackgroundColor))
-                    .cornerRadius(8)
-                    Spacer()
-                        .frame(height: 0)
-                    
+                        }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity
+                        )
+                        .padding(.top, 15)
+                        .padding(.bottom, 15)
+                        .padding(.trailing, 15)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.textBackgroundColor))
+                .cornerRadius(8)
+                Spacer()
+                    .frame(height: 0)
             }
         }
     }
@@ -330,5 +366,22 @@ struct SearchView: View {
     
     func loadPostFromComment(commentView: CommentView) {
         self.contentView.openPostForComment(comment: commentView.comment)
+    }
+    
+    func loadTrendingCommunities() {
+        if page == 1 {
+            self.trendingCommunities.removeAll()
+        }
+        
+        let communityService = CommunityService(requestHandler: RequestHandler())
+        communityService.getCommunities(page: page, showNsfw: false, sortType: .hot, listingType: .all) { result in
+            switch result {
+            case .success(let listCommunityResponses):
+                self.trendingCommunities += listCommunityResponses.communities.filter { !self.trendingCommunities.contains($0) }
+                page += 1
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@
     - You can now change display name and banner in the profile view
     - You can view blocked communities and persons, as well as unblock them
     - To access, go into your profile and click the pen icon
+- Add "Trending" communities when opening Search
 
 ### Changes
 
