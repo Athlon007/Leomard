@@ -30,4 +30,15 @@ class PersonService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func saveUserSettings(oldSettings: LocalUserView, bio: String, displayName: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {
+        let body = SaveUserSettings(
+            bio: bio == oldSettings.person.bio ? nil : bio,
+            displayName: displayName == oldSettings.person.displayName ? nil : displayName
+        )  
+        
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/user/save_user_settings", method: .put, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

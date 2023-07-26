@@ -8,8 +8,7 @@
 import Foundation
 
 struct SaveUserSettings: Codable {
-    let avatar: String?
-    let banner: String?
     let bio: String?
     let displayName: String?
 }
+

@@ -14,6 +14,7 @@
 - Cross-posting
 - Hide instances
 - Compact View
+- You can now change display name and banner in the profile view
 
 ### Changes
 

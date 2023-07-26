@@ -7,11 +7,12 @@
 
 import Foundation
 import SwiftUI
+import MarkdownUI
 
 struct ProfileView: View {
     let commentService: CommentService
     let contentView: ContentView
-    let person: Person
+    @State var person: Person
     @Binding var myself: MyUserInfo?
     
     @State var personDetails: GetPersonDetailsResponse? = nil
@@ -34,6 +35,14 @@ struct ProfileView: View {
     @State var sessionChangeFail: Bool = false
     
     @State var showLogoutAlert: Bool = false
+    
+    @State var isEditingProfile: Bool = false
+    @State var bio: String = ""
+    @State var displayName: String = ""
+    @State var imageUploadFail: Bool = false
+    @State var imageUploadFailReason: String = ""
+    @State var updateProfileFail: Bool = false
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         toolbar
@@ -87,6 +96,7 @@ struct ProfileView: View {
                     maxWidth: .infinity,
                     alignment: .center
                 )
+                .overlay(profileEditor)
             }
             .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
                 Button("OK", role: .cancel) {}
@@ -101,7 +111,7 @@ struct ProfileView: View {
                 /// Why are we showing another profile sidebar here?
                 if sidebarVisible {
                     VStack {
-                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself, personService: personService!)
+                        ProfileSidebarUIView(personView: personDetails.personView, myself: $myself, personService: personService!, sender: self)
                     }
                     .frame(
                         minWidth: 0,
@@ -182,7 +192,7 @@ struct ProfileView: View {
             List {
                 VStack {
                     if personDetails != nil {
-                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself, personService: personService!)
+                        ProfileSidebarUIView(personView: personDetails!.personView, myself: $myself, personService: personService!, sender: self)
                     }
                 }
                 .frame(
@@ -278,6 +288,95 @@ struct ProfileView: View {
         }
     }
     
+    @ViewBuilder
+    private var profileEditor: some View {
+        if isEditingProfile {
+            ZStack {
+                Color(white: 0, opacity: 0.33)
+                VStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Button("Dismiss", action: {isEditingProfile = false})
+                                .buttonStyle(.link)
+                            Spacer()
+                            Button("Change More Settings", action: {
+                                let instance = LinkHelper.stripToHost(link: myself!.localUserView.person.actorId)
+                                self.openURL(URL(string: "https://" + instance + "/settings")!)
+                            })
+                            .buttonStyle(.link)
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.top, 10)
+                        .padding(.bottom, 0)
+                        Spacer()
+                        List {
+                            VStack(alignment: .leading) {
+                                Text("Display Name")
+                                    .bold()
+                                TextField("Optional", text: $displayName)
+                            }
+                            VStack(alignment: .leading) {
+                                Text("Bio")
+                                    .bold()
+                                Button("Add Image", action: addImage)
+                                TextEditor(text: $bio)
+                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                        maxHeight: .infinity,
+                                        alignment: .leading
+                                    )
+                                    .lineLimit(5...)
+                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                                Text("Bio Preview")
+                                    .bold()
+                                Markdown(MarkdownContent(bio))
+                            }
+                            VStack(alignment: .leading) {
+                                Button("Save Changes", action: {
+                                    userSettingsSave()
+                                })
+                                .buttonStyle(.borderedProminent)
+                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .textFieldStyle(.roundedBorder)
+                        
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .padding()
+                .frame(maxWidth: 600, maxHeight: 600)
+                .background(Color(.textBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+            }
+            .task {
+                self.displayName = myself?.localUserView.person.displayName ?? ""
+                self.bio = myself?.localUserView.person.bio ?? ""
+            }
+            .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
+                Button("OK") {}
+            }, message: {
+                Text(imageUploadFailReason)
+            })
+            .alert("Profile Update Failure", isPresented: $updateProfileFail, actions: {
+                Button("OK") {}
+            }, message: {
+                Text("Failed to update the profile. Try again later.")
+            })
+        }
+    }
+    
     // MARK: -
     
     func logout() {
@@ -361,7 +460,7 @@ struct ProfileView: View {
         }
     }
     
-    fileprivate func performSwitch(_ selection: SessionPickerOption) {        
+    fileprivate func performSwitch(_ selection: SessionPickerOption) {
         if let sessionInfo = selection.sessionInfo {
             let sessionNameAndInstance = (sessionInfo.name + "@" + sessionInfo.lemmyInstance).lowercased()
             if let myself = self.myself {
@@ -383,6 +482,84 @@ struct ProfileView: View {
         } else {
             // Add user.
             self.contentView.addNewUserLogin()
+        }
+    }
+    
+    func editProfile() {
+        isEditingProfile = true
+    }
+    
+    func addImage() {
+        let panel = NSOpenPanel()
+        panel.prompt = "Select file"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [
+            .init(importedAs: "leomard.supported.image.types.jpg"),
+            .init(importedAs: "leomard.supported.image.types.jpeg"),
+            .init(importedAs: "leomard.supported.image.types.png"),
+            .init(importedAs: "leomard.supported.image.types.webp"),
+            .init(importedAs: "leomard.supported.image.types.gif")
+        ]
+        panel.begin { (result) -> Void in
+            self.contentView.toggleInteraction(true)
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {
+                let imageService = ImageService(requestHandler: RequestHandler())
+                imageService.uploadImage(url: url) { result in
+                    switch result {
+                    case .success(let imageUploadResponse):
+                        if bio.count > 0 {
+                            bio += "\n\n"
+                        }
+                        
+                        bio += "![](\(imageUploadResponse.data.link))\n\n"
+                    case .failure(let error):
+                        if error is LeomardExceptions {
+                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
+                        } else {
+                            self.imageUploadFailReason = "Unable to upload the image :("
+                        }
+                        
+                        self.imageUploadFail = true
+                    }
+                }
+            }
+        }
+        panel.orderFrontRegardless()
+        self.contentView.toggleInteraction(false)
+    }
+    
+    func userSettingsSave() {
+        self.personService?.saveUserSettings(oldSettings: myself!.localUserView, bio: bio, displayName: displayName) { result in
+            switch result {
+            case .success(let loginResponse):
+                isEditingProfile = false
+                let success = SessionStorage.getInstance.updateCurrentSessionInfo(newInformation: loginResponse)
+                if !success {
+                    updateProfileFail = true
+                    return
+                }
+                self.personDetails = nil
+                self.contentView.myUser = nil
+                self.contentView.loadUserData()
+                self.myself = self.contentView.myUser
+                loadPersonDetails()
+            case .failure(let error):
+                if let errorResponse = error as? ErrorResponse {
+                    if errorResponse.error == "user_already_exists" {
+                        self.personDetails = nil
+                                        self.contentView.myUser = nil
+                                        self.contentView.loadUserData()
+                                        self.myself = self.contentView.myUser
+                                        loadPersonDetails()
+                        return
+                    }
+                }
+                print(error)
+                updateProfileFail = true
+            }
         }
     }
 }

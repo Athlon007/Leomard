@@ -13,6 +13,7 @@ struct ProfileSidebarUIView: View {
     let personView: PersonView
     @Binding var myself: MyUserInfo?
     let personService: PersonService
+    let sender: ProfileView
     
     @State var writingMessage: Bool = false
     @State var messageText: String = ""
@@ -136,22 +137,33 @@ struct ProfileSidebarUIView: View {
                     Button(action: startWritePrivateMessage) {
                         Image(systemName: "envelope")
                     }
-                    if personView.person != myself?.localUserView.person {
-                        Button(action: {
-                            if isPersonBlocked() {
-                                blockPerson()
-                            } else {
-                                showConfirmPersonBlock = true
-                            }
-                            
-                        } ) {
-                            Image(systemName: "person.fill.xmark")
-                                .foregroundColor(isPersonBlocked() ? .red : .primary)
+                    Button(action: {
+                        if isPersonBlocked() {
+                            blockPerson()
+                        } else {
+                            showConfirmPersonBlock = true
                         }
-                        .alert("Confirm", isPresented: $showConfirmPersonBlock, actions: {
-                            Button("Block", role: .destructive) { blockPerson() }
-                            Button("Cancel", role: .cancel) {}
-                        }, message: { Text("Are you sure you want to block this person?") })
+                        
+                    } ) {
+                        Image(systemName: "person.fill.xmark")
+                            .foregroundColor(isPersonBlocked() ? .red : .primary)
+                    }
+                    .alert("Confirm", isPresented: $showConfirmPersonBlock, actions: {
+                        Button("Block", role: .destructive) { blockPerson() }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: { Text("Are you sure you want to block this person?") })
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding()
+                .padding(.top, -20)
+            } else {
+                Spacer()
+                HStack {
+                    Button(action: { sender.editProfile() }) {
+                        Image(systemName: "pencil")
                     }
                 }
                 .frame(
