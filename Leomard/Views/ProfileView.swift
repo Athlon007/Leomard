@@ -36,6 +36,13 @@ struct ProfileView: View {
     
     @State var showLogoutAlert: Bool = false
     
+    // Profile Editor Stuff
+    let profileEditorTabs: [Option] = [
+        .init(id: 0, title: "Settings", imageName: "gearshape"),
+        .init(id: 1, title: "Person Blocks", imageName: "person.slash"),
+        .init(id: 2, title: "Community Blocks", imageName: "person.2.slash")
+    ]
+    @State var selectedProfileEditorTab: Option = .init(id: 0, title: "Settings", imageName: "gearshape")
     @State var isEditingProfile: Bool = false
     @State var bio: String = ""
     @State var displayName: String = ""
@@ -293,6 +300,9 @@ struct ProfileView: View {
         if isEditingProfile {
             ZStack {
                 Color(white: 0, opacity: 0.33)
+                    .onTapGesture {
+                        isEditingProfile = false
+                    }
                 VStack {
                     VStack(alignment: .leading) {
                         HStack {
@@ -313,39 +323,33 @@ struct ProfileView: View {
                         .padding(.top, 10)
                         .padding(.bottom, 0)
                         Spacer()
-                        List {
-                            VStack(alignment: .leading) {
-                                Text("Display Name")
-                                    .bold()
-                                TextField("Optional", text: $displayName)
+                        HStack {
+                            Spacer()
+                            Image(systemName: selectedProfileEditorTab.imageName)
+                                .padding(.trailing, 0)
+                            Picker("", selection: $selectedProfileEditorTab) {
+                                ForEach(profileEditorTabs, id: \.self) { method in
+                                    Text(method.title)
+                                }
                             }
-                            VStack(alignment: .leading) {
-                                Text("Bio")
-                                    .bold()
-                                Button("Add Image", action: addImage)
-                                TextEditor(text: $bio)
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                                    .lineLimit(5...)
-                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                                Text("Bio Preview")
-                                    .bold()
-                                Markdown(MarkdownContent(bio))
-                            }
-                            VStack(alignment: .leading) {
-                                Button("Save Changes", action: {
-                                    userSettingsSave()
-                                })
-                                .buttonStyle(.borderedProminent)
-                            }
+                            .frame(maxWidth: 180)
+                            Spacer()
                         }
-                        .frame(maxHeight: .infinity)
-                        .textFieldStyle(.roundedBorder)
+                        switch selectedProfileEditorTab {
+                        case profileEditorTabs[0]:
+                            personEditor
+                        case profileEditorTabs[1]:
+                            personBlocks
+                        case profileEditorTabs[2]:
+                            communityBlocks
+                        default:
+                            HStack {
+                                Spacer()
+                                ProgressView().progressViewStyle(.circular)
+                                Spacer()
+                            }
+                            Spacer()
+                        }
                         
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -360,10 +364,6 @@ struct ProfileView: View {
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }
-            .task {
-                self.displayName = myself?.localUserView.person.displayName ?? ""
-                self.bio = myself?.localUserView.person.bio ?? ""
-            }
             .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
                 Button("OK") {}
             }, message: {
@@ -374,8 +374,107 @@ struct ProfileView: View {
             }, message: {
                 Text("Failed to update the profile. Try again later.")
             })
+            .task {
+                selectedProfileEditorTab = profileEditorTabs[0]
+            }
         }
     }
+    
+    @ViewBuilder
+    private var personEditor: some View {
+        List {
+            VStack(alignment: .leading) {
+                Text("Display Name")
+                    .bold()
+                TextField("Optional", text: $displayName)
+            }
+            VStack(alignment: .leading) {
+                Text("Bio")
+                    .bold()
+                Button("Add Image", action: addImage)
+                TextEditor(text: $bio)
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                    .frame(
+                        maxWidth: .infinity,
+                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                        maxHeight: .infinity,
+                        alignment: .leading
+                    )
+                    .lineLimit(5...)
+                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                Text("Bio Preview")
+                    .bold()
+                Markdown(MarkdownContent(bio))
+            }
+            VStack(alignment: .leading) {
+                Button("Save Changes", action: {
+                    userSettingsSave()
+                })
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .frame(maxHeight: .infinity)
+        .textFieldStyle(.roundedBorder)
+        .task {
+            self.displayName = myself?.localUserView.person.displayName ?? ""
+            self.bio = myself?.localUserView.person.bio ?? ""
+        }
+    }
+    
+    @ViewBuilder
+    private var personBlocks: some View {
+        List(myself!.personBlocks, id: \.self) { blockedPerson in
+            HStack {
+                Text( "@" + blockedPerson.target.name + "@" + LinkHelper.stripToHost(link: blockedPerson.target.actorId))
+                Spacer()
+                Button("Unblock", action: {
+                    self.personService?.block(person: blockedPerson.target, block: false) { result in
+                        switch result {
+                        case .success(_):
+                            myself!.personBlocks = myself!.personBlocks.filter { $0 != blockedPerson }
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                })
+            }
+            if blockedPerson != myself!.personBlocks.last {
+                Divider()
+            }
+        }
+        .frame(maxHeight: .infinity)
+        .textFieldStyle(.roundedBorder)
+    }
+    
+    @ViewBuilder
+    private var communityBlocks: some View {
+        List(myself!.communityBlocks, id: \.self) { blockedCommunity in
+            HStack {
+                Text("!" + blockedCommunity.community.name + "@" + LinkHelper.stripToHost(link: blockedCommunity.community.actorId))
+                Spacer()
+                Button("Unblock", action: {
+                    let communityService = CommunityService(requestHandler: RequestHandler())
+                    communityService.block(community: blockedCommunity.community, block: false) { result in
+                        switch result {
+                        case .success(_):
+                            myself!.communityBlocks = myself!.communityBlocks.filter { $0 != blockedCommunity }
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                })
+            }
+            if blockedCommunity != myself!.communityBlocks.last {
+                Divider()
+            }
+        }
+        .frame(maxHeight: .infinity)
+        .textFieldStyle(.roundedBorder)
+        .task {
+            myself = self.contentView.myUser
+        }
+    }
+
     
     // MARK: -
     
@@ -550,10 +649,10 @@ struct ProfileView: View {
                 if let errorResponse = error as? ErrorResponse {
                     if errorResponse.error == "user_already_exists" {
                         self.personDetails = nil
-                                        self.contentView.myUser = nil
-                                        self.contentView.loadUserData()
-                                        self.myself = self.contentView.myUser
-                                        loadPersonDetails()
+                        self.contentView.myUser = nil
+                        self.contentView.loadUserData()
+                        self.myself = self.contentView.myUser
+                        loadPersonDetails()
                         return
                     }
                 }
