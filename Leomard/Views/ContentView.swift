@@ -282,8 +282,6 @@ struct ContentView: View {
                 print(error)
             }
         }
-        
-        updateUnreadMessagesCount()
     }
     
     func openPost(postView: PostView) {
