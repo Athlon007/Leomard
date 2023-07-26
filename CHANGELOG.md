@@ -18,6 +18,7 @@
 ### Changes
 
 - Decreased the indentation of the subcomments
+- Decreased the minimum window height
 
 ### Bug Fixes
 

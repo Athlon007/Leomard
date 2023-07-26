@@ -22,7 +22,7 @@ struct LeomardApp: App {
             ContentView(columnStatus: $mainWindowNavSplitStatus)
                 .frame(
                     minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800,
-                    minHeight: 800)
+                    minHeight: 400)
                 .onAppear {
                     ImageCache.shared.costLimit = 300 * (1024 * 1024)
                     ImageCache.shared.countLimit = 250
