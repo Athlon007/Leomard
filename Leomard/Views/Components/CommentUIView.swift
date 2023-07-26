@@ -189,6 +189,9 @@ struct CommentUIView: View {
                                     hideComment()
                                 }
                             }
+                            .contextMenu {
+                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
+                            }
                         if isReplying || isEditingComment {
                             Spacer()
                             VStack {
@@ -272,9 +275,6 @@ struct CommentUIView: View {
                     }
                     
                     self.commentBody = await commentView.comment.content.formatMarkdown()
-                }
-                .contextMenu {
-                    CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
                 }
             }
             .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
