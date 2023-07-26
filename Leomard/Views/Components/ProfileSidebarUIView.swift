@@ -21,6 +21,8 @@ struct ProfileSidebarUIView: View {
     @State var showConfirmPersonBlock: Bool = false
     @State var showBlockFailure: Bool = false
     
+    @State var bioText: String = ""
+    
     var body: some View {
         LazyVStack {
             ZStack() {
@@ -215,7 +217,7 @@ struct ProfileSidebarUIView: View {
             }
             Spacer()
             if personView.person.bio != nil {
-                let banner = MarkdownContent(personView.person.bio!)
+                let banner = MarkdownContent(bioText)
                 Markdown(banner)
                     .lineLimit(nil)
                     .frame(
@@ -225,6 +227,7 @@ struct ProfileSidebarUIView: View {
                     )
                     .padding()
                     .padding(.top, -20)
+                    .textSelection(.enabled)
                 Spacer()
             }
         }
@@ -238,6 +241,11 @@ struct ProfileSidebarUIView: View {
         .alert("Blocking Failed", isPresented: $showBlockFailure, actions: {
             Button("OK", role: .cancel) {}
         }, message: { Text("Failed to block the person. Try again later.")})
+        .task {
+            if let bio = personView.person.bio {
+                bioText = await bio.formatMarkdown(formatImages: false)
+            }
+        }
         
     }
     

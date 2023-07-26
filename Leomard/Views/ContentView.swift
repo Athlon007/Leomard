@@ -174,6 +174,14 @@ struct ContentView: View {
         .onOpenURL { url in
             handleUrl(url)
         }
+        .onAppear {
+            // Observe the custom notification when the view appears
+            NotificationCenter.default.addObserver(forName: NSNotification.Name("CustomURLReceived"), object: nil, queue: nil) { notification in
+                if let url = notification.object as? URL {
+                    handleUrl(url)
+                }
+            }
+        }
         .alert("Unrecognized Link", isPresented: $showUnrecognizedLinkError, actions: {
             Button("OK", action: {})
         }, message: { Text("Link could not be recognized neither as community nor person link.")})

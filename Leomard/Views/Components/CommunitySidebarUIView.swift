@@ -19,6 +19,8 @@ struct CommunityUISidebarView: View {
     @State var showConfirmCommunityBlock: Bool = false
     @State var showBlockFailure: Bool = false
     
+    @State var sidebarMarkdown: String = ""
+    
     var body: some View {
         LazyVStack {
             ZStack() {
@@ -135,8 +137,8 @@ struct CommunityUISidebarView: View {
             .padding(.top, 0)
             .padding(.bottom, 0)
             .frame(maxWidth: .infinity)
-            if let description = communityResponse.communityView.community.description {
-                Markdown(MarkdownContent(description))
+            if communityResponse.communityView.community.description != nil {
+                Markdown(MarkdownContent(sidebarMarkdown))
                     .lineLimit(nil)
                     .frame(
                         maxWidth: .infinity,
@@ -145,6 +147,7 @@ struct CommunityUISidebarView: View {
                     )
                     .padding()
                     .padding(.top, -20)
+                    .textSelection(.enabled)
                 Spacer()
             }
         }
@@ -158,6 +161,11 @@ struct CommunityUISidebarView: View {
         .alert("Blocking Failed", isPresented: $showBlockFailure, actions: {
             Button("OK", role: .cancel) {}
         }, message: { Text("Failed to block the community. Try again later.")})
+        .task {
+            if let description = communityResponse.communityView.community.description {
+                sidebarMarkdown = await description.formatMarkdown(formatImages: false)
+            }
+        }
     }
     
     func onSubscribeButtonClick() {
