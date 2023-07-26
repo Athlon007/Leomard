@@ -125,20 +125,26 @@ struct LeomardApp: App {
     }
 }
 
-// https://stackoverflow.com/questions/71506416/restoring-macos-window-size-after-close-using-swiftui-windowsgroup
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let mainWindow = NSApp.windows.first
-        mainWindow?.delegate = self
+        let mainWindow = NSApp.windows[0]
+        mainWindow.delegate = self
+    
+        // Register handling of leomard: protocol.
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleCustomURL(event:replyEvent:)), forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
     }
-
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        let mainWindow = NSApp.windows.first
-        if flag {
-            mainWindow?.orderFront(nil)
-        } else {
-            mainWindow?.makeKeyAndOrderFront(nil)
+    
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        NSApp.hide(nil)
+        return false
+    }
+    
+    @objc func handleCustomURL(event: NSAppleEventDescriptor, replyEvent: NSAppleEventDescriptor) {
+        if let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue {
+            if let url = URL(string: urlString) {
+                // Send as notification.
+                NotificationCenter.default.post(name: NSNotification.Name("CustomURLReceived"), object: url)
+            }
         }
-        return true
     }
 }

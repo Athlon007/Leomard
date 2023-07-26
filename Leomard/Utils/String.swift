@@ -11,11 +11,14 @@ extension String {
     /// This method catches all images in Markdonw text, and then adds new lines before and after it.
     /// We're doing it, because MarkdownUI tries to render those images in-line, often resulting in those overflowing the container and cutting-off the image.
     /// Markdown UI itself does not provide a way to tell it to move images to the next line, so we do it manually.
-    func formatMarkdown() async -> String {
+    func formatMarkdown(formatImages: Bool = true) async -> String {
         return await withCheckedContinuation { continuation in
             Task(priority: .background) {
-                var transformed = self.addSpacesBetweenImages(self)
-                transformed = self.convertPersonsLinks(input: transformed)
+                var transformed = self
+                if formatImages {
+                    transformed = addSpacesBetweenImages(transformed)
+                }
+                transformed = convertPersonsLinks(input: transformed)
                 transformed = convertInstanceLinks(input: transformed)
                 
                 return continuation.resume(returning: String(transformed))
