@@ -7,7 +7,9 @@
 - Mod Tools:
     - Remove posts
     - Lock posts
+    - Distinguish comment
 - Post-locked indicator
+- Distinguished comment indicator
 
 ### Bug Fixes
 

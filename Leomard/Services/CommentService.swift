@@ -141,4 +141,11 @@ class CommentService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func distinguish(comment: Comment, distinguished: Bool, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let body = DistinguishComment(commentId: comment.id, distinguished: distinguished)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/comment/distinguish", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

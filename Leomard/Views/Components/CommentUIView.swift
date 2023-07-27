@@ -34,6 +34,8 @@ struct CommentUIView: View {
     @State var updatedTimeAsString: String = ""
     @State var showConfirmDelete: Bool = false
     
+    @State var startRemove: Bool = false
+    
     @State var profileViewMode: Bool = false
     
     let subcommentsColorsOrder: [Color] = [
@@ -120,6 +122,12 @@ struct CommentUIView: View {
                                     
                                 }.help(updatedTimeAsString)
                             }
+                            if commentView.comment.distinguished {
+                                HStack {
+                                    Image(systemName: "star.circle")
+                                        .foregroundColor(Color.yellow)
+                                }
+                            }
                         }
                         .frame(
                             minWidth: 0,
@@ -190,7 +198,9 @@ struct CommentUIView: View {
                                 }
                             }
                             .contextMenu {
-                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
+                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
+                                    startRemove = true
+                                })
                             }
                         if isReplying || isEditingComment {
                             Spacer()
@@ -418,6 +428,17 @@ struct CommentUIView: View {
     func savePost() {
         let save = !commentView.saved
         self.commentService.saveComment(comment: commentView.comment, save: save) { result in
+            switch result {
+            case .success(let commentResponse):
+                self.commentView = commentResponse.commentView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func distinguish() {
+        commentService.distinguish(comment: commentView.comment, distinguished: !commentView.comment.distinguished) { result in
             switch result {
             case .success(let commentResponse):
                 self.commentView = commentResponse.commentView
