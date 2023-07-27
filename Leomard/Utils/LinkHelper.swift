@@ -39,7 +39,7 @@ struct LinkHelper {
     }
     
     static let animatedFormats = [
-        ".gif"
+        ".gif",
     ]
     
     static func isAnimatedLink(link: String) -> Bool {

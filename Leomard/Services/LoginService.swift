@@ -12,6 +12,9 @@ class LoginService: Service {
     
     private static let instancesList = "https://raw.githubusercontent.com/maltfield/awesome-lemmy-instances/main/awesome-lemmy-instances.csv"
     
+    private var allInstances: [LemmyInstance] = []
+    private var approvedInstances: [LemmyInstance] = []
+    
     public init(requestHandler: RequestHandler) {
         self.requestHandler = requestHandler
     }
@@ -44,8 +47,6 @@ class LoginService: Service {
             if let csvString = String(data: data, encoding: .utf8) {
                 let csvRows = csvString.components(separatedBy: "\n").map { $0.components(separatedBy: ",")}
                 
-                var instances: [LemmyInstance] = []
-                
                 for row in csvRows {
                     if csvRows.first == row {
                         // First is just the header.
@@ -61,6 +62,12 @@ class LoginService: Service {
                     let users = Int(row[6])!
                     let blockedBy = Int(row[8])!
                     let upTime = Double(row[9].replacingOccurrences(of: "%", with: "")) ?? 0
+                
+                    let name: String = nameAndUrl.split(separator: "]").map(String.init)[0].replacingOccurrences(of: "[", with: "")
+                    let link: String = nameAndUrl.split(separator: "(").map(String.init)[1].replacingOccurrences(of: ")", with: "")
+                    let lemmyInstance = LemmyInstance(name: name, url: link)
+                    
+                    self.allInstances.append(lemmyInstance)
                     
                     // Instance to show rules:
                     // - Must be federated and not NSFW.
@@ -70,17 +77,30 @@ class LoginService: Service {
                     if !federated || users < 500 || blockedBy >= 10 || upTime < 0.95 {
                         continue
                     }
-                
-                    let name: String = nameAndUrl.split(separator: "]").map(String.init)[0].replacingOccurrences(of: "[", with: "")
-                    let link: String = nameAndUrl.split(separator: "(").map(String.init)[1].replacingOccurrences(of: ")", with: "")
-                    let lemmyInstance = LemmyInstance(name: name, url: link)
-                    instances.append(lemmyInstance)
+                    
+                    self.approvedInstances.append(lemmyInstance)
                 }
                 
-                completion(.success(instances))
+                completion(.success(self.approvedInstances))
                 return
             }
             completion(.failure(URLError.init(.badURL)))
         }.resume()
+    }
+    
+    public func searchInstance(query: String, completion: @escaping (Result<[LemmyInstance], Error>) -> Void) {
+        if query.count == 0 {
+            completion(.success(self.approvedInstances))
+            return
+        }
+        
+        var result: [LemmyInstance] = []
+        for instance in self.allInstances {
+            if instance.name.lowercased().contains(query.lowercased()) || instance.url.lowercased().contains(query.lowercased()) {
+                result.append(instance)
+            }
+        }
+        
+        completion(.success(result))
     }
 }

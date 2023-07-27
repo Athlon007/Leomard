@@ -319,8 +319,12 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var gifOrImage: some View {
-        // Image-only view.
-        if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+        if LinkHelper.isVideosLink(link: postView.post.url!) {
+            // Video
+            VideoPlayer(player: AVPlayer(url: URL(string: postView.post.url!)!))
+                .frame(maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
+        } else if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+            // Image-only view.
             // GIF
             AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)

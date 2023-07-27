@@ -12,6 +12,7 @@ enum LeomardExceptions: Error, CustomStringConvertible {
     case fileSizeTooLarge(String)
     case missingApiKey(String)
     case notLoggedIn(String)
+    case unableToGetIcon(String)
     
     var description: String {
         switch self {
@@ -22,6 +23,8 @@ enum LeomardExceptions: Error, CustomStringConvertible {
         case .missingApiKey(let message):
             return message
         case .notLoggedIn(let message):
+            return message
+        case .unableToGetIcon(let message):
             return message
         }
     }
