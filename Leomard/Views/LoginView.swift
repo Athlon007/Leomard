@@ -37,6 +37,8 @@ struct LoginView: View {
                         .font(.system(size: 24))
                     if SessionStorage.getInstance.getAllSessions().count > 0 {
                         Text("Saved Sessions")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .bold()
                         Picker("", selection: $selectedExistingSession) {
                             ForEach(sessions, id: \.self) { session in
                                 Text("\(session.title)")
@@ -56,9 +58,11 @@ struct LoginView: View {
                         }
                     }
                 }
+                Divider()
                 VStack {
                     Text("Pick your Lemmy instance")
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .bold()
                     List {
                         ForEach(instances, id: \.self) { instance in
                             HStack {
@@ -97,6 +101,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("lemmy.world", text: $url)
                     Text("Username or e-mail")
                         .frame(
@@ -104,6 +109,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("", text: $username)
                     Text("Password")
                         .frame(
@@ -111,6 +117,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     SecureField("", text: $password)
                     Text("2FA Code (Optional)")
                         .frame(
@@ -118,6 +125,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("", text: $twoFA)
                 }
                 Button("Login", action: login)
