@@ -14,6 +14,8 @@
 - Post-locked indicator
 - Distinguished comment indicator
 - Images to Login View
+- Instance icons on the login screen
+- Search for instance on the login screen
 
 ### Bug Fixes
 
