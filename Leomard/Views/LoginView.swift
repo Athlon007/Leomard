@@ -21,6 +21,9 @@ struct LoginView: View {
     @State var instances: [LemmyInstance] = []
     @State var selectedInstance: LemmyInstance? = nil
     
+    @State var selectedExistingSession: SessionPickerOption = SessionPickerOption(title: "", sessionInfo: nil)
+    @State fileprivate var sessions: [SessionPickerOption] = []
+    
     var body: some View {
         ZStack {
             VStack {
@@ -32,6 +35,26 @@ struct LoginView: View {
                     Text("Leomard")
                         .bold()
                         .font(.system(size: 24))
+                    if SessionStorage.getInstance.getAllSessions().count > 0 {
+                        Text("Saved Sessions")
+                        Picker("", selection: $selectedExistingSession) {
+                            ForEach(sessions, id: \.self) { session in
+                                Text("\(session.title)")
+                            }
+                        }
+                        .onChange(of: selectedExistingSession) { value in
+                            _ = SessionStorage.getInstance.setCurrentSession(value.sessionInfo!)
+                            self.isLoginFailed = false
+                            self.contentView.navigateToFeed()
+                            self.contentView.endNewUserLogin()
+                            self.contentView.loadUserData()
+                        }
+                        .task {
+                            for session in SessionStorage.getInstance.getAllSessions() {
+                                sessions.append(.init(title: "\(session.name)@\(session.lemmyInstance)", sessionInfo: session))
+                            }
+                        }
+                    }
                 }
                 VStack {
                     Text("Pick your Lemmy instance")

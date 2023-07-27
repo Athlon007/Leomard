@@ -9,7 +9,7 @@ import Foundation
 
 struct SessionInfo: Codable, Equatable, Hashable, Identifiable {
     var id = UUID()
-    public let loginResponse: LoginResponse
+    public var loginResponse: LoginResponse
     public let lemmyInstance: String
     public let name: String
     

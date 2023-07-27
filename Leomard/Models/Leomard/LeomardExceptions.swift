@@ -11,6 +11,7 @@ enum LeomardExceptions: Error, CustomStringConvertible {
     case versionFromStringDecodeError(String)
     case fileSizeTooLarge(String)
     case missingApiKey(String)
+    case notLoggedIn(String)
     
     var description: String {
         switch self {
@@ -19,6 +20,8 @@ enum LeomardExceptions: Error, CustomStringConvertible {
         case .fileSizeTooLarge(let message):
             return message
         case .missingApiKey(let message):
+            return message
+        case .notLoggedIn(let message):
             return message
         }
     }

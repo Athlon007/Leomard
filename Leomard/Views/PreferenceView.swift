@@ -179,9 +179,31 @@ struct PreferencesView: View {
             }
         }
         VStack(alignment: .leading) {
+            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
+        }
+        VStack(alignment: .leading) {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
+            Toggle("Show NSFW content in Feed", isOn: UserPreferences.getInstance.$showNsfwInFeed)
+                .padding(.leading, 16)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
+        }
+        GroupBox("Mark Post As Read") {
+            Toggle("When opening the post", isOn: UserPreferences.getInstance.$markPostAsReadOnOpen)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("When voting on post", isOn: UserPreferences.getInstance.$markPostAsReadOnVote)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        VStack {
+            Toggle("Hide Read Posts", isOn: UserPreferences.getInstance.$hideReadPosts)
+        }
+        VStack(alignment: .leading) {
+            Text("Hidden Instances")
+            TextField("Hidden Instances", text: UserPreferences.getInstance.$blockedInstances, prompt: Text("ex.: instance1.com, instance2.org"))
+                .textFieldStyle(.roundedBorder)
+            Text("Any instances listed here will be filtered out. You won't see communities, posts, or comments from those instances. Simply type the hostname of the instance (comma-separated).")
+                .lineLimit(nil)
         }
     }
     

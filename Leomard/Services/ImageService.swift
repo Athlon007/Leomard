@@ -54,7 +54,7 @@ class ImageService: Service {
     }
     
     private func isFileSizeOk(url: URL) -> Bool {
-        let attributes = try? FileManager.default.attributesOfItem(atPath: url.absoluteString.replacingOccurrences(of: "file://", with: ""))
+        let attributes = try? FileManager.default.attributesOfItem(atPath: url.absoluteString.replacingOccurrences(of: "file://", with: "").replacingOccurrences(of: "%20", with: " "))
         
         if attributes != nil {
             let size = attributes![.size] as? UInt64 ?? UInt64(0)

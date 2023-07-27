@@ -210,12 +210,6 @@ struct CommunityUIView: View {
                             self.loadPosts()
                         }
                     }
-                    .onTapGesture {
-                        self.contentView.openPost(postView: postView)
-                    }
-                    .contextMenu {
-                        PostContextMenu(contentView: self.contentView, postView: postView)
-                    }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Spacer()
                     .frame(height: 0)

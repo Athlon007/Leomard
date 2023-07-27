@@ -43,4 +43,25 @@ class CommunityService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func getCommunities(page: Int, showNsfw: Bool, sortType: SortType, listingType: ListingType, completion: @escaping (Result<ListCommunitiesResponse, Error>) -> Void) {
+        let nsfw = !UserPreferences.getInstance.showNsfw ? false : showNsfw
+        let request = "/community/list?page=\(page)&show_nsfw=\(nsfw)&sort=\(String(describing: sortType))&type_=\(String(describing: listingType))"
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: request, method: .get) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        var response = try self.decode(type: ListCommunitiesResponse.self, data: data)
+                        response.communities = response.communities.filter { !UserPreferences.isBlockedInstance($0.community.actorId) }
+                        completion(.success(response))
+                    }
+                } catch {
+                    
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

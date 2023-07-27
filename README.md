@@ -24,7 +24,7 @@ This app is free and open source, is not affiliated with Lemmy or its developers
 
 ## Requirements
 
-- macOS 13.1 Ventura or later
+- macOS 13.0 Ventura or later
 
 ## Installation
 
@@ -42,6 +42,7 @@ Start the app, you can login by clicking "Profile" in the bottom left corner.
 ![Screenshot 2](Assets/Screenshots/2.png)
 ![Screenshot 3](Assets/Screenshots/3.png)
 ![Screenshot 4](Assets/Screenshots/4.png)
+![Screenshot 5](Assets/Screenshots/5.png)
 
 ## Contributing
 

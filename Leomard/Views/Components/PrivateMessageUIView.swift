@@ -23,7 +23,7 @@ struct PrivateMessageUIView: View {
     @State var isReplied: Bool = false
     
     var body: some View {
-        if isReplied {
+        if isReplied && unreadOnlyMode {
             EmptyView()
         } else {
             VStack {
@@ -163,6 +163,7 @@ struct PrivateMessageUIView: View {
                     commentText = ""
                     isSendingComment = false
                     isReplied = true
+                    isReplying = false
                     
                     toggleMarkAsRead()
                     

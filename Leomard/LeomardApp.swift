@@ -17,18 +17,23 @@ struct LeomardApp: App {
     
     @State private var latestRelease: Release? = nil
 
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             ContentView(columnStatus: $mainWindowNavSplitStatus)
                 .frame(
                     minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800,
-                    minHeight: 800)
+                    minHeight: 400,
+                    idealHeight: 800)
                 .onAppear {
                     ImageCache.shared.costLimit = 300 * (1024 * 1024)
                     ImageCache.shared.countLimit = 250
                     
                     DataLoader.sharedUrlCache.diskCapacity = 500 * (1024 * 1024)
                     DataLoader.sharedUrlCache.memoryCapacity = 0
+                }
+                .onDisappear {
+                    
                 }
                 .task {
                     checkForUpdateOnStart()
@@ -115,6 +120,30 @@ struct LeomardApp: App {
                 }
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let mainWindow = NSApp.windows[0]
+        mainWindow.delegate = self
+    
+        // Register handling of leomard: protocol.
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleCustomURL(event:replyEvent:)), forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
+    }
+    
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        NSApp.hide(nil)
+        return false
+    }
+    
+    @objc func handleCustomURL(event: NSAppleEventDescriptor, replyEvent: NSAppleEventDescriptor) {
+        if let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue {
+            if let url = URL(string: urlString) {
+                // Send as notification.
+                NotificationCenter.default.post(name: NSNotification.Name("CustomURLReceived"), object: url)
             }
         }
     }

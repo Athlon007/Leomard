@@ -18,7 +18,17 @@ extension URL {
         request.httpMethod = "HEAD"
         URLSession.shared.dataTask(with: request) { _, response, _ in
             let r = (response as? HTTPURLResponse)
-            completion(r?.statusCode == 200)
+            
+            if r?.statusCode == 405 {
+                // Server does not allow "HEAD" for whatever reason?
+                // Try sending full on "GET" request instead.
+                URLSession.shared.dataTask(with: URLRequest(url: self)) { _, response2, _ in
+                    let r2 = (response2 as? HTTPURLResponse)
+                    completion(r2?.statusCode == 200)
+                }
+            } else {
+                completion(r?.statusCode == 200)
+            }
         }.resume()
     }
 }
