@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.3 (2023-07-27)
+
+### Added
+
+- Added support for "!community@instance" and "@user@instance" in the text. You can now click on them to open the community or user profile
+- Added protocol handler for `leomard://` links. Communties or profiles can be opened by opening a link with such protocol (example: `leomard://!leomard@lemm.ee`)
+- You can now feature a post in community as a moderator (right-click and click "Pin")
+- Color coding to subcomments
+- Comments can now be marked as read manually, on post view, or vote
+- "Show NSFW Content in Feed" toggle
+- "Hide Read Posts" toggle
+- Cross-posting
+- Hide instances. Simply add an instance hostname to the list in settings, and posts, comments and profiles from that instance will not be shown in the feed and search
+- Compact View
+- Added profile editing
+    - You can now change display name and banner in the profile view
+    - You can view blocked communities and persons, as well as unblock them
+    - To access, go into your profile and click the pen icon
+- "Trending" communities when opening Search. You can also scroll down to see more trending communities
+- You can now select from saved sessions on login screen
+
+### Changes
+
+- Decreased the indentation of the subcomments
+- Decreased the minimum window height, so the window won't be too big on smaller screens or larger display scales
+- Slightly lowered system requirements to macOS 13.0 (previous version required was macOS 13.1)
+
+### Bug Fixes
+
+- Fixed verifying URLs in post creation. Sometimes the server would not allow "HEAD" requests. If that's the case, the app will send "GET", if 405 is returned
+- Fixed adding images, if they have a space in the name
+- Window size is not restored correctly on launch
+- Fix duplicate call to updateUnreadMessagesCount() (#54)
+- When all replies are shown, when replying, the reply won't disappear (#57)
+
 ## 0.2 (2023-07-24)
 
 *Note: You will have to log in again, because the app now uses a different method of storing the authorization tokens. Sorry for the inconvenience.*

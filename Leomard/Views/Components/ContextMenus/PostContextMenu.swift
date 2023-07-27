@@ -11,6 +11,7 @@ import SwiftUI
 struct PostContextMenu: View {
     let contentView: ContentView
     let postView: PostView
+    let sender: PostUIView
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -56,6 +57,12 @@ struct PostContextMenu: View {
             }
         }
         Divider()
+        Button(action: {
+            sender.markAsRead(!postView.read)
+        }) {
+            Text(postView.read ? "Mark as unread" : "Mark as read")
+        }
+        Divider()
         ShareLink(item: URL(string: postView.post .apId)!) {
             Text("Share")
         }
@@ -64,6 +71,15 @@ struct PostContextMenu: View {
                 contentView.startReport(postView.post)
             }) {
                 Text("Report")
+                    .padding()
+            }
+        }
+        if contentView.myUser != nil && contentView.myUser!.mods(community: postView.community) {
+            Divider()
+            Button(action: {
+                sender.featureCommunity()
+            }) {
+                Text(postView.post.featuredCommunity ? "Unpin" : "Pin")
                     .padding()
             }
         }

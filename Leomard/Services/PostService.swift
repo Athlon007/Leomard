@@ -23,7 +23,10 @@ class PostService: Service {
                     do {
                         var responses = try self.decode(type: GetPostsResponse.self, data: data)
                         responses.posts.forEach { postView in
-                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw ||
+                                postView.post.nsfw && !UserPreferences.getInstance.showNsfwInFeed ||
+                                postView.read && UserPreferences.getInstance.hideReadPosts ||
+                                UserPreferences.isBlockedInstance(postView.community.actorId) {
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }
@@ -61,7 +64,8 @@ class PostService: Service {
                     do {
                         var responses = try self.decode(type: GetPostsResponse.self, data: data)
                         responses.posts.forEach { postView in
-                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw  {
+                            if postView.post.nsfw && !UserPreferences.getInstance.showNsfw ||
+                                postView.read && UserPreferences.getInstance.hideReadPosts{
                                 responses.posts = responses.posts.filter { $0 != postView}
                             }
                         }
@@ -114,6 +118,25 @@ class PostService: Service {
     public func report(post: Post, reason: String, completion: @escaping (Result<PostReportResponse, Error>) -> Void) {
         let body = CreatePostReport(postId: post.id, reason: reason)
         requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/report", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func feature(post: Post, featureType: PostFeatureType, featured: Bool, completion: @escaping(Result<PostResponse, Error>) -> Void) {
+        let body = FeaturePost(featureType: String(describing: featureType), featured: featured, postId: post.id)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/feature", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func markAsRead(post: Post, read: Bool, completion: @escaping(Result<PostResponse, Error>) -> Void) {
+        if !SessionStorage.getInstance.isSessionActive() {
+            completion(.failure(LeomardExceptions.notLoggedIn("You're not logged in.")))
+            return
+        }
+        
+        let body = MarkPostAsRead(postId: post.id, read: read)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/mark_as_read", method: .post, body: body) { result in
             self.respond(result, completion)
         }
     }

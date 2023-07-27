@@ -38,7 +38,7 @@ struct UserSearchUIView: View {
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 18))
-                        Text(personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
+                        Text("@" + personView.person.name + "@" + LinkHelper.stripToHost(link: personView.person.actorId))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.secondary)

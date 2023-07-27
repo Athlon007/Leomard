@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LoginResponse: Codable, Hashable {
+struct LoginResponse: Codable, Hashable, Equatable {
     public let jwt: String?
     public let registrationCreated: Bool
     public let verifyEmailSent: Bool

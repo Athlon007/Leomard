@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PostPopup: View {
-    let postView: PostView
+    @State var postView: PostView
     let contentView: ContentView
     let commentService: CommentService
     let postService: PostService
@@ -138,6 +138,18 @@ struct PostPopup: View {
             .padding(.bottom, 20)
             .task {
                 self.loadComments()
+                
+                if UserPreferences.getInstance.markPostAsReadOnOpen && !postView.read {
+                    postService.markAsRead(post: postView.post, read: true) { result in
+                        switch result {
+                        case .success(let postResponse):
+                            self.postView = postResponse.postView
+                        case .failure(let error):
+                            print(error)
+                            // TODO: Show error
+                        }
+                    }
+                }
             }
             .alert("Error", isPresented: $showingAlert, actions: {
                 Button("Retry", role: .destructive) {

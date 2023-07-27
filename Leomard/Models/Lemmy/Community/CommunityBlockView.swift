@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CommunityBlockView: Codable {
+struct CommunityBlockView: Codable, Hashable {
     public let community: Community
     public let person: Person
 }
