@@ -15,6 +15,8 @@ struct CommunityUISidebarView: View {
     let contentView: ContentView
     @Binding var myself: MyUserInfo?
     var onPostAdded: (PostView) -> Void
+    var onEditCommunity: () -> Void
+    var onRemoveCommunity: () -> Void
     
     @State var showConfirmCommunityBlock: Bool = false
     @State var showBlockFailure: Bool = false
@@ -113,23 +115,36 @@ struct CommunityUISidebarView: View {
                     )
                     .padding(.top, -20)
                     .padding(.bottom, -20)
-                    Button(action: {
-                        if isCommunityBlocked() {
-                            blockCommunity()
-                        } else {
-                            showConfirmCommunityBlock = true
+                    if !myself!.mods(community: communityResponse.communityView.community) {
+                        Button(action: {
+                            if isCommunityBlocked() {
+                                blockCommunity()
+                            } else {
+                                showConfirmCommunityBlock = true
+                            }
+                            
+                        } ) {
+                            Image(systemName: "person.fill.xmark")
+                                .foregroundColor(isCommunityBlocked() ? .red : .primary)
                         }
-                        
-                    } ) {
-                        Image(systemName: "person.fill.xmark")
-                            .foregroundColor(isCommunityBlocked() ? .red : .primary)
+                        .padding(.top, -20)
+                        .padding(.bottom, -20)
+                        .alert("Confirm", isPresented: $showConfirmCommunityBlock, actions: {
+                            Button("Block", role: .destructive) { blockCommunity() }
+                            Button("Cancel", role: .cancel) {}
+                        }, message: { Text("Are you sure you want to block this community?") })
+                    } else {
+                        Button(action: { onEditCommunity() }) {
+                            Image(systemName: "pencil")
+                        }
+                        .padding(.top, -20)
+                        .padding(.bottom, -20)
+                        Button(action: { onRemoveCommunity() }) {
+                            Image(systemName: "trash")
+                        }
+                        .padding(.top, -20)
+                        .padding(.bottom, -20)
                     }
-                    .padding(.top, -20)
-                    .padding(.bottom, -20)
-                    .alert("Confirm", isPresented: $showConfirmCommunityBlock, actions: {
-                        Button("Block", role: .destructive) { blockCommunity() }
-                        Button("Cancel", role: .cancel) {}
-                    }, message: { Text("Are you sure you want to block this community?") })
                 }
                 Spacer()
             }

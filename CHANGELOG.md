@@ -9,6 +9,7 @@
     - Lock posts
     - Distinguish comment
     - Remove comments
+    - Remove community
 - Post-locked indicator
 - Distinguished comment indicator
 

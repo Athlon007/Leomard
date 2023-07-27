@@ -64,4 +64,11 @@ class CommunityService: Service {
             }
         }
     }
+    
+    public func remove(community: Community, removed: Bool, completion: @escaping((Result<CommunityResponse, Error>)) -> Void) {
+        let body = RemoveCommunity(communityId: community.id, removed: removed)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community/remove", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

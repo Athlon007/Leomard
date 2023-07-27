@@ -40,6 +40,11 @@ struct CommunityUIView: View {
     
     @State var isLoading: Bool = false
     
+    @State var showCommunityEdit: Bool = false
+    @State var showCommunityRemove: Bool = false
+    @State var communityRemoved: Bool = false
+    @State var communityRemoveText: String = ""
+    
     var body: some View {
         toolbar
             .frame(
@@ -69,6 +74,28 @@ struct CommunityUIView: View {
             self.selectedBrowseOption = browseOptions[0]
             loadCommunity()
         }
+        .alert("Remove Community", isPresented: $showCommunityRemove, actions: {
+            TextField("", text: $communityRemoveText)
+            Button("Remove Community", role: .destructive) {
+                communityService?.remove(community: community, removed: true) { result in
+                    switch result {
+                    case .success(_):
+                        communityRemoved = true
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+                .disabled(communityRemoveText != "Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
+            Button("Cancel") {}
+        }, message: {
+            Text("Are you really, REALLY sure you want to remove this community? To remove the community, type the following:\n\n Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
+        })
+        .alert("Community Removed", isPresented: $communityRemoved, actions: {
+            Button("OK", action: {})
+        }, message: {
+            Text("Community has been removed successfully.")
+        })
         Spacer()
     }
     
@@ -86,7 +113,13 @@ struct CommunityUIView: View {
                                 communityService: communityService!,
                                 contentView: contentView,
                                 myself: $myself,
-                                onPostAdded: addNewPost)
+                                onPostAdded: addNewPost,
+                            onEditCommunity: {
+                                showCommunityEdit = true
+                            },
+                            onRemoveCommunity: {
+                                showCommunityRemove = true
+                            })
                         }
                         .frame(
                             minWidth: 0,
@@ -120,7 +153,12 @@ struct CommunityUIView: View {
             List {
                 VStack {
                     if communityResponse != nil {
-                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost)
+                        CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost, onEditCommunity: {
+                            showCommunityEdit = true
+                        },
+                        onRemoveCommunity: {
+                            showCommunityRemove = true
+                        })
                     }
                 }
                 .frame(

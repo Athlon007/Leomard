@@ -222,8 +222,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "411"
+            endingLineNumber = "411"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,8 +238,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1646,9 +1646,9 @@
             filePath = "Leomard/Views/Components/CommunitySidebarUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "blockCommunity()"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "isCommunityBlocked()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
