@@ -140,4 +140,11 @@ class PostService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func remove(post: Post, reason: String, removed: Bool, completion: @escaping(Result<PostResponse, Error>) -> Void) {
+        let body = RemovePost(postId: post.id, reason: reason.count == 0 ? nil : reason, removed: removed)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/remove", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

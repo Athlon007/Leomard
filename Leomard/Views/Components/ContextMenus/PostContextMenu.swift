@@ -76,11 +76,13 @@ struct PostContextMenu: View {
         }
         if contentView.myUser != nil && contentView.myUser!.mods(community: postView.community) {
             Divider()
-            Button(action: {
-                sender.featureCommunity()
-            }) {
-                Text(postView.post.featuredCommunity ? "Unpin" : "Pin")
-                    .padding()
+            Menu("Mod Tools") {
+                Button(postView.post.featuredCommunity ? "Unpin" : "Pin") {
+                    sender.featureCommunity()
+                }
+                Button("Remove") {
+                    sender.startPostRemoval()
+                }
             }
         }
     }
