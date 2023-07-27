@@ -2,6 +2,13 @@
 
 ## TBA (TBA)
 
+## Added
+
+- Mod Tools:
+    - Remove posts
+    - Lock posts
+- Post-locked indicator
+
 ### Bug Fixes
 
 - Fixed opening post, if you opened a community from another post

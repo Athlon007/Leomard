@@ -80,6 +80,9 @@ struct PostContextMenu: View {
                 Button(postView.post.featuredCommunity ? "Unpin" : "Pin") {
                     sender.featureCommunity()
                 }
+                Button(postView.post.locked ? "Unlock" : "Lock") {
+                    sender.lock()
+                }
                 Button("Remove") {
                     sender.startPostRemoval()
                 }

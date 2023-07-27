@@ -202,6 +202,10 @@ struct PostUIView: View {
                 Image(systemName: "pin.fill")
                     .foregroundColor(.red)
             }
+            if postView.post.locked {
+                Image(systemName: "lock.fill")
+                    .foregroundColor(.green)
+            }
             Text(postView.post.name)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -598,5 +602,16 @@ struct PostUIView: View {
     
     func startPostRemoval() {
         startRemovePost = true
+    }
+    
+    func lock() {
+        postService.lock(post: postView.post, locked: !postView.post.locked) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
