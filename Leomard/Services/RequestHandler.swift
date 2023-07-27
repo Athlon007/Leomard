@@ -26,7 +26,7 @@ fileprivate struct NoBodyPost: Codable {
 final class RequestHandler {
     public final let VERSION = "v3"
 
-    public func makeApiRequest(host: String, request: String, method: HTTPMethod, headers: [String:String]? = nil, body: Codable? = nil, completion: @escaping (Result<APIResponse, Error>) -> Void) {
+    public func makeApiRequest(host: String, request: String, method: HTTPMethod, headers: [String:String]? = nil, body: Codable? = nil, noAuth: Bool = false, completion: @escaping (Result<APIResponse, Error>) -> Void) {
         Task(priority: .userInitiated) {
             var urlString = host.containsAny("github.com", "imgur.com") ? "\(host)\(request)" : "\(host)/api/\(self.VERSION)\(request)"
             
@@ -34,7 +34,7 @@ final class RequestHandler {
                 urlString = "https://\(urlString)"
             }
             
-            if SessionStorage.getInstance.isSessionActive() && method == .get {
+            if SessionStorage.getInstance.isSessionActive() && method == .get && !noAuth {
                 let jwt = SessionStorage.getInstance.getCurrentSession()?.loginResponse.jwt
                 if !urlString.contains("?") {
                     urlString += "?auth=\(jwt!)"

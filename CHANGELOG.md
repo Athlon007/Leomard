@@ -13,10 +13,13 @@
     - Edit community
 - Post-locked indicator
 - Distinguished comment indicator
+- Images to Login View
 
 ### Bug Fixes
 
 - Fixed opening post, if you opened a community from another post
+- Fixed login to some instances caused to faulty decoding of site metadata
+- Fixed displaying videos, if they are added in "URL" part of the post
 
 ## 0.3 (2023-07-27)
 
