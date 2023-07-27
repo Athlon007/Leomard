@@ -81,7 +81,7 @@ class CommunityService: Service {
             title: displayName == community.title ? nil : displayName
         )
         
-        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community", method: .put) { result in
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community", method: .put, body: body) { result in
             self.respond(result, completion)
         }
     }
