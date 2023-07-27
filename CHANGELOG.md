@@ -1,6 +1,6 @@
 # Changelog
 
-## TBA (TBA)
+## 0.4 (TBA)
 
 ## Added
 
@@ -10,6 +10,7 @@
     - Distinguish comment
     - Remove comments
     - Remove community
+    - Edit community
 - Post-locked indicator
 - Distinguished comment indicator
 

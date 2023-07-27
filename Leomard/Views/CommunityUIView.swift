@@ -7,9 +7,10 @@
 
 import Foundation
 import SwiftUI
+import MarkdownUI
 
 struct CommunityUIView: View {
-    let community: Community
+    @State var community: Community
     let postService: PostService
     let commentService: CommentService
     let contentView: ContentView
@@ -41,9 +42,20 @@ struct CommunityUIView: View {
     @State var isLoading: Bool = false
     
     @State var showCommunityEdit: Bool = false
+    @State var title: String = ""
+    @State var description: String = ""
+    @State var nsfw: Bool = false
+    @State var postingRestrictedToMods: Bool = false
+    @State var communityUpdateFail: Bool = false
+    
+    @State var imageUploadFail: Bool = false
+    @State var imageUploadFailReason: String = ""
+    
     @State var showCommunityRemove: Bool = false
     @State var communityRemoved: Bool = false
     @State var communityRemoveText: String = ""
+    
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         toolbar
@@ -67,6 +79,7 @@ struct CommunityUIView: View {
                 )
             }
         }
+        .overlay(communityEditor)
         .cornerRadius(8)
         .task {
             let requestHandler = RequestHandler()
@@ -86,7 +99,7 @@ struct CommunityUIView: View {
                     }
                 }
             }
-                .disabled(communityRemoveText != "Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
+            .disabled(communityRemoveText != "Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
             Button("Cancel") {}
         }, message: {
             Text("Are you really, REALLY sure you want to remove this community? To remove the community, type the following:\n\n Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
@@ -114,12 +127,12 @@ struct CommunityUIView: View {
                                 contentView: contentView,
                                 myself: $myself,
                                 onPostAdded: addNewPost,
-                            onEditCommunity: {
-                                showCommunityEdit = true
-                            },
-                            onRemoveCommunity: {
-                                showCommunityRemove = true
-                            })
+                                onEditCommunity: {
+                                    showCommunityEdit = true
+                                },
+                                onRemoveCommunity: {
+                                    showCommunityRemove = true
+                                })
                         }
                         .frame(
                             minWidth: 0,
@@ -156,7 +169,7 @@ struct CommunityUIView: View {
                         CommunityUISidebarView(communityResponse: communityResponse!, communityService: communityService!, contentView: contentView, myself: $myself, onPostAdded: addNewPost, onEditCommunity: {
                             showCommunityEdit = true
                         },
-                        onRemoveCommunity: {
+                                               onRemoveCommunity: {
                             showCommunityRemove = true
                         })
                     }
@@ -312,6 +325,103 @@ struct CommunityUIView: View {
         }
     }
     
+    @ViewBuilder
+    private var communityEditor: some View {
+        if showCommunityEdit {
+            ZStack {
+                Color(white: 0, opacity: 0.33)
+                    .onTapGesture {
+                        showCommunityEdit = false
+                    }
+                VStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Button("Dismiss", action: { showCommunityEdit = false })
+                                .buttonStyle(.link)
+                            Spacer()
+                            Button("Change More Settings", action: {
+                                self.openURL(URL(string: community.actorId)!)
+                            })
+                            .buttonStyle(.link)
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.top, 10)
+                        .padding(.bottom, 0)
+                        Spacer()
+                        
+                        List {
+                            VStack(alignment: .leading) {
+                                Text("Display Name")
+                                    .bold()
+                                TextField("Optional", text: $title)
+                            }
+                            VStack(alignment: .leading) {
+                                Text("Description")
+                                    .bold()
+                                Button("Add Image", action: addImage)
+                                TextEditor(text: $description)
+                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                        maxHeight: .infinity,
+                                        alignment: .leading
+                                    )
+                                    .lineLimit(5...)
+                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                                Text("Description Preview")
+                                    .bold()
+                                Markdown(MarkdownContent(description))
+                            }
+                            VStack(alignment: .leading) {
+                                Toggle("NSFW", isOn: $nsfw)
+                                Toggle("Posting Restricted To Moderators", isOn: $postingRestrictedToMods)
+                            }
+                            VStack(alignment: .leading) {
+                                Button("Save Changes", action: {
+                                    saveCommunitySettings()
+                                })
+                                .buttonStyle(.borderedProminent)
+                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .textFieldStyle(.roundedBorder)
+                        .task {
+                            self.title = community.title
+                            self.description = community.description ?? ""
+                            self.nsfw = community.nsfw
+                            self.postingRestrictedToMods = community.postingRestrictedToMods
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .padding()
+                .frame(maxWidth: 600, maxHeight: 600)
+                .background(Color(.textBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+            }
+            .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
+                Button("OK") {}
+            }, message: {
+                Text(imageUploadFailReason)
+            })
+            .alert("Community Update Failure", isPresented: $communityUpdateFail, actions: {
+                Button("OK") {}
+            }, message: {
+                Text("Failed to update the community. Try again later.")
+            })
+        }
+    }
+    
     // MARK: -
     
     func loadCommunity() {
@@ -430,6 +540,60 @@ struct CommunityUIView: View {
                 page += 1
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+    
+    func addImage() {
+        let panel = NSOpenPanel()
+        panel.prompt = "Select file"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [
+            .init(importedAs: "leomard.supported.image.types.jpg"),
+            .init(importedAs: "leomard.supported.image.types.jpeg"),
+            .init(importedAs: "leomard.supported.image.types.png"),
+            .init(importedAs: "leomard.supported.image.types.webp"),
+            .init(importedAs: "leomard.supported.image.types.gif")
+        ]
+        panel.begin { (result) -> Void in
+            self.contentView.toggleInteraction(true)
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {
+                let imageService = ImageService(requestHandler: RequestHandler())
+                imageService.uploadImage(url: url) { result in
+                    switch result {
+                    case .success(let imageUploadResponse):
+                        if description.count > 0 {
+                            description += "\n\n"
+                        }
+                        
+                        description += "![](\(imageUploadResponse.data.link))\n\n"
+                    case .failure(let error):
+                        if error is LeomardExceptions {
+                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
+                        } else {
+                            self.imageUploadFailReason = "Unable to upload the image :("
+                        }
+                        
+                        self.imageUploadFail = true
+                    }
+                }
+            }
+        }
+        panel.orderFrontRegardless()
+        self.contentView.toggleInteraction(false)
+    }
+    
+    func saveCommunitySettings() {
+        communityService?.edit(community: community, displayName: title, description: description, nsfw: nsfw, postingRestrictedToMods: postingRestrictedToMods) { result in
+            switch result {
+            case .success(let communityResponse):
+                self.community = communityResponse.communityView.community
+            case .failure(let error):
+                print(error)
+                communityUpdateFail = true
             }
         }
     }
