@@ -35,6 +35,7 @@ struct CommentUIView: View {
     @State var showConfirmDelete: Bool = false
     
     @State var startRemove: Bool = false
+    @State var removalReason: String = ""
     
     @State var profileViewMode: Bool = false
     
@@ -71,9 +72,9 @@ struct CommentUIView: View {
                     VStack {
                         EmptyView()
                     }
-                        .frame(maxWidth: 4, maxHeight: .infinity, alignment: .topLeading)
-                        .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count + 1)])
-                        .cornerRadius(8)
+                    .frame(maxWidth: 4, maxHeight: .infinity, alignment: .topLeading)
+                    .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count + 1)])
+                    .cornerRadius(8)
                 }
                 LazyVStack {
                     HStack {
@@ -288,6 +289,22 @@ struct CommentUIView: View {
                 }
             }
             .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
+            .alert("Remove Comment (Mod)", isPresented: $startRemove, actions: {
+                TextField("Optional", text: $removalReason)
+                Button("Remove", role: .destructive) {
+                    self.commentService.remove(comment: commentView.comment, removed: true, reason: removalReason) { result in
+                        switch result {
+                        case .success(let commentResponse):
+                            self.commentView = commentResponse.commentView
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("State the reason of removal:")
+            })
         }
     }
     

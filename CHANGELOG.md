@@ -8,6 +8,7 @@
     - Remove posts
     - Lock posts
     - Distinguish comment
+    - Remove comments
 - Post-locked indicator
 - Distinguished comment indicator
 

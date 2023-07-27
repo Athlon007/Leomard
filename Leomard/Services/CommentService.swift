@@ -148,4 +148,11 @@ class CommentService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func remove(comment: Comment, removed: Bool, reason: String, completion: @escaping (Result<CommentResponse, Error>) -> Void) {
+        let body = RemoveComment(commentId: comment.id, reason: reason.count > 0 ? reason : nil, removed: removed)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/comment/remove", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

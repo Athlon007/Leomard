@@ -1806,8 +1806,8 @@
             filePath = "Leomard/Views/Components/CommentUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "416"
-            endingLineNumber = "416"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
             landmarkName = "deleteComment()"
             landmarkType = "7">
          </BreakpointContent>
