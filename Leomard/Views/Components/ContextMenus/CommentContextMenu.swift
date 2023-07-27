@@ -11,6 +11,8 @@ import SwiftUI
 struct CommentContextMenu: View {
     let contentView: ContentView
     let commentView: CommentView
+    let onDistinguish: () -> Void
+    let onRemove: () -> Void
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -34,6 +36,17 @@ struct CommentContextMenu: View {
             }) {
                 Text("Report")
                     .padding()
+            }
+        }
+        if contentView.myUser != nil && contentView.myUser!.mods(community: commentView.community) {
+            Divider()
+            Menu("Mod Tools") {
+                Button(commentView.comment.distinguished ? "Undistinguish" : "Distinguish") {
+                    onDistinguish()
+                }
+                Button("Remove") {
+                    onRemove()
+                }
             }
         }
     }
