@@ -1,5 +1,11 @@
 # Changelog
 
+## TBA (TBA)
+
+### Bug Fixes
+
+- Fixed opening post, if you opened a community from another post
+
 ## 0.3 (2023-07-27)
 
 ### Added
