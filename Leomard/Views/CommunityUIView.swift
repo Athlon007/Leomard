@@ -501,7 +501,7 @@ struct CommunityUIView: View {
             isLoading = false
             switch result {
             case .success(let postsResponse):
-                self.posts += postsResponse.posts
+                self.posts += postsResponse.posts.filter { !self.posts.contains($0) }
                 page += 1
             case .failure(let error):
                 print(error)
@@ -515,7 +515,7 @@ struct CommunityUIView: View {
             isLoading = false
             switch result {
             case .success(let commentsResponse):
-                self.comments += commentsResponse.comments
+                self.comments += commentsResponse.comments.filter { !self.comments.contains($0) }
                 page += 1
             case .failure(let error):
                 print(error)
@@ -586,7 +586,7 @@ struct CommunityUIView: View {
             isLoading = false
             switch result {
             case .success(let response):
-                self.posts += response.posts
+                self.posts += response.posts.filter { !self.posts.contains($0) }
                 page += 1
             case .failure(let error):
                 print(error)
