@@ -47,6 +47,11 @@ final class UserPreferences: ObservableObject {
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false
     
+    // MARK: - Prefer Display Name
+    @AppStorage("prefer_display_name_community_post", store: .standard) var preferDisplayNameCommunityPost: Bool = false
+    @AppStorage("prefer_display_name_communtiy_followed", store: .standard) var preferDisplayNameCommunityFollowed: Bool = false
+    @AppStorage("prefer_display_name_people_post", store: .standard) var preferDisplayNamePeoplePost: Bool = false
+    
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]
     

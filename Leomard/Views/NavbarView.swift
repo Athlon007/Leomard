@@ -59,9 +59,11 @@ struct NavbarView: View {
                 followedVisible = !followedVisible
             }
             if followedVisible {
-                ForEach(followedCommunities.sorted(by: { $0.community.name < $1.community.name }), id: \.self) { communityView in
+                ForEach(followedCommunities.sorted(by: {
+                    UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? $0.community.title < $1.community.title
+                    : $0.community.name < $1.community.name }), id: \.self) { communityView in
                     if UserPreferences.getInstance.navbarShowLetterSeparators,
-                        let firstChar = communityView.community.name.first,
+                       let firstChar =  UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? communityView.community.title.first : communityView.community.name.first,
                         isFirstCommunityStartingWithThisChar(community: communityView.community) {
                         Text(String(firstChar.uppercased()))
                     }

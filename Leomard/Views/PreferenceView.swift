@@ -153,6 +153,22 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Toggle("Followed List: Show Letter Separators", isOn: UserPreferences.getInstance.$navbarShowLetterSeparators)
         }
+        GroupBox("Prefer Display Name") {
+            VStack {
+                Text("Communities")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Toggle("Posts", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityPost)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Toggle("Followed", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityFollowed)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Divider()
+            VStack {
+                Toggle("People", isOn: UserPreferences.getInstance.$preferDisplayNamePeoplePost)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
