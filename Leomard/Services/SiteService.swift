@@ -19,4 +19,26 @@ class SiteService: Service {
             self.respond(result, completion)
         }
     }
+    
+    public func getSiteIcon(url: String, completion: @escaping (Result<URL, Error>) -> Void) {
+        requestHandler.makeApiRequest(host: url, request: "/site", method: .get, noAuth: true) { result in
+            switch result {
+            case .success(let apiResponse):
+                do {
+                    if let data = apiResponse.data {
+                        let response = try self.decode(type: GetSiteResponse.self, data: data)
+                        if let icon = response.siteView.site.icon, let url = URL(string: icon) {
+                            completion(.success(url))
+                            return
+                        }
+                    }
+                    completion(.failure(LeomardExceptions.unableToGetIcon("Cannot get icon for \(url)")))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

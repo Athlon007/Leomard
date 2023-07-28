@@ -42,6 +42,9 @@ struct PostUIView: View {
 	@State private var performedTasksWillAppear = false
 	@State var showFailedToFeatureAlert: Bool = false
     
+    @State var startRemovePost: Bool = false
+    @State var removalReason: String = ""
+    
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -126,6 +129,22 @@ struct PostUIView: View {
             .contextMenu {
                 PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
             }
+            .alert("Remove Post (Mod)", isPresented: $startRemovePost, actions: {
+                TextField("Optional", text: $removalReason)
+                Button("Remove", role: .destructive) {
+                    self.postService.remove(post: postView.post, reason: removalReason, removed: true) { result in
+                        switch result {
+                        case .success(let postResponse):
+                            self.postView = postResponse.postView
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("State the reason of removal:")
+            })
         }
     }
     
@@ -202,6 +221,10 @@ struct PostUIView: View {
             if postView.post.featuredCommunity {
                 Image(systemName: "pin.fill")
                     .foregroundColor(.red)
+            }
+            if postView.post.locked {
+                Image(systemName: "lock.fill")
+                    .foregroundColor(.green)
             }
             Text(postView.post.name)
                 .bold()
@@ -313,8 +336,12 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var gifOrImage: some View {
-        // Image-only view.
-        if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+        if LinkHelper.isVideosLink(link: postView.post.url!) {
+            // Video
+            VideoPlayer(player: AVPlayer(url: URL(string: postView.post.url!)!))
+                .frame(maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
+        } else if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+            // Image-only view.
             // GIF
             AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
@@ -589,5 +616,20 @@ struct PostUIView: View {
     
     func crossPost() {
         contentView.openCrossPost(post: postView)
+    }
+    
+    func startPostRemoval() {
+        startRemovePost = true
+    }
+    
+    func lock() {
+        postService.lock(post: postView.post, locked: !postView.post.locked) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

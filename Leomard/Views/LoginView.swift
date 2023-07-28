@@ -12,6 +12,8 @@ struct LoginView: View {
     let requestHandler: RequestHandler
     var contentView: ContentView
     
+    @State var loginService: LoginService? = nil
+    
     @State var url: String = ""
     @State var username: String = ""
     @State var password: String = ""
@@ -20,6 +22,7 @@ struct LoginView: View {
     @State var isLoginFailed: Bool = false
     @State var instances: [LemmyInstance] = []
     @State var selectedInstance: LemmyInstance? = nil
+    @State var instanceSearch: String = ""
     
     @State var selectedExistingSession: SessionPickerOption = SessionPickerOption(title: "", sessionInfo: nil)
     @State fileprivate var sessions: [SessionPickerOption] = []
@@ -37,6 +40,8 @@ struct LoginView: View {
                         .font(.system(size: 24))
                     if SessionStorage.getInstance.getAllSessions().count > 0 {
                         Text("Saved Sessions")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .bold()
                         Picker("", selection: $selectedExistingSession) {
                             ForEach(sessions, id: \.self) { session in
                                 Text("\(session.title)")
@@ -56,16 +61,38 @@ struct LoginView: View {
                         }
                     }
                 }
+                Divider()
                 VStack {
                     Text("Pick your Lemmy instance")
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .bold()
                     List {
+                        TextField("Search", text: $instanceSearch)
+                            .onSubmit {
+                                self.searchInstance()
+                            }
+                            .textFieldStyle(.roundedBorder)
                         ForEach(instances, id: \.self) { instance in
                             HStack {
                                 HStack {
                                     VStack{
-                                        Image(systemName: "person.2.circle")
-                                            .AvatarFormatting(size: 50)
+                                        if let image = instance.image {
+                                            AsyncImage(url: image, content: { phase in
+                                                switch phase {
+                                                case .success(let image):
+                                                    image
+                                                        .AvatarFormatting(size: 50)
+                                                default:
+                                                    Image(systemName: "person.2.circle")
+                                                        .AvatarFormatting(size: 50)
+                                                        .foregroundColor(.black)
+                                                }
+                                            })
+                                        } else {
+                                            Image(systemName: "person.2.circle")
+                                                .AvatarFormatting(size: 50)
+                                                .foregroundColor(.black)
+                                        }
                                     }
                                     VStack {
                                         Text(instance.name)
@@ -97,6 +124,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("lemmy.world", text: $url)
                     Text("Username or e-mail")
                         .frame(
@@ -104,6 +132,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("", text: $username)
                     Text("Password")
                         .frame(
@@ -111,6 +140,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     SecureField("", text: $password)
                     Text("2FA Code (Optional)")
                         .frame(
@@ -118,6 +148,7 @@ struct LoginView: View {
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .bold()
                     TextField("", text: $twoFA)
                 }
                 Button("Login", action: login)
@@ -130,6 +161,7 @@ struct LoginView: View {
             .padding()
             .frame(maxWidth: 600)
             .task {
+                self.loginService = LoginService(requestHandler: RequestHandler())
                 loadRecommendedInstances()
             }
             .background(Color(.textBackgroundColor))
@@ -141,9 +173,8 @@ struct LoginView: View {
     }
     
     func login() {
-        let loginService: LoginService = LoginService(requestHandler: requestHandler)
         let login = Login(usernameOrEmail: self.username, password: self.password, totp_2faToken: self.twoFA)
-        loginService.login(lemmyInstance: self.url, login: login) { result in
+        loginService!.login(lemmyInstance: self.url, login: login) { result in
             switch (result) {
             case .success(let loginResponse):
                 let sessionInfo: SessionInfo = SessionInfo(loginResponse: loginResponse, lemmyInstance: url, name: self.username)
@@ -160,13 +191,43 @@ struct LoginView: View {
     }
     
     func loadRecommendedInstances() {
-        let loginService: LoginService = LoginService(requestHandler: requestHandler)
-        loginService.getLemmyInstances() { result in
+        self.loginService!.getLemmyInstances() { result in
             switch result {
             case .success(let instances):
                 self.instances = instances
+                getImages()
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+    
+    func getImages() {
+        let siteService = SiteService(requestHandler: RequestHandler())
+        for instance in instances {
+            DispatchQueue.main.async {
+                siteService.getSiteIcon(url: instance.url) { result in
+                    switch result {
+                    case .success(let url):
+                        if let index = instances.firstIndex(of: instance) {
+                            instances[index].image = url
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func searchInstance() {
+        self.loginService!.searchInstance(query: instanceSearch) { result in
+            switch result {
+            case .success(let instances):
+                self.instances = instances
+                getImages()
+            default:
+                print("Search fail.")
             }
         }
     }

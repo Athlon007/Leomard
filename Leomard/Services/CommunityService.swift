@@ -64,4 +64,25 @@ class CommunityService: Service {
             }
         }
     }
+    
+    public func remove(community: Community, removed: Bool, completion: @escaping((Result<CommunityResponse, Error>)) -> Void) {
+        let body = RemoveCommunity(communityId: community.id, removed: removed)
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community/remove", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func edit(community: Community, displayName: String, description: String, nsfw: Bool, postingRestrictedToMods: Bool, completion: @escaping (Result<CommunityResponse, Error>) -> Void) {
+        let body = EditCommunity(
+            communityId: community.id,
+            description: description == community.description ? nil : description,
+            nsfw: nsfw == community.nsfw ? nil : nsfw,
+            postingRestrictedToMods: postingRestrictedToMods == community.postingRestrictedToMods ? nil : postingRestrictedToMods,
+            title: displayName == community.title ? nil : displayName
+        )
+        
+        requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/community", method: .put, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
 }

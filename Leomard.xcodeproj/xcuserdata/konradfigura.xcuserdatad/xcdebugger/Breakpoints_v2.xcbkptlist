@@ -222,8 +222,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "521"
+            endingLineNumber = "521"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,8 +238,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "539"
+            endingLineNumber = "539"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
+            startingLineNumber = "522"
+            endingLineNumber = "522"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -272,7 +272,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "51"
             endingLineNumber = "51"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -288,15 +288,15 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
             endingLineNumber = "46"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "D180075B-749C-4F99-81CE-528636CC414F - f375d28e6070de3e"
+                  uuid = "D180075B-749C-4F99-81CE-528636CC414F - ee7a3aa7562d0e6b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, noAuth: Swift.Bool, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "Leomard"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
@@ -304,14 +304,14 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "46"
                   endingLineNumber = "46"
-                  offsetFromSymbolStart = "5080">
+                  offsetFromSymbolStart = "5376">
                </Location>
                <Location
-                  uuid = "D180075B-749C-4F99-81CE-528636CC414F - f375d28e6070de3e"
+                  uuid = "D180075B-749C-4F99-81CE-528636CC414F - ee7a3aa7562d0e6b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, noAuth: Swift.Bool, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "Leomard"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
@@ -319,7 +319,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "46"
                   endingLineNumber = "46"
-                  offsetFromSymbolStart = "5492">
+                  offsetFromSymbolStart = "5792">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -750,8 +750,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
+            startingLineNumber = "339"
+            endingLineNumber = "339"
             landmarkName = "gifOrImage"
             landmarkType = "24">
             <Locations>
@@ -798,8 +798,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
             landmarkName = "postBodyMarkdown"
             landmarkType = "24">
          </BreakpointContent>
@@ -814,8 +814,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "postBodyMarkdown"
             landmarkType = "24">
          </BreakpointContent>
@@ -846,10 +846,10 @@
             filePath = "Leomard/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
-            landmarkName = "startReport(_:)"
-            landmarkType = "7">
+            startingLineNumber = "451"
+            endingLineNumber = "451"
+            landmarkName = "ContentView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -862,8 +862,8 @@
             filePath = "Leomard/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "465"
-            endingLineNumber = "465"
+            startingLineNumber = "471"
+            endingLineNumber = "471"
             landmarkName = "handleUrl(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -878,8 +878,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "550"
-            endingLineNumber = "550"
+            startingLineNumber = "577"
+            endingLineNumber = "577"
             landmarkName = "featureCommunity()"
             landmarkType = "7">
          </BreakpointContent>
@@ -894,8 +894,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "552"
-            endingLineNumber = "552"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
             landmarkName = "featureCommunity()"
             landmarkType = "7">
          </BreakpointContent>
@@ -960,7 +960,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "74"
             endingLineNumber = "74"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -976,7 +976,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "100"
             endingLineNumber = "100"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -1024,7 +1024,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
             endingLineNumber = "63"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1040,7 +1040,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "69"
             endingLineNumber = "69"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1056,7 +1056,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
             endingLineNumber = "71"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1072,7 +1072,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
             endingLineNumber = "73"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1646,9 +1646,9 @@
             filePath = "Leomard/Views/Components/CommunitySidebarUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "blockCommunity()"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "isCommunityBlocked()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1712,7 +1712,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "29"
             endingLineNumber = "29"
-            landmarkName = "makeApiRequest(host:request:method:headers:body:completion:)"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1720,7 +1720,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0EB2204C-5BB5-4D44-AF4E-87D56BBDBEB8"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Leomard/Views/Popups/PostPopup.swift"
@@ -1745,6 +1745,118 @@
             startingLineNumber = "41"
             endingLineNumber = "41"
             landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ABE976E0-5320-47C0-8672-EFBB8F18430D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/CommentService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "deleteComment(comment:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "ABE976E0-5320-47C0-8672-EFBB8F18430D - be260748f0fab92c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Leomard.CommentService.deleteComment(comment: Leomard.Comment, completion: (Swift.Result&lt;Swift.Bool, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/CommentService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "118"
+                  endingLineNumber = "118"
+                  offsetFromSymbolStart = "124">
+               </Location>
+               <Location
+                  uuid = "ABE976E0-5320-47C0-8672-EFBB8F18430D - 2c8836b5bc172f9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; () in Leomard.CommentService.deleteComment(comment: Leomard.Comment, completion: (Swift.Result&lt;Swift.Bool, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/CommentService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DF05EA47-A094-48DE-9100-8450D2CA6C23"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/CommentUIView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
+            landmarkName = "deleteComment()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "65A8DAE1-3832-4982-BEF2-6B2AA4FF0C74"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/RequestHandler.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "makeApiRequest(host:request:method:headers:body:noAuth:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6329994F-47A5-4F70-8602-83332A8F4BD9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/LoginView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "searchInstance()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "89E17BD2-8ABF-4694-AB4A-45F8C0AD557E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/PostUIView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
+            landmarkName = "gifOrImage"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
