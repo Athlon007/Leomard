@@ -707,9 +707,9 @@ struct ProfileView: View {
         }
         
         let query = page == 1 ? searchQuery : lastQuery
-        lastQuery = query
         
         if page == 1 {
+            lastQuery = query
             self.personDetails!.posts = []
             self.personDetails!.comments = []
         }
