@@ -21,6 +21,8 @@ struct NavbarView: View {
     @State var emptyCounter: Int = 0
     @State var followedVisible: Bool = true
     
+    @State var addedLetters: [Character] = []
+    
     var body: some View {
         sidebarItems(options: options)
             .padding(.top, 24)
@@ -57,7 +59,10 @@ struct NavbarView: View {
                 followedVisible = !followedVisible
             }
             if followedVisible {
-                ForEach(followedCommunities, id: \.self) { communityView in
+                ForEach(followedCommunities.sorted(by: { $0.community.name < $1.community.name }), id: \.self) { communityView in
+                    if let firstChar = communityView.community.name.first, isFirstCommunityStartingWithThisChar(community: communityView.community) {
+                        Text(String(firstChar.uppercased()))
+                    }
                     NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
                 }
             }
@@ -70,5 +75,9 @@ struct NavbarView: View {
             NavbarItem(option: profileOption, currentSelection: $currentSelection, contentView: contentView, currentCommunity: $currentCommunity, badgeCount: $emptyCounter)
         }
         .NavBarItemContainer()
+    }
+    
+    func isFirstCommunityStartingWithThisChar(community: Community) -> Bool {
+        return followedCommunities.filter { $0.community.name.first! == community.name.first! }.first?.community == community
     }
 }
