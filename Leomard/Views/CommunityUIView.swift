@@ -80,6 +80,7 @@ struct CommunityUIView: View {
             }
         }
         .overlay(communityEditor)
+        .overlay(removeCommunityOverlay)
         .cornerRadius(8)
         .task {
             let requestHandler = RequestHandler()
@@ -87,29 +88,80 @@ struct CommunityUIView: View {
             self.selectedBrowseOption = browseOptions[0]
             loadCommunity()
         }
-        .alert("Remove Community", isPresented: $showCommunityRemove, actions: {
-            TextField("", text: $communityRemoveText)
-            Button("Remove Community", role: .destructive) {
-                communityService?.remove(community: community, removed: true) { result in
-                    switch result {
-                    case .success(_):
-                        communityRemoved = true
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-            }
-            .disabled(communityRemoveText != "Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
-            Button("Cancel") {}
-        }, message: {
-            Text("Are you really, REALLY sure you want to remove this community? To remove the community, type the following:\n\n Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
-        })
+        
         .alert("Community Removed", isPresented: $communityRemoved, actions: {
             Button("OK", action: {})
         }, message: {
             Text("Community has been removed successfully.")
         })
         Spacer()
+    }
+    
+    // MARK: -
+    
+    @ViewBuilder
+    private var removeCommunityOverlay: some View {
+        if showCommunityRemove {
+            ZStack {
+                Color(white: 0, opacity: 0.33)
+                    .onTapGesture {
+                        showCommunityEdit = false
+                    }
+                VStack(alignment: .center) {
+                    VStack(alignment: .center) {
+                        Image(nsImage: NSApplication.shared.applicationIconImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                        Text("Remove Community")
+                            .bold()
+                            .font(.title2)
+                    }
+                    .padding()
+                    VStack(alignment: .center) {
+                        Text("Are you really, REALLY sure you want to remove this community? To remove the community, type the following:\n")
+                        Text("**Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.**")
+                            .frame(alignment: .center)
+                            .bold()
+                    }
+                    .frame(maxWidth: .infinity)
+                    TextField("", text: $communityRemoveText)
+                    HStack(alignment: .center) {
+                        Button("Remove Community") {
+                            communityService?.remove(community: community, removed: true) { result in
+                                switch result {
+                                case .success(_):
+                                    communityRemoved = true
+                                case .failure(let error):
+                                    print(error)
+                                }
+                            }
+                            showCommunityRemove = false
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(.red)
+                        .disabled(communityRemoveText != "Yes, remove \(community.name)@\(LinkHelper.stripToHost(link: community.actorId)) community.")
+                        Button("Cancel") {
+                            showCommunityRemove = false
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+                .frame(maxWidth: 300)
+                .padding()
+                .background(Color(.windowBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+                .task {
+                    communityRemoveText = ""
+                }
+                .cornerRadius(16)
+            }
+        }
     }
     
     // MARK: -
