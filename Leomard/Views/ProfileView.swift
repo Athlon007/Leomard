@@ -19,6 +19,7 @@ struct ProfileView: View {
     
     @State var postService: PostService? = nil
     @State var personService: PersonService? = nil
+    @State var searchService: SearchService? = nil
     @State var browseOptions: [Option] = [
         .init(id: 0, title: "Comments", imageName: "message"),
         .init(id: 1, title: "Posts", imageName: "doc.plaintext"),
@@ -49,6 +50,12 @@ struct ProfileView: View {
     @State var imageUploadFail: Bool = false
     @State var imageUploadFailReason: String = ""
     @State var updateProfileFail: Bool = false
+    
+    @State var searchVisible: Bool = false
+    @State var searchQuery: String = ""
+    @State var lastQuery: String = ""
+    @State var showSearchPosts: Bool = false
+    
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -220,7 +227,33 @@ struct ProfileView: View {
             Spacer()
             profileToolbarItems
             Spacer()
+            searchBox
             sessionPicker
+        }
+    }
+    
+    @ViewBuilder
+    private var searchBox: some View {
+        HStack {
+            if searchVisible {
+                TextField("Search", text: $searchQuery)
+                    .frame(maxWidth: 200)
+                    .onSubmit {
+                        page = 1
+                        search()
+                    }
+                    .cornerRadius(8)
+            }
+            Button(action: {
+                searchVisible = !searchVisible
+                if !searchVisible {
+                    page = 1
+                    loadPersonDetails()
+                }
+            }) {
+                Image(systemName: "magnifyingglass")
+            }
+            .buttonStyle(.link)
         }
     }
     
@@ -260,6 +293,7 @@ struct ProfileView: View {
                 .onChange(of: selectedSort) { value in
                     self.reloadFeed()
                 }
+                .disabled(searchVisible)
             }
             Button(action: reloadFeed) {
                 Image(systemName: "arrow.clockwise")
@@ -502,6 +536,11 @@ struct ProfileView: View {
     }
     
     func loadPersonDetails() {
+        if searchVisible {
+            self.search()
+            return
+        }
+        
         if page == 1 && self.personDetails != nil {
             self.personDetails!.comments = []
             self.personDetails!.posts = []
@@ -658,6 +697,31 @@ struct ProfileView: View {
                 }
                 print(error)
                 updateProfileFail = true
+            }
+        }
+    }
+    
+    func search() {
+        if searchService == nil {
+            searchService = SearchService(requestHandler: RequestHandler())
+        }
+        
+        var query = page == 1 ? searchQuery : lastQuery
+        lastQuery = query
+        
+        if page == 1 {
+            self.personDetails!.posts = []
+            self.personDetails!.comments = []
+        }
+        
+        searchService?.search(person: person, query: query, searchType: selectedBrowseOption == browseOptions[0] ? .comments : .posts, page: page) { result in
+            switch result {
+            case .success(let searchResponse):
+                self.personDetails!.posts += searchResponse.posts.filter { !self.personDetails!.posts.contains($0) }
+                self.personDetails!.comments += searchResponse.comments.filter { !self.personDetails!.comments.contains($0) }
+                page += 1
+            case .failure(let error):
+                print(error)
             }
         }
     }

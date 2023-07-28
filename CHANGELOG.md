@@ -16,6 +16,7 @@
 - Images to Login View
 - Instance icons on the login screen
 - Search for instance on the login screen
+- Search profiles
 
 ### Bug Fixes
 
