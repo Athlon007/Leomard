@@ -35,8 +35,6 @@ struct PreferencesView: View {
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
     @State var manuallyCheckedForUpdate: Bool = false
     
-    @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
-    
     var body: some View {
         NavigationSplitView {
             preferencesSidebar
@@ -151,6 +149,9 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Text("Inbox")
             Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
+        }
+        VStack(alignment: .leading) {
+            Toggle("Followed List: Show Letter Separators", isOn: UserPreferences.getInstance.$navbarShowLetterSeparators)
         }
     }
     

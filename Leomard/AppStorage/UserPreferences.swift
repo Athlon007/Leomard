@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 final class UserPreferences: ObservableObject {
-    private static var instance = UserPreferences()
+    @State private static var instance = UserPreferences()
     @ObservedObject public static var getInstance = UserPreferences.instance
     
     private init() {}
@@ -43,6 +43,9 @@ final class UserPreferences: ObservableObject {
     
     // MARK: - Post View
     @AppStorage("use_post_compact_view", store: .standard) var usePostCompactView: Bool = false
+    
+    // MARK: - Navbar
+    @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]

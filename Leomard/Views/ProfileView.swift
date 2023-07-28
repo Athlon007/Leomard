@@ -706,7 +706,7 @@ struct ProfileView: View {
             searchService = SearchService(requestHandler: RequestHandler())
         }
         
-        var query = page == 1 ? searchQuery : lastQuery
+        let query = page == 1 ? searchQuery : lastQuery
         lastQuery = query
         
         if page == 1 {

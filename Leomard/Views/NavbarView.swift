@@ -60,13 +60,15 @@ struct NavbarView: View {
             }
             if followedVisible {
                 ForEach(followedCommunities.sorted(by: { $0.community.name < $1.community.name }), id: \.self) { communityView in
-                    if let firstChar = communityView.community.name.first, isFirstCommunityStartingWithThisChar(community: communityView.community) {
+                    if UserPreferences.getInstance.navbarShowLetterSeparators,
+                        let firstChar = communityView.community.name.first,
+                        isFirstCommunityStartingWithThisChar(community: communityView.community) {
                         Text(String(firstChar.uppercased()))
                     }
                     NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
                 }
             }
-        }
+        }    
     }
     
     @ViewBuilder
