@@ -800,7 +800,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "227"
             endingLineNumber = "227"
-            landmarkName = "postBodyMarkdown"
+            landmarkName = "postTitle"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -816,7 +816,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "228"
             endingLineNumber = "228"
-            landmarkName = "postBodyMarkdown"
+            landmarkName = "postTitle"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -880,7 +880,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "577"
             endingLineNumber = "577"
-            landmarkName = "featureCommunity()"
+            landmarkName = "deletePost()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -896,7 +896,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "579"
             endingLineNumber = "579"
-            landmarkName = "featureCommunity()"
+            landmarkName = "deletePost()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1838,8 +1838,8 @@
             filePath = "Leomard/Views/LoginView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "searchInstance()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1856,8 +1856,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "329"
             endingLineNumber = "329"
-            landmarkName = "gifOrImage"
-            landmarkType = "24">
+            landmarkName = "staticImage(_:@ViewBuilder:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

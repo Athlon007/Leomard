@@ -63,15 +63,17 @@ struct LoginView: View {
                 }
                 Divider()
                 VStack {
-                    Text("Pick your Lemmy instance")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .bold()
-                    List {
+                    VStack {
+                        Text("Pick your Lemmy instance")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .bold()
                         TextField("Search", text: $instanceSearch)
                             .onSubmit {
                                 self.searchInstance()
                             }
                             .textFieldStyle(.roundedBorder)
+                    }
+                    List {
                         ForEach(instances, id: \.self) { instance in
                             HStack {
                                 HStack {
