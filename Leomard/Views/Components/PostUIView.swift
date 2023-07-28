@@ -26,6 +26,7 @@ struct PostUIView: View {
     private static let padding: CGFloat = 12
     
     @State var postBody: String? = nil
+    @State private var postBodyMarkdownContent: MarkdownContent? = nil
     @State var url: URL? = nil
     @State var updatedTimeAsString: String = ""
     
@@ -37,8 +38,9 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
-    
-    @State var showFailedToFeatureAlert: Bool = false
+
+	@State private var performedTasksWillAppear = false
+	@State var showFailedToFeatureAlert: Bool = false
     
     @State var startRemovePost: Bool = false
     @State var removalReason: String = ""
@@ -104,9 +106,13 @@ struct PostUIView: View {
                 )
                 
                 .task {
-                    postBody = await postBodyTask()
-                    url = await postUrlTask()
-                    updatedTimeAsString = await updatedTimeAsStringTask()
+					if performedTasksWillAppear == false {
+						performedTasksWillAppear = true
+						postBody = await postBodyTask()
+						postBodyMarkdownContent = await postBodyMarkdownContentTask()
+						url = await postUrlTask()
+						updatedTimeAsString = await updatedTimeAsStringTask()
+					}
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
                     Button("OK", action: {})
@@ -139,6 +145,20 @@ struct PostUIView: View {
             }, message: {
                 Text("State the reason of removal:")
             })
+        }
+    }
+    
+    nonisolated
+    private func postBodyMarkdownContentTask() async -> MarkdownContent? {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                if let body = await self.postBody {
+                    let content = MarkdownContent(body)
+                    continuation.resume(returning: content)
+                } else {
+                    continuation.resume(returning: nil)
+                }
+            }
         }
     }
     
@@ -221,23 +241,20 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var postBodyMarkdown: some View {
-        if let body = self.postBody {
-            let content = MarkdownContent(body)
-            Markdown(content)
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                .lineLimit(nil)
-                .textSelection(.enabled)
-                .background(GeometryReader { geometry in
-                    Color.clear
-                        .onAppear {
-                            self.bodyHeight = geometry.size.height
-                        }
-                })
-        }
+        Markdown(postBodyMarkdownContent ?? .init(""))
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                alignment: .leading
+            )
+            .lineLimit(nil)
+            .textSelection(.enabled)
+            .background(GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.bodyHeight = geometry.size.height
+                    }
+            })
     }
     
     @ViewBuilder
@@ -313,7 +330,7 @@ struct PostUIView: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                 }
-            }.onDisappear(.lowerPriority)
+            }.onDisappear(.cancel)
         }
     }
     
@@ -362,7 +379,7 @@ struct PostUIView: View {
     @ViewBuilder
     private var communityPersonDate: some View {
         LazyHStack(spacing: 4) {
-            HStack(spacing: 4) {
+            Group {
                 Text("in")
                 CommunityAvatar(community: postView.community)
                 Text(self.postView.community.name)
@@ -371,7 +388,7 @@ struct PostUIView: View {
             .onTapGesture {
                 self.contentView.openCommunity(community: postView.community)
             }
-            HStack(spacing: 4) {
+            Group {
                 Text("by")
                 PersonDisplay(person: postView.creator, myself: $myself)
                     .onTapGesture {
@@ -379,13 +396,10 @@ struct PostUIView: View {
                     }
             }
             DateDisplayView(date: self.postView.post.published)
-            if postView.post.updated != nil {
-                HStack {
-                    Image(systemName: "pencil")
-                    
-                }.help(updatedTimeAsString)
-            }
-        }
+            Image(systemName: "pencil")
+                .opacity(postView.post.updated != nil ? 1 : 0)
+                .help(updatedTimeAsString)
+        }.padding(.vertical, 2)
     }
     
     /// Upvote, downvote, reply, bookmark, etc.

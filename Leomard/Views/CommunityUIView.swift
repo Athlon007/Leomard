@@ -116,48 +116,46 @@ struct CommunityUIView: View {
     
     @ViewBuilder
     private func communityContent(_ communityResponse: GetCommunityResponse?, sidebarVisible: Bool) -> some View {
-        ScrollViewReader { scrollProxy in
-            List {
-                if let communityResponse {
-                    if sidebarVisible {
-                        VStack {
-                            CommunityUISidebarView(
-                                communityResponse: communityResponse,
-                                communityService: communityService!,
-                                contentView: contentView,
-                                myself: $myself,
-                                onPostAdded: addNewPost,
-                                onEditCommunity: {
-                                    showCommunityEdit = true
-                                },
-                                onRemoveCommunity: {
-                                    showCommunityRemove = true
-                                })
-                        }
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: .infinity,
-                            alignment: .center
-                        )
-                        .cornerRadius(8)
-                        .padding(.bottom, 15)
+        List {
+            if let communityResponse {
+                if sidebarVisible {
+                    VStack {
+                        CommunityUISidebarView(
+                            communityResponse: communityResponse,
+                            communityService: communityService!,
+                            contentView: contentView,
+                            myself: $myself,
+                            onPostAdded: addNewPost,
+                            onEditCommunity: {
+                                showCommunityEdit = true
+                            },
+                            onRemoveCommunity: {
+                                showCommunityRemove = true
+                            })
                     }
-                    switch selectedBrowseOption.id {
-                    case 1:
-                        commentsList
-                    default:
-                        postsList
-                    }
-                    
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        alignment: .center
+                    )
+                    .cornerRadius(8)
+                    .padding(.bottom, 15)
                 }
+                switch selectedBrowseOption.id {
+                case 1:
+                    commentsList
+                default:
+                    postsList
+                }
+                
             }
-            .frame(
-                minWidth: 0,
-                maxWidth: 600,
-                maxHeight: .infinity,
-                alignment: .center
-            )
         }
+        .frame(
+            minWidth: 0,
+            maxWidth: 600,
+            maxHeight: .infinity,
+            alignment: .center
+        )
     }
     
     @ViewBuilder
