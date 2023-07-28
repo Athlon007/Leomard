@@ -19,6 +19,7 @@
 - Search profiles
 - Separate followed communities by first letter of the name (disabled by default)
 - Prefered display name for communities and users: you can either choose to display handles, or display names
+- Search followed communities
 
 ### Bug Fixes
 
