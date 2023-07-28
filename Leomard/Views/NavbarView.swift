@@ -33,7 +33,7 @@ struct NavbarView: View {
             )
         userProfileItem
     }
-
+    
     // MARK: -
     
     @ViewBuilder
@@ -61,16 +61,17 @@ struct NavbarView: View {
             if followedVisible {
                 ForEach(followedCommunities.sorted(by: {
                     UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? $0.community.title < $1.community.title
-                    : $0.community.name < $1.community.name }), id: \.self) { communityView in
-                    if UserPreferences.getInstance.navbarShowLetterSeparators,
-                       let firstChar =  UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? communityView.community.title.first : communityView.community.name.first,
-                        isFirstCommunityStartingWithThisChar(community: communityView.community) {
-                        Text(String(firstChar.uppercased()))
+                                                                                    : $0.community.name < $1.community.name
+                }), id: \.self) { communityView in
+                        if UserPreferences.getInstance.navbarShowLetterSeparators,
+                           let firstChar =  UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? communityView.community.title.first : communityView.community.name.first,
+                           isFirstCommunityStartingWithThisChar(community: communityView.community) {
+                            Text(String(firstChar.uppercased()))
+                        }
+                        NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
                     }
-                    NavbarCommunityItem(community: communityView.community, currentCommunity: $currentCommunity, contentView: contentView)
-                }
             }
-        }    
+        }
     }
     
     @ViewBuilder
@@ -83,5 +84,5 @@ struct NavbarView: View {
     
     func isFirstCommunityStartingWithThisChar(community: Community) -> Bool {
         return followedCommunities.filter { $0.community.name.first == community.name.first }.first?.community == community
-    }
+    }    
 }
