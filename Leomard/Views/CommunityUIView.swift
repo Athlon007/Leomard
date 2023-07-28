@@ -48,24 +48,20 @@ struct CommunityUIView: View {
             )
             .padding(.leading)
             .padding(.trailing)
-        // TODO: Nested stacks along with readers causing major performance issues.
-//        VStack {
-//            GeometryReader { proxy in
-//                HStack {
-//                    communityContent(
-//                        communityResponse,
-//                        sidebarVisible: proxy.size.width < 1000)
-//                    communitySidebar(visible: proxy.size.width > 1000)
-//                }
-//                .frame(
-//                    maxWidth: .infinity,
-//                    alignment: .center
-//                )
-//            }
-//        }
-        communityContent(
-            communityResponse,
-            sidebarVisible: false)
+        VStack {
+            GeometryReader { proxy in
+                HStack {
+                    communityContent(
+                        communityResponse,
+                        sidebarVisible: proxy.size.width < 1000)
+                    communitySidebar(visible: proxy.size.width > 1000)
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .center
+                )
+            }
+        }
         .cornerRadius(8)
         .task {
             let requestHandler = RequestHandler()
@@ -80,41 +76,42 @@ struct CommunityUIView: View {
     
     @ViewBuilder
     private func communityContent(_ communityResponse: GetCommunityResponse?, sidebarVisible: Bool) -> some View {
-        postsList
-//        List {
-//            if let communityResponse {
-//                if sidebarVisible {
-//                    VStack {
-//                        CommunityUISidebarView(
-//                            communityResponse: communityResponse,
-//                            communityService: communityService!,
-//                            contentView: contentView,
-//                            myself: $myself,
-//                            onPostAdded: addNewPost)
-//                    }
-//                    .frame(
-//                        minWidth: 0,
-//                        maxWidth: .infinity,
-//                        alignment: .center
-//                    )
-//                    .cornerRadius(8)
-//                    .padding(.bottom, 15)
-//                }
-//                switch selectedBrowseOption.id {
-//                case 1:
-//                    commentsList
-//                default:
-//                    postsList
-//                }
-//
-//            }
-//        }
-//        .frame(
-//            minWidth: 0,
-//            maxWidth: 600,
-//            maxHeight: .infinity,
-//            alignment: .center
-//        )
+        ScrollViewReader { scrollProxy in
+            List {
+                if let communityResponse {
+                    if sidebarVisible {
+                        VStack {
+                            CommunityUISidebarView(
+                                communityResponse: communityResponse,
+                                communityService: communityService!,
+                                contentView: contentView,
+                                myself: $myself,
+                                onPostAdded: addNewPost)
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .center
+                        )
+                        .cornerRadius(8)
+                        .padding(.bottom, 15)
+                    }
+                    switch selectedBrowseOption.id {
+                    case 1:
+                        commentsList
+                    default:
+                        postsList
+                    }
+                    
+                }
+            }
+            .frame(
+                minWidth: 0,
+                maxWidth: 600,
+                maxHeight: .infinity,
+                alignment: .center
+            )
+        }
     }
     
     @ViewBuilder
@@ -202,10 +199,9 @@ struct CommunityUIView: View {
                     .foregroundColor(.secondary)
             }
         } else {
-            List(posts, id: \.post.id) { postView in
+            ForEach(posts, id: \.self) { postView in
                 PostUIView(postView: postView, shortBody: true, postService: self.postService, myself: $myself, contentView: contentView)
                     .onAppear {
-                        // TODO: Posts are still duplicated.
                         if postView == self.posts.last {
                             self.loadPosts()
                         }
