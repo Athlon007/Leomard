@@ -78,6 +78,6 @@ struct NavbarView: View {
     }
     
     func isFirstCommunityStartingWithThisChar(community: Community) -> Bool {
-        return followedCommunities.filter { $0.community.name.first! == community.name.first! }.first?.community == community
+        return followedCommunities.filter { $0.community.name.first == community.name.first }.first?.community == community
     }
 }
