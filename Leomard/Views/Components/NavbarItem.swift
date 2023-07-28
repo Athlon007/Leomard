@@ -79,17 +79,13 @@ struct NavbarCommunityItem: View {
             LazyImage(url: .init(string: community.icon ?? ""), transaction: .init(animation: .easeOut)) { state in
                 if let image = state.image {
                     image.AvatarFormatting(size: 20)
-                } else if let _ = state.error {
-                    Image(systemName: "person.circle")
-                        .AvatarFormatting(size: 20)
-                        .foregroundColor(.black)
                 } else {
-                    Image(systemName: "person.circle")
+                    Image(systemName: "person.2.circle")
                         .AvatarFormatting(size: 20)
                         .foregroundColor(.black)
                 }
             }
-            Text(community.name + "@" + LinkHelper.stripToHost(link: community.actorId))
+            Text((UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? community.title : community.name) + "@" + LinkHelper.stripToHost(link: community.actorId))
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading

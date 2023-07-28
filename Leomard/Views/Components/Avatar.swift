@@ -54,7 +54,7 @@ struct CommunityAvatar: View {
             if let image = state.image {
                 image.AvatarFormatting(size: size)
             } else {
-                Image(systemName: "person.circle")
+                Image(systemName: "person.2.circle")
                     .AvatarFormatting(size: size)
                     .foregroundColor(.black)
             }

@@ -382,7 +382,7 @@ struct PostUIView: View {
             Group {
                 Text("in")
                 CommunityAvatar(community: postView.community)
-                Text(self.postView.community.name)
+                Text(UserPreferences.getInstance.preferDisplayNameCommunityPost ? self.postView.community.title : self.postView.community.name)
                     .fontWeight(.semibold)
             }
             .onTapGesture {

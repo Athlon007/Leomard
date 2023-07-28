@@ -35,8 +35,6 @@ struct PreferencesView: View {
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
     @State var manuallyCheckedForUpdate: Bool = false
     
-    @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
-    
     var body: some View {
         NavigationSplitView {
             preferencesSidebar
@@ -152,6 +150,25 @@ struct PreferencesView: View {
             Text("Inbox")
             Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
         }
+        VStack(alignment: .leading) {
+            Toggle("Followed List: Show Letter Separators", isOn: UserPreferences.getInstance.$navbarShowLetterSeparators)
+        }
+        GroupBox("Prefer Display Name") {
+            VStack {
+                Text("Communities")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Toggle("Posts", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityPost)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Toggle("Followed", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityFollowed)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Divider()
+            VStack {
+                Toggle("People", isOn: UserPreferences.getInstance.$preferDisplayNamePeoplePost)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder

@@ -706,10 +706,10 @@ struct ProfileView: View {
             searchService = SearchService(requestHandler: RequestHandler())
         }
         
-        var query = page == 1 ? searchQuery : lastQuery
-        lastQuery = query
+        let query = page == 1 ? searchQuery : lastQuery
         
         if page == 1 {
+            lastQuery = query
             self.personDetails!.posts = []
             self.personDetails!.comments = []
         }
