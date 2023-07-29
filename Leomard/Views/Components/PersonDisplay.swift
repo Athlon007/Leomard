@@ -22,7 +22,7 @@ struct PersonDisplay: View {
     }
     
     func getDisplayName() -> String {
-        var output = person.name
+        var output = UserPreferences.getInstance.preferDisplayNamePeoplePost ? person.displayName ?? person.name : person.name
         if person.botAccount {
             output += " 🤖"
         }

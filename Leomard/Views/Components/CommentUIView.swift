@@ -34,6 +34,9 @@ struct CommentUIView: View {
     @State var updatedTimeAsString: String = ""
     @State var showConfirmDelete: Bool = false
     
+    @State var startRemove: Bool = false
+    @State var removalReason: String = ""
+    
     @State var profileViewMode: Bool = false
     
     let subcommentsColorsOrder: [Color] = [
@@ -69,9 +72,9 @@ struct CommentUIView: View {
                     VStack {
                         EmptyView()
                     }
-                        .frame(maxWidth: 4, maxHeight: .infinity, alignment: .topLeading)
-                        .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count + 1)])
-                        .cornerRadius(8)
+                    .frame(maxWidth: 4, maxHeight: .infinity, alignment: .topLeading)
+                    .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count + 1)])
+                    .cornerRadius(8)
                 }
                 LazyVStack {
                     HStack {
@@ -119,6 +122,12 @@ struct CommentUIView: View {
                                     Image(systemName: "pencil")
                                     
                                 }.help(updatedTimeAsString)
+                            }
+                            if commentView.comment.distinguished {
+                                HStack {
+                                    Image(systemName: "star.circle")
+                                        .foregroundColor(Color.yellow)
+                                }
                             }
                         }
                         .frame(
@@ -190,7 +199,9 @@ struct CommentUIView: View {
                                 }
                             }
                             .contextMenu {
-                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView)
+                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
+                                    startRemove = true
+                                })
                             }
                         if isReplying || isEditingComment {
                             Spacer()
@@ -278,6 +289,22 @@ struct CommentUIView: View {
                 }
             }
             .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
+            .alert("Remove Comment (Mod)", isPresented: $startRemove, actions: {
+                TextField("Optional", text: $removalReason)
+                Button("Remove", role: .destructive) {
+                    self.commentService.remove(comment: commentView.comment, removed: true, reason: removalReason) { result in
+                        switch result {
+                        case .success(let commentResponse):
+                            self.commentView = commentResponse.commentView
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("State the reason of removal:")
+            })
         }
     }
     
@@ -418,6 +445,17 @@ struct CommentUIView: View {
     func savePost() {
         let save = !commentView.saved
         self.commentService.saveComment(comment: commentView.comment, save: save) { result in
+            switch result {
+            case .success(let commentResponse):
+                self.commentView = commentResponse.commentView
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func distinguish() {
+        commentService.distinguish(comment: commentView.comment, distinguished: !commentView.comment.distinguished) { result in
             switch result {
             case .success(let commentResponse):
                 self.commentView = commentResponse.commentView

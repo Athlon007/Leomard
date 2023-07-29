@@ -26,6 +26,7 @@ struct PostUIView: View {
     private static let padding: CGFloat = 12
     
     @State var postBody: String? = nil
+    @State private var postBodyMarkdownContent: MarkdownContent? = nil
     @State var url: URL? = nil
     @State var updatedTimeAsString: String = ""
     
@@ -37,8 +38,12 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
+
+	@State private var performedTasksWillAppear = false
+	@State var showFailedToFeatureAlert: Bool = false
     
-    @State var showFailedToFeatureAlert: Bool = false
+    @State var startRemovePost: Bool = false
+    @State var removalReason: String = ""
     
     @Environment(\.openURL) var openURL
     
@@ -101,9 +106,13 @@ struct PostUIView: View {
                 )
                 
                 .task {
-                    postBody = await postBodyTask()
-                    url = await postUrlTask()
-                    updatedTimeAsString = await updatedTimeAsStringTask()
+					if performedTasksWillAppear == false {
+						performedTasksWillAppear = true
+						postBody = await postBodyTask()
+						postBodyMarkdownContent = await postBodyMarkdownContentTask()
+						url = await postUrlTask()
+						updatedTimeAsString = await updatedTimeAsStringTask()
+					}
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
                     Button("OK", action: {})
@@ -119,6 +128,36 @@ struct PostUIView: View {
             }
             .contextMenu {
                 PostContextMenu(contentView: contentView, postView: self.postView, sender: self)
+            }
+            .alert("Remove Post (Mod)", isPresented: $startRemovePost, actions: {
+                TextField("Optional", text: $removalReason)
+                Button("Remove", role: .destructive) {
+                    self.postService.remove(post: postView.post, reason: removalReason, removed: true) { result in
+                        switch result {
+                        case .success(let postResponse):
+                            self.postView = postResponse.postView
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            }, message: {
+                Text("State the reason of removal:")
+            })
+        }
+    }
+    
+    nonisolated
+    private func postBodyMarkdownContentTask() async -> MarkdownContent? {
+        return await withCheckedContinuation { continuation in
+            Task(priority: .background) {
+                if let body = await self.postBody {
+                    let content = MarkdownContent(body)
+                    continuation.resume(returning: content)
+                } else {
+                    continuation.resume(returning: nil)
+                }
             }
         }
     }
@@ -183,6 +222,10 @@ struct PostUIView: View {
                 Image(systemName: "pin.fill")
                     .foregroundColor(.red)
             }
+            if postView.post.locked {
+                Image(systemName: "lock.fill")
+                    .foregroundColor(.green)
+            }
             Text(postView.post.name)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -198,23 +241,20 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var postBodyMarkdown: some View {
-        if let body = self.postBody {
-            let content = MarkdownContent(body)
-            Markdown(content)
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
-                .lineLimit(nil)
-                .textSelection(.enabled)
-                .background(GeometryReader { geometry in
-                    Color.clear
-                        .onAppear {
-                            self.bodyHeight = geometry.size.height
-                        }
-                })
-        }
+        Markdown(postBodyMarkdownContent ?? .init(""))
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                alignment: .leading
+            )
+            .lineLimit(nil)
+            .textSelection(.enabled)
+            .background(GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.bodyHeight = geometry.size.height
+                    }
+            })
     }
     
     @ViewBuilder
@@ -290,14 +330,18 @@ struct PostUIView: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                 }
-            }.onDisappear(.lowerPriority)
+            }.onDisappear(.cancel)
         }
     }
     
     @ViewBuilder
     private var gifOrImage: some View {
-        // Image-only view.
-        if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+        if LinkHelper.isVideosLink(link: postView.post.url!) {
+            // Video
+            VideoPlayer(player: AVPlayer(url: URL(string: postView.post.url!)!))
+                .frame(maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
+        } else if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+            // Image-only view.
             // GIF
             AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
@@ -335,16 +379,16 @@ struct PostUIView: View {
     @ViewBuilder
     private var communityPersonDate: some View {
         LazyHStack(spacing: 4) {
-            HStack(spacing: 4) {
+            Group {
                 Text("in")
                 CommunityAvatar(community: postView.community)
-                Text(self.postView.community.name)
+                Text(UserPreferences.getInstance.preferDisplayNameCommunityPost ? self.postView.community.title : self.postView.community.name)
                     .fontWeight(.semibold)
             }
             .onTapGesture {
                 self.contentView.openCommunity(community: postView.community)
             }
-            HStack(spacing: 4) {
+            Group {
                 Text("by")
                 PersonDisplay(person: postView.creator, myself: $myself)
                     .onTapGesture {
@@ -352,13 +396,10 @@ struct PostUIView: View {
                     }
             }
             DateDisplayView(date: self.postView.post.published)
-            if postView.post.updated != nil {
-                HStack {
-                    Image(systemName: "pencil")
-                    
-                }.help(updatedTimeAsString)
-            }
-        }
+            Image(systemName: "pencil")
+                .opacity(postView.post.updated != nil ? 1 : 0)
+                .help(updatedTimeAsString)
+        }.padding(.vertical, 2)
     }
     
     /// Upvote, downvote, reply, bookmark, etc.
@@ -575,5 +616,20 @@ struct PostUIView: View {
     
     func crossPost() {
         contentView.openCrossPost(post: postView)
+    }
+    
+    func startPostRemoval() {
+        startRemovePost = true
+    }
+    
+    func lock() {
+        postService.lock(post: postView.post, locked: !postView.post.locked) { result in
+            switch result {
+            case .success(let postResponse):
+                self.postView = postResponse.postView
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

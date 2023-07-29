@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import NukeUI
 
 struct NavbarItem: View {
     let option: Option
@@ -18,17 +19,18 @@ struct NavbarItem: View {
     var body: some View {
         HStack {
             if let link = option.externalLink {
-                AsyncImage(url: URL(string: link),
-                           content: { phase in
-                    switch phase {
-                    case .success(let image):
+                LazyImage(url: .init(string: link), transaction: .init(animation: .easeOut)) { state in
+                    if let image = state.image {
                         image.resizable()
                             .AvatarFormatting(size: 20)
-                    default:
+                    } else if let _ = state.error {
+                        Image(systemName: option.imageName)
+                            .AvatarFormatting(size: 20)
+                    } else {
                         Image(systemName: option.imageName)
                             .AvatarFormatting(size: 20)
                     }
-                })
+                }
             } else {
                 Image(systemName: option.imageName)
                     .resizable()
@@ -74,24 +76,16 @@ struct NavbarCommunityItem: View {
     
     var body: some View {
         HStack {
-            if community.icon == nil {
-                Image(systemName: "person.circle")
-                    .AvatarFormatting(size: 20)
-                    .foregroundColor(.black)
-            } else {
-                AsyncImage(url: URL(string: community.icon!),
-                           content: { phase in
-                    switch phase {
-                    case .success(let image):
-                        image.AvatarFormatting(size: 20)
-                    default:
-                        Image(systemName: "person.circle")
-                            .AvatarFormatting(size: 20)
-                            .foregroundColor(.black)
-                    }
-                })
+            LazyImage(url: .init(string: community.icon ?? ""), transaction: .init(animation: .easeOut)) { state in
+                if let image = state.image {
+                    image.AvatarFormatting(size: 20)
+                } else {
+                    Image(systemName: "person.2.circle")
+                        .AvatarFormatting(size: 20)
+                        .foregroundColor(.black)
+                }
             }
-            Text(community.name + "@" + LinkHelper.stripToHost(link: community.actorId))
+            Text((UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? community.title : community.name) + "@" + LinkHelper.stripToHost(link: community.actorId))
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading

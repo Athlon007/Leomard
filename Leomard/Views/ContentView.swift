@@ -286,8 +286,14 @@ struct ContentView: View {
     
     func openPost(postView: PostView) {
         postHidden = false
-        self.openedPostView = nil
-        self.openedPostView = postView
+        if self.openedPostView != nil {
+            self.openedPostView = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.openedPostView = postView
+            }
+        } else {
+            self.openedPostView = postView
+        }
     }
     
     func openPostForComment(comment: Comment) {

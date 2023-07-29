@@ -7,13 +7,21 @@
 
 import Foundation
 
+extension DateFormatter {
+
+    static let convertDate: DateFormatter = {
+        let formatter = DateFormatter()
+        return formatter
+    }()
+}
+
 struct DateFormatConverter
 {
     private static let format: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
     private static let formatAlternative: String = "yyyy-MM-dd'T'HH:mm:ss"
     static func formatToDate(from text: String) throws -> Date
     {
-        let formatter = DateFormatter()
+        let formatter = DateFormatter.convertDate
         formatter.dateFormat = text.contains(".") ? DateFormatConverter.format : DateFormatConverter.formatAlternative
         
         guard let date = formatter.date(from: text) else {

@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.4 (2023-07-29)
+
+## Added
+
+- Mod Tools:
+    - Remove posts
+    - Lock posts
+    - Distinguish comment
+    - Remove comments
+    - Remove community
+    - Edit community
+- Post-locked indicator
+- Distinguished comment indicator
+- Instance icons on the login screen
+- Search for instance on the login screen
+- Search profiles
+- Separate followed communities by first letter of the name (disabled by default)
+- Prefered display name for communities and users: you can either choose to display handles, or display names
+- Search followed communities
+
+### Bug Fixes
+
+- Fixed opening post, if you opened a community from another post
+- Fixed login to some instances caused to faulty decoding of site metadata
+- Fixed displaying videos, if they are added in "URL" part of the post
+- Fixed duplicate posts in communities
+- Fixed sorting of followed communities
+
 ## 0.3 (2023-07-27)
 
 ### Added

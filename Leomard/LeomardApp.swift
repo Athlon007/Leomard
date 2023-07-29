@@ -16,6 +16,9 @@ struct LeomardApp: App {
     @State private var mainWindowNavSplitStatus = NavigationSplitViewVisibility.automatic
     
     @State private var latestRelease: Release? = nil
+    
+    // Initialize user preferences here, so all subwindows catch it getting updated.
+    @ObservedObject var userPreferences: UserPreferences = UserPreferences.getInstance
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
