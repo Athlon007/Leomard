@@ -2,7 +2,7 @@
 
 ## 0.4 (2023-07-29)
 
-## Added
+### Added
 
 - Mod Tools:
     - Remove posts
