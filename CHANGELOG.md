@@ -24,7 +24,6 @@
 
 - Fixed opening post, if you opened a community from another post
 - Fixed login to some instances caused to faulty decoding of site metadata
-- Fixed displaying videos, if they are added in "URL" part of the post
 - Fixed duplicate posts in communities
 - Fixed sorting of followed communities
 
