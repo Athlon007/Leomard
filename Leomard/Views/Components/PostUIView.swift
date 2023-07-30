@@ -274,8 +274,8 @@ struct PostUIView: View {
             gifOrImage
             Spacer()
         } else if postView.post.embedVideoUrl != nil && LinkHelper.isVideosLink(link: postView.post.embedVideoUrl!) {
-            VideoPlayer(player: AVPlayer(url: URL(string: postView.post.embedVideoUrl!)!))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            WebVideoPlayer(link: postView.post.embedVideoUrl!, imageHeight: $gifHeight)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
         }
     }
     
@@ -336,7 +336,11 @@ struct PostUIView: View {
     
     @ViewBuilder
     private var gifOrImage: some View {
-        if LinkHelper.isAnimatedLink(link: postView.post.url!) {
+        if LinkHelper.isVideosLink(link: postView.post.url!) {
+            // Video
+            WebVideoPlayer(link: postView.post.url!, imageHeight: $gifHeight)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: gifHeight, maxHeight: .infinity, alignment: .leading)
+        } else if LinkHelper.isAnimatedLink(link: postView.post.url!) {
             // Image-only view.
             // GIF
             AnimatedImage(link: postView.post.url!, imageHeight: $gifHeight)

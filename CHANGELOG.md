@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 (2023-07-30)
+
+### Bug Fixes
+
+- Fixed app crashing when trying to process posts with videos that are NOT on YouTube
+
 ## 0.4 (2023-07-29)
 
 ### Added
