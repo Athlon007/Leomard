@@ -88,6 +88,47 @@ struct YoutubePlayer: NSViewRepresentable {
     }
 }
 
+struct WebVideoPlayer: NSViewRepresentable {
+    let link: String
+    @Binding var imageHeight: CGFloat
+    
+
+    func makeNSView(context: Context) -> WKWebVideoNonInteractable {
+        return WKWebVideoNonInteractable()
+    }
+    
+    func updateNSView(_ nsView: WKWebVideoNonInteractable, context: Context) {        
+        let type = link.components(separatedBy: ".").last ?? "mp4"
+        
+        let html = """
+               <html>
+               <head>
+               <style>
+               html, body {
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                    font-family: sans-serif;
+               }
+               video {
+                   width: 100%;
+                   height: 100%;
+                   object-fit: contain;
+               }
+               </style>
+               </head>
+               <body>
+               <video controls>
+                <source src="\(link)" type="video/\(type)">
+                Sorry! Failed to load the video :(<br>Here's the link: \(link)
+               </video>
+               </body>
+               </html>
+               """
+        nsView.loadHTMLString(html, baseURL: nil)
+    }
+}
+
 
 class WKWebViewNonInteractable: WKWebView
 {
