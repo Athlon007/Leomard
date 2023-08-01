@@ -28,7 +28,8 @@ class CommentService: Service {
     public func getAllComments(post: Post, page: Int, sortType: CommentSortType, completion: @escaping (Result<GetCommentsResponse, Error>) -> Void) {
         let postId = post.id
         let host = SessionStorage.getInstance.getLemmyInstance()
-        self.requestHandler.makeApiRequest(host: host, request: "/comment/list?post_id=\(String(postId))&sort=\(String(describing: sortType))&page=\(String(page))", method: .get) { result in
+        let requestResource = "/comment/list?post_id=\(String(postId))&sort=\(String(describing: sortType))&page=\(String(page))&type_=All"
+        self.requestHandler.makeApiRequest(host: host, request: requestResource, method: .get) { result in
             switch result {
             case .success(let response):
                 do {
