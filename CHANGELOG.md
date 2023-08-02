@@ -13,6 +13,7 @@
     - If you create a list or quote and press "Return", the next line will automatically start with the same formatting
     - Text editor itself now shows formatting as you type
 - Updated the About to include HighlightedTextEditor license
+- Markdown highlight to comment editor
 
 ### Bug Fixes
 

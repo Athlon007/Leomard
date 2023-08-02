@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import MarkdownUI
+import HighlightedTextEditor
 
 struct CommentUIView: View {
     @State var commentView: CommentView
@@ -183,97 +184,39 @@ struct CommentUIView: View {
                             .foregroundColor(Color(.secondaryLabelColor))
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
-                        let content = MarkdownContent(commentBody)
-                        Markdown(content)
-                            .lineLimit(nil)
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
-                            .onTapGesture {
-                                if self.profileViewMode {
-                                    contentView.openPostForComment(comment: self.commentView.comment)
-                                } else {
-                                    hideComment()
-                                }
-                            }
-                            .contextMenu {
-                                CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
-                                    startRemove = true
-                                })
-                            }
-                        if isReplying || isEditingComment {
-                            Spacer()
-                            VStack {
-                                Text(isEditingComment ? "Edit" : "Reply")
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        alignment: .leading
-                                    )
-                                    .fontWeight(.semibold)
-                                TextEditor(text: $commentText)
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                                    .lineLimit(5...)
-                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                                HStack {
-                                    Button(isEditingComment ? "Save" : "Send", action: onSaveSendCommentClick)
-                                        .buttonStyle(.borderedProminent)
-                                        .frame(
-                                            alignment: .leading
-                                        )
-                                        .disabled(!isSendable())
-                                    Button("Cancel", action: cancelComment)
-                                        .buttonStyle(.automatic)
-                                        .frame(
-                                            alignment: .leading
-                                        )
-                                }
+                        VStack {
+                            let content = MarkdownContent(commentBody)
+                            Markdown(content)
+                                .lineLimit(nil)
                                 .frame(
+                                    minWidth: 0,
                                     maxWidth: .infinity,
                                     maxHeight: .infinity,
                                     alignment: .leading
                                 )
-                            }
-                            .frame(
-                                maxHeight: .infinity,
-                                alignment: .leading
-                            )
+                                .onTapGesture {
+                                    if self.profileViewMode {
+                                        contentView.openPostForComment(comment: self.commentView.comment)
+                                    } else {
+                                        hideComment()
+                                    }
+                                }
+                        }
+                        .contextMenu {
+                            CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
+                                startRemove = true
+                            })
+                         }
+                        if isReplying || isEditingComment {
+                            Spacer()
+                            replyOrEdit
                         }
                         if (subComments.count > 0 || commentView.counts.childCount > 0) && !profileViewMode {
                             Spacer()
-                            ForEach(subComments, id: \.self) { commentView in
-                                CommentUIView(commentView: commentView, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
-                                    .frame(maxHeight: .infinity, alignment: .leading)
-                                if commentView != self.subComments.last {
-                                    Divider()
-                                        .padding(.leading, 20)
-                                }
-                                Spacer()
-                            }
-                            if !lastResultEmpty {
-                                Divider()
-                                Button("Load replies", action: loadSubcomments)
-                                    .buttonStyle(.plain)
-                                    .foregroundColor(Color(.secondaryLabelColor))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, CGFloat(CommentUIView.intentOffset))
-                            }
+                            subcomments
                         }
                     }
                 }
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .leading
-                )
                 .task {
                     if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
                         loadSubcomments()
@@ -289,7 +232,7 @@ struct CommentUIView: View {
                 }
             }
             .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
-            .alert("Remove Comment (Mod)", isPresented: $startRemove, actions: {
+            .alert("Remove Comment (Moderator)", isPresented: $startRemove, actions: {
                 TextField("Optional", text: $removalReason)
                 Button("Remove", role: .destructive) {
                     self.commentService.remove(comment: commentView.comment, removed: true, reason: removalReason) { result in
@@ -306,6 +249,72 @@ struct CommentUIView: View {
                 Text("State the reason of removal:")
             })
         }
+    }
+    
+    @ViewBuilder
+    private var subcomments: some View {
+        Spacer()
+        ForEach(subComments, id: \.self) { newComment in
+            CommentUIView(commentView: newComment, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
+                .frame(maxHeight: .infinity, alignment: .leading)
+            if commentView != self.subComments.last {
+                Divider()
+                    .padding(.leading, 20)
+            }
+            Spacer()
+        }
+        if !lastResultEmpty {
+            Divider()
+            Button("Load replies", action: loadSubcomments)
+                .buttonStyle(.plain)
+                .foregroundColor(Color(.secondaryLabelColor))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, CGFloat(CommentUIView.intentOffset))
+        }
+    }
+    
+    @ViewBuilder
+    private var replyOrEdit: some View {
+        VStack {
+            Text(isEditingComment ? "Edit" : "Reply")
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .fontWeight(.semibold)
+            HighlightedTextEditor(text: $commentText, highlightRules: .markdown)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                .frame(
+                    maxWidth: .infinity,
+                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight * 1.5,
+                    maxHeight: .infinity,
+                    alignment: .leading
+                )
+                .lineLimit(5...)
+                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+            HStack {
+                Button(isEditingComment ? "Save" : "Send", action: onSaveSendCommentClick)
+                    .buttonStyle(.borderedProminent)
+                    .frame(
+                        alignment: .leading
+                    )
+                    .disabled(!isSendable())
+                Button("Cancel", action: cancelComment)
+                    .buttonStyle(.automatic)
+                    .frame(
+                        alignment: .leading
+                    )
+            }
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: .leading
+            )
+        }
+        .frame(
+            maxHeight: .infinity,
+            alignment: .leading
+        )
     }
     
     func loadSubcomments() {

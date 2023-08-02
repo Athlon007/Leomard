@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import HighlightedTextEditor
 
 struct PostPopup: View {
     @State var postView: PostView
@@ -68,7 +69,7 @@ struct PostPopup: View {
                                     alignment: .leading
                                 )
                                 .fontWeight(.semibold)
-                            TextEditor(text: $commentText)
+                            HighlightedTextEditor(text: $commentText, highlightRules: .markdown)
                                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
                                 .frame(
                                     maxWidth: .infinity,
