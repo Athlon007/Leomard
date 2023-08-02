@@ -178,6 +178,7 @@
 		B0D948762A6AA72F0039D0D6 /* ImgurImageUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948752A6AA72F0039D0D6 /* ImgurImageUploadResponse.swift */; };
 		B0D948782A6AABF50039D0D6 /* ImgurImageUploadForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948772A6AABF50039D0D6 /* ImgurImageUploadForm.swift */; };
 		B0D9487A2A6AB1850039D0D6 /* Keys.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */; };
+		B0EEFE0D2A7A73990065CB27 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = B0EEFE0C2A7A73990065CB27 /* HighlightedTextEditor */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -383,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B00695E12A50E56500206C77 /* MarkdownUI in Frameworks */,
+				B0EEFE0D2A7A73990065CB27 /* HighlightedTextEditor in Frameworks */,
 				E45A506A2A69E263008ED437 /* NukeUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -845,6 +847,7 @@
 			packageProductDependencies = (
 				B00695E02A50E56500206C77 /* MarkdownUI */,
 				E45A50692A69E263008ED437 /* NukeUI */,
+				B0EEFE0C2A7A73990065CB27 /* HighlightedTextEditor */,
 			);
 			productName = Leomard;
 			productReference = B01ECC542A505356005ECF36 /* Leomard.app */;
@@ -921,6 +924,7 @@
 			packageReferences = (
 				B00695DF2A50E56500206C77 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				E45A50682A69E262008ED437 /* XCRemoteSwiftPackageReference "Nuke" */,
+				B0EEFE0B2A7A73990065CB27 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */,
 			);
 			productRefGroup = B01ECC552A505356005ECF36 /* Products */;
 			projectDirPath = "";
@@ -1458,6 +1462,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		B0EEFE0B2A7A73990065CB27 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kyle-n/HighlightedTextEditor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		E45A50682A69E262008ED437 /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke.git";
@@ -1473,6 +1485,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B00695DF2A50E56500206C77 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		B0EEFE0C2A7A73990065CB27 /* HighlightedTextEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0EEFE0B2A7A73990065CB27 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */;
+			productName = HighlightedTextEditor;
 		};
 		E45A50692A69E263008ED437 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "highlightedtexteditor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kyle-n/HighlightedTextEditor",
+      "state" : {
+        "revision" : "7069ede002afc6bde867aef7035f45ff72dc839c",
+        "version" : "2.1.0"
+      }
+    },
+    {
       "identity" : "nuke",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kean/Nuke.git",

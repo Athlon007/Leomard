@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5 (TBA)
+
+### Added
+
+- The "!leomard@lemm.ee" in About view now opens the community in Leomard
+
+### Changes
+
+- Big improvements to Post editor:
+    - Added a toolbar with buttons for formatting
+    - If you create a list or quote and press "Return", the next line will automatically start with the same formatting
+    - Text editor itself now shows formatting as you type
+- Updated the About to include HighlightedTextEditor license
+
+### Bug Fixes
+
+- Fixed an issue where sometimes not all comments would load
+
 ## 0.4.1 (2023-07-30)
 
 ### Bug Fixes
