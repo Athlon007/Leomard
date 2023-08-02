@@ -78,182 +78,59 @@ struct CommentUIView: View {
                     .cornerRadius(8)
                 }
                 LazyVStack {
-                    HStack {
+                    VStack {
                         HStack {
-                            PersonDisplay(person: commentView.creator, myself: $myself)
-                                .onTapGesture {
-                                    contentView.openPerson(profile: commentView.creator)
-                                    
-                                }
-                            if commentView.post.creatorId == commentView.creator.id {
-                                HStack {
-                                    Text("OP")
-                                        .padding(2)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 8))
-                                }
-                                .background(Color(.linkColor))
-                                .clipShape(RoundedRectangle(cornerRadius: 6))
-                            }
-                            HStack {
-                                Image(systemName: "arrow.up")
-                                Text(String(commentView.counts.upvotes))
-                            }
-                            .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
-                            .onTapGesture {
-                                likeComment()
-                            }
-                            HStack {
-                                Image(systemName: "arrow.down")
-                                Text(String(commentView.counts.downvotes))
-                            }
-                            .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
-                            .onTapGesture {
-                                dislikeComment()
-                            }
-                            if commentView.counts.childCount > 0 {
-                                HStack {
-                                    Image(systemName: "ellipsis.message")
-                                    Text(String(commentView.counts.childCount))
-                                }
-                            }
-                            DateDisplayView(date: self.commentView.comment.published)
-                            if commentView.comment.updated != nil {
-                                HStack {
-                                    Image(systemName: "pencil")
-                                    
-                                }.help(updatedTimeAsString)
-                            }
-                            if commentView.comment.distinguished {
-                                HStack {
-                                    Image(systemName: "star.circle")
-                                        .foregroundColor(Color.yellow)
-                                }
-                            }
+                            commentInformation
+                            commentActions
                         }
                         .frame(
                             minWidth: 0,
                             maxWidth: .infinity,
                             alignment: .leading
                         )
-                        if myself != nil {
-                            HStack {
-                                if commentView.creator.actorId == myself?.localUserView.person.actorId {
-                                    Button(action: startEditComment) {
-                                        Image(systemName: "pencil")
-                                    }
-                                    .buttonStyle(.link)
-                                    .foregroundColor(.primary)
-                                    Button(action: { showConfirmDelete = true }) {
-                                        Image(systemName: "trash")
-                                    }
-                                    .buttonStyle(.link)
-                                    .foregroundColor(.primary)
-                                    .alert("Confirm", isPresented: $showConfirmDelete, actions: {
-                                        Button("Delete", role: .destructive) { deleteComment() }
-                                        Button("Cancel", role: .cancel) {}
-                                    }, message: {
-                                        Text("Are you sure you want to delete a comment?")
-                                    })
+                        commentContent
+                    }
+                    .task {
+                        if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
+                            loadSubcomments()
+                        }
+                        
+                        if commentView.comment.updated != nil {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                            updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
+                        }
+                        
+                        self.commentBody = await commentView.comment.content.formatMarkdown()
+                    }
+                    .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
+                    .alert("Remove Comment (Moderator)", isPresented: $startRemove, actions: {
+                        TextField("Optional", text: $removalReason)
+                        Button("Remove", role: .destructive) {
+                            self.commentService.remove(comment: commentView.comment, removed: true, reason: removalReason) { result in
+                                switch result {
+                                case .success(let commentResponse):
+                                    self.commentView = commentResponse.commentView
+                                case .failure(let error):
+                                    print(error)
                                 }
-                                Button(action: savePost) {
-                                    Image(systemName: "bookmark")
-                                }
-                                .buttonStyle(.link)
-                                .foregroundColor(commentView.saved ? .green : .primary)
-                                Button(action: startReply) {
-                                    Image(systemName: "arrowshape.turn.up.left")
-                                }
-                                .buttonStyle(.link)
-                                .foregroundColor(.primary)
                             }
-                            .frame(
-                                minWidth: 0,
-                                alignment: .trailing
-                            )
                         }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: {
+                        Text("State the reason of removal:")
+                    })
+                    if (subComments.count > 0 || commentView.counts.childCount > 0) && !profileViewMode {
+                        Spacer()
+                        subcomments
                     }
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                    if self.hidden {
-                        Button("...", action: showComment)
-                            .buttonStyle(.plain)
-                            .foregroundColor(Color(.secondaryLabelColor))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        VStack {
-                            let content = MarkdownContent(commentBody)
-                            Markdown(content)
-                                .lineLimit(nil)
-                                .frame(
-                                    minWidth: 0,
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-                                .onTapGesture {
-                                    if self.profileViewMode {
-                                        contentView.openPostForComment(comment: self.commentView.comment)
-                                    } else {
-                                        hideComment()
-                                    }
-                                }
-                        }
-                        .contextMenu {
-                            CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
-                                startRemove = true
-                            })
-                         }
-                        if isReplying || isEditingComment {
-                            Spacer()
-                            replyOrEdit
-                        }
-                        if (subComments.count > 0 || commentView.counts.childCount > 0) && !profileViewMode {
-                            Spacer()
-                            subcomments
-                        }
-                    }
-                }
-                .task {
-                    if self.indentLevel == 0 && self.commentView.counts.childCount > 0 {
-                        loadSubcomments()
-                    }
-                    
-                    if commentView.comment.updated != nil {
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-                        updatedTimeAsString = dateFormatter.string(from: commentView.comment.updated!)
-                    }
-                    
-                    self.commentBody = await commentView.comment.content.formatMarkdown()
                 }
             }
-            .padding(.leading, CGFloat(CommentUIView.intentOffset * self.indentLevel))
-            .alert("Remove Comment (Moderator)", isPresented: $startRemove, actions: {
-                TextField("Optional", text: $removalReason)
-                Button("Remove", role: .destructive) {
-                    self.commentService.remove(comment: commentView.comment, removed: true, reason: removalReason) { result in
-                        switch result {
-                        case .success(let commentResponse):
-                            self.commentView = commentResponse.commentView
-                        case .failure(let error):
-                            print(error)
-                        }
-                    }
-                }
-                Button("Cancel", role: .cancel) {}
-            }, message: {
-                Text("State the reason of removal:")
-            })
         }
     }
     
     @ViewBuilder
     private var subcomments: some View {
-        Spacer()
         ForEach(subComments, id: \.self) { newComment in
             CommentUIView(commentView: newComment, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
                 .frame(maxHeight: .infinity, alignment: .leading)
@@ -270,6 +147,153 @@ struct CommentUIView: View {
                 .foregroundColor(Color(.secondaryLabelColor))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, CGFloat(CommentUIView.intentOffset))
+        }
+    }
+    
+    @ViewBuilder
+    private var commentInformation: some View {
+        HStack {
+            PersonDisplay(person: commentView.creator, myself: $myself)
+                .onTapGesture {
+                    contentView.openPerson(profile: commentView.creator)
+                    
+                }
+            if commentView.post.creatorId == commentView.creator.id {
+                HStack {
+                    Text("OP")
+                        .padding(2)
+                        .foregroundColor(.white)
+                        .font(.system(size: 8))
+                }
+                .background(Color(.linkColor))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+            }
+            HStack {
+                Image(systemName: "arrow.up")
+                Text(String(commentView.counts.upvotes))
+            }
+            .foregroundColor(commentView.myVote != nil && commentView.myVote! > 0 ? .orange : .primary)
+            .onTapGesture {
+                likeComment()
+            }
+            HStack {
+                Image(systemName: "arrow.down")
+                Text(String(commentView.counts.downvotes))
+            }
+            .foregroundColor(commentView.myVote != nil && commentView.myVote! < 0 ? .blue : .primary)
+            .onTapGesture {
+                dislikeComment()
+            }
+            if commentView.counts.childCount > 0 {
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(commentView.counts.childCount))
+                }
+            }
+            DateDisplayView(date: self.commentView.comment.published)
+            if commentView.comment.updated != nil {
+                HStack {
+                    Image(systemName: "pencil")
+                    
+                }.help(updatedTimeAsString)
+            }
+            if commentView.comment.distinguished {
+                HStack {
+                    Image(systemName: "star.circle")
+                        .foregroundColor(Color.yellow)
+                }
+            }
+        }
+        .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            alignment: .leading
+        )
+    }
+    
+    @ViewBuilder
+    private var commentContent: some View {
+        if self.hidden {
+            Button("...", action: showComment)
+                .buttonStyle(.plain)
+                .foregroundColor(Color(.secondaryLabelColor))
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            VStack {
+                let content = MarkdownContent(commentBody)
+                Markdown(content)
+                    .lineLimit(nil)
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .leading
+                    )
+                    .onTapGesture {
+                        if self.profileViewMode {
+                            contentView.openPostForComment(comment: self.commentView.comment)
+                        } else {
+                            hideComment()
+                        }
+                    }
+            }
+            .contextMenu {
+                CommentContextMenu(contentView: self.contentView, commentView: self.commentView, onDistinguish: distinguish, onRemove: {
+                    startRemove = true
+                })
+            }
+            if isReplying || isEditingComment {
+                Spacer()
+                replyOrEdit
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var commentActions: some View {
+        if myself != nil {
+            HStack {
+                if commentView.creator.actorId == myself?.localUserView.person.actorId {
+                    Button(action: startEditComment) {
+                        Image(systemName: "pencil")
+                    }
+                    .buttonStyle(.link)
+                    .foregroundColor(.primary)
+                    Button(action: { showConfirmDelete = true }) {
+                        Image(systemName: "trash")
+                    }
+                    .buttonStyle(.link)
+                    .foregroundColor(.primary)
+                    .alert("Confirm", isPresented: $showConfirmDelete, actions: {
+                        Button("Delete", role: .destructive) { deleteComment() }
+                        Button("Cancel", role: .cancel) {}
+                    }, message: {
+                        Text("Are you sure you want to delete a comment?")
+                    })
+                }
+                Menu("", content: {
+                    CommentContextMenu(contentView: contentView, commentView: commentView, onDistinguish: distinguish, onRemove: {
+                        startRemove = true
+                    })
+                })
+                .menuStyle(.borderlessButton)
+                .buttonStyle(.link)
+                .frame(maxWidth: 10)
+                Button(action: savePost) {
+                    Image(systemName: "bookmark")
+                }
+                .buttonStyle(.link)
+                .foregroundColor(commentView.saved ? .green : .primary)
+                Button(action: startReply) {
+                    Image(systemName: "arrowshape.turn.up.left")
+                }
+                .buttonStyle(.link)
+                .foregroundColor(.primary)
+            }
+            .frame(
+                minWidth: 0,
+                alignment: .trailing
+            )
         }
     }
     
