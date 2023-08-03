@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.5 (TBA)
+
+### Added
+
+- The "!leomard@lemm.ee" in About view now opens the community in Leomard
+- Add "v" symbol to the right of comment, that doubles as Context Menu button for this comment
+- Add "Are you sure you want to close post creation" alert
+
+### Changes
+
+- Big improvements to Post editor:
+    - Added a toolbar with buttons for formatting
+    - If you create a list or quote and press "Return", the next line will automatically start with the same formatting
+    - Text editor itself now shows formatting as you type
+- Updated the About to include HighlightedTextEditor license
+- Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
+
+### Bug Fixes
+
+- Fixed an issue where sometimes not all comments would load
+
 ## 0.4.1 (2023-07-30)
 
 ### Bug Fixes

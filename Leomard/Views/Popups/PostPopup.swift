@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import HighlightedTextEditor
 
 struct PostPopup: View {
     @State var postView: PostView
@@ -68,16 +69,12 @@ struct PostPopup: View {
                                     alignment: .leading
                                 )
                                 .fontWeight(.semibold)
-                            TextEditor(text: $commentText)
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+                            MarkdownEditor(bodyText: $commentText, contentView: self.contentView)
                                 .frame(
                                     maxWidth: .infinity,
                                     minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
+                                    maxHeight: .infinity
                                 )
-                                .lineLimit(5...)
-                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
                             Button("Send", action: createComment)
                                 .buttonStyle(.borderedProminent)
                                 .frame(
@@ -90,6 +87,7 @@ struct PostPopup: View {
                                     .progressViewStyle(.circular)
                             }
                         }
+                        .frame(maxHeight: .infinity)
                         Spacer()
                         Picker("Sort By", selection: $sortType) {
                             ForEach(CommentSortType.allCases, id: \.self) { method in
@@ -117,6 +115,7 @@ struct PostPopup: View {
                         }
                     }
                     .frame(
+                        maxWidth: .infinity,
                         minHeight: 0,
                         maxHeight: .infinity
                     )
