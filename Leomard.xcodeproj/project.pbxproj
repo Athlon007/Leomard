@@ -184,6 +184,8 @@
 		B0EEFE142A7BE09B0065CB27 /* ModAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE132A7BE09B0065CB27 /* ModAddView.swift */; };
 		B0EEFE162A7BE0D20065CB27 /* ModAddCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE152A7BE0D20065CB27 /* ModAddCommunity.swift */; };
 		B0EEFE182A7BE2080065CB27 /* ModAddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE172A7BE2080065CB27 /* ModAddCommunityView.swift */; };
+		B0EEFE222A7C03CF0065CB27 /* AdminPurgeComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE212A7C03CF0065CB27 /* AdminPurgeComment.swift */; };
+		B0EEFE242A7C04950065CB27 /* AdminPurgeCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE232A7C04950065CB27 /* AdminPurgeCommentView.swift */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -386,6 +388,8 @@
 		B0EEFE132A7BE09B0065CB27 /* ModAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModAddView.swift; sourceTree = "<group>"; };
 		B0EEFE152A7BE0D20065CB27 /* ModAddCommunity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModAddCommunity.swift; sourceTree = "<group>"; };
 		B0EEFE172A7BE2080065CB27 /* ModAddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModAddCommunityView.swift; sourceTree = "<group>"; };
+		B0EEFE212A7C03CF0065CB27 /* AdminPurgeComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminPurgeComment.swift; sourceTree = "<group>"; };
+		B0EEFE232A7C04950065CB27 /* AdminPurgeCommentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminPurgeCommentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -847,6 +851,8 @@
 				B0EEFE132A7BE09B0065CB27 /* ModAddView.swift */,
 				B0EEFE152A7BE0D20065CB27 /* ModAddCommunity.swift */,
 				B0EEFE172A7BE2080065CB27 /* ModAddCommunityView.swift */,
+				B0EEFE212A7C03CF0065CB27 /* AdminPurgeComment.swift */,
+				B0EEFE232A7C04950065CB27 /* AdminPurgeCommentView.swift */,
 			);
 			path = ModLog;
 			sourceTree = "<group>";
@@ -1090,6 +1096,8 @@
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
 				B05998312A69521300267636 /* UpdateView.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
+				B0EEFE222A7C03CF0065CB27 /* AdminPurgeComment.swift in Sources */,
+				B0EEFE242A7C04950065CB27 /* AdminPurgeCommentView.swift in Sources */,
 				B05B212D2A5EA6CC00BA8FB2 /* CommentReply.swift in Sources */,
 				B017A3B92A6C3595001949A8 /* PostReport.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,

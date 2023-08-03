@@ -153,6 +153,11 @@ convert_file() {
                 line=${line//CommentId/Int}
             fi
 
+            # Convert "CommentId" to "Int"
+            if [[ $line == *"LanguageId"* ]]; then
+                line=${line//LanguageId/Int}
+            fi
+
             # Convert anything "*Id" to "Int"
             if [[ $line == *"*Id"* ]]; then
                 line=${line//\*Id/Int}
@@ -194,7 +199,7 @@ convert_file() {
                 # Add the variable to the init block
                 if [[ $variableType == *"?"* ]]; then
                     initBlock="$initBlock        let ${variableName}String = try container.decodeIfPresent(String.self, forKey: .$variableName)\n"
-                    initBlock="$initBlock        self.$variableName = ${variableName}String != nil ? DateFormatConverter.formatToDate(text: ${variableName}String) : nil\n"
+                    initBlock="$initBlock        self.$variableName = ${variableName}String != nil ? try DateFormatConverter.formatToDate(from: ${variableName}String!) : nil\n"
                 else
                     initBlock="$initBlock        let ${variableName}String = try container.decode(String.self, forKey: .$variableName)\n"
                     initBlock="$initBlock        self.$variableName = try DateFormatConverter.formatToDate(from: ${variableName}String)\n"
