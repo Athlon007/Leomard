@@ -73,7 +73,7 @@ struct PostPopup: View {
                                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
                                 .frame(
                                     maxWidth: .infinity,
-                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
+                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight * 3,
                                     maxHeight: .infinity,
                                     alignment: .leading
                                 )
