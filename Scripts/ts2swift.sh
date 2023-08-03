@@ -64,8 +64,19 @@ convert_file() {
             continue
         fi
 
+        # If variable name is "auth" - skip.
+        # This is because Leomard handles auth variable by itself.
+        if [[ $line == *"auth"* ]]; then
+            continue
+        fi
+
         # If editing a struct
         if [ $isEditingStruct = true ] ; then
+            # If line does not have ":" -> skip
+            if [[ $line != *":"* ]]; then
+                continue
+            fi
+
             # If in isEditingStruct mode -> convert the variables to swift variables
             # First, remove "_" and capitalise first letter after each "_"
 
@@ -91,8 +102,8 @@ convert_file() {
                 line=${line//:/_:}
             fi
 
-            # Remove first 5 characters (empty space)
-            line=${line:4}
+            # Remove first 2 characters (empty space)
+            line=${line:2}
             # Remove the ";" - Swift doesn't need it
             line=${line%;}
 
@@ -181,7 +192,7 @@ convert_file() {
 
             if [[ $variableType == *"Date"* ]]; then
                 # Add the variable to the init block
-                if [[ $line == *"? "* ]]; then
+                if [[ $variableType == *"?"* ]]; then
                     initBlock="$initBlock        let ${variableName}String = try container.decodeIfPresent(String.self, forKey: .$variableName)\n"
                     initBlock="$initBlock        self.$variableName = ${variableName}String != nil ? DateFormatConverter.formatToDate(text: ${variableName}String) : nil\n"
                 else
@@ -189,7 +200,10 @@ convert_file() {
                     initBlock="$initBlock        self.$variableName = try DateFormatConverter.formatToDate(from: ${variableName}String)\n"
                 fi
             else
-                if [[ $line == *"? "* ]]; then
+                if [[ $variableType == *"?"* ]]; then
+                    # remove last character
+                    variableType=${variableType%?}
+
                     # Add the variable to the init block
                     initBlock="$initBlock        self.$variableName = try container.decodeIfPresent($variableType.self, forKey: .$variableName)\n"
                 else
