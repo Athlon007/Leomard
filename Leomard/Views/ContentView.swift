@@ -55,6 +55,9 @@ struct ContentView: View {
     
     @State var showUnrecognizedLinkError: Bool = false
     
+    @State var imageUploadFail: Bool = false
+    @State var imageUploadFailReason: String = ""
+    
     var appIconBadge = AppAlertBadge()
     
     var body: some View {
@@ -185,6 +188,11 @@ struct ContentView: View {
         .alert("Unrecognized Link", isPresented: $showUnrecognizedLinkError, actions: {
             Button("OK", action: {})
         }, message: { Text("Link could not be recognized neither as community nor person link.")})
+        .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
+            Button("OK") {}
+        }, message: {
+            Text(imageUploadFailReason)
+        })
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -306,9 +314,9 @@ struct ContentView: View {
             }
         }
     }
-
+    
     func closePost() {
-        self.openedPostView = nil        
+        self.openedPostView = nil
     }
     
     func logout() {
@@ -495,5 +503,46 @@ struct ContentView: View {
         self.onPostAdded = { post in
             self.openPost(postView: post)
         }
+    }
+    
+    func addImage(completion: @escaping (Result<ImgurImageUploadResponse, Error>) -> Void) {
+        let panel = NSOpenPanel()
+        panel.prompt = "Select file"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [
+            .init(importedAs: "leomard.supported.image.types.jpg"),
+            .init(importedAs: "leomard.supported.image.types.jpeg"),
+            .init(importedAs: "leomard.supported.image.types.png"),
+            .init(importedAs: "leomard.supported.image.types.webp"),
+            .init(importedAs: "leomard.supported.image.types.gif")
+        ]
+        panel.begin { (result) -> Void in
+            toggleInteraction(true)
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {
+                let imageService = ImageService(requestHandler: RequestHandler())
+                imageService.uploadImage(url: url) { result in
+                    switch result {
+                    case .success(let imageUploadResponse):
+                        completion(.success(imageUploadResponse))
+                    case .failure(let error):
+                        if error is LeomardExceptions {
+                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
+                        } else {
+                            self.imageUploadFailReason = "Unable to upload the image :("
+                        }
+                        self.imageUploadFail = true
+                        
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                completion(.failure(LeomardExceptions.userCancelledOperation("User cancelled image upload.")))
+            }
+        }
+        panel.orderFrontRegardless()
+        toggleInteraction(false)
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import MarkdownUI
 
 struct ProfileView: View {
     let commentService: CommentService
@@ -47,8 +46,6 @@ struct ProfileView: View {
     @State var isEditingProfile: Bool = false
     @State var bio: String = ""
     @State var displayName: String = ""
-    @State var imageUploadFail: Bool = false
-    @State var imageUploadFailReason: String = ""
     @State var updateProfileFail: Bool = false
     
     @State var searchVisible: Bool = false
@@ -398,11 +395,6 @@ struct ProfileView: View {
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }
-            .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
-                Button("OK") {}
-            }, message: {
-                Text(imageUploadFailReason)
-            })
             .alert("Profile Update Failure", isPresented: $updateProfileFail, actions: {
                 Button("OK") {}
             }, message: {
@@ -425,21 +417,11 @@ struct ProfileView: View {
             VStack(alignment: .leading) {
                 Text("Bio")
                     .bold()
-                Button("Add Image", action: addImage)
-                TextEditor(text: $bio)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                    .frame(
-                        maxWidth: .infinity,
-                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                        maxHeight: .infinity,
-                        alignment: .leading
-                    )
-                    .lineLimit(5...)
-                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                Text("Bio Preview")
-                    .bold()
-                Markdown(MarkdownContent(bio))
+                MarkdownEditor(bodyText: $bio, contentView: self.contentView)
+                    .frame(maxHeight: .infinity)
             }
+            .frame(maxHeight: .infinity)
+            Spacer()
             VStack(alignment: .leading) {
                 Button("Save Changes", action: {
                     userSettingsSave()
@@ -625,48 +607,6 @@ struct ProfileView: View {
     
     func editProfile() {
         isEditingProfile = true
-    }
-    
-    func addImage() {
-        let panel = NSOpenPanel()
-        panel.prompt = "Select file"
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.canCreateDirectories = false
-        panel.canChooseFiles = true
-        panel.allowedContentTypes = [
-            .init(importedAs: "leomard.supported.image.types.jpg"),
-            .init(importedAs: "leomard.supported.image.types.jpeg"),
-            .init(importedAs: "leomard.supported.image.types.png"),
-            .init(importedAs: "leomard.supported.image.types.webp"),
-            .init(importedAs: "leomard.supported.image.types.gif")
-        ]
-        panel.begin { (result) -> Void in
-            self.contentView.toggleInteraction(true)
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {
-                let imageService = ImageService(requestHandler: RequestHandler())
-                imageService.uploadImage(url: url) { result in
-                    switch result {
-                    case .success(let imageUploadResponse):
-                        if bio.count > 0 {
-                            bio += "\n\n"
-                        }
-                        
-                        bio += "![](\(imageUploadResponse.data.link))\n\n"
-                    case .failure(let error):
-                        if error is LeomardExceptions {
-                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
-                        } else {
-                            self.imageUploadFailReason = "Unable to upload the image :("
-                        }
-                        
-                        self.imageUploadFail = true
-                    }
-                }
-            }
-        }
-        panel.orderFrontRegardless()
-        self.contentView.toggleInteraction(false)
     }
     
     func userSettingsSave() {

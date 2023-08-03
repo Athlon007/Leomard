@@ -6,6 +6,7 @@
 
 - The "!leomard@lemm.ee" in About view now opens the community in Leomard
 - Add "v" symbol to the right of comment, that doubles as Context Menu button for this comment
+- Add "Are you sure you want to close post creation" alert
 
 ### Changes
 
@@ -14,7 +15,7 @@
     - If you create a list or quote and press "Return", the next line will automatically start with the same formatting
     - Text editor itself now shows formatting as you type
 - Updated the About to include HighlightedTextEditor license
-- Markdown highlight to comment editor
+- Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
 
 ### Bug Fixes
 

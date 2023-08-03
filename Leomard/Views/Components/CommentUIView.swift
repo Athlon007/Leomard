@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import MarkdownUI
-import HighlightedTextEditor
 
 struct CommentUIView: View {
     @State var commentView: CommentView
@@ -306,16 +305,12 @@ struct CommentUIView: View {
                     alignment: .leading
                 )
                 .fontWeight(.semibold)
-            HighlightedTextEditor(text: $commentText, highlightRules: .markdown)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
+            MarkdownEditor(bodyText: $commentText, contentView: self.contentView)
                 .frame(
                     maxWidth: .infinity,
-                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight * 1.5,
                     maxHeight: .infinity,
                     alignment: .leading
                 )
-                .lineLimit(5...)
-                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
             HStack {
                 Button(isEditingComment ? "Save" : "Send", action: onSaveSendCommentClick)
                     .buttonStyle(.borderedProminent)

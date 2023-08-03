@@ -7,9 +7,7 @@
 
 import Foundation
 import SwiftUI
-import MarkdownUI
 import NukeUI
-import HighlightedTextEditor
 
 struct PostCreationPopup: View {
     let contentView: ContentView
@@ -30,8 +28,6 @@ struct PostCreationPopup: View {
     @State var alertMessage: String = ""
     @State var isSendingPost: Bool = false
     
-    @State var imageUploadFail: Bool = false
-    @State var imageUploadFailReason: String = ""
     @State var isUploadingImage: Bool = false
     
     // Cross-post stuff
@@ -39,18 +35,8 @@ struct PostCreationPopup: View {
     @State var communities: [CommunityView] = []
     @State var selectedCrossCommunity: Community? = nil
     
-    // Editing stuff
-    @State var selectRange: NSRange = .init(location: 0, length: 0)
-    let editorButtonsFont: Font = .custom(
-            "AmericanTypewriter",
-            fixedSize: NSFont.preferredFont(forTextStyle: .body).xHeight * 2)
-    @State var adjustCursorBy: Int = 0
-    @State var editorInsertionMode: EditorInsertionMode = .none
-    @State var previousBodyLength: Int = 0
-    @State var showInsertLink: Bool = false
-    @State var insertLinkText: String = ""
-    @State var insertLinkUrl: String = ""
-    @State var insertImageToEditor: Bool = false
+    @State var showCloseDialog: Bool = false
+
     
     var body: some View {
         ZStack {
@@ -64,12 +50,14 @@ struct PostCreationPopup: View {
                 .background(Color.black)
                 .opacity(0.33)
                 .onTapGesture {
-                    close()
+                    preClose()
                 }
             VStack {
                 VStack {
                     HStack {
-                        Button("Dismiss", action: close)
+                        Button("Dismiss", action: {
+                            preClose()
+                        })
                             .buttonStyle(.link)
                     }
                     .frame(
@@ -101,7 +89,29 @@ struct PostCreationPopup: View {
                                     checkUrlValidity()
                                 }
                                 .border(!isUrlValid ? .red : .clear, width: 4)
-                            Button("Add Image", action: addImage)
+                            Button("Add Image", action: {
+                                isUploadingImage = true
+                                self.contentView.addImage { result in
+                                    isUploadingImage = false
+                                    switch result {
+                                    case .success(let response):
+                                        if self.url == "" {
+                                            // URL not set? Set the image as URL.
+                                            self.url = response.data.link
+                                        } else {
+                                            // Otherwise add it to content of the bodyText.
+                                            if bodyText.count > 0 {
+                                                // If there already is some text, add new line.
+                                                bodyText += "\n\n"
+                                            }
+                                            
+                                            bodyText += "![](\(response.data.link))\n\n"
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                }
+                            })
                             if isUploadingImage {
                                 ProgressView().progressViewStyle(.circular)
                             }
@@ -124,113 +134,7 @@ struct PostCreationPopup: View {
                             )
                             .fontWeight(.semibold)
                         Spacer()
-                        HStack {
-                            Button(action: {
-                                addToBody("**", on: .bothSides)
-                            }, label: {
-                                Image(systemName: "bold")
-                            })
-                            .help("Bold")
-                            Button(action: {
-                                addToBody("*", on: .bothSides)
-                            }, label: {
-                                Image(systemName: "italic")
-                            })
-                            .help("Italic")
-                            Button(action: {
-                                insertLinkText = ""
-                                insertLinkUrl = ""
-                                showInsertLink = true
-                            }, label: {
-                                Image(systemName: "link")
-                            })
-                            .help("Link")
-                            Button(action: {
-                                insertImageToEditor = true
-                                addImage()
-                            }, label: {
-                                Image(systemName: "photo")
-                            })
-                            Button(action: {
-                                addToBody("# ", on: .leftSide)
-                            }, label: {
-                                Text("H")
-                                    .font(editorButtonsFont)
-                            })
-                            .help("Header")
-                            Button(action: {
-                                addToBody("~~", on: .bothSides)
-                            }, label: {
-                                Image(systemName: "strikethrough")
-                            })
-                            .help("Strikethrough")
-                            Button(action: {
-                                addToBody("> ", on: .leftSide)
-                                editorInsertionMode = .quote
-                            }, label: {
-                                Image(systemName: "quote.closing")
-                            })
-                            .help("Quote")
-                            Button(action: {
-                                addToBody("- ", on: .leftSide)
-                                editorInsertionMode = .bulletpoint
-                            }, label: {
-                                Image(systemName: "list.bullet")
-                            })
-                            .help("List")
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .buttonStyle(.link)
-                        Spacer()
-                        VStack {
-                            Spacer()
-                            HighlightedTextEditor(text: $bodyText, highlightRules: .markdown)
-                                .onSelectionChange { (range: NSRange) in
-                                    selectRange = range
-                                    updateAutoInsertMode()
-                                }
-                                .introspect { editor in
-                                    if adjustCursorBy != 0 {
-                                        DispatchQueue.main.async {
-                                            let range: NSRange = NSMakeRange(selectRange.location + adjustCursorBy, 0)
-                                            editor.textView.setSelectedRange(range)
-                                            adjustCursorBy = 0
-                                        }
-                                    }
-                                    
-                                }
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                .frame(
-                                    maxWidth: .infinity,
-                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-                                .lineLimit(5...)
-                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                            Text("Preview")
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                                .fontWeight(.semibold)
-                            List {
-                                let content = MarkdownContent(bodyText)
-                                Markdown(content)
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: .infinity,
-                                        minHeight: 0,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                            }
-                        }
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .leading
-                        )
+                        MarkdownEditor(bodyText: $bodyText, contentView: contentView)
                         Spacer()
                         Toggle("NSFW", isOn: $isNsfw)
                             .frame(
@@ -310,10 +214,13 @@ struct PostCreationPopup: View {
         }, message: {
             Text(alertMessage)
         })
-        .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
-            Button("OK") {}
+        .alert("Close Post Creation?", isPresented: $showCloseDialog, actions: {
+            Button("Yes") {
+                close()
+            }
+            Button("No", role: .cancel) {}
         }, message: {
-            Text(imageUploadFailReason)
+            Text("Your post will be lost.")
         })
         .task {
             if self.editedPost != nil {
@@ -334,14 +241,14 @@ struct PostCreationPopup: View {
                 }
             }
         }
-        .alert("Insert Link", isPresented: $showInsertLink, actions: {
-            TextField("Text Displayed", text: $insertLinkText)
-            TextField("URL", text: $insertLinkUrl)
-            Button(action: {
-                addToBody(" [\(insertLinkText)](\(insertLinkUrl))", on: .rightSide)
-            }, label: { Text("Add") })
-            Button(role: .cancel, action: {}, label: { Text("Cancel") })
-        })
+    }
+    
+    func preClose() {
+        if url.count > 0 || title.count > 0 || bodyText.count > 0 {
+            showCloseDialog = true
+        } else {
+            close()
+        }
     }
     
     func close() {
@@ -429,60 +336,7 @@ struct PostCreationPopup: View {
             }
         }
     }
-    
-    func addImage() {
-        let panel = NSOpenPanel()
-        panel.prompt = "Select file"
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.canCreateDirectories = false
-        panel.canChooseFiles = true
-        panel.allowedContentTypes = [
-            .init(importedAs: "leomard.supported.image.types.jpg"),
-            .init(importedAs: "leomard.supported.image.types.jpeg"),
-            .init(importedAs: "leomard.supported.image.types.png"),
-            .init(importedAs: "leomard.supported.image.types.webp"),
-            .init(importedAs: "leomard.supported.image.types.gif")
-        ]
-        panel.begin { (result) -> Void in
-            self.contentView.toggleInteraction(true)
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
-                let imageService = ImageService(requestHandler: RequestHandler())
-                isUploadingImage = true
-                imageService.uploadImage(url: url) { result in
-                    switch result {
-                    case .success(let imageUploadResponse):
-                        isUploadingImage = false
-                        if self.url == "" && !insertImageToEditor {
-                            // URL not set? Set the image as URL.
-                            self.url = imageUploadResponse.data.link
-                        } else {
-                            // Otherwise add it to content of the bodyText.
-                            if bodyText.count > 0 {
-                                // If there already is some text, add new line.
-                                bodyText += "\n\n"
-                            }
-                            
-                            bodyText += "![](\(imageUploadResponse.data.link))\n\n"
-                        }
-                        insertImageToEditor = false
-                    case .failure(let error):
-                        isUploadingImage = false
-                        if error is LeomardExceptions {
-                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
-                        } else {
-                            self.imageUploadFailReason = "Unable to upload the image :("
-                        }
-                        
-                        self.imageUploadFail = true
-                    }
-                }
-            }
-        }
-        panel.orderFrontRegardless()
-        self.contentView.toggleInteraction(false)
-    }
-    
+   
     func searchCommunity() {
         let searchService = SearchService(requestHandler: RequestHandler())
         searchService.search(query: searchCommunityText, searchType: .communities, page: 1) { result in
@@ -495,71 +349,4 @@ struct PostCreationPopup: View {
             }
         }
     }
-    
-    // Makes sure that the lists and quotes are automatically inserted.
-    func updateAutoInsertMode() {
-        var removing = false
-        let secondLast = selectRange.location > 0 ? bodyText[bodyText.index(bodyText.startIndex, offsetBy: selectRange.location - 1)] : Character("§")
-        if previousBodyLength > bodyText.count && secondLast.isNewline {
-            editorInsertionMode = .none
-            removing = true
-        }
-        if !removing {
-            if bodyText.last == "-" {
-                editorInsertionMode = .bulletpoint
-            } else if bodyText.last == ">" {
-                editorInsertionMode = .quote
-            }
-        }
-        
-        if secondLast.isNewline {
-            if editorInsertionMode == .bulletpoint {
-                bodyText += "- "
-                adjustCursorBy += 2
-            } else if editorInsertionMode == .quote {
-                bodyText += "> "
-                adjustCursorBy += 2
-            }
-        }
-        
-        previousBodyLength = bodyText.count
-    }
-    
-    func addToBody(_ set: String, on: AddOnSides) {
-        var location = selectRange.location
-        var length = selectRange.length
-        if length == 0 {
-            // If length is 0, adjust the location and length to select the entire word in bodyText.
-            while location > 0 && !bodyText[bodyText.index(bodyText.startIndex, offsetBy: location - 1)].isWhitespace {
-                location -= 1
-            }
-            
-            while location + length < bodyText.count && !bodyText[bodyText.index(bodyText.startIndex, offsetBy: location + length)].isWhitespace {
-                length += 1
-            }
-        }
-        
-        let startIndex = bodyText.index(bodyText.startIndex, offsetBy: location)
-        let endIndex = bodyText.index(bodyText.startIndex, offsetBy: location + length)
-        if on == .rightSide || on == .bothSides {
-            self.bodyText.insert(contentsOf: set, at: endIndex)
-        }
-        if on == .leftSide || on == .bothSides {
-            self.bodyText.insert(contentsOf: set, at: startIndex)
-        }
-        
-        adjustCursorBy += on == .bothSides ? set.count : set.count
-    }
-}
-
-enum AddOnSides {
-    case leftSide
-    case rightSide
-    case bothSides
-}
-
-enum EditorInsertionMode {
-    case none
-    case bulletpoint
-    case quote
 }

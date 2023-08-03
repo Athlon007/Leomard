@@ -179,6 +179,7 @@
 		B0D948782A6AABF50039D0D6 /* ImgurImageUploadForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D948772A6AABF50039D0D6 /* ImgurImageUploadForm.swift */; };
 		B0D9487A2A6AB1850039D0D6 /* Keys.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */; };
 		B0EEFE0D2A7A73990065CB27 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = B0EEFE0C2A7A73990065CB27 /* HighlightedTextEditor */; };
+		B0EEFE0F2A7BADAE0065CB27 /* MarkdownEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE0E2A7BADAE0065CB27 /* MarkdownEditor.swift */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -376,6 +377,7 @@
 		B0D948752A6AA72F0039D0D6 /* ImgurImageUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurImageUploadResponse.swift; sourceTree = "<group>"; };
 		B0D948772A6AABF50039D0D6 /* ImgurImageUploadForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurImageUploadForm.swift; sourceTree = "<group>"; };
 		B0D948792A6AAFD10039D0D6 /* Keys.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Keys.xcconfig; sourceTree = "<group>"; };
+		B0EEFE0E2A7BADAE0065CB27 /* MarkdownEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -653,6 +655,7 @@
 				B091F8752A59998500F0DA32 /* UserSearchUIView.swift */,
 				B05B21472A5ED8C100BA8FB2 /* CommentReplyUIView.swift */,
 				B05B214D2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift */,
+				B0EEFE0E2A7BADAE0065CB27 /* MarkdownEditor.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1090,6 +1093,7 @@
 				B009ACF92A713F84008A10C7 /* ListCommunitiesResponse.swift in Sources */,
 				B00695D92A50CD0900206C77 /* GetPostsResponse.swift in Sources */,
 				B0D7A1632A53529B00FE2852 /* GetCommentsResponse.swift in Sources */,
+				B0EEFE0F2A7BADAE0065CB27 /* MarkdownEditor.swift in Sources */,
 				B091F8502A55AE7900F0DA32 /* EditComment.swift in Sources */,
 				B0CEBE502A51A90700982D4D /* LoginService.swift in Sources */,
 				B00A5C472A5C2A5C00D3CF98 /* CreatePost.swift in Sources */,
