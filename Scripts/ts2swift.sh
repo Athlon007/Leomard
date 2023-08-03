@@ -51,6 +51,90 @@ convert_file() {
 
     isEditingStruct=false
 
+    # If the original file name ends with "Type.ts" -> it's an enum.
+    if [[ $filename == *"Type.ts" ]]; then
+        echo "line: $line"
+        # Get the name of the enum
+        enumName=$(echo "$filename" | cut -f 1 -d '.')
+        enumName=${enumName//input/}
+        enumName=${enumName//\/}
+        echo "enum $enumName: String, Codable, CustomStringConvertible {" >> "$output"
+
+        allCasesBlock="    static let allCases: [$enumName] = [\n        " >> "$output"
+
+        while IFS= read -r line
+        do
+            # If line starts with "| " -> it's a value of the enum
+            if [[ $line != "  | "* ]]; then
+                continue
+            fi
+
+            # Remove "| " from the beginning of the line
+            line=${line:4}
+
+            # Trim
+            line=${line// /}
+
+            # Remove quotes
+            line=${line//\"/}
+            # Remove ";"
+            line=${line//;/}
+
+
+            # Replace first letter with lowercase letter using sed
+
+            # Get the first letter
+            firstLetter=$(echo "$line" | cut -c 1)
+            # Lowercase it
+            firstLetter=$(echo "$firstLetter" | tr '[:upper:]' '[:lower:]')
+
+            # Get the rest of the string
+            restOfTheString=$(echo "$line" | cut -c 2-)
+
+            # combine
+            line="$firstLetter$restOfTheString"
+
+            # Add
+            echo "    case $line" >> "$output"
+            allCasesBlock="$allCasesBlock$line,\n        "
+        done < "$filename"
+
+        echo "\n" >> "$output"
+
+        # Remove last ",\n"
+        allCasesBlock=${allCasesBlock%???????????}
+        # Add the closing bracket
+        allCasesBlock="$allCasesBlock\n    ]\n"
+
+        # init block from decoder
+        initBlock="    init(from decoder: Decoder) throws {\n"
+        initBlock="$initBlock        let container = try decoder.singleValueContainer()\n"
+        initBlock="$initBlock        let rawValue = try container.decode(String.self)\n"
+        initBlock="$initBlock        if let variant = ${enumName%Type}.allCases.first(where: { \$0.rawValue.uppercased() == rawValue.uppercased() }) {\n"
+        initBlock="$initBlock            self = variant\n"
+        initBlock="$initBlock        } else {\n"
+        initBlock="$initBlock            throw DecodingError.dataCorruptedError(in: container, debugDescription: \"Invalid value: \(rawValue)\")\n"
+        initBlock="$initBlock        }\n"
+
+        # description block - convert first char to capital
+        descriptionBlock="    var description: String {\n"
+        descriptionBlock="$descriptionBlock        let lowercasedString = self.rawValue\n"
+        descriptionBlock="$descriptionBlock        let firstChar = lowercasedString.prefix(1).uppercased()\n"
+        descriptionBlock="$descriptionBlock        let otherChars = lowercasedString.dropFirst()\n"
+        descriptionBlock="$descriptionBlock        return firstChar + otherChars\n"
+        descriptionBlock="$descriptionBlock    }"
+
+        # Add the blocks to the file
+        echo "$allCasesBlock" >> "$output"
+        echo "$initBlock" >> "$output"
+        echo "$descriptionBlock" >> "$output"
+
+        # Close the enum
+        echo "}" >> "$output"
+
+        return 0
+    fi
+
     initBlock="    init(from decoder: Decoder) throws {\n"
     initBlock="$initBlock        let container = try decoder.container(keyedBy: CodingKeys.self)\n"
 
