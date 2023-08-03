@@ -192,6 +192,25 @@
 		B0EEFE2E2A7C05DD0065CB27 /* AdminPurgePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE282A7C05DD0065CB27 /* AdminPurgePostView.swift */; };
 		B0EEFE2F2A7C05DD0065CB27 /* AdminPurgeCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE292A7C05DD0065CB27 /* AdminPurgeCommunityView.swift */; };
 		B0EEFE302A7C05DD0065CB27 /* AdminPurgePerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE2A2A7C05DD0065CB27 /* AdminPurgePerson.swift */; };
+		B0EEFE432A7C06A00065CB27 /* ModLockPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE312A7C069F0065CB27 /* ModLockPost.swift */; };
+		B0EEFE442A7C06A00065CB27 /* ModRemovePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE322A7C069F0065CB27 /* ModRemovePost.swift */; };
+		B0EEFE452A7C06A00065CB27 /* ModRemoveCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE332A7C069F0065CB27 /* ModRemoveCommentView.swift */; };
+		B0EEFE462A7C06A00065CB27 /* ModBanFromCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE342A7C069F0065CB27 /* ModBanFromCommunityView.swift */; };
+		B0EEFE472A7C06A00065CB27 /* ModLockPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE352A7C069F0065CB27 /* ModLockPostView.swift */; };
+		B0EEFE482A7C06A00065CB27 /* ModTransferCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE362A7C069F0065CB27 /* ModTransferCommunity.swift */; };
+		B0EEFE492A7C06A00065CB27 /* ModHideCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE372A7C069F0065CB27 /* ModHideCommunity.swift */; };
+		B0EEFE4A2A7C06A00065CB27 /* ModRemoveCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE382A7C06A00065CB27 /* ModRemoveCommunityView.swift */; };
+		B0EEFE4B2A7C06A00065CB27 /* ModTransferCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE392A7C06A00065CB27 /* ModTransferCommunityView.swift */; };
+		B0EEFE4C2A7C06A00065CB27 /* ModRemoveComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3A2A7C06A00065CB27 /* ModRemoveComment.swift */; };
+		B0EEFE4D2A7C06A00065CB27 /* ModBanFromCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3B2A7C06A00065CB27 /* ModBanFromCommunity.swift */; };
+		B0EEFE4E2A7C06A00065CB27 /* ModFeaturePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3C2A7C06A00065CB27 /* ModFeaturePost.swift */; };
+		B0EEFE4F2A7C06A00065CB27 /* ModBanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3D2A7C06A00065CB27 /* ModBanView.swift */; };
+		B0EEFE502A7C06A00065CB27 /* ModRemovePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3E2A7C06A00065CB27 /* ModRemovePostView.swift */; };
+		B0EEFE512A7C06A00065CB27 /* ModBan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE3F2A7C06A00065CB27 /* ModBan.swift */; };
+		B0EEFE522A7C06A00065CB27 /* ModRemoveCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE402A7C06A00065CB27 /* ModRemoveCommunity.swift */; };
+		B0EEFE532A7C06A00065CB27 /* ModFeaturePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE412A7C06A00065CB27 /* ModFeaturePostView.swift */; };
+		B0EEFE542A7C06A00065CB27 /* ModHideCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE422A7C06A00065CB27 /* ModHideCommunityView.swift */; };
+		B0EEFE562A7C06CF0065CB27 /* GetModlogResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE552A7C06CF0065CB27 /* GetModlogResponse.swift */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -402,6 +421,25 @@
 		B0EEFE282A7C05DD0065CB27 /* AdminPurgePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminPurgePostView.swift; sourceTree = "<group>"; };
 		B0EEFE292A7C05DD0065CB27 /* AdminPurgeCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminPurgeCommunityView.swift; sourceTree = "<group>"; };
 		B0EEFE2A2A7C05DD0065CB27 /* AdminPurgePerson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminPurgePerson.swift; sourceTree = "<group>"; };
+		B0EEFE312A7C069F0065CB27 /* ModLockPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModLockPost.swift; sourceTree = "<group>"; };
+		B0EEFE322A7C069F0065CB27 /* ModRemovePost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemovePost.swift; sourceTree = "<group>"; };
+		B0EEFE332A7C069F0065CB27 /* ModRemoveCommentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemoveCommentView.swift; sourceTree = "<group>"; };
+		B0EEFE342A7C069F0065CB27 /* ModBanFromCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModBanFromCommunityView.swift; sourceTree = "<group>"; };
+		B0EEFE352A7C069F0065CB27 /* ModLockPostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModLockPostView.swift; sourceTree = "<group>"; };
+		B0EEFE362A7C069F0065CB27 /* ModTransferCommunity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModTransferCommunity.swift; sourceTree = "<group>"; };
+		B0EEFE372A7C069F0065CB27 /* ModHideCommunity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModHideCommunity.swift; sourceTree = "<group>"; };
+		B0EEFE382A7C06A00065CB27 /* ModRemoveCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemoveCommunityView.swift; sourceTree = "<group>"; };
+		B0EEFE392A7C06A00065CB27 /* ModTransferCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModTransferCommunityView.swift; sourceTree = "<group>"; };
+		B0EEFE3A2A7C06A00065CB27 /* ModRemoveComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemoveComment.swift; sourceTree = "<group>"; };
+		B0EEFE3B2A7C06A00065CB27 /* ModBanFromCommunity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModBanFromCommunity.swift; sourceTree = "<group>"; };
+		B0EEFE3C2A7C06A00065CB27 /* ModFeaturePost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModFeaturePost.swift; sourceTree = "<group>"; };
+		B0EEFE3D2A7C06A00065CB27 /* ModBanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModBanView.swift; sourceTree = "<group>"; };
+		B0EEFE3E2A7C06A00065CB27 /* ModRemovePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemovePostView.swift; sourceTree = "<group>"; };
+		B0EEFE3F2A7C06A00065CB27 /* ModBan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModBan.swift; sourceTree = "<group>"; };
+		B0EEFE402A7C06A00065CB27 /* ModRemoveCommunity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModRemoveCommunity.swift; sourceTree = "<group>"; };
+		B0EEFE412A7C06A00065CB27 /* ModFeaturePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModFeaturePostView.swift; sourceTree = "<group>"; };
+		B0EEFE422A7C06A00065CB27 /* ModHideCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModHideCommunityView.swift; sourceTree = "<group>"; };
+		B0EEFE552A7C06CF0065CB27 /* GetModlogResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetModlogResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -806,6 +844,7 @@
 		B0CEBE8E2A52D3C200982D4D /* Gets */ = {
 			isa = PBXGroup;
 			children = (
+				B0EEFE552A7C06CF0065CB27 /* GetModlogResponse.swift */,
 				B00695D82A50CD0900206C77 /* GetPostsResponse.swift */,
 				B0CEBE5C2A52C2CD00982D4D /* GetSiteResponse.swift */,
 				B0D7A1622A53529B00FE2852 /* GetCommentsResponse.swift */,
@@ -871,6 +910,24 @@
 				B0EEFE252A7C05DC0065CB27 /* AdminPurgePersonView.swift */,
 				B0EEFE272A7C05DD0065CB27 /* AdminPurgePost.swift */,
 				B0EEFE282A7C05DD0065CB27 /* AdminPurgePostView.swift */,
+				B0EEFE3F2A7C06A00065CB27 /* ModBan.swift */,
+				B0EEFE3B2A7C06A00065CB27 /* ModBanFromCommunity.swift */,
+				B0EEFE342A7C069F0065CB27 /* ModBanFromCommunityView.swift */,
+				B0EEFE3D2A7C06A00065CB27 /* ModBanView.swift */,
+				B0EEFE3C2A7C06A00065CB27 /* ModFeaturePost.swift */,
+				B0EEFE412A7C06A00065CB27 /* ModFeaturePostView.swift */,
+				B0EEFE372A7C069F0065CB27 /* ModHideCommunity.swift */,
+				B0EEFE422A7C06A00065CB27 /* ModHideCommunityView.swift */,
+				B0EEFE312A7C069F0065CB27 /* ModLockPost.swift */,
+				B0EEFE352A7C069F0065CB27 /* ModLockPostView.swift */,
+				B0EEFE3A2A7C06A00065CB27 /* ModRemoveComment.swift */,
+				B0EEFE332A7C069F0065CB27 /* ModRemoveCommentView.swift */,
+				B0EEFE402A7C06A00065CB27 /* ModRemoveCommunity.swift */,
+				B0EEFE382A7C06A00065CB27 /* ModRemoveCommunityView.swift */,
+				B0EEFE322A7C069F0065CB27 /* ModRemovePost.swift */,
+				B0EEFE3E2A7C06A00065CB27 /* ModRemovePostView.swift */,
+				B0EEFE362A7C069F0065CB27 /* ModTransferCommunity.swift */,
+				B0EEFE392A7C06A00065CB27 /* ModTransferCommunityView.swift */,
 			);
 			path = ModLog;
 			sourceTree = "<group>";
@@ -1031,6 +1088,7 @@
 				B091F8712A58769100F0DA32 /* SearchView.swift in Sources */,
 				B05998372A698AC000267636 /* UpdateFrequency.swift in Sources */,
 				B091F8402A547A7E00F0DA32 /* CreatePostLike.swift in Sources */,
+				B0EEFE4B2A7C06A00065CB27 /* ModTransferCommunityView.swift in Sources */,
 				B0CBC65C2A6A8E8B006E3A43 /* ImageService.swift in Sources */,
 				B091F86F2A5832D700F0DA32 /* SearchType.swift in Sources */,
 				B091F87A2A59C5AE00F0DA32 /* UserPreferences.swift in Sources */,
@@ -1044,9 +1102,11 @@
 				B082141D2A66AC6D00CD3DB4 /* Sessions.swift in Sources */,
 				B091F83C2A54708800F0DA32 /* Avatar.swift in Sources */,
 				B059982D2A693A0400267636 /* GithubService.swift in Sources */,
+				B0EEFE432A7C06A00065CB27 /* ModLockPost.swift in Sources */,
 				B091F8542A55EE9200F0DA32 /* PersonService.swift in Sources */,
 				B05B211A2A5C6D0000BA8FB2 /* Error.swift in Sources */,
 				B0EEFE2D2A7C05DD0065CB27 /* AdminPurgePost.swift in Sources */,
+				B0EEFE532A7C06A00065CB27 /* ModFeaturePostView.swift in Sources */,
 				B01ECC582A505356005ECF36 /* LeomardApp.swift in Sources */,
 				B05B21522A5F2F1300BA8FB2 /* MarkPrivateMessageAsRead.swift in Sources */,
 				B0CEBE442A519A1600982D4D /* NavbarItem.swift in Sources */,
@@ -1058,9 +1118,12 @@
 				B0CEBE572A51D35600982D4D /* LoginView.swift in Sources */,
 				B05B214A2A5EE89600BA8FB2 /* MarkCommentReplyAsRead.swift in Sources */,
 				B05998292A69330700267636 /* TagNameVersion.swift in Sources */,
+				B0EEFE472A7C06A00065CB27 /* ModLockPostView.swift in Sources */,
+				B0EEFE4E2A7C06A00065CB27 /* ModFeaturePost.swift in Sources */,
 				B05B21422A5EAEE800BA8FB2 /* InboxView.swift in Sources */,
 				B091F8672A57705C00F0DA32 /* FollowCommunity.swift in Sources */,
 				B017A3C72A700663001949A8 /* MarkPostAsRead.swift in Sources */,
+				B0EEFE562A7C06CF0065CB27 /* GetModlogResponse.swift in Sources */,
 				B05B21382A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift in Sources */,
 				B05998202A67F9F100267636 /* BlockCommunity.swift in Sources */,
 				B05998222A67FA0D00267636 /* BlockCommunityResponse.swift in Sources */,
@@ -1085,6 +1148,8 @@
 				B0A910C12A72FC7A00959A1D /* EditCommunity.swift in Sources */,
 				B0EEFE2E2A7C05DD0065CB27 /* AdminPurgePostView.swift in Sources */,
 				B091F8762A59998500F0DA32 /* UserSearchUIView.swift in Sources */,
+				B0EEFE512A7C06A00065CB27 /* ModBan.swift in Sources */,
+				B0EEFE492A7C06A00065CB27 /* ModHideCommunity.swift in Sources */,
 				B0EEFE302A7C05DD0065CB27 /* AdminPurgePerson.swift in Sources */,
 				B017A3B72A6C3537001949A8 /* PostReportView.swift in Sources */,
 				B0D7A16B2A53929200FE2852 /* ElapsedTime.swift in Sources */,
@@ -1095,6 +1160,7 @@
 				B05998272A69322700267636 /* ReleaseAsset.swift in Sources */,
 				B0D948782A6AABF50039D0D6 /* ImgurImageUploadForm.swift in Sources */,
 				B05B21322A5EA84600BA8FB2 /* PrivateMessage.swift in Sources */,
+				B0EEFE442A7C06A00065CB27 /* ModRemovePost.swift in Sources */,
 				B0D7A1582A531E5600FE2852 /* LinkHelper.swift in Sources */,
 				B017A3C12A6C5107001949A8 /* CommentReport.swift in Sources */,
 				B00695D12A50C23400206C77 /* Post.swift in Sources */,
@@ -1106,8 +1172,10 @@
 				B091F8562A55EF6900F0DA32 /* GetPersonDetailsResponse.swift in Sources */,
 				B0CEBE552A51D2F100982D4D /* SessionInfo.swift in Sources */,
 				B0EEFE142A7BE09B0065CB27 /* ModAddView.swift in Sources */,
+				B0EEFE452A7C06A00065CB27 /* ModRemoveCommentView.swift in Sources */,
 				B0CEBE6D2A52C93400982D4D /* CommunityFollowerView.swift in Sources */,
 				B0EEFE2C2A7C05DD0065CB27 /* AdminPurgeCommunity.swift in Sources */,
+				B0EEFE522A7C06A00065CB27 /* ModRemoveCommunity.swift in Sources */,
 				B05B213E2A5EAB6000BA8FB2 /* RepliesService.swift in Sources */,
 				B017A3BB2A6C4F86001949A8 /* CreateCommentReport.swift in Sources */,
 				B0CEBE7A2A52CF6D00982D4D /* PersonBlockView.swift in Sources */,
@@ -1117,18 +1185,22 @@
 				B091F84E2A55968C00F0DA32 /* DeleteComment.swift in Sources */,
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
 				B05998312A69521300267636 /* UpdateView.swift in Sources */,
+				B0EEFE502A7C06A00065CB27 /* ModRemovePostView.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
 				B0EEFE222A7C03CF0065CB27 /* AdminPurgeComment.swift in Sources */,
 				B0EEFE242A7C04950065CB27 /* AdminPurgeCommentView.swift in Sources */,
 				B05B212D2A5EA6CC00BA8FB2 /* CommentReply.swift in Sources */,
 				B017A3B92A6C3595001949A8 /* PostReport.swift in Sources */,
 				B00695DC2A50D21900206C77 /* DateFormatConverter.swift in Sources */,
+				B0EEFE4C2A7C06A00065CB27 /* ModRemoveComment.swift in Sources */,
 				B082141B2A66A50F00CD3DB4 /* SessionStorage.swift in Sources */,
 				B059982F2A693CBD00267636 /* LeomardExceptions.swift in Sources */,
 				B059981C2A67E55D00267636 /* BlockPerson.swift in Sources */,
 				B0CEBE612A52C60B00982D4D /* PersonView.swift in Sources */,
+				B0EEFE462A7C06A00065CB27 /* ModBanFromCommunityView.swift in Sources */,
 				B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */,
 				B0CEBE8B2A52D34400982D4D /* SiteView.swift in Sources */,
+				B0EEFE4A2A7C06A00065CB27 /* ModRemoveCommunityView.swift in Sources */,
 				B05B21342A5EA98000BA8FB2 /* PrivateMessageView.swift in Sources */,
 				B0CEBE3C2A5197AC00982D4D /* NavbarView.swift in Sources */,
 				B05B21292A5DB75500BA8FB2 /* CommunityContextMenu.swift in Sources */,
@@ -1163,6 +1235,7 @@
 				B091F84A2A54A54000F0DA32 /* DateDisplayView.swift in Sources */,
 				B0CEBE752A52CEF400982D4D /* LocalUserView.swift in Sources */,
 				B0CEBE692A52C81A00982D4D /* CustomEmojiView.swift in Sources */,
+				B0EEFE482A7C06A00065CB27 /* ModTransferCommunity.swift in Sources */,
 				B091F8652A56DDBD00F0DA32 /* CommunitySidebarUIView.swift in Sources */,
 				B091F8482A54874700F0DA32 /* PersonDisplay.swift in Sources */,
 				B0A910B72A72870500959A1D /* RemovePost.swift in Sources */,
@@ -1173,14 +1246,17 @@
 				B0EEFE2F2A7C05DD0065CB27 /* AdminPurgeCommunityView.swift in Sources */,
 				B017A3C52A6FEC91001949A8 /* FeaturePost.swift in Sources */,
 				B0EEFE182A7BE2080065CB27 /* ModAddCommunityView.swift in Sources */,
+				B0EEFE4F2A7C06A00065CB27 /* ModBanView.swift in Sources */,
 				B091F8382A5432A900F0DA32 /* PostContextMenu.swift in Sources */,
 				B0A910BD2A72E6C000959A1D /* RemoveComment.swift in Sources */,
 				B05B211E2A5D939B00BA8FB2 /* DeletePost.swift in Sources */,
 				B0A910BF2A72F50400959A1D /* RemoveCommunity.swift in Sources */,
 				B0A910BB2A72E41400959A1D /* DistinguishComment.swift in Sources */,
 				B0CEBE8D2A52D37F00982D4D /* Tagline.swift in Sources */,
+				B0EEFE542A7C06A00065CB27 /* ModHideCommunityView.swift in Sources */,
 				B0D948742A6AA6E20039D0D6 /* ImgurImage.swift in Sources */,
 				B017A3B52A6C3511001949A8 /* PostReportResponse.swift in Sources */,
+				B0EEFE4D2A7C06A00065CB27 /* ModBanFromCommunity.swift in Sources */,
 				B0CEBE5F2A52C5C000982D4D /* PersonAggregates.swift in Sources */,
 				B05998352A69657500267636 /* DmgHelper.swift in Sources */,
 				B011377B2A50A5C40060768F /* RequestHandler.swift in Sources */,
@@ -1365,7 +1441,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.4.1;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.Leomard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1396,7 +1472,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.4.1;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Athlon.Leomard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
