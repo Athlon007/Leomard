@@ -8,6 +8,8 @@
 # Make sure you have "input" folder in the same directory as this script with at least 1 .ts file in it.
 # The output will be in the "output" folder.
 
+version="1.0"
+
 
 # Check if "input" folder is present and check if it has at least 1 .ts file
 if [ ! -d "input" ] || [ ! "$(ls -A input)" ]; then
@@ -41,7 +43,7 @@ convert_file() {
     echo "//  ${filenameWithoutExtension:7}.swift" >> "$output"
     echo "//  Leomard" >> "$output"
     echo "//" >> "$output"
-    echo "//  Created automatically by ts2swift on $(date +'%d/%m/%Y')." >> "$output"
+    echo "//  Created automatically by ts2swift $version on $(date +'%d/%m/%Y')." >> "$output"
     echo "//" >> "$output"
     echo "" >> "$output"
     echo "import Foundation" >> "$output"
