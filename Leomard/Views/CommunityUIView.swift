@@ -463,10 +463,6 @@ struct CommunityUIView: View {
         VStack {
             
         }
-        .task {
-            modlogService = ModlogService(requestHandler: RequestHandler())
-            loadModlog()
-        }
     }
     
     // MARK: -
@@ -527,6 +523,8 @@ struct CommunityUIView: View {
         
         if selectedBrowseOption.id == 0 {
             loadPosts()
+        }  else if selectedBrowseOption.id == 2 {
+            loadModlog()
         } else {
             loadComments()
         }
@@ -604,6 +602,10 @@ struct CommunityUIView: View {
     }
     
     func loadModlog() {
+        if modlogService == nil {
+            modlogService = ModlogService(requestHandler: RequestHandler())
+        }
+        
         if let service = modlogService {
             if page == 1 {
                 self.modlogResponse = .init()
