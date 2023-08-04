@@ -212,6 +212,8 @@
 		B0EEFE542A7C06A00065CB27 /* ModHideCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE422A7C06A00065CB27 /* ModHideCommunityView.swift */; };
 		B0EEFE562A7C06CF0065CB27 /* GetModlogResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE552A7C06CF0065CB27 /* GetModlogResponse.swift */; };
 		B0EEFE582A7CF9C00065CB27 /* ModlogActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE572A7CF9C00065CB27 /* ModlogActionType.swift */; };
+		B0EEFE5A2A7CFAB90065CB27 /* GetModlog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE592A7CFAB90065CB27 /* GetModlog.swift */; };
+		B0EEFE5C2A7CFB0E0065CB27 /* ModlogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE5B2A7CFB0E0065CB27 /* ModlogService.swift */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -442,6 +444,8 @@
 		B0EEFE422A7C06A00065CB27 /* ModHideCommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModHideCommunityView.swift; sourceTree = "<group>"; };
 		B0EEFE552A7C06CF0065CB27 /* GetModlogResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetModlogResponse.swift; sourceTree = "<group>"; };
 		B0EEFE572A7CF9C00065CB27 /* ModlogActionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModlogActionType.swift; sourceTree = "<group>"; };
+		B0EEFE592A7CFAB90065CB27 /* GetModlog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetModlog.swift; sourceTree = "<group>"; };
+		B0EEFE5B2A7CFB0E0065CB27 /* ModlogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModlogService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -688,6 +692,7 @@
 				B05B213F2A5EADF700BA8FB2 /* PrivateMessageService.swift */,
 				B059982C2A693A0400267636 /* GithubService.swift */,
 				B0CBC65B2A6A8E8B006E3A43 /* ImageService.swift */,
+				B0EEFE5B2A7CFB0E0065CB27 /* ModlogService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -861,6 +866,7 @@
 				B05B21352A5EA9D900BA8FB2 /* PrivateMessagesResponse.swift */,
 				B05B21372A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift */,
 				B05B214B2A5EE92800BA8FB2 /* CommentReplyResponse.swift */,
+				B0EEFE592A7CFAB90065CB27 /* GetModlog.swift */,
 			);
 			path = Gets;
 			sourceTree = "<group>";
@@ -1125,6 +1131,7 @@
 				B0EEFE4E2A7C06A00065CB27 /* ModFeaturePost.swift in Sources */,
 				B05B21422A5EAEE800BA8FB2 /* InboxView.swift in Sources */,
 				B091F8672A57705C00F0DA32 /* FollowCommunity.swift in Sources */,
+				B0EEFE5A2A7CFAB90065CB27 /* GetModlog.swift in Sources */,
 				B017A3C72A700663001949A8 /* MarkPostAsRead.swift in Sources */,
 				B0EEFE562A7C06CF0065CB27 /* GetModlogResponse.swift in Sources */,
 				B05B21382A5EA9FA00BA8FB2 /* PrivateMessageResponse.swift in Sources */,
@@ -1188,6 +1195,7 @@
 				B05B212B2A5EA6A100BA8FB2 /* CommentReplyView.swift in Sources */,
 				B091F84E2A55968C00F0DA32 /* DeleteComment.swift in Sources */,
 				B0D7A1652A5352C000FE2852 /* CommentService.swift in Sources */,
+				B0EEFE5C2A7CFB0E0065CB27 /* ModlogService.swift in Sources */,
 				B05998312A69521300267636 /* UpdateView.swift in Sources */,
 				B0EEFE502A7C06A00065CB27 /* ModRemovePostView.swift in Sources */,
 				B0D7A15D2A533DAF00FE2852 /* CommentAggregates.swift in Sources */,
