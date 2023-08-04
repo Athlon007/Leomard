@@ -9,7 +9,7 @@
 # Make sure you have "input" folder in the same directory as this script with at least 1 .ts file in it.
 # The output will be in the "output" folder.
 
-version="1.1"
+version="1.2"
 
 
 # Check if "input" folder is present and check if it has at least 1 .ts file
@@ -211,38 +211,33 @@ convert_file() {
                 fi
 
                 # Convert "PersonId" to "Int"
-                if [[ $line == *"PersonId"* ]]; then
-                    line=${line//PersonId/Int}
+                if [[ $line == *": PersonId"* ]]; then
+                    line=${line//: PersonId/: Int}
                 fi
 
                 # Convert "CommunityId" to "Int"
-                if [[ $line == *"CommunityId"* ]]; then
-                    line=${line//CommunityId/Int}
+                if [[ $line == *": CommunityId"* ]]; then
+                    line=${line//: CommunityId/: Int}
                 fi
 
                 # Convert "PostId" to "Int"
-                if [[ $line == *"PostId"* ]]; then
-                    line=${line//PostId/Int}
+                if [[ $line == *": PostId"* ]]; then
+                    line=${line//: PostId/: Int}
                 fi
 
                 # Convert "CommentId" to "Int"
-                if [[ $line == *"CommentId"* ]]; then
-                    line=${line//CommentId/Int}
+                if [[ $line == *": CommentId"* ]]; then
+                    line=${line//: CommentId/: Int}
                 fi
 
                 # Convert "CommentId" to "Int"
-                if [[ $line == *"CommentReplyId"* ]]; then
-                    line=${line//CommentId/Int}
+                if [[ $line == *": CommentReplyId"* ]]; then
+                    line=${line//: CommentReplyId/: Int}
                 fi
 
                 # Convert "CommentId" to "Int"
-                if [[ $line == *"LanguageId"* ]]; then
-                    line=${line//LanguageId/Int}
-                fi
-
-                # Convert anything "*Id" to "Int"
-                if [[ $line == *"*Id"* ]]; then
-                    line=${line//\*Id/Int}
+                if [[ $line == *": LanguageId"* ]]; then
+                    line=${line//: LanguageId/: Int}
                 fi
 
                 # If the var name is either: when_, published or updated, replace type with Date
