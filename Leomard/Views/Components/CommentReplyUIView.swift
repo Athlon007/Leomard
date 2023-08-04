@@ -194,7 +194,7 @@ struct CommentReplyUIView: View {
                 }
             }
             .background(Color(.textBackgroundColor))
-            .cornerRadius(4)
+            .cornerRadius(8)
             .onTapGesture {
                 contentView.openPostForComment(comment: commentReplyView.comment)
             }

@@ -140,7 +140,7 @@ struct PrivateMessageUIView: View {
                 }
             }
             .background(Color(.textBackgroundColor))
-            .cornerRadius(4)
+            .cornerRadius(8)
         }
     }
     

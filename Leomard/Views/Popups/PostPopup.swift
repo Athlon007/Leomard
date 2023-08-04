@@ -128,11 +128,11 @@ struct PostPopup: View {
                 )
                 .background(Color(.textBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
             }
-            .cornerRadius(4)
+            .cornerRadius(8)
             .padding(.top, 20)
             .padding(.bottom, 20)
             .task {

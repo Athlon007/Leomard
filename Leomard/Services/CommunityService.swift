@@ -54,6 +54,9 @@ class CommunityService: Service {
                     if let data = apiResponse.data {
                         var response = try self.decode(type: ListCommunitiesResponse.self, data: data)
                         response.communities = response.communities.filter { !UserPreferences.isBlockedInstance($0.community.actorId) }
+                        if !nsfw {
+                            response.communities = response.communities.filter { !$0.community.nsfw }
+                        }
                         completion(.success(response))
                     }
                 } catch {

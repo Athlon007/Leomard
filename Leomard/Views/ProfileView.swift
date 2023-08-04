@@ -389,9 +389,10 @@ struct ProfileView: View {
                 .frame(maxWidth: 600, maxHeight: 600)
                 .background(Color(.textBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
+                .cornerRadius(8)
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }
