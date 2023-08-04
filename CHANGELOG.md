@@ -16,6 +16,7 @@
     - Text editor itself now shows formatting as you type
 - Updated the About to include HighlightedTextEditor license
 - Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
+- Sort types dropdown text is now formatted correctly
 
 ### Bug Fixes
 

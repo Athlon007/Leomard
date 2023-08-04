@@ -91,4 +91,22 @@ extension String {
         
         return result
     }
+    
+    func spaceBeforeCapital() -> String {
+        var output = ""
+        for char in self {
+            if self.first == char {
+                output += String(char)
+                continue
+            }
+            
+            if char.isUppercase {
+                output += " "
+            }
+            
+            output += String(char)
+        }
+        
+        return output
+    }
 }

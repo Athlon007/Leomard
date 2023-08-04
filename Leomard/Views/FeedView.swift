@@ -97,7 +97,7 @@ struct FeedView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $viewModel.selectedListing) {
                     ForEach(ListingType.allCases, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)
@@ -111,7 +111,7 @@ struct FeedView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $viewModel.selectedSort) {
                     ForEach(sortTypes, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)
