@@ -222,8 +222,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "552"
-            endingLineNumber = "552"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,8 +238,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "570"
-            endingLineNumber = "570"
+            startingLineNumber = "571"
+            endingLineNumber = "571"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
+            startingLineNumber = "554"
+            endingLineNumber = "554"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,8 +430,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -446,8 +446,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "346"
-            endingLineNumber = "346"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -494,8 +494,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "348"
-            endingLineNumber = "348"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -510,8 +510,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "350"
-            endingLineNumber = "350"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -558,8 +558,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -606,8 +606,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "communitiesList"
             landmarkType = "24">
          </BreakpointContent>
@@ -622,8 +622,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -670,8 +670,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "search()"
             landmarkType = "7">
             <Locations>
@@ -718,8 +718,8 @@
             filePath = "Leomard/Views/SearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "communitiesList"
             landmarkType = "24">
          </BreakpointContent>
@@ -862,8 +862,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
             landmarkName = "deletePost()"
             landmarkType = "7">
          </BreakpointContent>
@@ -878,8 +878,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "579"
-            endingLineNumber = "579"
+            startingLineNumber = "581"
+            endingLineNumber = "581"
             landmarkName = "deletePost()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1390,8 +1390,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
+            startingLineNumber = "639"
+            endingLineNumber = "639"
             landmarkName = "userSettingsSave()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1406,8 +1406,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "616"
-            endingLineNumber = "616"
+            startingLineNumber = "617"
+            endingLineNumber = "617"
             landmarkName = "userSettingsSave()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1416,22 +1416,6 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D12A3BB6-26AF-4E93-A1CF-0054F09F976A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Leomard/Views/ProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "629"
-            endingLineNumber = "629"
-            landmarkName = "userSettingsSave()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7DE60744-F92E-43BA-9543-F87C7432E5D2"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -1447,6 +1431,22 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "7DE60744-F92E-43BA-9543-F87C7432E5D2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/ProfileView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "631"
+            endingLineNumber = "631"
+            landmarkName = "userSettingsSave()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
             uuid = "AE1D9AED-825C-4E34-BB05-C80A2DF8B4DF"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1454,8 +1454,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "626"
+            endingLineNumber = "626"
             landmarkName = "userSettingsSave()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1470,8 +1470,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "626"
-            endingLineNumber = "626"
+            startingLineNumber = "627"
+            endingLineNumber = "627"
             landmarkName = "userSettingsSave()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1550,8 +1550,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
             landmarkName = "profileEditor"
             landmarkType = "24">
          </BreakpointContent>
@@ -1566,8 +1566,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
+            startingLineNumber = "448"
+            endingLineNumber = "448"
             landmarkName = "personBlocks"
             landmarkType = "24">
             <Locations>
@@ -1854,8 +1854,8 @@
             filePath = "Leomard/Views/ProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "657"
-            endingLineNumber = "657"
+            startingLineNumber = "658"
+            endingLineNumber = "658"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1954,6 +1954,70 @@
             endingLineNumber = "240"
             landmarkName = "commentContent"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B136C0B7-E234-469E-AFBD-2CB6882DFB24"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/CommunityService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "getCommunities(page:showNsfw:sortType:listingType:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B136C0B7-E234-469E-AFBD-2CB6882DFB24 - 64176fedc19d14de"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Leomard.CommunityService.getCommunities(page: Swift.Int, showNsfw: Swift.Bool, sortType: Leomard.SortType, listingType: Leomard.ListingType, completion: (Swift.Result&lt;Leomard.ListCommunitiesResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/CommunityService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50"
+                  offsetFromSymbolStart = "860">
+               </Location>
+               <Location
+                  uuid = "B136C0B7-E234-469E-AFBD-2CB6882DFB24 - cab2d1385abd30a7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; () in Leomard.CommunityService.getCommunities(page: Swift.Int, showNsfw: Swift.Bool, sortType: Leomard.SortType, listingType: Leomard.ListingType, completion: (Swift.Result&lt;Leomard.ListCommunitiesResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Leomard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/CommunityService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "180">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "39211AA9-EE7F-4A4D-9DCF-0397D849F694"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Services/CommunityService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "getCommunities(page:showNsfw:sortType:listingType:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
