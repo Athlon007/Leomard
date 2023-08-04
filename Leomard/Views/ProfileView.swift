@@ -285,7 +285,7 @@ struct ProfileView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $selectedSort) {
                     ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)

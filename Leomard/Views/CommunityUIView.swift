@@ -344,7 +344,7 @@ struct CommunityUIView: View {
                         .padding(.trailing, 0)
                     Picker("", selection: $selectedSortType) {
                         ForEach(sortTypes, id: \.self) { method in
-                            Text(String(describing: method))
+                            Text(String(describing: method).spaceBeforeCapital())
                         }
                     }
                     .frame(maxWidth: 120)
