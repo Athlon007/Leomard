@@ -2,7 +2,7 @@
 //  ModlogActionType.swift
 //  Leomard
 //
-//  Created automatically by ts2swift 1.1 on 04/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
@@ -24,7 +24,7 @@ enum ModlogActionType: String, Codable, CustomStringConvertible {
     case adminPurgeCommunity
     case adminPurgePost
     case adminPurgeComment
-    
+
     static let allCases: [ModlogActionType] = [
         all,
         modRemovePost,
@@ -43,7 +43,7 @@ enum ModlogActionType: String, Codable, CustomStringConvertible {
         adminPurgePost,
         adminPurgeComment
     ]
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
@@ -53,7 +53,7 @@ enum ModlogActionType: String, Codable, CustomStringConvertible {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid value: \(rawValue)")
         }
     }
-    
+
     var description: String {
         let lowercasedString = self.rawValue
         let firstChar = lowercasedString.prefix(1).uppercased()

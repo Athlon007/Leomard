@@ -2,12 +2,12 @@
 //  ModRemovePostView.swift
 //  Leomard
 //
-//  Created automatically by ts2swift 1.0 on 03/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
 
-struct ModRemovePostView: Codable {
+struct ModRemovePostView: Codable, Hashable {
     let modRemovePost: ModRemovePost
     let moderator: Person?
     let post: Post

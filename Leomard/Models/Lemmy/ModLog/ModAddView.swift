@@ -2,13 +2,20 @@
 //  ModAddView.swift
 //  Leomard
 //
-//  Created by Konrad Figura on 03/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
 
-struct ModAddView: Codable {
+struct ModAddView: Codable, Hashable {
     let modAdd: ModAdd
-    let moddedPerson: Person
     let moderator: Person?
+    let moddedPerson: Person
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.modAdd = try container.decode(ModAdd.self, forKey: .modAdd)
+        self.moderator = try container.decodeIfPresent(Person.self, forKey: .moderator)
+        self.moddedPerson = try container.decode(Person.self, forKey: .moddedPerson)
+    }
 }

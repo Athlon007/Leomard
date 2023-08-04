@@ -8,21 +8,21 @@
 import Foundation
 
 struct GetModlogResponse: Codable {
-    let removedPosts: [ModRemovePostView]
-    let lockedPosts: [ModLockPostView]
-    let featuredPosts: [ModFeaturePostView]
-    let removedComments: [ModRemoveCommentView]
-    let removedCommunities: [ModRemoveCommunityView]
-    let bannedFromCommunity: [ModBanFromCommunityView]
-    let banned: [ModBanView]
-    let addedToCommunity: [ModAddCommunityView]
-    let transferredToCommunity: [ModTransferCommunityView]
-    let added: [ModAddView]
-    let adminPurgedPersons: [AdminPurgePersonView]
-    let adminPurgedCommunities: [AdminPurgeCommunityView]
-    let adminPurgedPosts: [AdminPurgePostView]
-    let adminPurgedComments: [AdminPurgeCommentView]
-    let hiddenCommunities: [ModHideCommunityView]
+    var removedPosts: [ModRemovePostView]
+    var lockedPosts: [ModLockPostView]
+    var featuredPosts: [ModFeaturePostView]
+    var removedComments: [ModRemoveCommentView]
+    var removedCommunities: [ModRemoveCommunityView]
+    var bannedFromCommunity: [ModBanFromCommunityView]
+    var banned: [ModBanView]
+    var addedToCommunity: [ModAddCommunityView]
+    var transferredToCommunity: [ModTransferCommunityView]
+    var added: [ModAddView]
+    var adminPurgedPersons: [AdminPurgePersonView]
+    var adminPurgedCommunities: [AdminPurgeCommunityView]
+    var adminPurgedPosts: [AdminPurgePostView]
+    var adminPurgedComments: [AdminPurgeCommentView]
+    var hiddenCommunities: [ModHideCommunityView]
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -41,5 +41,24 @@ struct GetModlogResponse: Codable {
         self.adminPurgedPosts = try container.decode([AdminPurgePostView].self, forKey: .adminPurgedPosts)
         self.adminPurgedComments = try container.decode([AdminPurgeCommentView].self, forKey: .adminPurgedComments)
         self.hiddenCommunities = try container.decode([ModHideCommunityView].self, forKey: .hiddenCommunities)
+    }
+    
+    init() {
+        self.removedPosts = []
+        self.lockedPosts = []
+        self.featuredPosts = []
+        self.removedComments = []
+        self.removedCommunities = []
+        self.bannedFromCommunity = []
+        self.banned = []
+        self.addedToCommunity = []
+        self.transferredToCommunity = []
+        self.added = []
+        self.adminPurgedPersons = []
+        self.adminPurgedCommunities = []
+        self.adminPurgedPosts = []
+        self.adminPurgedComments = []
+        self.hiddenCommunities = []
+        
     }
 }

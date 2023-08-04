@@ -19,7 +19,8 @@ struct CommunityUIView: View {
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     @State var browseOptions: [Option] = [
         .init(id: 0, title: "Posts", imageName: "doc.plaintext"),
-        .init(id: 1, title: "Comments", imageName: "message")
+        .init(id: 1, title: "Comments", imageName: "message"),
+        .init(id: 2, title: "Modlog", imageName: "list.triangle")
     ]
     
     @State var communityService: CommunityService?
@@ -52,6 +53,10 @@ struct CommunityUIView: View {
     @State var communityRemoveText: String = ""
     
     @Environment(\.openURL) var openURL
+    
+    // Modlog
+    @State var modlogService: ModlogService? = nil
+    @State var modlogResponse: GetModlogResponse = .init()
     
     var body: some View {
         toolbar
@@ -192,6 +197,8 @@ struct CommunityUIView: View {
                 switch selectedBrowseOption.id {
                 case 1:
                     commentsList
+                case 2:
+                    modlog
                 default:
                     postsList
                 }
@@ -451,6 +458,17 @@ struct CommunityUIView: View {
         }
     }
     
+    @ViewBuilder
+    private var modlog: some View {
+        VStack {
+            
+        }
+        .task {
+            modlogService = ModlogService(requestHandler: RequestHandler())
+            loadModlog()
+        }
+    }
+    
     // MARK: -
     
     func loadCommunity() {
@@ -581,6 +599,67 @@ struct CommunityUIView: View {
             case .failure(let error):
                 print(error)
                 communityUpdateFail = true
+            }
+        }
+    }
+    
+    func loadModlog() {
+        if let service = modlogService {
+            if page == 1 {
+                self.modlogResponse = .init()
+            }
+            
+            service.getModlog(community: communityResponse!.communityView.community, page: page) { result in
+                switch result {
+                case .success(let response):
+                    self.modlogResponse.removedPosts += response.removedPosts.filter { !self.modlogResponse.removedPosts.contains($0)}
+                    self.modlogResponse.lockedPosts += response.lockedPosts.filter {
+                        !self.modlogResponse.lockedPosts.contains($0)
+                    }
+                    self.modlogResponse.featuredPosts += response.featuredPosts.filter {
+                        !self.modlogResponse.featuredPosts.contains($0)
+                    }
+                    self.modlogResponse.removedComments += response.removedComments.filter {
+                        !self.modlogResponse.removedComments.contains($0)
+                    }
+                    self.modlogResponse.removedCommunities += response.removedCommunities.filter {
+                        !self.modlogResponse.removedCommunities.contains($0)
+                    }
+                    self.modlogResponse.bannedFromCommunity += response.bannedFromCommunity.filter {
+                        !self.modlogResponse.bannedFromCommunity.contains($0)
+                    }
+                    self.modlogResponse.banned += response.banned.filter {
+                        !self.modlogResponse.banned.contains($0)
+                    }
+                    self.modlogResponse.addedToCommunity += response.addedToCommunity.filter {
+                        !self.modlogResponse.addedToCommunity.contains($0)
+                    }
+                    self.modlogResponse.transferredToCommunity += response.transferredToCommunity.filter {
+                        !self.modlogResponse.transferredToCommunity.contains($0)
+                    }
+                    self.modlogResponse.added += response.added.filter {
+                        !self.modlogResponse.added.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedPersons += response.adminPurgedPersons.filter {
+                        !self.modlogResponse.adminPurgedPersons.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedCommunities += response.adminPurgedCommunities.filter {
+                        !self.modlogResponse.adminPurgedCommunities.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedPosts += response.adminPurgedPosts.filter {
+                        !self.modlogResponse.adminPurgedPosts.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedComments += response.adminPurgedComments.filter {
+                        !self.modlogResponse.adminPurgedComments.contains($0)
+                    }
+                    self.modlogResponse.hiddenCommunities += response.hiddenCommunities.filter {
+                        !self.modlogResponse.hiddenCommunities.contains($0)
+                    }
+                    
+                    page += 1
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }
