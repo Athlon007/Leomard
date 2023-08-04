@@ -111,11 +111,12 @@ convert_file() {
         initBlock="    init(from decoder: Decoder) throws {\n"
         initBlock="$initBlock        let container = try decoder.singleValueContainer()\n"
         initBlock="$initBlock        let rawValue = try container.decode(String.self)\n"
-        initBlock="$initBlock        if let variant = ${enumName%Type}.allCases.first(where: { \$0.rawValue.uppercased() == rawValue.uppercased() }) {\n"
+        initBlock="$initBlock        if let variant = ${enumName}.allCases.first(where: { \$0.rawValue.uppercased() == rawValue.uppercased() }) {\n"
         initBlock="$initBlock            self = variant\n"
         initBlock="$initBlock        } else {\n"
         initBlock="$initBlock            throw DecodingError.dataCorruptedError(in: container, debugDescription: \"Invalid value: \(rawValue)\")\n"
         initBlock="$initBlock        }\n"
+        initBlock="$initBlock    }\n"
 
         # description block - convert first char to capital
         descriptionBlock="    var description: String {\n"
