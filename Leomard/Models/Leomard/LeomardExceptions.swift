@@ -13,6 +13,7 @@ enum LeomardExceptions: Error, CustomStringConvertible {
     case missingApiKey(String)
     case notLoggedIn(String)
     case unableToGetIcon(String)
+    case userCancelledOperation(String)
     
     var description: String {
         switch self {
@@ -25,6 +26,8 @@ enum LeomardExceptions: Error, CustomStringConvertible {
         case .notLoggedIn(let message):
             return message
         case .unableToGetIcon(let message):
+            return message
+        case .userCancelledOperation(let message):
             return message
         }
     }

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import MarkdownUI
 import NukeUI
 
 struct PostCreationPopup: View {
@@ -29,14 +28,15 @@ struct PostCreationPopup: View {
     @State var alertMessage: String = ""
     @State var isSendingPost: Bool = false
     
-    @State var imageUploadFail: Bool = false
-    @State var imageUploadFailReason: String = ""
     @State var isUploadingImage: Bool = false
     
     // Cross-post stuff
     @State var searchCommunityText: String = ""
     @State var communities: [CommunityView] = []
     @State var selectedCrossCommunity: Community? = nil
+    
+    @State var showCloseDialog: Bool = false
+
     
     var body: some View {
         ZStack {
@@ -50,12 +50,14 @@ struct PostCreationPopup: View {
                 .background(Color.black)
                 .opacity(0.33)
                 .onTapGesture {
-                    close()
+                    preClose()
                 }
             VStack {
                 VStack {
                     HStack {
-                        Button("Dismiss", action: close)
+                        Button("Dismiss", action: {
+                            preClose()
+                        })
                             .buttonStyle(.link)
                     }
                     .frame(
@@ -87,7 +89,29 @@ struct PostCreationPopup: View {
                                     checkUrlValidity()
                                 }
                                 .border(!isUrlValid ? .red : .clear, width: 4)
-                            Button("Add Image", action: addImage)
+                            Button("Add Image", action: {
+                                isUploadingImage = true
+                                self.contentView.addImage { result in
+                                    isUploadingImage = false
+                                    switch result {
+                                    case .success(let response):
+                                        if self.url == "" {
+                                            // URL not set? Set the image as URL.
+                                            self.url = response.data.link
+                                        } else {
+                                            // Otherwise add it to content of the bodyText.
+                                            if bodyText.count > 0 {
+                                                // If there already is some text, add new line.
+                                                bodyText += "\n\n"
+                                            }
+                                            
+                                            bodyText += "![](\(response.data.link))\n\n"
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                }
+                            })
                             if isUploadingImage {
                                 ProgressView().progressViewStyle(.circular)
                             }
@@ -110,41 +134,7 @@ struct PostCreationPopup: View {
                             )
                             .fontWeight(.semibold)
                         Spacer()
-                        VStack {
-                            Spacer()
-                            TextEditor(text: $bodyText)
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                .frame(
-                                    maxWidth: .infinity,
-                                    minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-                                .lineLimit(5...)
-                                .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                            Text("Preview")
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                                .fontWeight(.semibold)
-                            List {
-                                let content = MarkdownContent(bodyText)
-                                Markdown(content)
-                                    .frame(
-                                        minWidth: 0,
-                                        maxWidth: .infinity,
-                                        minHeight: 0,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                            }
-                        }
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .leading
-                        )
+                        MarkdownEditor(bodyText: $bodyText, contentView: contentView)
                         Spacer()
                         Toggle("NSFW", isOn: $isNsfw)
                             .frame(
@@ -224,10 +214,13 @@ struct PostCreationPopup: View {
         }, message: {
             Text(alertMessage)
         })
-        .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
-            Button("OK") {}
+        .alert("Close Post Creation?", isPresented: $showCloseDialog, actions: {
+            Button("Yes") {
+                close()
+            }
+            Button("No", role: .cancel) {}
         }, message: {
-            Text(imageUploadFailReason)
+            Text("Your post will be lost.")
         })
         .task {
             if self.editedPost != nil {
@@ -247,6 +240,14 @@ struct PostCreationPopup: View {
                     }
                 }
             }
+        }
+    }
+    
+    func preClose() {
+        if url.count > 0 || title.count > 0 || bodyText.count > 0 {
+            showCloseDialog = true
+        } else {
+            close()
         }
     }
     
@@ -335,59 +336,7 @@ struct PostCreationPopup: View {
             }
         }
     }
-    
-    func addImage() {
-        let panel = NSOpenPanel()
-        panel.prompt = "Select file"
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.canCreateDirectories = false
-        panel.canChooseFiles = true
-        panel.allowedContentTypes = [
-            .init(importedAs: "leomard.supported.image.types.jpg"),
-            .init(importedAs: "leomard.supported.image.types.jpeg"),
-            .init(importedAs: "leomard.supported.image.types.png"),
-            .init(importedAs: "leomard.supported.image.types.webp"),
-            .init(importedAs: "leomard.supported.image.types.gif")
-        ]
-        panel.begin { (result) -> Void in
-            self.contentView.toggleInteraction(true)
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {                
-                let imageService = ImageService(requestHandler: RequestHandler())
-                isUploadingImage = true
-                imageService.uploadImage(url: url) { result in
-                    switch result {
-                    case .success(let imageUploadResponse):
-                        isUploadingImage = false
-                        if self.url == "" {
-                            // URL not set? Set the image as URL.
-                            self.url = imageUploadResponse.data.link
-                        } else {
-                            // Otherwise add it to content of the bodyText.
-                            if bodyText.count > 0 {
-                                // If there already is some text, add new line.
-                                bodyText += "\n\n"
-                            }
-                            
-                            bodyText += "![](\(imageUploadResponse.data.link))\n\n"
-                        }
-                    case .failure(let error):
-                        isUploadingImage = false
-                        if error is LeomardExceptions {
-                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
-                        } else {
-                            self.imageUploadFailReason = "Unable to upload the image :("
-                        }
-                        
-                        self.imageUploadFail = true
-                    }
-                }
-            }
-        }
-        panel.orderFrontRegardless()
-        self.contentView.toggleInteraction(false)
-    }
-    
+   
     func searchCommunity() {
         let searchService = SearchService(requestHandler: RequestHandler())
         searchService.search(query: searchCommunityText, searchType: .communities, page: 1) { result in
