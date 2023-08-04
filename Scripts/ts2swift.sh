@@ -11,6 +11,12 @@
 
 version="1.2"
 
+# Get --make-hashables flag
+makeHashables=false
+if [ "$1" = "--make-hashables" ]; then
+    makeHashables=true
+fi
+
 
 # Check if "input" folder is present and check if it has at least 1 .ts file
 if [ ! -d "input" ] || [ ! "$(ls -A input)" ]; then
@@ -141,7 +147,11 @@ convert_file() {
             if [[ $line == export*interface* ]]; then
                 # Get the name of the struct
                 structName=$(echo "$line" | cut -f 3 -d ' ')
-                echo "struct $structName: Codable {" >> "$output"
+                if [ $makeHashables = true ] ; then
+                    echo "struct $structName: Codable, Hashable {" >> "$output"
+                else
+                    echo "struct $structName: Codable {" >> "$output"
+                fi
                 isEditingStruct=true
                 continue
             fi
