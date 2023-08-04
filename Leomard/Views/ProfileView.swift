@@ -282,7 +282,7 @@ struct ProfileView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $selectedSort) {
                     ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)
@@ -389,9 +389,10 @@ struct ProfileView: View {
                 .frame(maxWidth: 600, maxHeight: 600)
                 .background(Color(.textBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
+                .cornerRadius(8)
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }

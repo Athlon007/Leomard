@@ -91,4 +91,31 @@ extension String {
         
         return result
     }
+    
+    func spaceBeforeCapital() -> String {
+        var output = ""
+        for char in self {
+            if self.first == char {
+                output += String(char)
+                continue
+            }
+            
+            if char.isUppercase {
+                output += " "
+            }
+            
+            output += String(char)
+        }
+        
+        return output
+    }
+    
+    var htmlDecoded: String {
+        let attr = try? NSAttributedString(data: Data(utf8), options: [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+        ], documentAttributes: nil)
+        
+        return attr?.string ?? self
+    }
 }

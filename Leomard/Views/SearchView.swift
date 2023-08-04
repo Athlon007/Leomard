@@ -147,7 +147,7 @@ struct SearchView: View {
             List {
                 ForEach(searchResponse.comments, id: \.self) { commentView in
                     VStack {
-                        CommentUIView(commentView: commentView, indentLevel: 1, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
+                        CommentUIView(commentView: commentView, indentLevel: 0, commentService: commentService, myself: $myself, post: commentView.post, contentView: contentView)
                             .onAppear {
                                 if commentView == searchResponse.comments.last {
                                     self.search()
@@ -157,9 +157,7 @@ struct SearchView: View {
                                 maxWidth: .infinity,
                                 maxHeight: .infinity
                             )
-                            .padding(.top, 15)
-                            .padding(.bottom, 15)
-                            .padding(.trailing, 15)
+                            .padding(15)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.textBackgroundColor))
@@ -280,7 +278,7 @@ struct SearchView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.textBackgroundColor))
-                    .cornerRadius(4)
+                    .cornerRadius(8)
                     Spacer()
                         .frame(height: 0)
                     

@@ -176,7 +176,7 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Picker("Default post sort method", selection: UserPreferences.getInstance.$postSortMethod) {
                 ForEach(UserPreferences.getInstance.sortTypes, id: \.self) { method in
-                    Text(String(describing: method))
+                    Text(String(describing: method).spaceBeforeCapital())
                 }
             }
             Picker("Default comment sort method", selection: UserPreferences.getInstance.$commentSortMethod) {
@@ -191,7 +191,7 @@ struct PreferencesView: View {
             }
             Picker("Default profile sort method", selection: UserPreferences.getInstance.$profileSortMethod) {
                 ForEach(UserPreferences.getInstance.profileSortTypes, id: \.self) { method in
-                    Text(String(describing: method))
+                    Text(String(describing: method).spaceBeforeCapital())
                 }
             }
         }

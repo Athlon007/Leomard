@@ -100,7 +100,7 @@ struct PostUIView: View {
                 .frame(
                     minWidth: 0,
                     maxWidth: .infinity,
-                    minHeight: titleHeight + bodyHeight + imageHeight,
+                    minHeight: UserPreferences.getInstance.usePostCompactView ? 0 : titleHeight + bodyHeight + imageHeight,
                     maxHeight: .infinity,
                     alignment: .top
                 )
@@ -226,7 +226,7 @@ struct PostUIView: View {
                 Image(systemName: "lock.fill")
                     .foregroundColor(.green)
             }
-            Text(postView.post.name)
+            Text(postView.post.name.htmlDecoded)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 24))
@@ -380,7 +380,9 @@ struct PostUIView: View {
     private var communityPersonDate: some View {
         LazyHStack(spacing: 4) {
             Group {
-                Text("in")
+                if !UserPreferences.getInstance.usePostCompactView {
+                    Text("in")
+                }
                 CommunityAvatar(community: postView.community)
                 Text(UserPreferences.getInstance.preferDisplayNameCommunityPost ? self.postView.community.title : self.postView.community.name)
                     .fontWeight(.semibold)

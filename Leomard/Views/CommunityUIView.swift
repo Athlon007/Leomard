@@ -147,7 +147,7 @@ struct CommunityUIView: View {
                 .padding()
                 .background(Color(.windowBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
                 .listStyle(SidebarListStyle())
@@ -155,7 +155,7 @@ struct CommunityUIView: View {
                 .task {
                     communityRemoveText = ""
                 }
-                .cornerRadius(16)
+                .cornerRadius(8)
             }
         }
     }
@@ -340,7 +340,7 @@ struct CommunityUIView: View {
                         .padding(.trailing, 0)
                     Picker("", selection: $selectedSortType) {
                         ForEach(sortTypes, id: \.self) { method in
-                            Text(String(describing: method))
+                            Text(String(describing: method).spaceBeforeCapital())
                         }
                     }
                     .frame(maxWidth: 120)
@@ -437,9 +437,10 @@ struct CommunityUIView: View {
                 .frame(maxWidth: 600, maxHeight: 600)
                 .background(Color(.textBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
+                .cornerRadius(8)
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }

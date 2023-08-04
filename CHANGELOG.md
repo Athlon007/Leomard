@@ -16,10 +16,15 @@
     - Text editor itself now shows formatting as you type
 - Updated the About to include HighlightedTextEditor license
 - Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
+- Sort types dropdown text is now formatted correctly
+- General UI consistency improvements
 
 ### Bug Fixes
 
 - Fixed an issue where sometimes not all comments would load
+- Fixed a bug where if user toggled on compact view, the already loaded posts would not be compacted correctly
+- Trending will not show NSFW communities anymore
+- Fixed decoding HTML entities in the title of the post
 
 ## 0.4.1 (2023-07-30)
 
