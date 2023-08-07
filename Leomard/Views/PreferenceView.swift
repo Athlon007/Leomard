@@ -201,13 +201,16 @@ struct PreferencesView: View {
                 }
             }
         }
-        VStack(alignment: .leading) {
-            Text("NSFW")
+        GroupBox("NSFW") {
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Toggle("Show NSFW content in Feed", isOn: UserPreferences.getInstance.$showNsfwInFeed)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 16)
             Toggle("Blur NSFW content", isOn: UserPreferences.getInstance.$blurNsfw)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         GroupBox("Mark Post As Read") {
             Toggle("When opening the post", isOn: UserPreferences.getInstance.$markPostAsReadOnOpen)
                 .frame(maxWidth: .infinity, alignment: .leading)

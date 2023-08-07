@@ -26,6 +26,7 @@
 - Sort types dropdown text is now formatted correctly
 - General UI consistency improvements
 - Moved "Compact View" into "Display" preferences
+- Moved "Show Letter Separators" into "Display" preferences
 
 ### Bug Fixes
 
