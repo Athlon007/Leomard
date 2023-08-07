@@ -2,12 +2,12 @@
 //  ModBanView.swift
 //  Leomard
 //
-//  Created automatically by ts2swift 1.0 on 03/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
 
-struct ModBanView: Codable {
+struct ModBanView: Codable, Hashable {
     let modBan: ModBan
     let moderator: Person?
     let bannedPerson: Person

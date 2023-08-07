@@ -222,9 +222,9 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
-            landmarkName = "search()"
+            startingLineNumber = "776"
+            endingLineNumber = "776"
+            landmarkName = "toggleSearch()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -238,8 +238,8 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
+            startingLineNumber = "794"
+            endingLineNumber = "794"
             landmarkName = "search()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,9 +254,9 @@
             filePath = "Leomard/Views/CommunityUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "554"
-            endingLineNumber = "554"
-            landmarkName = "search()"
+            startingLineNumber = "777"
+            endingLineNumber = "777"
+            landmarkName = "toggleSearch()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2017,6 +2017,22 @@
             startingLineNumber = "49"
             endingLineNumber = "49"
             landmarkName = "getCommunities(page:showNsfw:sortType:listingType:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F974FBD8-40CB-4548-B18C-53C4AB8432EB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/CommunityUIView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "829"
+            endingLineNumber = "829"
+            landmarkName = "loadModlog()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

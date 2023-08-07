@@ -2,14 +2,14 @@
 //  ModRemovePost.swift
 //  Leomard
 //
-//  Created automatically by ts2swift 1.0 on 03/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
 
-struct ModRemovePost: Codable {
+struct ModRemovePost: Codable, Hashable {
     let id: Int
-    let modInt: Int
+    let modPersonId: Int
     let postId: Int
     let reason: String?
     let removed: Bool
@@ -18,7 +18,7 @@ struct ModRemovePost: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
-        self.modInt = try container.decode(Int.self, forKey: .modInt)
+        self.modPersonId = try container.decode(Int.self, forKey: .modPersonId)
         self.postId = try container.decode(Int.self, forKey: .postId)
         self.reason = try container.decodeIfPresent(String.self, forKey: .reason)
         self.removed = try container.decode(Bool.self, forKey: .removed)

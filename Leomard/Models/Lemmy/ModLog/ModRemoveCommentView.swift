@@ -2,12 +2,12 @@
 //  ModRemoveCommentView.swift
 //  Leomard
 //
-//  Created automatically by ts2swift 1.0 on 03/08/2023.
+//  Created automatically by ts2swift 1.2 on 04/08/2023.
 //
 
 import Foundation
 
-struct ModRemoveCommentView: Codable {
+struct ModRemoveCommentView: Codable, Hashable {
     let modRemoveComment: ModRemoveComment
     let moderator: Person?
     let comment: Comment
