@@ -214,6 +214,7 @@
 		B0EEFE582A7CF9C00065CB27 /* ModlogActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE572A7CF9C00065CB27 /* ModlogActionType.swift */; };
 		B0EEFE5A2A7CFAB90065CB27 /* GetModlog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE592A7CFAB90065CB27 /* GetModlog.swift */; };
 		B0EEFE5C2A7CFB0E0065CB27 /* ModlogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE5B2A7CFB0E0065CB27 /* ModlogService.swift */; };
+		B0EEFE602A8179BA0065CB27 /* PostOpenedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EEFE5F2A8179BA0065CB27 /* PostOpenedView.swift */; };
 		E45A506A2A69E263008ED437 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E45A50692A69E263008ED437 /* NukeUI */; };
 /* End PBXBuildFile section */
 
@@ -446,6 +447,7 @@
 		B0EEFE572A7CF9C00065CB27 /* ModlogActionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModlogActionType.swift; sourceTree = "<group>"; };
 		B0EEFE592A7CFAB90065CB27 /* GetModlog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetModlog.swift; sourceTree = "<group>"; };
 		B0EEFE5B2A7CFB0E0065CB27 /* ModlogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModlogService.swift; sourceTree = "<group>"; };
+		B0EEFE5F2A8179BA0065CB27 /* PostOpenedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostOpenedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -725,6 +727,7 @@
 				B05B21472A5ED8C100BA8FB2 /* CommentReplyUIView.swift */,
 				B05B214D2A5F2B7D00BA8FB2 /* PrivateMessageUIView.swift */,
 				B0EEFE0E2A7BADAE0065CB27 /* MarkdownEditor.swift */,
+				B0EEFE5F2A8179BA0065CB27 /* PostOpenedView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1102,6 +1105,7 @@
 				B091F86F2A5832D700F0DA32 /* SearchType.swift in Sources */,
 				B091F87A2A59C5AE00F0DA32 /* UserPreferences.swift in Sources */,
 				B0CEBE7D2A52CFA600982D4D /* MyUserInfo.swift in Sources */,
+				B0EEFE602A8179BA0065CB27 /* PostOpenedView.swift in Sources */,
 				B0CEBE822A52D08400982D4D /* LocalSite.swift in Sources */,
 				B0CEBE632A52C64600982D4D /* Language.swift in Sources */,
 				B05B21462A5EAF6D00BA8FB2 /* GetUnreadCountResponse.swift in Sources */,

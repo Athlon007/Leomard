@@ -70,7 +70,7 @@ struct PostUIView: View {
                         postBodyContent
                     }
                     Spacer(minLength: 6)
-                    if UserPreferences.getInstance.usePostCompactView {
+                    if UserPreferences.getInstance.usePostCompactView && shortBody {
                         HStack {
                             communityPersonDate
                                 .frame (
@@ -121,7 +121,8 @@ struct PostUIView: View {
                 })
             }
             .padding(Self.padding)
-            .background(Color(.textBackgroundColor))
+            .foregroundColor(getForegroundColor())
+            .background(getBackgroundColor())
             .cornerRadius(Self.cornerRadius)
             .onTapGesture {
                 self.contentView.openPost(postView: self.postView)
@@ -645,5 +646,21 @@ struct PostUIView: View {
                 postView.read = true
             }
         }
+    }
+    
+    func getBackgroundColor() -> Color {
+        if UserPreferences.getInstance.twoColumnView && shortBody {
+            return self.contentView.openedPostView == self.postView ? Color(.selectedContentBackgroundColor) : Color(.textBackgroundColor)
+        }
+        
+        return Color(.textBackgroundColor)
+    }
+    
+    func getForegroundColor() -> Color {
+        if UserPreferences.getInstance.twoColumnView && shortBody {
+            return self.contentView.openedPostView == self.postView ? Color(.white) : Color(.textColor)
+        }
+        
+        return Color(.textColor)
     }
 }

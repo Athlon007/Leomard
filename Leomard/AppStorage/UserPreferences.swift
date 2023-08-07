@@ -44,6 +44,7 @@ final class UserPreferences: ObservableObject {
     
     // MARK: - Post View
     @AppStorage("use_post_compact_view", store: .standard) var usePostCompactView: Bool = false
+    @AppStorage("two_column_view", store: .standard) var twoColumnView: Bool = false
     
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false

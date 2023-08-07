@@ -19,6 +19,7 @@ struct PreferencesView: View {
     fileprivate let preferenceOptions: [PreferenceOption] = [
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
+        .init(name: "Display", icon: "display", color: .teal),
         .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green)
         //.init(name: "Experimental", icon: "testtube.2", color: .red)
     ]
@@ -34,6 +35,10 @@ struct PreferencesView: View {
     ]
     @State fileprivate var selectedNotificaitonCheckFrequency: FrequencyOption = .init(name: "Err", seconds: 60)
     @State var manuallyCheckedForUpdate: Bool = false
+    
+    @State fileprivate var selectedViewType: ViewModeOption = .singleColumn
+    
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationSplitView {
@@ -60,6 +65,8 @@ struct PreferencesView: View {
             if selectedNotificaitonCheckFrequency.name == "Err" {
                 selectedNotificaitonCheckFrequency = notificationCheckFrequencies[3]
             }
+            
+            self.selectedViewType = UserPreferences.getInstance.twoColumnView ? .twoColumns : .singleColumn
         }
     }
     
@@ -120,8 +127,10 @@ struct PreferencesView: View {
                 case preferenceOptions[1]:
                     contentPreferences
                 case preferenceOptions[2]:
+                    displayPreferences
+                case preferenceOptions[3]:
                     updatesPreferences
-                //case preferenceOptions[3]:
+                //case preferenceOptions[4]:
                     //experimentalPreferences
                 default:
                     Text("")
@@ -196,9 +205,6 @@ struct PreferencesView: View {
             }
         }
         VStack(alignment: .leading) {
-            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
-        }
-        VStack(alignment: .leading) {
             Text("NSFW")
             Toggle("Show NSFW content", isOn: UserPreferences.getInstance.$showNsfw)
             Toggle("Show NSFW content in Feed", isOn: UserPreferences.getInstance.$showNsfwInFeed)
@@ -223,6 +229,56 @@ struct PreferencesView: View {
                 .textFieldStyle(.roundedBorder)
             Text("Any instances listed here will be filtered out. You won't see communities, posts, or comments from those instances. Simply type the hostname of the instance (comma-separated).")
                 .lineLimit(nil)
+        }
+    }
+    
+    @ViewBuilder
+    private var displayPreferences: some View {
+        VStack(alignment: .leading) {
+            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
+        }
+        GroupBox("View Mode") {
+            VStack {
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "PopupViewDark" : "PopupView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.twoColumnView = false
+                            selectedViewType = .singleColumn
+                        }
+                    Picker("", selection: $selectedViewType) {
+                        Text("Single-Column").tag(ViewModeOption.singleColumn)
+                    }
+                    .onChange(of: selectedViewType) { value in
+                        if value == ViewModeOption.singleColumn {
+                            UserPreferences.getInstance.twoColumnView = false
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+                Divider()
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "TwoColumnViewDark" : "TwoColumnView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.twoColumnView = true
+                            selectedViewType = .twoColumns
+                        }
+                    Picker("", selection: $selectedViewType) {
+                        Text("Two-Column").tag(ViewModeOption.twoColumns)
+                    }
+                    .onChange(of: selectedViewType) { value in
+                        if value == ViewModeOption.twoColumns {
+                            UserPreferences.getInstance.twoColumnView = true
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+            }
         }
     }
     
@@ -263,4 +319,9 @@ fileprivate struct PreferenceOption: Hashable {
     let name: String
     let icon: String
     let color: Color
+}
+
+fileprivate enum ViewModeOption {
+    case singleColumn
+    case twoColumns
 }
