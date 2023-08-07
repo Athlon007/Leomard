@@ -159,9 +159,6 @@ struct PreferencesView: View {
             Text("Inbox")
             Toggle("Show Unread only by default", isOn: UserPreferences.getInstance.$unreadonlyWhenOpeningInbox)
         }
-        VStack(alignment: .leading) {
-            Toggle("Followed List: Show Letter Separators", isOn: UserPreferences.getInstance.$navbarShowLetterSeparators)
-        }
         GroupBox("Prefer Display Name") {
             VStack {
                 Text("Communities")
@@ -280,6 +277,13 @@ struct PreferencesView: View {
                 }
             }
         }
+        GroupBox("Followed List") {
+            Toggle("Show Letter Separators", isOn: UserPreferences.getInstance.$navbarShowLetterSeparators)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("Show Communities Instances", isOn: UserPreferences.getInstance.$showCommunitiesInstances)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder

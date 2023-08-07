@@ -12,7 +12,8 @@
 - Two-column view
     - Posts will open in the second column, instead of a popup window
     - You can enable it in Preferences -> Display -> Two-column view
-- Added "Display" preferences
+- Add "Display" preferences
+- "Show Communities Instances" in Preferences -> Display
 
 ### Changes
 
