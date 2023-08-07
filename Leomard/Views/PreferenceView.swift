@@ -210,6 +210,8 @@ struct PreferencesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             Toggle("When voting on post", isOn: UserPreferences.getInstance.$markPostAsReadOnVote)
                 .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("When viewed in feed", isOn: UserPreferences.getInstance.$markPostAsReadOnDisappear)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         VStack {

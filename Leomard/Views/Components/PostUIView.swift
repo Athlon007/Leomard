@@ -38,9 +38,9 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
-
-	@State private var performedTasksWillAppear = false
-	@State var showFailedToFeatureAlert: Bool = false
+    
+    @State private var performedTasksWillAppear = false
+    @State var showFailedToFeatureAlert: Bool = false
     
     @State var startRemovePost: Bool = false
     @State var removalReason: String = ""
@@ -106,13 +106,13 @@ struct PostUIView: View {
                 )
                 
                 .task {
-					if performedTasksWillAppear == false {
-						performedTasksWillAppear = true
-						postBody = await postBodyTask()
-						postBodyMarkdownContent = await postBodyMarkdownContentTask()
-						url = await postUrlTask()
-						updatedTimeAsString = await updatedTimeAsStringTask()
-					}
+                    if performedTasksWillAppear == false {
+                        performedTasksWillAppear = true
+                        postBody = await postBodyTask()
+                        postBodyMarkdownContent = await postBodyMarkdownContentTask()
+                        url = await postUrlTask()
+                        updatedTimeAsString = await updatedTimeAsStringTask()
+                    }
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
                     Button("OK", action: {})
@@ -145,6 +145,9 @@ struct PostUIView: View {
             }, message: {
                 Text("State the reason of removal:")
             })
+            .onDisappear {
+                markPostAsReadOnDisapper()
+            }
         }
     }
     
@@ -472,18 +475,18 @@ struct PostUIView: View {
     private var compactViewVotes: some View {
         VStack {
             Image(systemName: "arrow.up")
-            .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-            .onTapGesture {
-                likePost()
-            }
-            .font(Font.headline.weight(.bold))
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                .onTapGesture {
+                    likePost()
+                }
+                .font(Font.headline.weight(.bold))
             Text(String(postView.counts.upvotes - postView.counts.downvotes))
             Image(systemName: "arrow.down")
-            .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-            .onTapGesture {
-                dislikePost()
-            }
-            .font(Font.headline.weight(.bold))
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                .onTapGesture {
+                    dislikePost()
+                }
+                .font(Font.headline.weight(.bold))
         }
     }
     
@@ -631,6 +634,15 @@ struct PostUIView: View {
                 self.postView = postResponse.postView
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+    
+    func markPostAsReadOnDisapper() {
+        if UserPreferences.getInstance.markPostAsReadOnDisappear && !postView.read {
+            self.postService.markAsRead(post: postView.post, read: true) { _ in
+                print("post \(postView.post.name) marked as read")
+                postView.read = true
             }
         }
     }

@@ -32,6 +32,7 @@ final class UserPreferences: ObservableObject {
     // MARK: - Mark as Read Stuff
     @AppStorage("mark_post_as_read_on_open", store: .standard) var markPostAsReadOnOpen: Bool = true
     @AppStorage("mark_post_as_read_on_vote", store: .standard) var markPostAsReadOnVote: Bool = true
+    @AppStorage("mark_post_as_read_on_disappear", store: .standard) var markPostAsReadOnDisappear: Bool = false
     @AppStorage("hide_read_posts", store: .standard) var hideReadPosts: Bool = false
     
     // MARK: - Not in Preferences.
