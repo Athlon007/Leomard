@@ -20,4 +20,8 @@ struct ModRemovePostView: Codable, Hashable {
         self.post = try container.decode(Post.self, forKey: .post)
         self.community = try container.decode(Community.self, forKey: .community)
     }
+    
+    func date() -> Date {
+        return modRemovePost.when_
+    }
 }

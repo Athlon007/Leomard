@@ -18,4 +18,8 @@ struct ModAddView: Codable, Hashable {
         self.moderator = try container.decodeIfPresent(Person.self, forKey: .moderator)
         self.moddedPerson = try container.decode(Person.self, forKey: .moddedPerson)
     }
+    
+    func date() -> Date {
+        return modAdd.when_
+    }
 }

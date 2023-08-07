@@ -7,6 +7,7 @@
 - The "!leomard@lemm.ee" in About view now opens the community in Leomard
 - Add "v" symbol to the right of comment, that doubles as Context Menu button for this comment
 - Add "Are you sure you want to close post creation" alert
+- Community modlog
 
 ### Changes
 

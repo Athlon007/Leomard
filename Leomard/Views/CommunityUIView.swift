@@ -57,6 +57,7 @@ struct CommunityUIView: View {
     // Modlog
     @State var modlogService: ModlogService? = nil
     @State var modlogResponse: GetModlogResponse = .init()
+    @State var selectedModlogActionType: ModlogActionType = .modRemovePost
     
     var body: some View {
         toolbar
@@ -461,8 +462,230 @@ struct CommunityUIView: View {
     
     @ViewBuilder
     private var modlog: some View {
-        VStack {
-            
+        Picker("", selection: $selectedModlogActionType) {
+            ForEach(ModlogActionType.allCasesCommunity, id: \.self) { method in
+                Text(String(describing: method).spaceBeforeCapital().replacingOccurrences(of: "Mod ", with: ""))
+            }
+            .onChange(of: selectedModlogActionType) { result in
+                if page != 1 {
+                    page = 1
+                    loadModlog()
+                }
+            }
+        }
+        
+        if isLoading {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .frame(maxWidth: .infinity)
+        }
+        
+        switch selectedModlogActionType {
+        case .modRemovePost:
+            if modlogResponse.removedPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemovePost.when_) {
+                    AnyView(
+                        Text("has \(result.modRemovePost.removed ? "removed" : "restored") post titled: \"\(result.post.name)\".\n\nReason: \(result.modRemovePost.reason ?? "not specified").")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modLockPost:
+            if modlogResponse.lockedPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.lockedPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modLockPost.when_) {
+                    AnyView(
+                        Text("has \(result.modLockPost.locked ? "locked" : "unlocked") post titled: \"\(result.post.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.lockedPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modFeaturePost:
+            if modlogResponse.featuredPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.featuredPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modFeaturePost.when_) {
+                    AnyView(
+                        Text("has \(result.modFeaturePost.featured ? "featured" : "unfeatured") post titled: \"\(result.post.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.featuredPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modRemoveComment:
+            if modlogResponse.removedComments.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedComments, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemoveComment.when_) {
+                    AnyView (
+                        HStack {
+                            Text("has \(result.modRemoveComment.removed ? "removed" : "restored") comment by")
+                            PersonDisplay(person: result.commenter, myself: $myself)
+                            Text("from post: \"\(result.post.name)\"")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedComments.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modRemoveCommunity:
+            if modlogResponse.removedCommunities.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedCommunities, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemoveCommunity.when_) {
+                    AnyView(
+                        Text("has \(result.modRemoveCommunity.removed ? "removed" : "restored") community: \"\(result.community.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedCommunities.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modBanFromCommunity:
+            if modlogResponse.bannedFromCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.bannedFromCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modBanFromCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modBanFromCommunity.banned ? "banned" : "unbanned")")
+                            PersonDisplay(person: result.bannedPerson, myself: $myself)
+                            Text("Reason: \(result.modBanFromCommunity.reason ?? "")")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.bannedFromCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modBan:
+            if modlogResponse.banned.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.banned, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modBan.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modBan.banned ? "banned" : "unbanned")")
+                            PersonDisplay(person: result.bannedPerson, myself: $myself)
+                            Text("Reason: \(result.modBan.reason ?? "")")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.banned.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modAddCommunity:
+            if modlogResponse.addedToCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.addedToCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modAddCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modAddCommunity.removed ? "removed from" : "added to") community")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.addedToCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modTransferCommunity:
+            if modlogResponse.transferredToCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.transferredToCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modTransferCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has transferred")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                            Text("to the community.")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.transferredToCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modAdd:
+            if modlogResponse.added.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.added, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modAdd.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has added")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                            Text("to the community.")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.added.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        default:
+            Text("Unimplemented log type, sorry!")
         }
     }
     
@@ -612,6 +835,8 @@ struct CommunityUIView: View {
                 self.modlogResponse = .init()
             }
             
+            isLoading = true
+            
             service.getModlog(community: communityResponse!.communityView.community, page: page) { result in
                 switch result {
                 case .success(let response):
@@ -619,6 +844,7 @@ struct CommunityUIView: View {
                     self.modlogResponse.lockedPosts += response.lockedPosts.filter {
                         !self.modlogResponse.lockedPosts.contains($0)
                     }
+                    
                     self.modlogResponse.featuredPosts += response.featuredPosts.filter {
                         !self.modlogResponse.featuredPosts.contains($0)
                     }
@@ -663,7 +889,39 @@ struct CommunityUIView: View {
                 case .failure(let error):
                     print(error)
                 }
+                isLoading = false
             }
         }
+    }
+}
+
+fileprivate extension HStack {
+    func ModlogEntry() -> some View {
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .backgroundStyle(Color(.textBackgroundColor))
+    }
+}
+
+fileprivate struct ModlogEntryView: View {
+    let mod: Person?
+    @Binding var myself: MyUserInfo?
+    let when: Date
+    @ViewBuilder var content: AnyView
+    
+    var body: some View {
+        HStack {
+            if let mod = mod {
+                PersonDisplay(person: mod, myself: $myself)
+            } else {
+                Text("Moderator")
+                    .bold()
+            }
+            content
+                .lineLimit(nil)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            DateDisplayView(date: when, showRealTime: true)
+        }
+        .ModlogEntry()
     }
 }

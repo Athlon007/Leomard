@@ -43,6 +43,17 @@ enum ModlogActionType: String, Codable, CustomStringConvertible {
         adminPurgePost,
         adminPurgeComment
     ]
+    
+    static let allCasesCommunity: [ModlogActionType] = [
+            modRemovePost,
+            modLockPost,
+            modFeaturePost,
+            modRemoveComment,
+            modRemoveCommunity,
+            modBanFromCommunity,
+            modAddCommunity,
+            modTransferCommunity
+        ]
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
