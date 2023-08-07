@@ -85,7 +85,12 @@ struct NavbarCommunityItem: View {
                         .foregroundColor(.black)
                 }
             }
-            Text((UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? community.title : community.name) + "@" + LinkHelper.stripToHost(link: community.actorId))
+            Text(
+                UserPreferences.getInstance.showCommunitiesInstances ?
+                    (UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? community.title : community.name) + "@" + LinkHelper.stripToHost(link: community.actorId)
+                :
+                    (UserPreferences.getInstance.preferDisplayNameCommunityFollowed ? community.title : community.name)
+            )
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading

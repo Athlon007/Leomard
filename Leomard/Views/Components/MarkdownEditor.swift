@@ -31,7 +31,7 @@ struct MarkdownEditor: View {
     
     @State var preview: Bool = false
     
-    let maxEditorHeight: Int = 26
+    let maxEditorHeight: Int = 13
     
     var body: some View {
         VStack {

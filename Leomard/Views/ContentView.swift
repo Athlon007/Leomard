@@ -63,67 +63,11 @@ struct ContentView: View {
     var body: some View {
         // - TODO: We're using this ZStack so we can add modal popups over our navigation split view. Perhaps using the `.overlay()` modifier on the split view might be more appropriate?
         ZStack {
-            NavigationSplitView(columnVisibility: $columnStatus) {
-                NavbarView(
-                    options: options,
-                    profileOption: $profileOption,
-                    currentSelection: $currentSelection,
-                    followedCommunities: $followedCommunities,
-                    contentView: self,
-                    currentCommunity: $openedCommunity,
-                    unreadMessagesCount: $unreadMessages
-                )
-                .listStyle(SidebarListStyle())
-                .navigationBarBackButtonHidden(true)
-                .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 750)
-            } detail: {
-                ZStack {
-                    VStack {
-                        switch currentSelection.id {
-                        case 1:
-                            InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, myself: $myUser, contentView: self, commentService: self.commentService!)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        case 2:
-                            SearchView(postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        case 3:
-                            profileOrLoginView()
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        default:
-                            FeedView(contentView: self, myself: $myUser, siteView: $siteView)
-                                .listStyle(SidebarListStyle())
-                                .scrollContentBackground(.hidden)
-                        }
-                    }
-                    
-                    profileView(openedPerson)
-                        .listStyle(SidebarListStyle())
-                        .scrollContentBackground(.hidden)
-                        .background(.thickMaterial)
-                    communityView(openedCommunity)
-                        .listStyle(SidebarListStyle())
-                        .scrollContentBackground(.hidden)
-                        .background(.thickMaterial)
-                }
-                .frame(minWidth: 600, minHeight: 400)
+            if UserPreferences.getInstance.twoColumnView {
+                twoColumnView
+            } else {
+                classicView
             }
-            .frame(minWidth: 600, minHeight: 400)
-            .task {
-                self.currentSelection = self.options[0]
-                self.requestHandler = RequestHandler()
-                self.siteService = SiteService(requestHandler: self.requestHandler!)
-                self.commentService = CommentService(requestHandler: self.requestHandler!)
-                self.postService = PostService(requestHandler: self.requestHandler!)
-                self.repliesService = RepliesService(requestHandler: self.requestHandler!)
-                
-                self.loadUserData()
-            }
-            
-            postPopup(openedPostView)
-                .opacity(postHidden ? 0 : 1)
             postCreationPopup(openedPostMakingForCommunity)
         }
         .allowsHitTesting(interactionEnabled)
@@ -193,6 +137,140 @@ struct ContentView: View {
         }, message: {
             Text(imageUploadFailReason)
         })
+    }
+    
+    @ViewBuilder
+    private var classicView: some View {
+        NavigationSplitView(columnVisibility: $columnStatus) {
+            NavbarView(
+                options: options,
+                profileOption: $profileOption,
+                currentSelection: $currentSelection,
+                followedCommunities: $followedCommunities,
+                contentView: self,
+                currentCommunity: $openedCommunity,
+                unreadMessagesCount: $unreadMessages
+            )
+            .listStyle(SidebarListStyle())
+            .navigationBarBackButtonHidden(true)
+            .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 750)
+        } detail: {
+            ZStack {
+                VStack {
+                    switch currentSelection.id {
+                    case 1:
+                        InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, myself: $myUser, contentView: self, commentService: self.commentService!)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    case 2:
+                        SearchView(postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    case 3:
+                        profileOrLoginView()
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    default:
+                        FeedView(contentView: self, myself: $myUser, siteView: $siteView)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    }
+                }
+                
+                profileView(openedPerson)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+                communityView(openedCommunity)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+            }
+            .frame(minWidth: 600, minHeight: 400)
+        }
+        .frame(minWidth: 600, minHeight: 400)
+        .task {
+            self.currentSelection = self.options[0]
+            self.requestHandler = RequestHandler()
+            self.siteService = SiteService(requestHandler: self.requestHandler!)
+            self.commentService = CommentService(requestHandler: self.requestHandler!)
+            self.postService = PostService(requestHandler: self.requestHandler!)
+            self.repliesService = RepliesService(requestHandler: self.requestHandler!)
+            
+            self.loadUserData()
+        }
+        
+        postPopup(openedPostView)
+            .opacity(postHidden ? 0 : 1)
+    }
+    
+    @ViewBuilder
+    private var twoColumnView: some View {
+        NavigationSplitView(columnVisibility: $columnStatus) {
+            NavbarView(
+                options: options,
+                profileOption: $profileOption,
+                currentSelection: $currentSelection,
+                followedCommunities: $followedCommunities,
+                contentView: self,
+                currentCommunity: $openedCommunity,
+                unreadMessagesCount: $unreadMessages
+            )
+            .listStyle(SidebarListStyle())
+            .navigationBarBackButtonHidden(true)
+            .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 750)
+        } content: {
+            ZStack {
+                VStack {
+                    switch currentSelection.id {
+                    case 1:
+                        InboxView(repliesService: self.repliesService!, requestHandler: self.requestHandler!, myself: $myUser, contentView: self, commentService: self.commentService!)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    case 2:
+                        SearchView(postService: postService!, commentService: commentService!, contentView: self, myself: $myUser)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    case 3:
+                        profileOrLoginView()
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    default:
+                        FeedView(contentView: self, myself: $myUser, siteView: $siteView)
+                            .listStyle(SidebarListStyle())
+                            .scrollContentBackground(.hidden)
+                    }
+                }
+                
+                profileView(openedPerson)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+                communityView(openedCommunity)
+                    .listStyle(SidebarListStyle())
+                    .scrollContentBackground(.hidden)
+                    .background(.thickMaterial)
+            }
+            .frame(minWidth: 600, minHeight: 400)
+        } detail: {
+            if self.openedPostView != nil {
+                List {
+                    PostOpenedView(postView: self.openedPostView!, contentView: self, commentService: commentService!, postService: postService!, myself: $myUser)
+                }
+                .frame(minWidth: 400)
+            }
+        }
+        .frame(minWidth: 600, minHeight: 400)
+        .task {
+            self.currentSelection = self.options[0]
+            self.requestHandler = RequestHandler()
+            self.siteService = SiteService(requestHandler: self.requestHandler!)
+            self.commentService = CommentService(requestHandler: self.requestHandler!)
+            self.postService = PostService(requestHandler: self.requestHandler!)
+            self.repliesService = RepliesService(requestHandler: self.requestHandler!)
+            
+            self.loadUserData()
+        }
     }
     
     /// - Returns: A view reflecting whether user is logged in to a profile or user needs to be prompted to log in.
@@ -295,8 +373,13 @@ struct ContentView: View {
     func openPost(postView: PostView) {
         postHidden = false
         if self.openedPostView != nil {
+            if UserPreferences.getInstance.twoColumnView && self.openedPostView == postView {
+                self.openedPostView = nil
+                return
+            }
+            
             self.openedPostView = nil
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 self.openedPostView = postView
             }
         } else {

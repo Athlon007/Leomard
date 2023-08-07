@@ -9,6 +9,11 @@
 - Add "Are you sure you want to close post creation" alert
 - Community modlog
 - Posts can now be marked as read when you scroll past them (disabled by default)
+- Two-column view
+    - Posts will open in the second column, instead of a popup window
+    - You can enable it in Preferences -> Display -> Two-column view
+- Add "Display" preferences
+- "Show Communities Instances" in Preferences -> Display
 
 ### Changes
 
@@ -20,6 +25,8 @@
 - Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
 - Sort types dropdown text is now formatted correctly
 - General UI consistency improvements
+- Moved "Compact View" into "Display" preferences
+- Moved "Show Letter Separators" into "Display" preferences
 
 ### Bug Fixes
 
@@ -27,6 +34,7 @@
 - Fixed a bug where if user toggled on compact view, the already loaded posts would not be compacted correctly
 - Trending will not show NSFW communities anymore
 - Fixed decoding HTML entities in the title of the post
+- If compact view is enabled, if you open a post, the bottom bar will not be displayed in a single row anymore
 
 ## 0.4.1 (2023-07-30)
 
