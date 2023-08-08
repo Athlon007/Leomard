@@ -194,17 +194,26 @@ struct MarkdownEditor: View {
     
     // Makes sure that the lists and quotes are automatically inserted.
     func updateAutoInsertMode() {
-        var removing = false        
-        let secondLast = selectRange.location - 1 > 0 ? bodyText[bodyText.index(bodyText.startIndex, offsetBy: selectRange.location - 1)] : Character("§")
+        var removing = false
+        
+        var last = Character("§")
+        var secondLast = Character("§")
+        if selectRange.location - 2 > 0 && selectRange.location <= bodyText.count {
+            let secondLastIndex = bodyText.index(bodyText.startIndex, offsetBy: selectRange.location - 2)
+            secondLast = bodyText[secondLastIndex]
+            
+            let lastIndex = bodyText.index(bodyText.startIndex, offsetBy: selectRange.location - 1)
+            last = bodyText[lastIndex]
+        }
 
         if previousBodyLength > bodyText.count && secondLast.isNewline {
             editorInsertionMode = .none
             removing = true
         }
         if !removing {
-            if bodyText.last == "-" {
+            if last == "-" && secondLast == "\n" {
                 editorInsertionMode = .bulletpoint
-            } else if bodyText.last == ">" {
+            } else if last == ">" && secondLast == "\n" {
                 editorInsertionMode = .quote
             }
         }
@@ -213,7 +222,7 @@ struct MarkdownEditor: View {
             autoInsertCharacterAdded = false
         }
         
-        if secondLast.isNewline && !autoInsertCharacterAdded {
+        if last.isNewline && !autoInsertCharacterAdded {
             if editorInsertionMode == .bulletpoint {
                 bodyText += "- "
                 adjustCursorBy += 2

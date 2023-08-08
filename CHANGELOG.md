@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.1 (TBA)
+
+### Bug Fixes
+
+- Fixed crash caused by text editor accessing index out of bounds
+- Fixed text editor inserting unexpected "-", if you wrote words with "-" in them and pressed "Return"
+
 ## 0.5 (2023-08-08)
 
 ### Added
