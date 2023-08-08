@@ -326,7 +326,9 @@ struct PreferencesView: View {
                 Button("?", action: {
                     self.helpText = """
 # Store liked posts locally
-Liked posts will be saved into your session, which then can browsed in your Profile view under \"Liked\" posts.\nLeomard does not know which posts you liked in other apps, and will add them if either you see that post in, or you like one in Leomard only.
+Liked posts will be saved into your session, which then can be browsed in your Profile view under **Liked** posts.
+
+Leomard does not know which posts you liked in other apps, and will add them if either you see that post in, or you like one in Leomard only.
 
 The information about what you like is securely stored on your device.
 """

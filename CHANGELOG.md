@@ -6,6 +6,7 @@
 
 - "Store Liked Posts" in Preferences -> Experiments
     - With this enabled, you can see all the posts you liked in the "Liked" tab in your profile
+- Added "Experiments" preferences
 
 ### Changes
 

@@ -110,11 +110,11 @@ struct ProfileView: View {
                     maxWidth: .infinity,
                     alignment: .center
                 )
-                .overlay(profileEditor)
             }
             .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
                 Button("OK", role: .cancel) {}
             }, message: { Text("Failed to change the session") })
+            .overlay(profileEditor)
         }
     }
     
@@ -337,6 +337,7 @@ struct ProfileView: View {
                     .onTapGesture {
                         isEditingProfile = false
                     }
+                    .ignoresSafeArea()
                 VStack {
                     VStack(alignment: .leading) {
                         HStack {
