@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.5.1 (TBA)
+## 0.5.1 (2023-08-08)
 
 ### Bug Fixes
 
 - Fixed crash caused by text editor accessing index out of bounds
 - Fixed text editor inserting unexpected "-", if you wrote words with "-" in them and pressed "Return"
+- Clicking opened post body won't close the post anymore
 
 ## 0.5 (2023-08-08)
 

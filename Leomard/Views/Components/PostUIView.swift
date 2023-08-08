@@ -125,6 +125,9 @@ struct PostUIView: View {
             .background(getBackgroundColor())
             .cornerRadius(Self.cornerRadius)
             .onTapGesture {
+                if !shortBody {
+                    return
+                }
                 self.contentView.openPost(postView: self.postView)
             }
             .contextMenu {
