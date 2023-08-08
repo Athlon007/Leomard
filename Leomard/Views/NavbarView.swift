@@ -59,6 +59,7 @@ struct NavbarView: View {
                         Image(systemName: "v.circle")
                             .foregroundColor(.secondary)
                             .rotationEffect(.degrees(followedVisible ? 180 : 0))
+                            .animation(.spring(), value: followedVisible)
                     }
                     .onTapGesture {
                         followedVisible = !followedVisible
