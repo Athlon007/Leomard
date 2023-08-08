@@ -38,9 +38,9 @@ struct PostUIView: View {
     @State var titleHeight: CGFloat = 0
     @State var bodyHeight: CGFloat = 0
     @State var imageHeight: CGFloat = 0
-
-	@State private var performedTasksWillAppear = false
-	@State var showFailedToFeatureAlert: Bool = false
+    
+    @State private var performedTasksWillAppear = false
+    @State var showFailedToFeatureAlert: Bool = false
     
     @State var startRemovePost: Bool = false
     @State var removalReason: String = ""
@@ -70,7 +70,7 @@ struct PostUIView: View {
                         postBodyContent
                     }
                     Spacer(minLength: 6)
-                    if UserPreferences.getInstance.usePostCompactView {
+                    if UserPreferences.getInstance.usePostCompactView && shortBody {
                         HStack {
                             communityPersonDate
                                 .frame (
@@ -100,19 +100,19 @@ struct PostUIView: View {
                 .frame(
                     minWidth: 0,
                     maxWidth: .infinity,
-                    minHeight: titleHeight + bodyHeight + imageHeight,
+                    minHeight: UserPreferences.getInstance.usePostCompactView ? 0 : titleHeight + bodyHeight + imageHeight,
                     maxHeight: .infinity,
                     alignment: .top
                 )
                 
                 .task {
-					if performedTasksWillAppear == false {
-						performedTasksWillAppear = true
-						postBody = await postBodyTask()
-						postBodyMarkdownContent = await postBodyMarkdownContentTask()
-						url = await postUrlTask()
-						updatedTimeAsString = await updatedTimeAsStringTask()
-					}
+                    if performedTasksWillAppear == false {
+                        performedTasksWillAppear = true
+                        postBody = await postBodyTask()
+                        postBodyMarkdownContent = await postBodyMarkdownContentTask()
+                        url = await postUrlTask()
+                        updatedTimeAsString = await updatedTimeAsStringTask()
+                    }
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
                     Button("OK", action: {})
@@ -121,7 +121,8 @@ struct PostUIView: View {
                 })
             }
             .padding(Self.padding)
-            .background(Color(.textBackgroundColor))
+            .foregroundColor(getForegroundColor())
+            .background(getBackgroundColor())
             .cornerRadius(Self.cornerRadius)
             .onTapGesture {
                 self.contentView.openPost(postView: self.postView)
@@ -145,6 +146,9 @@ struct PostUIView: View {
             }, message: {
                 Text("State the reason of removal:")
             })
+            .onDisappear {
+                markPostAsReadOnDisapper()
+            }
         }
     }
     
@@ -226,7 +230,7 @@ struct PostUIView: View {
                 Image(systemName: "lock.fill")
                     .foregroundColor(.green)
             }
-            Text(postView.post.name)
+            Text(postView.post.name.htmlDecoded)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 24))
@@ -254,6 +258,12 @@ struct PostUIView: View {
                     .onAppear {
                         self.bodyHeight = geometry.size.height
                     }
+            })
+            .markdownTextStyle(\.text, textStyle: {
+                ForegroundColor(getForegroundColor())
+            })
+            .markdownTextStyle(\.link, textStyle: {
+                ForegroundColor(getLinkColor())
             })
     }
     
@@ -380,7 +390,9 @@ struct PostUIView: View {
     private var communityPersonDate: some View {
         LazyHStack(spacing: 4) {
             Group {
-                Text("in")
+                if !UserPreferences.getInstance.usePostCompactView {
+                    Text("in")
+                }
                 CommunityAvatar(community: postView.community)
                 Text(UserPreferences.getInstance.preferDisplayNameCommunityPost ? self.postView.community.title : self.postView.community.name)
                     .fontWeight(.semibold)
@@ -390,7 +402,7 @@ struct PostUIView: View {
             }
             Group {
                 Text("by")
-                PersonDisplay(person: postView.creator, myself: $myself)
+                PersonDisplay(person: postView.creator, myself: $myself, defaultForegroundColor: getForegroundColor())
                     .onTapGesture {
                         self.contentView.openPerson(profile: postView.creator)
                     }
@@ -411,7 +423,7 @@ struct PostUIView: View {
                     Image(systemName: "arrow.up")
                     Text(String(postView.counts.upvotes))
                 }
-                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : getForegroundColor())
                 .onTapGesture {
                     likePost()
                 }
@@ -419,7 +431,7 @@ struct PostUIView: View {
                     Image(systemName: "arrow.down")
                     Text(String(postView.counts.downvotes))
                 }
-                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : getForegroundColor())
                 .onTapGesture {
                     dislikePost()
                 }
@@ -435,12 +447,12 @@ struct PostUIView: View {
                         Image(systemName: "pencil")
                     }
                     .buttonStyle(.link)
-                    .foregroundColor(.primary)
+                    .foregroundColor(getForegroundColor())
                     Button(action: { showConfirmDelete = true }) {
                         Image(systemName: "trash")
                     }
                     .buttonStyle(.link)
-                    .foregroundColor(.primary)
+                    .foregroundColor(getForegroundColor())
                     .alert("Confirm", isPresented: $showConfirmDelete, actions: {
                         Button("Delete", role: .destructive) { deletePost() }
                         Button("Cancel", role: .cancel) {}
@@ -453,12 +465,12 @@ struct PostUIView: View {
                 }
                 .help("Cross-Post")
                 .buttonStyle(.link)
-                .foregroundColor(.primary)
+                .foregroundColor(getForegroundColor())
                 HStack {
                     Image(systemName: "bookmark")
                 }
                 .frame(alignment: .trailing)
-                .foregroundColor(postView.saved ? .green : .primary)
+                .foregroundColor(postView.saved ? .green : getForegroundColor())
                 .onTapGesture {
                     savePost()
                 }
@@ -470,18 +482,18 @@ struct PostUIView: View {
     private var compactViewVotes: some View {
         VStack {
             Image(systemName: "arrow.up")
-            .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : .primary)
-            .onTapGesture {
-                likePost()
-            }
-            .font(Font.headline.weight(.bold))
+                .foregroundColor(postView.myVote != nil && postView.myVote! > 0 ? .orange : getForegroundColor())
+                .onTapGesture {
+                    likePost()
+                }
+                .font(Font.headline.weight(.bold))
             Text(String(postView.counts.upvotes - postView.counts.downvotes))
             Image(systemName: "arrow.down")
-            .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : .primary)
-            .onTapGesture {
-                dislikePost()
-            }
-            .font(Font.headline.weight(.bold))
+                .foregroundColor(postView.myVote != nil && postView.myVote! < 0 ? .blue : getForegroundColor())
+                .onTapGesture {
+                    dislikePost()
+                }
+                .font(Font.headline.weight(.bold))
         }
     }
     
@@ -631,5 +643,38 @@ struct PostUIView: View {
                 print(error)
             }
         }
+    }
+    
+    func markPostAsReadOnDisapper() {
+        if UserPreferences.getInstance.markPostAsReadOnDisappear && !postView.read {
+            self.postService.markAsRead(post: postView.post, read: true) { _ in
+                print("post \(postView.post.name) marked as read")
+                postView.read = true
+            }
+        }
+    }
+    
+    func getBackgroundColor() -> Color {
+        if UserPreferences.getInstance.twoColumnView && shortBody {
+            return self.contentView.openedPostView == self.postView ? Color(.selectedContentBackgroundColor) : Color(.textBackgroundColor)
+        }
+        
+        return Color(.textBackgroundColor)
+    }
+    
+    func getForegroundColor() -> Color {
+        if UserPreferences.getInstance.twoColumnView && shortBody {
+            return self.contentView.openedPostView == self.postView ? Color(.white) : Color(.textColor)
+        }
+        
+        return Color(.textColor)
+    }
+    
+    func getLinkColor() -> Color {
+        if UserPreferences.getInstance.twoColumnView && shortBody {
+            return self.contentView.openedPostView == self.postView ? Color(red: 185, green: 245, blue: 96) : Color(.linkColor)
+        }
+        
+        return Color(.linkColor)
     }
 }

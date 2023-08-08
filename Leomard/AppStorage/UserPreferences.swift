@@ -32,6 +32,7 @@ final class UserPreferences: ObservableObject {
     // MARK: - Mark as Read Stuff
     @AppStorage("mark_post_as_read_on_open", store: .standard) var markPostAsReadOnOpen: Bool = true
     @AppStorage("mark_post_as_read_on_vote", store: .standard) var markPostAsReadOnVote: Bool = true
+    @AppStorage("mark_post_as_read_on_disappear", store: .standard) var markPostAsReadOnDisappear: Bool = false
     @AppStorage("hide_read_posts", store: .standard) var hideReadPosts: Bool = false
     
     // MARK: - Not in Preferences.
@@ -43,9 +44,11 @@ final class UserPreferences: ObservableObject {
     
     // MARK: - Post View
     @AppStorage("use_post_compact_view", store: .standard) var usePostCompactView: Bool = false
+    @AppStorage("two_column_view", store: .standard) var twoColumnView: Bool = false
     
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false
+    @AppStorage("show_communities_instances", store: .standard) var showCommunitiesInstances: Bool = true
     
     // MARK: - Prefer Display Name
     @AppStorage("prefer_display_name_community_post", store: .standard) var preferDisplayNameCommunityPost: Bool = false

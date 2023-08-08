@@ -15,7 +15,7 @@ struct PostView: Hashable, Codable {
     public var counts: PostAggregates
     public let subscribed: String
     public let saved: Bool
-    public let read: Bool
+    public var read: Bool
     public let creatorBlocked: Bool
     public let unreadComments: Int
     public var myVote: Int?

@@ -25,7 +25,7 @@ struct LeomardApp: App {
         WindowGroup {
             ContentView(columnStatus: $mainWindowNavSplitStatus)
                 .frame(
-                    minWidth: mainWindowNavSplitStatus == .detailOnly ? 600 : 800,
+                    minWidth: getMinimumWidth(),
                     minHeight: 400,
                     idealHeight: 800)
                 .onAppear {
@@ -34,9 +34,6 @@ struct LeomardApp: App {
                     
                     DataLoader.sharedUrlCache.diskCapacity = 500 * (1024 * 1024)
                     DataLoader.sharedUrlCache.memoryCapacity = 0
-                }
-                .onDisappear {
-                    
                 }
                 .task {
                     checkForUpdateOnStart()
@@ -67,6 +64,14 @@ struct LeomardApp: App {
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowToolbarStyle(UnifiedWindowToolbarStyle())
         .windowResizability(.contentSize)
+    }
+    
+    func getMinimumWidth() -> CGFloat {
+        if UserPreferences.getInstance.twoColumnView {
+            return mainWindowNavSplitStatus == .detailOnly ? 1000 : 1200
+        } else {
+            return mainWindowNavSplitStatus == .detailOnly ? 600 : 800
+        }
     }
     
     func showPreferences() {

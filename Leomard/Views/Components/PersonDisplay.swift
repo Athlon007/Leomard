@@ -11,13 +11,14 @@ import SwiftUI
 struct PersonDisplay: View {
     let person: Person
     @Binding var myself: MyUserInfo?
+    var defaultForegroundColor: Color = .primary
     
     @State var color: Color = .primary
 
     var body: some View {
         PersonAvatar(person: person)
         Text(getDisplayName())
-            .PersonNameFormat(person: person, myself: myself)
+            .PersonNameFormat(person: person, myself: myself, defaultForegroundColor: defaultForegroundColor)
             .help(getHelpText())
     }
     
@@ -39,8 +40,8 @@ struct PersonDisplay: View {
 }
 
 extension Text {
-    func PersonNameFormat(person: Person, myself: MyUserInfo?) -> some View {
-        var color: Color = .primary
+    func PersonNameFormat(person: Person, myself: MyUserInfo?, defaultForegroundColor: Color = .primary) -> some View {
+        var color: Color = defaultForegroundColor
         if person.admin {
             color = .red
         }

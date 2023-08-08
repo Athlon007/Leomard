@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import MarkdownUI
 
 struct CommunityUIView: View {
     @State var community: Community
@@ -20,7 +19,8 @@ struct CommunityUIView: View {
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     @State var browseOptions: [Option] = [
         .init(id: 0, title: "Posts", imageName: "doc.plaintext"),
-        .init(id: 1, title: "Comments", imageName: "message")
+        .init(id: 1, title: "Comments", imageName: "message"),
+        .init(id: 2, title: "Modlog", imageName: "list.triangle")
     ]
     
     @State var communityService: CommunityService?
@@ -48,14 +48,16 @@ struct CommunityUIView: View {
     @State var postingRestrictedToMods: Bool = false
     @State var communityUpdateFail: Bool = false
     
-    @State var imageUploadFail: Bool = false
-    @State var imageUploadFailReason: String = ""
-    
     @State var showCommunityRemove: Bool = false
     @State var communityRemoved: Bool = false
     @State var communityRemoveText: String = ""
     
     @Environment(\.openURL) var openURL
+    
+    // Modlog
+    @State var modlogService: ModlogService? = nil
+    @State var modlogResponse: GetModlogResponse = .init()
+    @State var selectedModlogActionType: ModlogActionType = .modRemovePost
     
     var body: some View {
         toolbar
@@ -151,7 +153,7 @@ struct CommunityUIView: View {
                 .padding()
                 .background(Color(.windowBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
                 .listStyle(SidebarListStyle())
@@ -159,7 +161,7 @@ struct CommunityUIView: View {
                 .task {
                     communityRemoveText = ""
                 }
-                .cornerRadius(16)
+                .cornerRadius(8)
             }
         }
     }
@@ -196,6 +198,8 @@ struct CommunityUIView: View {
                 switch selectedBrowseOption.id {
                 case 1:
                     commentsList
+                case 2:
+                    modlog
                 default:
                     postsList
                 }
@@ -344,7 +348,7 @@ struct CommunityUIView: View {
                         .padding(.trailing, 0)
                     Picker("", selection: $selectedSortType) {
                         ForEach(sortTypes, id: \.self) { method in
-                            Text(String(describing: method))
+                            Text(String(describing: method).spaceBeforeCapital())
                         }
                     }
                     .frame(maxWidth: 120)
@@ -412,20 +416,8 @@ struct CommunityUIView: View {
                             VStack(alignment: .leading) {
                                 Text("Description")
                                     .bold()
-                                Button("Add Image", action: addImage)
-                                TextEditor(text: $description)
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                                    .lineLimit(5...)
-                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
-                                Text("Description Preview")
-                                    .bold()
-                                Markdown(MarkdownContent(description))
+                                MarkdownEditor(bodyText: $description, contentView: self.contentView)
+                                    .frame(maxHeight: .infinity)
                             }
                             VStack(alignment: .leading) {
                                 Toggle("NSFW", isOn: $nsfw)
@@ -453,22 +445,247 @@ struct CommunityUIView: View {
                 .frame(maxWidth: 600, maxHeight: 600)
                 .background(Color(.textBackgroundColor))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.windowFrameTextColor), lineWidth: 1)
                 )
+                .cornerRadius(8)
                 .listStyle(SidebarListStyle())
                 .scrollContentBackground(.hidden)
             }
-            .alert("Image Upload Failed", isPresented: $imageUploadFail, actions: {
-                Button("OK") {}
-            }, message: {
-                Text(imageUploadFailReason)
-            })
             .alert("Community Update Failure", isPresented: $communityUpdateFail, actions: {
                 Button("OK") {}
             }, message: {
                 Text("Failed to update the community. Try again later.")
             })
+        }
+    }
+    
+    @ViewBuilder
+    private var modlog: some View {
+        Picker("", selection: $selectedModlogActionType) {
+            ForEach(ModlogActionType.allCasesCommunity, id: \.self) { method in
+                Text(String(describing: method).spaceBeforeCapital().replacingOccurrences(of: "Mod ", with: ""))
+            }
+            .onChange(of: selectedModlogActionType) { result in
+                if page != 1 {
+                    page = 1
+                    loadModlog()
+                }
+            }
+        }
+        
+        if isLoading {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .frame(maxWidth: .infinity)
+        }
+        
+        switch selectedModlogActionType {
+        case .modRemovePost:
+            if modlogResponse.removedPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemovePost.when_) {
+                    AnyView(
+                        Text("has \(result.modRemovePost.removed ? "removed" : "restored") post titled: \"\(result.post.name)\".\n\nReason: \(result.modRemovePost.reason ?? "not specified").")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modLockPost:
+            if modlogResponse.lockedPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.lockedPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modLockPost.when_) {
+                    AnyView(
+                        Text("has \(result.modLockPost.locked ? "locked" : "unlocked") post titled: \"\(result.post.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.lockedPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modFeaturePost:
+            if modlogResponse.featuredPosts.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.featuredPosts, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modFeaturePost.when_) {
+                    AnyView(
+                        Text("has \(result.modFeaturePost.featured ? "featured" : "unfeatured") post titled: \"\(result.post.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.featuredPosts.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modRemoveComment:
+            if modlogResponse.removedComments.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedComments, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemoveComment.when_) {
+                    AnyView (
+                        HStack {
+                            Text("has \(result.modRemoveComment.removed ? "removed" : "restored") comment by")
+                            PersonDisplay(person: result.commenter, myself: $myself)
+                            Text("from post: \"\(result.post.name)\"")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedComments.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modRemoveCommunity:
+            if modlogResponse.removedCommunities.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.removedCommunities, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modRemoveCommunity.when_) {
+                    AnyView(
+                        Text("has \(result.modRemoveCommunity.removed ? "removed" : "restored") community: \"\(result.community.name)\"")
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.removedCommunities.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modBanFromCommunity:
+            if modlogResponse.bannedFromCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.bannedFromCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modBanFromCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modBanFromCommunity.banned ? "banned" : "unbanned")")
+                            PersonDisplay(person: result.bannedPerson, myself: $myself)
+                            Text("Reason: \(result.modBanFromCommunity.reason ?? "")")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.bannedFromCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modBan:
+            if modlogResponse.banned.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.banned, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modBan.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modBan.banned ? "banned" : "unbanned")")
+                            PersonDisplay(person: result.bannedPerson, myself: $myself)
+                            Text("Reason: \(result.modBan.reason ?? "")")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.banned.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modAddCommunity:
+            if modlogResponse.addedToCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.addedToCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modAddCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has \(result.modAddCommunity.removed ? "removed from" : "added to") community")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.addedToCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modTransferCommunity:
+            if modlogResponse.transferredToCommunity.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.transferredToCommunity, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modTransferCommunity.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has transferred")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                            Text("to the community.")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.transferredToCommunity.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        case .modAdd:
+            if modlogResponse.added.count == 0 && !isLoading {
+                Text("No entries.")
+            }
+            ForEach(modlogResponse.added, id: \.self) { result in
+                ModlogEntryView(mod: result.moderator, myself: $myself, when: result.modAdd.when_) {
+                    AnyView(
+                        HStack {
+                            Text("has added")
+                            PersonDisplay(person: result.moddedPerson, myself: $myself)
+                            Text("to the community.")
+                        }
+                    )
+                }
+                .onAppear {
+                    if result == modlogResponse.added.last {
+                        page += 1
+                        loadModlog()
+                    }
+                }
+                Spacer()
+            }
+        default:
+            Text("Unimplemented log type, sorry!")
         }
     }
     
@@ -530,6 +747,8 @@ struct CommunityUIView: View {
         
         if selectedBrowseOption.id == 0 {
             loadPosts()
+        }  else if selectedBrowseOption.id == 2 {
+            loadModlog()
         } else {
             loadComments()
         }
@@ -594,48 +813,6 @@ struct CommunityUIView: View {
         }
     }
     
-    func addImage() {
-        let panel = NSOpenPanel()
-        panel.prompt = "Select file"
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.canCreateDirectories = false
-        panel.canChooseFiles = true
-        panel.allowedContentTypes = [
-            .init(importedAs: "leomard.supported.image.types.jpg"),
-            .init(importedAs: "leomard.supported.image.types.jpeg"),
-            .init(importedAs: "leomard.supported.image.types.png"),
-            .init(importedAs: "leomard.supported.image.types.webp"),
-            .init(importedAs: "leomard.supported.image.types.gif")
-        ]
-        panel.begin { (result) -> Void in
-            self.contentView.toggleInteraction(true)
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue, let url = panel.url {
-                let imageService = ImageService(requestHandler: RequestHandler())
-                imageService.uploadImage(url: url) { result in
-                    switch result {
-                    case .success(let imageUploadResponse):
-                        if description.count > 0 {
-                            description += "\n\n"
-                        }
-                        
-                        description += "![](\(imageUploadResponse.data.link))\n\n"
-                    case .failure(let error):
-                        if error is LeomardExceptions {
-                            self.imageUploadFailReason = String(describing: error as! LeomardExceptions)
-                        } else {
-                            self.imageUploadFailReason = "Unable to upload the image :("
-                        }
-                        
-                        self.imageUploadFail = true
-                    }
-                }
-            }
-        }
-        panel.orderFrontRegardless()
-        self.contentView.toggleInteraction(false)
-    }
-    
     func saveCommunitySettings() {
         communityService?.edit(community: community, displayName: title, description: description, nsfw: nsfw, postingRestrictedToMods: postingRestrictedToMods) { result in
             switch result {
@@ -646,5 +823,105 @@ struct CommunityUIView: View {
                 communityUpdateFail = true
             }
         }
+    }
+    
+    func loadModlog() {
+        if modlogService == nil {
+            modlogService = ModlogService(requestHandler: RequestHandler())
+        }
+        
+        if let service = modlogService {
+            if page == 1 {
+                self.modlogResponse = .init()
+            }
+            
+            isLoading = true
+            
+            service.getModlog(community: communityResponse!.communityView.community, page: page) { result in
+                switch result {
+                case .success(let response):
+                    self.modlogResponse.removedPosts += response.removedPosts.filter { !self.modlogResponse.removedPosts.contains($0)}
+                    self.modlogResponse.lockedPosts += response.lockedPosts.filter {
+                        !self.modlogResponse.lockedPosts.contains($0)
+                    }
+                    
+                    self.modlogResponse.featuredPosts += response.featuredPosts.filter {
+                        !self.modlogResponse.featuredPosts.contains($0)
+                    }
+                    self.modlogResponse.removedComments += response.removedComments.filter {
+                        !self.modlogResponse.removedComments.contains($0)
+                    }
+                    self.modlogResponse.removedCommunities += response.removedCommunities.filter {
+                        !self.modlogResponse.removedCommunities.contains($0)
+                    }
+                    self.modlogResponse.bannedFromCommunity += response.bannedFromCommunity.filter {
+                        !self.modlogResponse.bannedFromCommunity.contains($0)
+                    }
+                    self.modlogResponse.banned += response.banned.filter {
+                        !self.modlogResponse.banned.contains($0)
+                    }
+                    self.modlogResponse.addedToCommunity += response.addedToCommunity.filter {
+                        !self.modlogResponse.addedToCommunity.contains($0)
+                    }
+                    self.modlogResponse.transferredToCommunity += response.transferredToCommunity.filter {
+                        !self.modlogResponse.transferredToCommunity.contains($0)
+                    }
+                    self.modlogResponse.added += response.added.filter {
+                        !self.modlogResponse.added.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedPersons += response.adminPurgedPersons.filter {
+                        !self.modlogResponse.adminPurgedPersons.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedCommunities += response.adminPurgedCommunities.filter {
+                        !self.modlogResponse.adminPurgedCommunities.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedPosts += response.adminPurgedPosts.filter {
+                        !self.modlogResponse.adminPurgedPosts.contains($0)
+                    }
+                    self.modlogResponse.adminPurgedComments += response.adminPurgedComments.filter {
+                        !self.modlogResponse.adminPurgedComments.contains($0)
+                    }
+                    self.modlogResponse.hiddenCommunities += response.hiddenCommunities.filter {
+                        !self.modlogResponse.hiddenCommunities.contains($0)
+                    }
+                    
+                    page += 1
+                case .failure(let error):
+                    print(error)
+                }
+                isLoading = false
+            }
+        }
+    }
+}
+
+fileprivate extension HStack {
+    func ModlogEntry() -> some View {
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .backgroundStyle(Color(.textBackgroundColor))
+    }
+}
+
+fileprivate struct ModlogEntryView: View {
+    let mod: Person?
+    @Binding var myself: MyUserInfo?
+    let when: Date
+    @ViewBuilder var content: AnyView
+    
+    var body: some View {
+        HStack {
+            if let mod = mod {
+                PersonDisplay(person: mod, myself: $myself)
+            } else {
+                Text("Moderator")
+                    .bold()
+            }
+            content
+                .lineLimit(nil)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            DateDisplayView(date: when, showRealTime: true)
+        }
+        .ModlogEntry()
     }
 }

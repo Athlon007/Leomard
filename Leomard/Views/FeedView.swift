@@ -21,6 +21,8 @@ final class FeedViewModel: ObservableObject {
     @Published private(set) var page: Int = 1
     @Published var postsResponse: GetPostsResponse = .init()
     
+    @Published var openedPost: PostView? = nil
+    
     func loadPosts() {
         if isLoadingPosts {
             return
@@ -97,7 +99,7 @@ struct FeedView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $viewModel.selectedListing) {
                     ForEach(ListingType.allCases, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)
@@ -111,7 +113,7 @@ struct FeedView: View {
                     .padding(.trailing, 0)
                 Picker("", selection: $viewModel.selectedSort) {
                     ForEach(sortTypes, id: \.self) { method in
-                        Text(String(describing: method))
+                        Text(String(describing: method).spaceBeforeCapital())
                     }
                 }
                 .frame(maxWidth: 80)
@@ -133,13 +135,17 @@ struct FeedView: View {
             GeometryReader { proxy in
                 HStack {
                     feedPostsList
-                    feedPageSidebar(visible: proxy.size.width > 1000)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: 400,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
+                    if UserPreferences.getInstance.twoColumnView {
+                        feedPostView(visible: proxy.size.width > 1000)
+                    } else {
+                        feedPageSidebar(visible: proxy.size.width > 1000)
+                            .frame(
+                                minWidth: 0,
+                                maxWidth: 400,
+                                maxHeight: .infinity,
+                                alignment: .center
+                            )
+                    }
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -195,6 +201,23 @@ struct FeedView: View {
                     maxWidth: .infinity
                 )
                 .cornerRadius(8)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func feedPostView(visible: Bool) -> some View {
+        if visible {
+            if self.viewModel.openedPost != nil {
+                List {
+                    PostOpenedView(postView: self.viewModel.openedPost!, contentView: contentView, commentService: CommentService(requestHandler: RequestHandler()), postService: PostService(requestHandler: RequestHandler()), myself: $myself)
+                }
+                .frame(maxWidth: 600)
+                .background(Color(.textBackgroundColor))
+                .cornerRadius(8)
+                .padding(.top, 15)
+            } else {
+                EmptyView()
             }
         }
     }

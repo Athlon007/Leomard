@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.5 (2023-08-08)
+
+### Added
+
+- Two-column view
+    - Posts will open in the second column, instead of a popup window
+    - You can enable it in Preferences -> Display -> Two-column view
+- The "!leomard@lemm.ee" in About view now opens the community in Leomard
+- Add "v" symbol to the right of comment, that doubles as Context Menu button for this comment
+- Add "Are you sure you want to close post creation" alert
+- Community modlog
+- Posts can now be marked as read when you scroll past them (disabled by default)
+- Add "Display" preferences
+- "Show Communities Instances" in Preferences -> Display
+
+### Changes
+
+- Big improvements to Post editor:
+    - Added a toolbar with buttons for formatting
+    - If you create a list or quote and press "Return", the next line will automatically start with the same formatting
+    - Text editor itself now shows formatting as you type
+- Updated the About to include HighlightedTextEditor license
+- Comment creator, profile sidebar editor and community sidebar editor now use the same text editor
+- Sort types dropdown text is now formatted correctly
+- General UI consistency improvements
+- Moved "Compact View" into "Display" preferences
+- Moved "Show Letter Separators" into "Display" preferences
+
+### Bug Fixes
+
+- Fixed an issue where sometimes not all comments would load
+- Fixed a bug where if user toggled on compact view, the already loaded posts would not be compacted correctly
+- Trending will not show NSFW communities anymore
+- Fixed decoding HTML entities in the title of the post
+- If compact view is enabled, if you open a post, the bottom bar will not be displayed in a single row anymore
+
 ## 0.4.1 (2023-07-30)
 
 ### Bug Fixes

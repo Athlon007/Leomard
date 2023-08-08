@@ -65,3 +65,4 @@ This project is licensed under GPL-3.0. See [LICENSE](LICENSE.md) for more infor
 - App Icon by [vintprox](https://github.com/vintprox) licensed under CC-BY-SA
 - [swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) licensed under MIT License
 - [Nuke](https://github.com/kean/Nuke) licensed under MIT License
+- [HighlightedTextEditor](https://github.com/kyle-n/HighlightedTextEditor) licensed under MIT License
