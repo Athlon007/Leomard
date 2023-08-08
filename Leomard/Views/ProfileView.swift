@@ -68,6 +68,9 @@ struct ProfileView: View {
             .task {
                 if person == myself?.localUserView.person {
                     browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
+                    if UserPreferences.getInstance.saveLikedPosts {
+                        browseOptions.append(Option(id: 3, title: "Liked", imageName: "hand.thumbsup"))
+                    }
                 }
                 
                 let requestHandler = RequestHandler()
@@ -553,7 +556,11 @@ struct ProfileView: View {
     
     func reloadFeed() {
         page = 1
-        loadPersonDetails()
+        if selectedBrowseOption.id == 3 {
+            loadLikedPosts()
+        } else {
+            loadPersonDetails()
+        }
     }
     
     func loadPostFromComment(commentView: CommentView) {
@@ -615,7 +622,7 @@ struct ProfileView: View {
             switch result {
             case .success(let loginResponse):
                 isEditingProfile = false
-                let success = SessionStorage.getInstance.updateCurrentSessionInfo(newInformation: loginResponse)
+                let success = SessionStorage.getInstance.updateCurrent(loginResponse: loginResponse)
                 if !success {
                     updateProfileFail = true
                     return
@@ -665,6 +672,29 @@ struct ProfileView: View {
                 print(error)
             }
         }
+    }
+    
+    func loadLikedPosts() {
+        if page == 1 {
+            self.personDetails!.posts = []
+        }
+        
+        let limit = 10
+        let startIndex = (page - 1) * limit
+        let endIndex = page * limit - 1
+        
+        for id in SessionStorage.getInstance.getCurrentSession()!.likedPosts[startIndex...endIndex] {
+            postService!.getPost(id: id) { result in
+                switch result {
+                case .success(let postResponse):
+                    self.personDetails!.posts += [ postResponse.postView ]
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
+        page += 1
     }
 }
 

@@ -65,13 +65,13 @@ final class SessionStorage {
         return self.updateKeychain()
     }
     
-    public func updateCurrentSessionInfo(newInformation: LoginResponse) -> Bool {
+    public func updateCurrent(loginResponse: LoginResponse) -> Bool {
         if sessions.currentSession == nil {
             return false
         }
         
         var updated = sessions.currentSession!
-        updated.loginResponse = newInformation
+        updated.loginResponse = loginResponse
         
         let index = sessions.allSessions.firstIndex(of: sessions.currentSession!)
         if index == nil {
@@ -162,5 +162,39 @@ final class SessionStorage {
         let context = LAContext()
         context.interactionNotAllowed = true
         return context
+    }
+    
+    public func addLikedPost(post: Post) -> Bool {
+        if var updated = sessions.currentSession, !updated.likedPosts.contains(post.id) {
+            updated.likedPosts.insert(post.id, at: 0)
+            
+            let index = sessions.allSessions.firstIndex(of: sessions.currentSession!)
+            if index == nil {
+                return false
+            }
+            
+            sessions.allSessions[index!] = updated
+            sessions.currentSession = updated
+            
+            return self.updateKeychain()
+        }
+        return false
+    }
+    
+    public func removeLikedPost(post: Post) -> Bool {
+        if var updated = sessions.currentSession, updated.likedPosts.contains(post.id) {
+            updated.likedPosts = updated.likedPosts.filter { $0 != post.id }
+            
+            let index = sessions.allSessions.firstIndex(of: sessions.currentSession!)
+            if index == nil {
+                return false
+            }
+            
+            sessions.allSessions[index!] = updated
+            sessions.currentSession = updated
+            
+            return self.updateKeychain()
+        }
+        return false
     }
 }
