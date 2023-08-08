@@ -35,16 +35,12 @@ final class UserPreferences: ObservableObject {
     @AppStorage("mark_post_as_read_on_disappear", store: .standard) var markPostAsReadOnDisappear: Bool = false
     @AppStorage("hide_read_posts", store: .standard) var hideReadPosts: Bool = false
     
-    // MARK: - Not in Preferences.
-    @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
-    @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
-    
     // MARK: - Blocked instances
     @AppStorage("blocked_instances", store: .standard) var blockedInstances: String = ""
     
     // MARK: - Post View
     @AppStorage("use_post_compact_view", store: .standard) var usePostCompactView: Bool = false
-    @AppStorage("two_column_view", store: .standard) var twoColumnView: Bool = false
+    @AppStorage("two_column_view", store: .standard) var twoColumnView: Bool = true
     
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false
@@ -54,6 +50,15 @@ final class UserPreferences: ObservableObject {
     @AppStorage("prefer_display_name_community_post", store: .standard) var preferDisplayNameCommunityPost: Bool = false
     @AppStorage("prefer_display_name_communtiy_followed", store: .standard) var preferDisplayNameCommunityFollowed: Bool = false
     @AppStorage("prefer_display_name_people_post", store: .standard) var preferDisplayNamePeoplePost: Bool = false
+    
+    // MARK: - Liked Posts
+    @AppStorage("save_liked_posts", store: .standard) var saveLikedPosts: Bool = false
+    
+    
+    
+    // MARK: - Not in Preferences.
+    @AppStorage("skipped_update_version", store: .standard) var skippedUpdateVersion: String = ""
+    @AppStorage("last_update_check_date", store: .standard) var lastUpdateCheckDate: Date = Date()
     
     let sortTypes: [SortType] = [ .topHour, .topDay, .topMonth, .topYear, .hot, .active, .new, .mostComments ]
     let profileSortTypes: [SortType] = [ .topWeek, .topMonth, .topYear, .hot, .active, .new, .mostComments, .old ]

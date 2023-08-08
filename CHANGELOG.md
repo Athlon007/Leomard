@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6 (TBA)
+
+### Added
+
+- "Store Liked Posts" in Preferences -> Experiments
+    - With this enabled, you can see all the posts you liked in the "Liked" tab in your profile
+- Added "Experiments" preferences
+
+### Changes
+
+- "Two-Colum View" is now the default view
+
 ## 0.5.1 (TBA)
 
 ### Bug Fixes

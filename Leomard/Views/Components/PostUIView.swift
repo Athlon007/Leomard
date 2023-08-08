@@ -112,6 +112,10 @@ struct PostUIView: View {
                         postBodyMarkdownContent = await postBodyMarkdownContentTask()
                         url = await postUrlTask()
                         updatedTimeAsString = await updatedTimeAsStringTask()
+                        
+                        if let vote = postView.myVote, vote > 0 {
+                            _ = SessionStorage.getInstance.addLikedPost(post: postView.post)
+                        }
                     }
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
