@@ -36,7 +36,15 @@ struct PostCreationPopup: View {
     @State var selectedCrossCommunity: Community? = nil
     
     @State var showCloseDialog: Bool = false
-
+    
+    @State var showDraftsDialog: Bool = false
+    
+    @State var postDrafts: PostDrafts = .init()
+    @State var drafts: [PostDraft] = []
+    
+    @State var stopAutosave: Bool = false
+    @State var restoredAutosave: PostDraft? = nil
+    @State var showAutosaveFoundAlert: Bool = false
     
     var body: some View {
         ZStack {
@@ -59,6 +67,11 @@ struct PostCreationPopup: View {
                             preClose()
                         })
                             .buttonStyle(.link)
+                        Spacer()
+                        Button("Drafts", action: {
+                            showDraftsDialog = true
+                        })
+                        .buttonStyle(.link)
                     }
                     .frame(
                         minWidth: 0,
@@ -66,6 +79,7 @@ struct PostCreationPopup: View {
                         alignment: .leading
                     )
                     .padding(.leading, 20)
+                    .padding(.trailing, 20)
                     .padding(.top, 10)
                     .padding(.bottom, 0)
                     
@@ -181,6 +195,7 @@ struct PostCreationPopup: View {
                             Spacer()
                         }.frame(alignment: .leading)
                     }
+                    .allowsHitTesting(!showDraftsDialog)
                     .padding()
                 }
                 .frame(
@@ -214,14 +229,19 @@ struct PostCreationPopup: View {
         }, message: {
             Text(alertMessage)
         })
-        .alert("Close Post Creation?", isPresented: $showCloseDialog, actions: {
+        .alert("Save Post As Draft?", isPresented: $showCloseDialog, actions: {
             Button("Yes") {
+                saveDraft()
                 close()
             }
-            Button("No", role: .cancel) {}
-        }, message: {
-            Text("Your post will be lost.")
+            Button("No") {
+                close()
+            }
+            Button("Cancel", role: .cancel) {}
         })
+        .overlay {
+            draftsOverlay
+        }
         .task {
             if self.editedPost != nil {
                 self.title = self.editedPost!.post.name
@@ -240,6 +260,124 @@ struct PostCreationPopup: View {
                     }
                 }
             }
+            
+            self.restoredAutosave = postDrafts.loadAutosave()
+            if self.restoredAutosave != nil {
+                showAutosaveFoundAlert = true
+            } else {
+                self.autosave()
+            }
+        }
+        .alert("Autosave File Found", isPresented: $showAutosaveFoundAlert, actions: {
+            Button("Restore") {
+                self.title = restoredAutosave!.title
+                self.bodyText = restoredAutosave!.body
+                self.url = restoredAutosave!.url
+                self.isNsfw = restoredAutosave!.nsfw
+                
+                autosave()
+            }
+            Button("Continue", role: .cancel) {
+                autosave()
+            }
+        }, message: {
+            Text("An autosave file has been found. Would you like to restore it?")
+        })
+    }
+    
+    @ViewBuilder
+    private var draftsOverlay: some View {
+        if showDraftsDialog {
+            ZStack {
+                Color(white: 0, opacity: 0.33)
+                    .onTapGesture {
+                        showDraftsDialog = false
+                    }
+                    .ignoresSafeArea()
+                VStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Button("Dismiss", action: { showDraftsDialog = false })
+                                .buttonStyle(.link)
+                            Spacer()
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.top, 10)
+                        .padding(.bottom, 0)
+                        Spacer()
+                        if self.drafts.count == 0 {
+                            Text("No drafts found.")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                        List(self.drafts, id: \.self) { draft in
+                            HStack {
+                                VStack {
+                                    if draft.title.count > 0 {
+                                        Text(draft.title)
+                                            .bold()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .font(.system(size: 24))
+                                    }
+                                    if draft.url.count > 0 {
+                                        Text(draft.url)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .foregroundColor(.secondary)
+                                            .italic()
+                                    }
+                                    if draft.body.count > 0 {
+                                        Text(draft.body)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                Button(action: {
+                                    self.title = draft.title
+                                    self.bodyText = draft.body
+                                    self.url = draft.url
+                                    self.isNsfw = draft.nsfw
+                                    
+                                    showDraftsDialog = false
+                                }) {
+                                    Image(systemName: "pencil")
+                                }
+                                .help("Use draft")
+                                .buttonStyle(.link)
+                                Button(action: {
+                                    self.postDrafts.deleteDraft(draft: draft)
+                                    self.drafts = postDrafts.loadDrafts()
+                                }) {
+                                    Image(systemName: "trash")
+                                }
+                                .help("Delete draft")
+                                .foregroundColor(.red)
+                                .buttonStyle(.link)
+                            }
+                            .frame(maxWidth: .infinity)
+                            Divider()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .textFieldStyle(.roundedBorder)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .padding()
+                .frame(maxWidth: 600, maxHeight: 600)
+                .background(Color(.textBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
+                .cornerRadius(8)
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+            }
+            .task {
+                self.drafts = postDrafts.loadDrafts()
+            }
         }
     }
     
@@ -252,6 +390,8 @@ struct PostCreationPopup: View {
     }
     
     func close() {
+        stopAutosave = true
+        postDrafts.removeAutosave()
         contentView.closePostCreation()
     }
     
@@ -347,6 +487,22 @@ struct PostCreationPopup: View {
                 print(error)
                 // TODO: Show error.
             }
+        }
+    }
+    
+    func saveDraft() {
+        let post = PostDraft(title: self.title, body: self.bodyText, url: self.url, nsfw: self.isNsfw)
+        self.postDrafts.saveDraft(postDraft: post)
+    }
+    
+    func autosave() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if stopAutosave {
+                return
+            }
+            
+            postDrafts.saveAutosave(postDraft: .init(title: self.title, body: self.bodyText, url: self.url, nsfw: isNsfw))
+            autosave()
         }
     }
 }

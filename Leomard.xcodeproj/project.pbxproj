@@ -117,6 +117,8 @@
 		B091F87C2A5AA56C00F0DA32 /* SavePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87B2A5AA56C00F0DA32 /* SavePost.swift */; };
 		B091F87E2A5AA84F00F0DA32 /* SaveComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87D2A5AA84F00F0DA32 /* SaveComment.swift */; };
 		B091F8802A5AE3A300F0DA32 /* LemmyInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */; };
+		B0A334CA2A83914800D09C39 /* PostDrafts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334C92A83914800D09C39 /* PostDrafts.swift */; };
+		B0A334CC2A83966400D09C39 /* PostDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334CB2A83966400D09C39 /* PostDraft.swift */; };
 		B0A910B72A72870500959A1D /* RemovePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910B62A72870500959A1D /* RemovePost.swift */; };
 		B0A910B92A728AE500959A1D /* LockPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910B82A728AE400959A1D /* LockPost.swift */; };
 		B0A910BB2A72E41400959A1D /* DistinguishComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910BA2A72E41400959A1D /* DistinguishComment.swift */; };
@@ -348,6 +350,8 @@
 		B091F87B2A5AA56C00F0DA32 /* SavePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavePost.swift; sourceTree = "<group>"; };
 		B091F87D2A5AA84F00F0DA32 /* SaveComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveComment.swift; sourceTree = "<group>"; };
 		B091F87F2A5AE3A300F0DA32 /* LemmyInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LemmyInstance.swift; sourceTree = "<group>"; };
+		B0A334C92A83914800D09C39 /* PostDrafts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDrafts.swift; sourceTree = "<group>"; };
+		B0A334CB2A83966400D09C39 /* PostDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraft.swift; sourceTree = "<group>"; };
 		B0A910B62A72870500959A1D /* RemovePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovePost.swift; sourceTree = "<group>"; };
 		B0A910B82A728AE400959A1D /* LockPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPost.swift; sourceTree = "<group>"; };
 		B0A910BA2A72E41400959A1D /* DistinguishComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistinguishComment.swift; sourceTree = "<group>"; };
@@ -641,6 +645,7 @@
 			children = (
 				B091F8792A59C5AE00F0DA32 /* UserPreferences.swift */,
 				B0CEBE472A519E0A00982D4D /* SessionStorage.swift */,
+				B0A334C92A83914800D09C39 /* PostDrafts.swift */,
 			);
 			path = AppStorage;
 			sourceTree = "<group>";
@@ -797,6 +802,7 @@
 				B082141C2A66AC6D00CD3DB4 /* Sessions.swift */,
 				B059982E2A693CBD00267636 /* LeomardExceptions.swift */,
 				B05998362A698AC000267636 /* UpdateFrequency.swift */,
+				B0A334CB2A83966400D09C39 /* PostDraft.swift */,
 			);
 			path = Leomard;
 			sourceTree = "<group>";
@@ -1183,6 +1189,8 @@
 				B0D7A1612A53524A00FE2852 /* CommentView.swift in Sources */,
 				B091F8582A5602A100F0DA32 /* GetPostResponse.swift in Sources */,
 				B0CEBE782A52CF3600982D4D /* CommunityModeratorView.swift in Sources */,
+				B0A334CC2A83966400D09C39 /* PostDraft.swift in Sources */,
+				B0A334CA2A83914800D09C39 /* PostDrafts.swift in Sources */,
 				B091F87E2A5AA84F00F0DA32 /* SaveComment.swift in Sources */,
 				B091F8562A55EF6900F0DA32 /* GetPersonDetailsResponse.swift in Sources */,
 				B0CEBE552A51D2F100982D4D /* SessionInfo.swift in Sources */,

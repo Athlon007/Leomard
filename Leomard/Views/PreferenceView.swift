@@ -179,6 +179,9 @@ struct PreferencesView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading) {
+            Toggle("Autosave post drafts", isOn: UserPreferences.getInstance.$autosavePostCreation)
+        }
     }
     
     @ViewBuilder
