@@ -95,7 +95,7 @@ struct DateDisplayView: View {
             output = "\(elapsed.days) day\(elapsed.days > 1 ? "s" : "")"
         }
         
-        output += output.starts(with: "-") ? " in the future" : " ago"
+        output += output.starts(with: "-") ? " from now" : " ago"
         if output.starts(with: "-") {
             output = output.replacingOccurrences(of: "-", with: "")
         }
