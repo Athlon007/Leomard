@@ -59,17 +59,28 @@ final class PostDrafts {
             let pattern = "draft_.*\\.json"
             do {
                 let draftsURLs = try FileManager.default.contentsOfDirectory(at: directory,
-                                                                             includingPropertiesForKeys: nil)
+                                                                             includingPropertiesForKeys: [.creationDateKey])
                 let filteredURLs = draftsURLs.filter { url in
                     let fileName = url.lastPathComponent
                     return fileName.range(of: pattern, options: .regularExpression) != nil
+                }
+                
+                let sortedURLs = filteredURLs.sorted { (url1, url2) -> Bool in
+                    do {
+                        let creationDate1 = try url1.resourceValues(forKeys: [.creationDateKey]).creationDate ?? Date.distantPast
+                        let creationDate2 = try url2.resourceValues(forKeys: [.creationDateKey]).creationDate ?? Date.distantPast
+                        return creationDate1 > creationDate2
+                    } catch {
+                        print("Error retrieving creation dates: \(error)")
+                        return false
+                    }
                 }
                 
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 
                 var output: [PostDraft] = .init()
-                for url in filteredURLs {
+                for url in sortedURLs {
                     let data = try Data(contentsOf: url, options: .mappedIfSafe)
                     let postDraft = try jsonDecoder.decode(PostDraft.self, from: data)
                     output.append(postDraft)
@@ -97,5 +108,68 @@ final class PostDrafts {
                 print("File \(draft.fileName) does not exist.")
             }
         }
+    }
+    
+    func saveAutosave(postDraft: PostDraft) {
+        if !UserPreferences.getInstance.autosavePostCreation {
+            return
+        }
+        
+        Task(priority: .background) {
+            let mainFolder = getDraftsDirectoryURL()
+            if let folder = mainFolder {
+                let fileName = "autosave.json"
+                var draft = postDraft
+                draft.fileName = fileName
+                
+                let fullPath = folder.appendingPathComponent(fileName)
+                
+                let jsonEncoder = JSONEncoder()
+                jsonEncoder.keyEncodingStrategy = .convertToSnakeCase
+                do {
+                    let jsonData = try jsonEncoder.encode(draft)
+                    try jsonData.write(to: fullPath)
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func removeAutosave() {
+        Task(priority: .background) {
+            if let directory = getDraftsDirectoryURL() {
+                let path = directory.appendingPathComponent("autosave.json")
+                if FileManager.default.fileExists(atPath: path.absoluteString.replacingOccurrences(of: "file://", with: "")) {
+                    do {
+                        try FileManager.default.removeItem(at: path)
+                    } catch {
+                        print(error)
+                    }
+                } else {
+                    print("File autosave.json does not exist.")
+                }
+            }
+        }
+    }
+    
+    func loadAutosave() -> PostDraft? {
+        if let directory = getDraftsDirectoryURL() {
+            let path = directory.appendingPathComponent("autosave.json")
+            if FileManager.default.fileExists(atPath: path.absoluteString.replacingOccurrences(of: "file://", with: "")) {
+                do {
+                    if let data = FileManager.default.contents(atPath: path.absoluteString.replacingOccurrences(of: "file://", with: "")) {
+                        let jsonDecoder = JSONDecoder()
+                        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                        let output = try jsonDecoder.decode(PostDraft.self, from: data)
+                        return output
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+        }
+        
+        return nil
     }
 }

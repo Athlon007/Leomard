@@ -10,6 +10,8 @@
 - Added saving posts as drafts
     - You can now save posts as drafts, and continue editing them later
     - You can access drafts in the "Drafts" tab in post creation view
+- Added post autosave, which will be restored if you accidentally close the program or it crashes
+    - You can disable it in Preferences -> General -> Autosave post drafts
 
 ### Changes
 

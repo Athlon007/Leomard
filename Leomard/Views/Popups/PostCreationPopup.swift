@@ -42,6 +42,10 @@ struct PostCreationPopup: View {
     @State var postDrafts: PostDrafts = .init()
     @State var drafts: [PostDraft] = []
     
+    @State var stopAutosave: Bool = false
+    @State var restoredAutosave: PostDraft? = nil
+    @State var showAutosaveFoundAlert: Bool = false
+    
     var body: some View {
         ZStack {
             VStack {  }
@@ -256,7 +260,29 @@ struct PostCreationPopup: View {
                     }
                 }
             }
+            
+            self.restoredAutosave = postDrafts.loadAutosave()
+            if self.restoredAutosave != nil {
+                showAutosaveFoundAlert = true
+            } else {
+                self.autosave()
+            }
         }
+        .alert("Autosave File Found", isPresented: $showAutosaveFoundAlert, actions: {
+            Button("Restore") {
+                self.title = restoredAutosave!.title
+                self.bodyText = restoredAutosave!.body
+                self.url = restoredAutosave!.url
+                self.isNsfw = restoredAutosave!.nsfw
+                
+                autosave()
+            }
+            Button("Continue", role: .cancel) {
+                autosave()
+            }
+        }, message: {
+            Text("An autosave file has been found. Would you like to restore it?")
+        })
     }
     
     @ViewBuilder
@@ -364,6 +390,8 @@ struct PostCreationPopup: View {
     }
     
     func close() {
+        stopAutosave = true
+        postDrafts.removeAutosave()
         contentView.closePostCreation()
     }
     
@@ -465,5 +493,16 @@ struct PostCreationPopup: View {
     func saveDraft() {
         let post = PostDraft(title: self.title, body: self.bodyText, url: self.url, nsfw: self.isNsfw)
         self.postDrafts.saveDraft(postDraft: post)
+    }
+    
+    func autosave() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if stopAutosave {
+                return
+            }
+            
+            postDrafts.saveAutosave(postDraft: .init(title: self.title, body: self.bodyText, url: self.url, nsfw: isNsfw))
+            autosave()
+        }
     }
 }
