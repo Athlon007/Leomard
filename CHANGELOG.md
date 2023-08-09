@@ -21,6 +21,10 @@
 - Preferences: renamed "Two-Column" to "Second Column"
 - Post creation times that are in the future won't dispay "-" at the start anymore
 
+### Bug Fixes
+
+- Fixed padding of the post toolbar in Compact View
+
 ## 0.5.1 (2023-08-08)
 
 ### Bug Fixes

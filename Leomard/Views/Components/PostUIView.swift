@@ -74,7 +74,6 @@ struct PostUIView: View {
                         HStack {
                             communityPersonDate
                                 .frame (
-                                    maxWidth: .infinity,
                                     alignment: .leading
                                 )
                             postActionsToolbar
@@ -411,9 +410,10 @@ struct PostUIView: View {
                     }
             }
             DateDisplayView(date: self.postView.post.published)
-            Image(systemName: "pencil")
-                .opacity(postView.post.updated != nil ? 1 : 0)
-                .help(updatedTimeAsString)
+            if postView.post.updated != nil {
+                Image(systemName: "pencil")
+                    .help(updatedTimeAsString)
+            }
         }.padding(.vertical, 2)
     }
     
