@@ -96,6 +96,9 @@ struct DateDisplayView: View {
         }
         
         output += output.starts(with: "-") ? " in the future" : " ago"
+        if output.starts(with: "-") {
+            output = output.replacingOccurrences(of: "-", with: "")
+        }
         
         if !noBrackets {
             output = "(\(output))"
