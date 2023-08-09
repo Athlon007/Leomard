@@ -244,7 +244,7 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
         }
-        GroupBox("View Mode") {
+        GroupBox("Open Posts In") {
             VStack {
                 VStack {
                     Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "PopupViewDark" : "PopupView"))
@@ -255,7 +255,7 @@ struct PreferencesView: View {
                             selectedViewType = .singleColumn
                         }
                     Picker("", selection: $selectedViewType) {
-                        Text("Single-Column").tag(ViewModeOption.singleColumn)
+                        Text("Popup").tag(ViewModeOption.singleColumn)
                     }
                     .onChange(of: selectedViewType) { value in
                         if value == ViewModeOption.singleColumn {
@@ -275,7 +275,7 @@ struct PreferencesView: View {
                             selectedViewType = .twoColumns
                         }
                     Picker("", selection: $selectedViewType) {
-                        Text("Two-Column").tag(ViewModeOption.twoColumns)
+                        Text("Second Column").tag(ViewModeOption.twoColumns)
                     }
                     .onChange(of: selectedViewType) { value in
                         if value == ViewModeOption.twoColumns {

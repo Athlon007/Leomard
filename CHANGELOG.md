@@ -16,6 +16,9 @@
 ### Changes
 
 - "Two-Colum View" is now the default view
+- Preferences: renamed "View Mode" to "Open Posts In"
+- Preferences: renamed "Single-Column" to "Popup"
+- Preferences: renamed "Two-Column" to "Second Column"
 
 ## 0.5.1 (2023-08-08)
 
