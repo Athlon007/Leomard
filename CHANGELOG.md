@@ -24,6 +24,7 @@
 ### Bug Fixes
 
 - Fixed padding of the post toolbar in Compact View
+- Post won't remain open when switching between sessions
 
 ## 0.5.1 (2023-08-08)
 

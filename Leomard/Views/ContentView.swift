@@ -344,6 +344,7 @@ struct ContentView: View {
     
     func navigateToFeed() {
         self.currentSelection = self.options[0]
+        self.openedPostView = nil
     }
     
     func loadUserData() {
