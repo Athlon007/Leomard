@@ -130,22 +130,24 @@ struct CommentUIView: View {
     
     @ViewBuilder
     private var subcomments: some View {
-        ForEach(subComments, id: \.self) { newComment in
-            CommentUIView(commentView: newComment, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
-                .frame(maxHeight: .infinity, alignment: .leading)
-            if commentView != self.subComments.last {
-                Divider()
-                    .padding(.leading, 20)
+        if !hidden {
+            ForEach(subComments, id: \.self) { newComment in
+                CommentUIView(commentView: newComment, indentLevel: self.indentLevel + 1, commentService: commentService, myself: $myself, post: post, contentView: contentView)
+                    .frame(maxHeight: .infinity, alignment: .leading)
+                if commentView != self.subComments.last {
+                    Divider()
+                        .padding(.leading, 20)
+                }
+                Spacer()
             }
-            Spacer()
-        }
-        if !lastResultEmpty {
-            Divider()
-            Button("Load replies", action: loadSubcomments)
-                .buttonStyle(.plain)
-                .foregroundColor(Color(.secondaryLabelColor))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, CGFloat(CommentUIView.intentOffset))
+            if !lastResultEmpty {
+                Divider()
+                Button("Load replies", action: loadSubcomments)
+                    .buttonStyle(.plain)
+                    .foregroundColor(Color(.secondaryLabelColor))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, CGFloat(CommentUIView.intentOffset))
+            }
         }
     }
     

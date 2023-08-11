@@ -25,6 +25,8 @@
 
 - Fixed padding of the post toolbar in Compact View
 - Post won't remain open when switching between sessions
+- Hiding comment will hide all its children
+- Fixed opening posts from Replies, if you had another post open in two-column view
 
 ## 0.5.1 (2023-08-08)
 
