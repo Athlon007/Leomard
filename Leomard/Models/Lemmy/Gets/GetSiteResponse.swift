@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GetSiteResponse: Codable {
+struct GetSiteResponse: Codable, Hashable {
     public let admins: [PersonView]
     public let allLanguages: [Language]
     public let customEmojis: [CustomEmojiView]

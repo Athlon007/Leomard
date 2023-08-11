@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MyUserInfo: Codable {
+struct MyUserInfo: Codable, Hashable {
     public var communityBlocks: [CommunityBlockView]
     public let discussionLanguages: [Int]
     public let follows: [CommunityFollowerView]

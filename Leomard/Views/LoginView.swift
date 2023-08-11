@@ -78,8 +78,8 @@ struct LoginView: View {
                             HStack {
                                 HStack {
                                     VStack{
-                                        if let image = instance.image {
-                                            AsyncImage(url: image, content: { phase in
+                                        if let image = instance.site?.siteView.site.icon {
+                                            AsyncImage(url: URL(string: image)!, content: { phase in
                                                 switch phase {
                                                 case .success(let image):
                                                     image
@@ -208,11 +208,11 @@ struct LoginView: View {
         let siteService = SiteService(requestHandler: RequestHandler())
         for instance in instances {
             DispatchQueue.main.async {
-                siteService.getSiteIcon(url: instance.url) { result in
+                siteService.getSite(url: instance.url) { result in
                     switch result {
-                    case .success(let url):
+                    case .success(let site):
                         if let index = instances.firstIndex(of: instance) {
-                            instances[index].image = url
+                            instances[index].site = site
                         }
                     case .failure(let error):
                         print(error)

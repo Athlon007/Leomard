@@ -39,6 +39,7 @@ Start the app, you can login by clicking "Profile" in the bottom left corner.
 ## Screenshots
 
 ![Screenshot 1](Assets/Screenshots/1.png)
+![Screenshot 6](Assets/Screenshots/6.png)
 ![Screenshot 2](Assets/Screenshots/2.png)
 ![Screenshot 3](Assets/Screenshots/3.png)
 ![Screenshot 4](Assets/Screenshots/4.png)
