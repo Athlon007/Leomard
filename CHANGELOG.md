@@ -27,6 +27,7 @@
 - Post won't remain open when switching between sessions
 - Hiding comment will hide all its children
 - Fixed opening posts from Replies, if you had another post open in two-column view
+- Fixed app crashing if trying to load subcomments more than 5 replies deep
 
 ## 0.5.1 (2023-08-08)
 

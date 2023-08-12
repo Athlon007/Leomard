@@ -73,7 +73,7 @@ struct CommentUIView: View {
                         EmptyView()
                     }
                     .frame(maxWidth: 4, maxHeight: .infinity, alignment: .topLeading)
-                    .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count + 1)])
+                    .background(subcommentsColorsOrder[(indentLevel - 1) % (subcommentsColorsOrder.count)])
                     .cornerRadius(8)
                 }
                 LazyVStack {

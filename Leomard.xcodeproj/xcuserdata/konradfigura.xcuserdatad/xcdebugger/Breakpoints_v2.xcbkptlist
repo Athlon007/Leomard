@@ -1697,7 +1697,7 @@
             startingLineNumber = "463"
             endingLineNumber = "463"
             landmarkName = "deleteComment()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1856,7 +1856,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "242"
             endingLineNumber = "242"
-            landmarkName = "subcomments"
+            landmarkName = "commentContent"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2418,6 +2418,22 @@
             endingLineNumber = "89"
             landmarkName = "convertPersonsLinks(input:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "335914F2-132F-4D18-908A-05FC8EAA4058"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/CommentUIView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
