@@ -38,6 +38,7 @@ struct PreferencesView: View {
     @State var manuallyCheckedForUpdate: Bool = false
     
     @State fileprivate var selectedViewType: ViewModeOption = .singleColumn
+    @State fileprivate var selectedPostDisplayOption: PostDisplayOption = .card
     
     @State var helpText: String = ""
     @State var showHelp: Bool = false
@@ -71,6 +72,7 @@ struct PreferencesView: View {
             }
             
             self.selectedViewType = UserPreferences.getInstance.twoColumnView ? .twoColumns : .singleColumn
+            self.selectedPostDisplayOption = UserPreferences.getInstance.usePostCompactView ? .compact : .card
         }
         .overlay {
             helpOverlay
@@ -241,8 +243,48 @@ struct PreferencesView: View {
     
     @ViewBuilder
     private var displayPreferences: some View {
-        VStack(alignment: .leading) {
-            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
+        GroupBox("Post Display") {
+            VStack {
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "CardViewDark" : "CardView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.usePostCompactView = false
+                            selectedPostDisplayOption = .card
+                        }
+                    Picker("", selection: $selectedPostDisplayOption) {
+                        Text("Card").tag(PostDisplayOption.card)
+                    }
+                    .onChange(of: selectedPostDisplayOption) { value in
+                        if value == PostDisplayOption.card {
+                            UserPreferences.getInstance.usePostCompactView = false
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+                Divider()
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "CompactViewDark" : "CompactView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.usePostCompactView = true
+                            selectedPostDisplayOption = .compact
+                        }
+                    Picker("", selection: $selectedPostDisplayOption) {
+                        Text("Compact").tag(PostDisplayOption.compact)
+                    }
+                    .onChange(of: selectedPostDisplayOption) { value in
+                        if value == PostDisplayOption.compact {
+                            UserPreferences.getInstance.usePostCompactView = true
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+            }
         }
         GroupBox("Open Posts In") {
             VStack {
@@ -396,4 +438,9 @@ fileprivate struct PreferenceOption: Hashable {
 fileprivate enum ViewModeOption {
     case singleColumn
     case twoColumns
+}
+
+fileprivate enum PostDisplayOption {
+    case card
+    case compact
 }
