@@ -98,16 +98,7 @@ struct PrivateMessageUIView: View {
                                         alignment: .leading
                                     )
                                     .fontWeight(.semibold)
-                                TextEditor(text: $commentText)
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(.primary, lineWidth: 0.5))
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        minHeight: 3 * NSFont.preferredFont(forTextStyle: .body).xHeight,
-                                        maxHeight: .infinity,
-                                        alignment: .leading
-                                    )
-                                    .lineLimit(5...)
-                                    .font(.system(size: NSFont.preferredFont(forTextStyle: .body).pointSize))
+                                MarkdownEditor(bodyText: $commentText, contentView: self.contentView)
                                 HStack {
                                     Button("Send", action: onSaveSendCommentClick)
                                         .buttonStyle(.borderedProminent)

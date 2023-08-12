@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CustomEmojiView: Codable {
+struct CustomEmojiView: Codable, Hashable {
     public let customEmoji: CustomEmoji
     public let keywords: [CustomEmojiKeyword]
 }

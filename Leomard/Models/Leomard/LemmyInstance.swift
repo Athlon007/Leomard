@@ -10,5 +10,5 @@ import Foundation
 struct LemmyInstance: Hashable {
     let name: String
     let url: String
-    var image: URL?
+    var site: GetSiteResponse?
 }

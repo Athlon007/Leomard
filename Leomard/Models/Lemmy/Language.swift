@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Language: Codable {
+struct Language: Codable, Hashable {
     public let id: Int
     public let name: String
     public let code: String

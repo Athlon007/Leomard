@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LocalSiteRateLimit: Codable {
+struct LocalSiteRateLimit: Codable, Hashable {
     public let id: Int
     public let comment: Int
     public let commentPerSecond: Int

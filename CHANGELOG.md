@@ -10,20 +10,26 @@
 - Added saving posts as drafts
     - You can now save posts as drafts, and continue editing them later
     - You can access drafts in the "Drafts" tab in post creation view
-- Added post autosave, which will be restored if you accidentally close the program or it crashes
+- Added post draft autosave, which will be restored if you accidentally close the program or it crashes
     - You can disable it in Preferences -> General -> Autosave post drafts
+- Inbox replies now use the new text editor
 
 ### Changes
 
-- "Two-Colum View" is now the default view
 - Preferences: renamed "View Mode" to "Open Posts In"
 - Preferences: renamed "Single-Column" to "Popup"
 - Preferences: renamed "Two-Column" to "Second Column"
+- "Second Column" is now the default view
 - Post creation times that are in the future won't dispay "-" at the start anymore
+- Compact View setting is now displayed in style of the "Open Posts In" setting
 
 ### Bug Fixes
 
 - Fixed padding of the post toolbar in Compact View
+- Post won't remain open when switching between sessions
+- Hiding comment will hide all its children
+- Fixed opening posts from Replies, if you had another post open in two-column view
+- Fixed app crashing if trying to load subcomments more than 5 replies deep
 
 ## 0.5.1 (2023-08-08)
 

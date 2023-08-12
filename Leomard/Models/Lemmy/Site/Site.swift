@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Site: Codable {
+struct Site: Codable, Hashable {
     public let id: Int
     public let actorId: String
     public let banner: String?
