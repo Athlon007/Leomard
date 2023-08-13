@@ -123,6 +123,7 @@ struct PostUIView: View {
                     Text("Failed to feature the post. Try again later.")
                 })
             }
+            .lineLimit(UserPreferences.getInstance.truncatePostTitles && self.shortBody ? 1 : nil)
             .padding(Self.padding)
             .foregroundColor(getForegroundColor())
             .background(getBackgroundColor())

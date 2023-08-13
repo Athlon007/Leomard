@@ -135,17 +135,14 @@ struct FeedView: View {
             GeometryReader { proxy in
                 HStack {
                     feedPostsList
-                    if UserPreferences.getInstance.twoColumnView {
-                        feedPostView(visible: proxy.size.width > 1000)
-                    } else {
-                        feedPageSidebar(visible: proxy.size.width > 1000)
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: 400,
-                                maxHeight: .infinity,
-                                alignment: .center
-                            )
-                    }
+                    feedPageSidebar(visible: proxy.size.width > 1000)
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: 400,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
+                    
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -158,11 +155,13 @@ struct FeedView: View {
     /// Infinite scrolling view for this feed's content
     @ViewBuilder
     private var feedPostsList: some View {
-        // - TODO: `scrollProxy` is expensive and isn't being used, remove?
-        ScrollViewReader { scrollProxy in
-            if viewModel.isLoadingPosts && viewModel.postsResponse.posts.count == 0 {
-                ProgressView().progressViewStyle(.circular).padding(.top, 20)
+        if viewModel.isLoadingPosts && viewModel.postsResponse.posts.count == 0 {
+            VStack {
+                ProgressView()
+                    .progressViewStyle(.circular)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        } else {
             List(viewModel.postsResponse.posts, id: \.post.id) { postView in
                 PostUIView(
                     postView: postView,

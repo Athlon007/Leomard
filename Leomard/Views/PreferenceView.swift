@@ -349,6 +349,9 @@ struct PreferencesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading) {
+            Toggle("Truncate Post Titles", isOn: UserPreferences.getInstance.$truncatePostTitles)
+        }
     }
     
     @ViewBuilder

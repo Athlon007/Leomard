@@ -45,6 +45,7 @@ final class UserPreferences: ObservableObject {
     @AppStorage("save_liked_posts", store: .standard) var saveLikedPosts: Bool = false
     @AppStorage("autosave_post_creation", store: .standard) var autosavePostCreation: Bool = true
     @AppStorage("use_piped_video_for_youtube", store: .standard) var usePipedVideoForYoutube: Bool = false
+    @AppStorage("truncate_post_titles", store: .standard) var truncatePostTitles: Bool = true
     
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false

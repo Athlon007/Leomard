@@ -698,7 +698,7 @@ struct ProfileView: View {
         }
         
         let limit = 10
-        var startIndex = (page - 1) * limit
+        let startIndex = (page - 1) * limit
         var endIndex = page * limit - 1
         
         if startIndex > SessionStorage.getInstance.getCurrentSession()!.likedPosts.count {

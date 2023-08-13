@@ -15,6 +15,7 @@
 - Inbox replies now use the new text editor
 - "Use Piped.video for YouTube videos" in Preferences -> Content
 - In Compact View, posts with videos and link to articles will now show a thumbnail
+- Added "Truncate Post Titles" in Preferences -> Display
 
 ### Changes
 
@@ -24,6 +25,7 @@
 - "Second Column" is now the default view
 - Post creation times that are in the future won't dispay "-" at the start anymore
 - Compact View setting is now displayed in style of the "Open Posts In" setting
+- Feed View optimizations
 
 ### Bug Fixes
 
