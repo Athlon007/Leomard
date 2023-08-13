@@ -50,7 +50,6 @@ struct YoutubePlayer: NSViewRepresentable {
     let link: String
     @Binding var imageHeight: CGFloat
     
-
     func makeNSView(context: Context) -> WKWebVideoNonInteractable {
         return WKWebVideoNonInteractable()
     }
@@ -61,6 +60,10 @@ struct YoutubePlayer: NSViewRepresentable {
             url = url.replacingOccurrences(of: "/watch?v=", with: "/embed/")
         } else if link.contains("youtu.be/") {
             url = url.replacingOccurrences(of: "youtu.be/", with: "youtube.com/embed/")
+        }
+        
+        if UserPreferences.getInstance.usePipedVideoForYoutube {
+            url = url.replacingOccurrences(of: "youtube.com", with: "piped.video")
         }
         
         let html = """
@@ -80,7 +83,7 @@ struct YoutubePlayer: NSViewRepresentable {
                </style>
                </head>
                <body>
-               <iframe src="\(url)">
+               <iframe src="\(url)"></iframe>
                </body>
                </html>
                """
@@ -162,7 +165,7 @@ class WKWebVideoNonInteractable: WKWebView
     override public func rightMouseDown(with event: NSEvent) {
         self.nextResponder?.rightMouseDown(with: event)
     }
-        
+    
     override public func viewDidMoveToSuperview() {
         self.evaluateJavaScript("document.body.remove()")
         super.viewDidMoveToSuperview()

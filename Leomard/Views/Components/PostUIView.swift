@@ -369,7 +369,7 @@ struct PostUIView: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(minWidth:0, maxWidth: !shortBody ? 600 : .infinity, maxHeight: .infinity, alignment: .leading)
                     .background(GeometryReader { geometry in
                         Color.clear
                             .onAppear {

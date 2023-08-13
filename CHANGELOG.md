@@ -13,6 +13,7 @@
 - Added post draft autosave, which will be restored if you accidentally close the program or it crashes
     - You can disable it in Preferences -> General -> Autosave post drafts
 - Inbox replies now use the new text editor
+- "Use Piped.video for YouTube videos" in Preferences -> Content
 
 ### Changes
 

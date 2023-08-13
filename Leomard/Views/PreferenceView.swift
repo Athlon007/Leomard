@@ -239,6 +239,19 @@ struct PreferencesView: View {
             Text("Any instances listed here will be filtered out. You won't see communities, posts, or comments from those instances. Simply type the hostname of the instance (comma-separated).")
                 .lineLimit(nil)
         }
+        VStack(alignment: .leading) {
+            HStack {
+                Toggle("Use Piped.video for YouTube videos", isOn: UserPreferences.getInstance.$usePipedVideoForYoutube)
+                Button("?", action: {
+                    self.helpText = """
+                # Use Piped.video for YouTube
+                Piped.video is an alternative privacy friendly YouTube frontend.
+                """
+                    self.showHelp = true
+                })
+                .cornerRadius(360)
+            }
+        }
     }
     
     @ViewBuilder
@@ -410,7 +423,7 @@ The information about what you like is securely stored on your device.
                         .padding(.bottom, 0)
                         let content = MarkdownContent(helpText)
                         Markdown(content)
-                            .frame(maxHeight: .infinity)
+                            .frame(minHeight: 0, maxHeight: .infinity)
                     }
                     .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 }

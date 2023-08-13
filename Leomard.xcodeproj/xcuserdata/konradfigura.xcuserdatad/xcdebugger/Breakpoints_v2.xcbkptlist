@@ -350,8 +350,8 @@
             filePath = "Leomard/Views/Components/ContextMenus/PostContextMenu.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1744,8 +1744,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "348"
             endingLineNumber = "348"
-            landmarkName = "staticImage(_:@ViewBuilder:)"
-            landmarkType = "7">
+            landmarkName = "PostUIView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1822,8 +1822,8 @@
             filePath = "Leomard/Views/Components/AnimatedImage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "updateNSView(_:context:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1838,8 +1838,8 @@
             filePath = "Leomard/Views/Components/AnimatedImage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "updateNSView(_:context:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2434,6 +2434,22 @@
             endingLineNumber = "76"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "659CFA25-5BB2-4B39-AE27-25F4E3BEE3C8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/AnimatedImage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "updateNSView(_:context:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
