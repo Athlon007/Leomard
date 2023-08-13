@@ -734,8 +734,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
+            startingLineNumber = "365"
+            endingLineNumber = "365"
             landmarkName = "gifOrImage"
             landmarkType = "24">
             <Locations>
@@ -862,10 +862,10 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "670"
-            endingLineNumber = "670"
-            landmarkName = "PostUIView"
-            landmarkType = "14">
+            startingLineNumber = "676"
+            endingLineNumber = "676"
+            landmarkName = "onPostEdited(updatedPostView:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -878,8 +878,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "672"
-            endingLineNumber = "672"
+            startingLineNumber = "678"
+            endingLineNumber = "678"
             landmarkName = "onPostEdited(updatedPostView:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1742,10 +1742,10 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "349"
-            endingLineNumber = "349"
-            landmarkName = "PostUIView"
-            landmarkType = "14">
+            startingLineNumber = "355"
+            endingLineNumber = "355"
+            landmarkName = "gifOrImage"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1966,10 +1966,10 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "730"
-            endingLineNumber = "730"
-            landmarkName = "markPostAsReadOnDisapper()"
-            landmarkType = "7">
+            startingLineNumber = "736"
+            endingLineNumber = "736"
+            landmarkName = "PostUIView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1982,10 +1982,10 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "731"
-            endingLineNumber = "731"
-            landmarkName = "PostUIView"
-            landmarkType = "14">
+            startingLineNumber = "737"
+            endingLineNumber = "737"
+            landmarkName = "getBackgroundColor()"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "0EDE8F82-C61D-4563-8342-194AC36D0B03 - 929d0a727305616a"
@@ -2030,8 +2030,8 @@
             filePath = "Leomard/Views/Components/PostUIView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "753"
-            endingLineNumber = "753"
+            startingLineNumber = "775"
+            endingLineNumber = "775"
             landmarkName = "getLinkColor()"
             landmarkType = "7">
          </BreakpointContent>

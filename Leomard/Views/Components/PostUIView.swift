@@ -243,6 +243,12 @@ struct PostUIView: View {
                             self.titleHeight = geometry.size.height
                         }
                 })
+                .foregroundColor(getTitleForegroundColor())
+            if UserPreferences.getInstance.showReadPostIndicator && postView.read {
+                Image(systemName: "checkmark")
+                    .help("You've read this post!")
+                    .foregroundColor(.green)
+            }
         }
     }
     
@@ -738,8 +744,24 @@ struct PostUIView: View {
     }
     
     func getForegroundColor() -> Color {
-        if UserPreferences.getInstance.twoColumnView && shortBody {
-            return self.contentView.openedPostView == self.postView ? Color(.white) : Color(.textColor)
+        if shortBody {
+            if self.contentView.openedPostView == self.postView && UserPreferences.getInstance.twoColumnView {
+                return Color(.white)
+            }
+        }
+        
+        return Color(.textColor)
+    }
+    
+    func getTitleForegroundColor() -> Color {
+        if shortBody {
+            if self.contentView.openedPostView == self.postView && UserPreferences.getInstance.twoColumnView {
+                return Color(.white)
+            }
+            
+            if self.postView.read && UserPreferences.getInstance.grayoutReadPosts {
+                return .secondary
+            }
         }
         
         return Color(.textColor)

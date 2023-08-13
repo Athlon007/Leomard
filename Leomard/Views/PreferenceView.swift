@@ -352,6 +352,12 @@ struct PreferencesView: View {
         VStack(alignment: .leading) {
             Toggle("Truncate Post Titles", isOn: UserPreferences.getInstance.$truncatePostTitles)
         }
+        GroupBox("Read Post Indicators") {
+            Toggle("Gray out post titles", isOn: UserPreferences.getInstance.$grayoutReadPosts)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("Show checkmark", isOn: UserPreferences.getInstance.$showReadPostIndicator)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+        }.frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder

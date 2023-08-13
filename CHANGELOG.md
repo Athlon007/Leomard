@@ -16,6 +16,8 @@
 - "Use Piped.video for YouTube videos" in Preferences -> Content
 - In Compact View, posts with videos and link to articles will now show a thumbnail
 - Added "Truncate Post Titles" in Preferences -> Display
+- Read post titles are now grayed out (can be disabled in Preferences -> Display -> Read Post Indicators -> Gray out post titles)
+- Also added "Show checkmark" next to read posts in Preferences -> Display -> Read Post Indicators
 
 ### Changes
 
