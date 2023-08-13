@@ -46,6 +46,8 @@ struct PostCreationPopup: View {
     @State var restoredAutosave: PostDraft? = nil
     @State var showAutosaveFoundAlert: Bool = false
     
+    @Environment(\.openURL) var openUrl
+    
     var body: some View {
         ZStack {
             VStack {  }
@@ -329,8 +331,11 @@ struct PostCreationPopup: View {
                                     if draft.url.count > 0 {
                                         Text(draft.url)
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .foregroundColor(.secondary)
+                                            .foregroundColor(Color(.linkColor))
                                             .italic()
+                                            .onTapGesture {
+                                                openUrl(URL(string: draft.url)!)
+                                            }
                                     }
                                     if draft.body.count > 0 {
                                         Text(draft.body)
