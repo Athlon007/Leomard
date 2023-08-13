@@ -124,7 +124,7 @@ struct CommunityUISidebarView: View {
                             }
                             
                         } ) {
-                            Image(systemName: "person.fill.xmark")
+                            Image(systemName: "person.2.slash.fill")
                                 .foregroundColor(isCommunityBlocked() ? .red : .primary)
                         }
                         .padding(.top, -20)
