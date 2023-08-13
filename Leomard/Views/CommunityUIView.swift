@@ -185,7 +185,8 @@ struct CommunityUIView: View {
                             },
                             onRemoveCommunity: {
                                 showCommunityRemove = true
-                            })
+                            },
+                            showingToTheSide: false)
                     }
                     .frame(
                         minWidth: 0,
@@ -225,7 +226,7 @@ struct CommunityUIView: View {
                         },
                                                onRemoveCommunity: {
                             showCommunityRemove = true
-                        })
+                        }, showingToTheSide: true)
                     }
                 }
                 .frame(

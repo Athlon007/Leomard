@@ -26,6 +26,7 @@
 - Post creation times that are in the future won't dispay "-" at the start anymore
 - Compact View setting is now displayed in style of the "Open Posts In" setting
 - Feed View optimizations
+- Community sidebar description is now hidden, if community is viewed in one-column view
 
 ### Bug Fixes
 

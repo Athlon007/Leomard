@@ -17,11 +17,13 @@ struct CommunityUISidebarView: View {
     var onPostAdded: (PostView) -> Void
     var onEditCommunity: () -> Void
     var onRemoveCommunity: () -> Void
+    var showingToTheSide: Bool
     
     @State var showConfirmCommunityBlock: Bool = false
     @State var showBlockFailure: Bool = false
     
     @State var sidebarMarkdown: String = ""
+    @State var showDescription: Bool = false
     
     var body: some View {
         LazyVStack {
@@ -153,16 +155,29 @@ struct CommunityUISidebarView: View {
             .padding(.bottom, 0)
             .frame(maxWidth: .infinity)
             if communityResponse.communityView.community.description != nil {
-                Markdown(MarkdownContent(sidebarMarkdown))
-                    .lineLimit(nil)
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity,
-                        alignment: .leading
-                    )
-                    .padding()
-                    .padding(.top, -20)
-                    .textSelection(.enabled)
+                if !showingToTheSide {
+                    VStack(alignment: .leading) {
+                        Button(showDescription ? "Hide Description" : "Show Description", action: {
+                            showDescription = !showDescription
+                        })
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.leading)
+                    .padding(.top, -10)
+                }
+                if showDescription || showingToTheSide {
+                    Markdown(MarkdownContent(sidebarMarkdown))
+                        .lineLimit(nil)
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: .leading
+                        )
+                        .padding()
+                        .padding(.top, -20)
+                        .textSelection(.enabled)
+                }
                 Spacer()
             }
         }
