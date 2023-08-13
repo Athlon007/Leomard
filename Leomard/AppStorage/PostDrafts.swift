@@ -40,6 +40,8 @@ final class PostDrafts {
             var draft = postDraft
             draft.fileName = fileName
             
+            draft.created = date
+            
             let fullPath = folder.appendingPathComponent(fileName)
             
             let jsonEncoder = JSONEncoder()

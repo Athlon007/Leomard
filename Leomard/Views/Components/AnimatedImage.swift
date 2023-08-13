@@ -64,6 +64,7 @@ struct YoutubePlayer: NSViewRepresentable {
         
         if UserPreferences.getInstance.usePipedVideoForYoutube {
             url = url.replacingOccurrences(of: "youtube.com", with: "piped.video")
+            url = url.replacingOccurrences(of: "www.", with: "")
         }
         
         let html = """

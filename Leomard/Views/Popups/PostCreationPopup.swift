@@ -322,6 +322,10 @@ struct PostCreationPopup: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .font(.system(size: 24))
                                     }
+                                    DateDisplayView(date: draft.created, showRealTime: true, noBrackets: true)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .foregroundColor(.secondary)
+                                        .italic()
                                     if draft.url.count > 0 {
                                         Text(draft.url)
                                             .frame(maxWidth: .infinity, alignment: .leading)
