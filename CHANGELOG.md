@@ -14,6 +14,7 @@
     - You can disable it in Preferences -> General -> Autosave post drafts
 - Inbox replies now use the new text editor
 - "Use Piped.video for YouTube videos" in Preferences -> Content
+- In Compact View, posts with videos and link to articles will now show a thumbnail
 
 ### Changes
 
