@@ -158,7 +158,6 @@ struct PostUIView: View {
                         switch result {
                         case .success(let postResponse):
                             self.postView.read = postResponse.postView.read
-                            self.postView.counts = postResponse.postView.counts
                         case .failure(let error):
                             print(error)
                             // TODO: Show error
