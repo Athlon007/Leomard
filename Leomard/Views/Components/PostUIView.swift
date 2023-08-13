@@ -132,6 +132,21 @@ struct PostUIView: View {
                 if !shortBody {
                     return
                 }
+                
+                if UserPreferences.getInstance.markPostAsReadOnOpen && !postView.read {
+                    self.postView.read = !self.postView.read 
+                    postService.markAsRead(post: postView.post, read: true) { result in
+                        switch result {
+                        case .success(let postResponse):
+                            self.postView.read = postResponse.postView.read
+                            self.postView.counts = postResponse.postView.counts
+                        case .failure(let error):
+                            print(error)
+                            // TODO: Show error
+                        }
+                    }
+                }
+                
                 self.contentView.openPost(postView: self.postView)
             }
             .contextMenu {
