@@ -24,6 +24,7 @@ struct PostUIView: View {
     private static let blurStrength: CGFloat = 50
     private static let cornerRadius: CGFloat = 8
     private static let padding: CGFloat = 12
+    private static let compactViewWrapDetailsRowAboveChars: Int = 34
     
     @State var postBody: String? = nil
     @State private var postBodyMarkdownContent: MarkdownContent? = nil
@@ -71,16 +72,33 @@ struct PostUIView: View {
                     }
                     Spacer(minLength: 6)
                     if UserPreferences.getInstance.usePostCompactView && shortBody {
-                        HStack {
-                            communityPersonDate
-                                .frame (
-                                    alignment: .leading
-                                )
-                            postActionsToolbar
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity
-                                )
+                        if postView.creator.name.count + postView.community.name.count <= PostUIView.compactViewWrapDetailsRowAboveChars {
+                            HStack {
+                                communityPersonDate
+                                    .frame (
+                                        alignment: .leading
+                                    )
+                                Spacer()
+                                postActionsToolbar
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity,
+                                        alignment: .trailing
+                                    )
+                            }.frame(maxWidth: .infinity)
+                        } else {
+                            VStack(alignment: .leading) {
+                                communityPersonDate
+                                    .frame (
+                                        alignment: .leading
+                                    )
+                                postActionsToolbar
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity,
+                                        alignment: .trailing
+                                    )
+                            }
                         }
                     } else {
                         communityPersonDate
@@ -92,7 +110,8 @@ struct PostUIView: View {
                         postActionsToolbar
                             .frame(
                                 maxWidth: .infinity,
-                                maxHeight: .infinity
+                                maxHeight: .infinity,
+                                alignment: .leading
                             )
                     }
                 }
@@ -134,7 +153,7 @@ struct PostUIView: View {
                 }
                 
                 if UserPreferences.getInstance.markPostAsReadOnOpen && !postView.read {
-                    self.postView.read = !self.postView.read 
+                    self.postView.read = !self.postView.read
                     postService.markAsRead(post: postView.post, read: true) { result in
                         switch result {
                         case .success(let postResponse):
@@ -436,6 +455,12 @@ struct PostUIView: View {
                 Image(systemName: "pencil")
                     .help(updatedTimeAsString)
             }
+            if shortBody && UserPreferences.getInstance.usePostCompactView {
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(postView.counts.comments))
+                }
+            }
         }.padding(.vertical, 2)
     }
     
@@ -460,12 +485,12 @@ struct PostUIView: View {
                 .onTapGesture {
                     dislikePost()
                 }
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(postView.counts.comments))
+                }
+                Spacer()
             }
-            HStack {
-                Image(systemName: "ellipsis.message")
-                Text(String(postView.counts.comments))
-            }
-            Spacer()
             if myself != nil {
                 if postView.creator.actorId == myself?.localUserView.person.actorId {
                     Button(action: { startEditPost() } ) {

@@ -38,6 +38,7 @@
 - Fixed opening posts from Replies, if you had another post open in two-column view
 - Fixed app crashing if trying to load subcomments more than 5 replies deep
 - Fixed a bug where marking post as read on open would not be reflected in the feed
+- Post details in compact view will now wrap correctly, if the sender name and community name are too long
 
 ## 0.5.1 (2023-08-08)
 
