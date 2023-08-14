@@ -2,6 +2,10 @@
 
 ## 0.6.1 (TBA)
 
+### Added
+
+- Added temporary photo icon to compact view posts, if they have a photo but it's not loaded yet
+
 ### Bug Fixes
 
 - Autosave file will be deleted, if you send the post
