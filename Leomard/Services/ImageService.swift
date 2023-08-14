@@ -63,4 +63,12 @@ class ImageService: Service {
         
         return false
     }
+    
+    public func isApiKeyPresent() -> Bool {
+        let apiKey = Bundle.main.infoDictionary?["IMGUR_KEY"] as? String
+        if apiKey == nil || apiKey == "" || apiKey == "api_key_goes_here" {
+            return false
+        }
+        return true
+    }
 }

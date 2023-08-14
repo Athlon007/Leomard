@@ -57,7 +57,7 @@ struct ContentView: View {
     
     @State var imageUploadFail: Bool = false
     @State var imageUploadFailReason: String = ""
-    
+        
     var appIconBadge = AppAlertBadge()
     
     var body: some View {

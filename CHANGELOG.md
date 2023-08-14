@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1 (TBA)
+
+### Bug Fixes
+
+- Autosave file will be deleted, if you send the post
+
 ## 0.6 (2023-08-14)
 
 ### Added

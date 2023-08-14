@@ -419,6 +419,7 @@ struct PostCreationPopup: View {
                     cleanWindow()
                     isSendingPost = false
                     contentView.closePostEdit()
+                    postDrafts.removeAutosave()
                 case .failure(let error):
                     print(error)
                     alertMessage = "Unable to edit post. Try again later."

@@ -25,8 +25,13 @@ struct NavbarView: View {
     
     @State var searchQuery: String = ""
     @State var searchVisible: Bool = false
+    @State var imgurKeyMissing: Bool = false
     
     var body: some View {
+        if imgurKeyMissing {
+            Text("IMGUR KEY MISSING!")
+                .foregroundColor(.red)
+        }
         sidebarItems(options: options)
             .padding(.top, 24)
         followedCommunitiesList
@@ -35,6 +40,12 @@ struct NavbarView: View {
                 maxHeight: .infinity
             )
         userProfileItem
+            .task {
+                let apiKey = Bundle.main.infoDictionary?["IMGUR_KEY"] as? String
+                if apiKey == nil || apiKey == "" || apiKey == "api_key_goes_here" {
+                    self.imgurKeyMissing = true
+                }
+            }
     }
     
     // MARK: -
