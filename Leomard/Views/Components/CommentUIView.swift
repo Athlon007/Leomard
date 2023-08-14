@@ -168,6 +168,7 @@ struct CommentUIView: View {
                 }
                 .background(Color(.linkColor))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
+                .help("Original Poster")
             }
             HStack {
                 Image(systemName: "arrow.up")
