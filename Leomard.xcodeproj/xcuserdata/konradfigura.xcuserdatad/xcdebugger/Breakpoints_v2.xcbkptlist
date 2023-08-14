@@ -2046,8 +2046,8 @@
             filePath = "Leomard/Views/Components/MarkdownEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "updateAutoInsertMode()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2062,8 +2062,8 @@
             filePath = "Leomard/Views/Components/MarkdownEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "updateAutoInsertMode()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2078,8 +2078,8 @@
             filePath = "Leomard/Views/Components/MarkdownEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
             landmarkName = "updateAutoInsertMode()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2094,8 +2094,8 @@
             filePath = "Leomard/Views/Components/MarkdownEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "updateAutoInsertMode()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2110,8 +2110,8 @@
             filePath = "Leomard/Views/Components/MarkdownEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "updateAutoInsertMode()"
             landmarkType = "7">
          </BreakpointContent>

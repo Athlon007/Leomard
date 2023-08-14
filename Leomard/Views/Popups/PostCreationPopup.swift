@@ -264,7 +264,7 @@ struct PostCreationPopup: View {
             }
             
             self.restoredAutosave = postDrafts.loadAutosave()
-            if self.restoredAutosave != nil {
+            if let autosave = self.restoredAutosave, autosave.title.count > 0 || autosave.body.count > 0 || autosave.url.count > 0 {
                 showAutosaveFoundAlert = true
             } else {
                 self.autosave()

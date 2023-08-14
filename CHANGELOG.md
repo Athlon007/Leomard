@@ -5,6 +5,9 @@
 ### Bug Fixes
 
 - Autosave file will be deleted, if you send the post
+- "Restore Autosave" prompt won't appear, if autosave file is empty
+- Improved autoinserting of "-" and ">" in the text editor
+- Images in the text editor will now be inserted at the cursor position
 
 ## 0.6 (2023-08-14)
 

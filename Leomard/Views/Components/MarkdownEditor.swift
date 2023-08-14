@@ -192,6 +192,15 @@ struct MarkdownEditor: View {
     
     // MARK: -
     
+    private func getPreviousChar() -> Character {
+        var last = Character("§")
+        if selectRange.location - 1 > 0 && selectRange.location <= bodyText.count {
+            let lastIndex = bodyText.index(bodyText.startIndex, offsetBy: selectRange.location - 1)
+            last = bodyText[lastIndex]
+        }
+        return last
+    }
+    
     // Makes sure that the lists and quotes are automatically inserted.
     func updateAutoInsertMode() {
         var removing = false
@@ -224,10 +233,10 @@ struct MarkdownEditor: View {
         
         if last.isNewline && !autoInsertCharacterAdded {
             if editorInsertionMode == .bulletpoint {
-                bodyText += "- "
+                bodyText.insert(contentsOf: "- ", at: bodyText.index(bodyText.startIndex, offsetBy: selectRange.location))
                 adjustCursorBy += 2
             } else if editorInsertionMode == .quote {
-                bodyText += "> "
+                bodyText.insert(contentsOf: "> ", at: bodyText.index(bodyText.startIndex, offsetBy: selectRange.location))
                 adjustCursorBy += 2
             }
             
@@ -270,13 +279,10 @@ struct MarkdownEditor: View {
             switch result {
             case .success(let response):
                 isUploadingImage = false
-                // Otherwise add it to content of the bodyText.
-                if bodyText.count > 0 {
-                    // If there already is some text, add new line.
-                    bodyText += "\n\n"
-                }
                 
-                bodyText += "![](\(response.data.link))\n\n"
+                let insert = "![](\(response.data.link))"
+                bodyText.insert(contentsOf: insert, at: bodyText.index(bodyText.startIndex, offsetBy: selectRange.location))
+                adjustCursorBy += insert.count        
             case .failure(let error):
                 print(error)
             }
