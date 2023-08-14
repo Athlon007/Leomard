@@ -14,6 +14,8 @@ enum LeomardExceptions: Error, CustomStringConvertible {
     case notLoggedIn(String)
     case unableToGetIcon(String)
     case userCancelledOperation(String)
+    case nsfwPost(String)
+    case base64ToImageDecodingError(String)
     
     var description: String {
         switch self {
@@ -28,6 +30,10 @@ enum LeomardExceptions: Error, CustomStringConvertible {
         case .unableToGetIcon(let message):
             return message
         case .userCancelledOperation(let message):
+            return message
+        case .nsfwPost(let message):
+            return message
+        case .base64ToImageDecodingError(let message):
             return message
         }
     }

@@ -24,6 +24,7 @@ struct PostUIView: View {
     private static let blurStrength: CGFloat = 50
     private static let cornerRadius: CGFloat = 8
     private static let padding: CGFloat = 12
+    private static let compactViewWrapDetailsRowAboveChars: Int = 34
     
     @State var postBody: String? = nil
     @State private var postBodyMarkdownContent: MarkdownContent? = nil
@@ -52,7 +53,7 @@ struct PostUIView: View {
             HStack {
                 if UserPreferences.getInstance.usePostCompactView && shortBody {
                     compactViewVotes
-                    compactViewImage
+                    compactViewPreview
                 }
                 LazyVStack {
                     postTitle
@@ -71,17 +72,33 @@ struct PostUIView: View {
                     }
                     Spacer(minLength: 6)
                     if UserPreferences.getInstance.usePostCompactView && shortBody {
-                        HStack {
-                            communityPersonDate
-                                .frame (
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                            postActionsToolbar
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity
-                                )
+                        if postView.creator.name.count + postView.community.name.count <= PostUIView.compactViewWrapDetailsRowAboveChars {
+                            HStack {
+                                communityPersonDate
+                                    .frame (
+                                        alignment: .leading
+                                    )
+                                Spacer()
+                                postActionsToolbar
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity,
+                                        alignment: .trailing
+                                    )
+                            }.frame(maxWidth: .infinity)
+                        } else {
+                            VStack(alignment: .leading) {
+                                communityPersonDate
+                                    .frame (
+                                        alignment: .leading
+                                    )
+                                postActionsToolbar
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity,
+                                        alignment: .trailing
+                                    )
+                            }
                         }
                     } else {
                         communityPersonDate
@@ -93,7 +110,8 @@ struct PostUIView: View {
                         postActionsToolbar
                             .frame(
                                 maxWidth: .infinity,
-                                maxHeight: .infinity
+                                maxHeight: .infinity,
+                                alignment: .leading
                             )
                     }
                 }
@@ -112,6 +130,10 @@ struct PostUIView: View {
                         postBodyMarkdownContent = await postBodyMarkdownContentTask()
                         url = await postUrlTask()
                         updatedTimeAsString = await updatedTimeAsStringTask()
+                        
+                        if let vote = postView.myVote, vote > 0 {
+                            _ = SessionStorage.getInstance.addLikedPost(post: postView.post)
+                        }
                     }
                 }
                 .alert("Featured Fail", isPresented: $showFailedToFeatureAlert, actions: {
@@ -120,6 +142,7 @@ struct PostUIView: View {
                     Text("Failed to feature the post. Try again later.")
                 })
             }
+            .lineLimit(UserPreferences.getInstance.truncatePostTitles && self.shortBody ? 1 : nil)
             .padding(Self.padding)
             .foregroundColor(getForegroundColor())
             .background(getBackgroundColor())
@@ -128,6 +151,20 @@ struct PostUIView: View {
                 if !shortBody {
                     return
                 }
+                
+                if UserPreferences.getInstance.markPostAsReadOnOpen && !postView.read {
+                    self.postView.read = !self.postView.read
+                    postService.markAsRead(post: postView.post, read: true) { result in
+                        switch result {
+                        case .success(let postResponse):
+                            self.postView.read = postResponse.postView.read
+                        case .failure(let error):
+                            print(error)
+                            // TODO: Show error
+                        }
+                    }
+                }
+                
                 self.contentView.openPost(postView: self.postView)
             }
             .contextMenu {
@@ -188,10 +225,6 @@ struct PostUIView: View {
         }
     }
     
-    func test() {
-        print("test")
-    }
-    
     nonisolated
     private func postUrlTask() async -> URL? {
         return await withCheckedContinuation { continuation in
@@ -243,6 +276,12 @@ struct PostUIView: View {
                             self.titleHeight = geometry.size.height
                         }
                 })
+                .foregroundColor(getTitleForegroundColor())
+            if UserPreferences.getInstance.showReadPostIndicator && postView.read {
+                Image(systemName: "checkmark")
+                    .help("You've read this post!")
+                    .foregroundColor(.green)
+            }
         }
     }
     
@@ -370,7 +409,7 @@ struct PostUIView: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(minWidth:0, maxWidth: !shortBody ? 600 : .infinity, maxHeight: .infinity, alignment: .leading)
                     .background(GeometryReader { geometry in
                         Color.clear
                             .onAppear {
@@ -411,9 +450,16 @@ struct PostUIView: View {
                     }
             }
             DateDisplayView(date: self.postView.post.published)
-            Image(systemName: "pencil")
-                .opacity(postView.post.updated != nil ? 1 : 0)
-                .help(updatedTimeAsString)
+            if postView.post.updated != nil {
+                Image(systemName: "pencil")
+                    .help(updatedTimeAsString)
+            }
+            if shortBody && UserPreferences.getInstance.usePostCompactView {
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(postView.counts.comments))
+                }
+            }
         }.padding(.vertical, 2)
     }
     
@@ -438,12 +484,12 @@ struct PostUIView: View {
                 .onTapGesture {
                     dislikePost()
                 }
+                HStack {
+                    Image(systemName: "ellipsis.message")
+                    Text(String(postView.counts.comments))
+                }
+                Spacer()
             }
-            HStack {
-                Image(systemName: "ellipsis.message")
-                Text(String(postView.counts.comments))
-            }
-            Spacer()
             if myself != nil {
                 if postView.creator.actorId == myself?.localUserView.person.actorId {
                     Button(action: { startEditPost() } ) {
@@ -501,26 +547,97 @@ struct PostUIView: View {
     }
     
     @ViewBuilder
-    private var compactViewImage: some View {
-        if postView.post.url != nil && LinkHelper.isImageLink(link: postView.post.url!) {
-            VStack {
-                LazyImage(url: URL(string: postView.post.url!)!) { result in
-                    if let image = result.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+    private var compactViewPreview: some View {
+        if let url = postView.post.url {
+            if LinkHelper.isImageLink(link: url) {
+                compactViewImage
+            } else if LinkHelper.isYouTubeLink(link: url) {
+                compactViewVideoThumbnail
+            } else if let thumbnail = postView.post.thumbnailUrl, LinkHelper.isImageLink(link: thumbnail) {
+                compactViewArticleThumbnail
             }
-            .frame(width: 40, height: 40, alignment: .leading)
-            .cornerRadius(4)
-            .aspectRatio(1, contentMode: .fit)
-            .clipped()
         }
     }
+    
+    @ViewBuilder
+    private var compactViewImage: some View {
+        VStack {
+            LazyImage(url: URL(string: postView.post.url!)!) { result in
+                if let image = result.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+        }
+        .frame(width: 40, height: 40, alignment: .leading)
+        .cornerRadius(4)
+        .aspectRatio(1, contentMode: .fit)
+        .clipped()
+    }
+    
+    @ViewBuilder
+    private var compactViewVideoThumbnail: some View {
+        VStack {
+            LazyImage(url: URL(string: postView.post.thumbnailUrl!)!) { result in
+                if let image = result.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+        }
+        .frame(width: 40, height: 40, alignment: .leading)
+        .cornerRadius(4)
+        .aspectRatio(1, contentMode: .fit)
+        .clipped()
+        .overlay {
+            ZStack {
+                Color(.black)
+                    .opacity(0.33)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Image(systemName: "play.fill")
+                    .foregroundColor(.white)
+            }
+            .cornerRadius(4)
+        }
+    }
+    
+    @ViewBuilder
+    private var compactViewArticleThumbnail: some View {
+        VStack {
+            LazyImage(url: URL(string: postView.post.thumbnailUrl!)!) { result in
+                if let image = result.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .blur(radius: (postView.post.nsfw || postView.community.nsfw) && UserPreferences.getInstance.blurNsfw && shortBody ? PostUIView.blurStrength : 0)
+        }
+        .frame(width: 40, height: 40, alignment: .leading)
+        .cornerRadius(4)
+        .aspectRatio(1, contentMode: .fit)
+        .overlay {
+            ZStack {
+                Color(.black)
+                    .opacity(0.33)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Image(systemName: "newspaper.fill")
+                    .foregroundColor(.white)
+            }
+            .cornerRadius(4)
+        }
+    }
+
     
     // MARK: -
     
@@ -666,8 +783,24 @@ struct PostUIView: View {
     }
     
     func getForegroundColor() -> Color {
-        if UserPreferences.getInstance.twoColumnView && shortBody {
-            return self.contentView.openedPostView == self.postView ? Color(.white) : Color(.textColor)
+        if shortBody {
+            if self.contentView.openedPostView == self.postView && UserPreferences.getInstance.twoColumnView {
+                return Color(.white)
+            }
+        }
+        
+        return Color(.textColor)
+    }
+    
+    func getTitleForegroundColor() -> Color {
+        if shortBody {
+            if self.contentView.openedPostView == self.postView && UserPreferences.getInstance.twoColumnView {
+                return Color(.white)
+            }
+            
+            if self.postView.read && UserPreferences.getInstance.grayoutReadPosts {
+                return .secondary
+            }
         }
         
         return Color(.textColor)

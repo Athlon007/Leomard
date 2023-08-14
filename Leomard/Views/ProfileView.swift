@@ -15,6 +15,7 @@ struct ProfileView: View {
     @Binding var myself: MyUserInfo?
     
     @State var personDetails: GetPersonDetailsResponse? = nil
+    @State var likedPosts: [PostView?] = []
     
     @State var postService: PostService? = nil
     @State var personService: PersonService? = nil
@@ -68,6 +69,9 @@ struct ProfileView: View {
             .task {
                 if person == myself?.localUserView.person {
                     browseOptions.append(Option(id: 2, title: "Saved", imageName: "star"))
+                    if UserPreferences.getInstance.saveLikedPosts {
+                        browseOptions.append(Option(id: 3, title: "Liked", imageName: "hand.thumbsup"))
+                    }
                 }
                 
                 let requestHandler = RequestHandler()
@@ -107,11 +111,11 @@ struct ProfileView: View {
                     maxWidth: .infinity,
                     alignment: .center
                 )
-                .overlay(profileEditor)
             }
             .alert("Error changing profile", isPresented: $sessionChangeFail, actions: {
                 Button("OK", role: .cancel) {}
             }, message: { Text("Failed to change the session") })
+            .overlay(profileEditor)
         }
     }
     
@@ -183,16 +187,32 @@ struct ProfileView: View {
                 .italic()
                 .foregroundColor(.secondary)
         } else {
-            ForEach(personDetails.posts, id: \.self) { postView in
-                PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
-                    .onAppear {
-                        if postView == personDetails.posts.last {
-                            self.loadPersonDetails()
-                        }
+            if selectedBrowseOption.id == 3 {
+                ForEach(likedPosts, id: \.self) { postView in
+                    if let post = postView {
+                        PostUIView(postView: post, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                            .onAppear {
+                                if post == likedPosts.last {
+                                    self.loadLikedPosts()
+                                }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        Spacer()
+                            .frame(height: 0)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                Spacer()
-                    .frame(height: 0)
+                }
+            } else {
+                ForEach(personDetails.posts, id: \.self) { postView in
+                    PostUIView(postView: postView, shortBody: true, postService: self.postService!, myself: $myself, contentView: contentView)
+                        .onAppear {
+                            if postView == personDetails.posts.last {
+                                self.loadPersonDetails()
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Spacer()
+                        .frame(height: 0)
+                }
             }
         }
     }
@@ -334,6 +354,7 @@ struct ProfileView: View {
                     .onTapGesture {
                         isEditingProfile = false
                     }
+                    .ignoresSafeArea()
                 VStack {
                     VStack(alignment: .leading) {
                         HStack {
@@ -553,7 +574,11 @@ struct ProfileView: View {
     
     func reloadFeed() {
         page = 1
-        loadPersonDetails()
+        if selectedBrowseOption.id == 3 {
+            loadLikedPosts()
+        } else {
+            loadPersonDetails()
+        }
     }
     
     func loadPostFromComment(commentView: CommentView) {
@@ -615,7 +640,7 @@ struct ProfileView: View {
             switch result {
             case .success(let loginResponse):
                 isEditingProfile = false
-                let success = SessionStorage.getInstance.updateCurrentSessionInfo(newInformation: loginResponse)
+                let success = SessionStorage.getInstance.updateCurrent(loginResponse: loginResponse)
                 if !success {
                     updateProfileFail = true
                     return
@@ -665,6 +690,46 @@ struct ProfileView: View {
                 print(error)
             }
         }
+    }
+    
+    func loadLikedPosts() {
+        if page == 1 {
+            self.likedPosts = []
+        }
+        
+        let limit = 10
+        let startIndex = (page - 1) * limit
+        var endIndex = page * limit - 1
+        
+        if startIndex > SessionStorage.getInstance.getCurrentSession()!.likedPosts.count {
+            return
+        }
+        
+        if endIndex > SessionStorage.getInstance.getCurrentSession()!.likedPosts.count {
+            endIndex = SessionStorage.getInstance.getCurrentSession()!.likedPosts.count - 1
+        }
+        
+        let range = SessionStorage.getInstance.getCurrentSession()!.likedPosts[startIndex...endIndex]
+        
+        self.likedPosts = self.likedPosts + [PostView?](repeating: nil, count: limit)
+        
+        var currentIndex = startIndex
+        for id in range {
+            let thisIndex = currentIndex
+            currentIndex += 1
+            postService!.getPost(id: id) { result in
+                switch result {
+                case .success(let postResponse):
+                    //self.personDetails!.posts += [ postResponse.postView ]
+                    //self.likedPosts.insert(postResponse.postView, at: thisIndex)
+                    self.likedPosts[thisIndex] = postResponse.postView
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
+        page += 1
     }
 }
 

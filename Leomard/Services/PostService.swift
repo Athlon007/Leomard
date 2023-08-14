@@ -41,7 +41,36 @@ class PostService: Service {
         }
     }
     
+    public func getPost(id: Int, completion: @escaping (Result<GetPostResponse, Error>) -> Void) {
+        let url = SessionStorage.getInstance.getLemmyInstance()
+        self.requestHandler.makeApiRequest(host: url, request: "/post?id=\(id)", method: .get) { result in
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.data {
+                    do {
+                        let response = try self.decode(type: GetPostResponse.self, data: data)
+                        if response.postView.post.nsfw && !UserPreferences.getInstance.showNsfw {
+                            completion(.failure(LeomardExceptions.nsfwPost("Post with id \(response.postView.post.id) is NSFW.")))
+                            return
+                        }
+                        completion(.success(response))
+                    } catch {
+                        self.respondError(data, completion)
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     public func setPostLike(post: Post, score: Int, completion: @escaping (Result<PostResponse, Error>) -> Void) {
+        if score > 0 {
+            _ = SessionStorage.getInstance.addLikedPost(post: post)
+        } else {
+            _ = SessionStorage.getInstance.removeLikedPost(post: post)
+        }
+        
         let body = CreatePostLike(postId: post.id, score: score)
         self.requestHandler.makeApiRequest(host: SessionStorage.getInstance.getLemmyInstance(), request: "/post/like", method: .post, body: body) { result in
             self.respond(result, completion)

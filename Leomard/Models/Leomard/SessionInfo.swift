@@ -13,6 +13,8 @@ struct SessionInfo: Codable, Equatable, Hashable, Identifiable {
     public let lemmyInstance: String
     public let name: String
     
+    public var likedPosts: [Int]
+    
     init(loginResponse: LoginResponse, lemmyInstance: String, name: String) {
         self.loginResponse = loginResponse
         
@@ -22,6 +24,17 @@ struct SessionInfo: Codable, Equatable, Hashable, Identifiable {
         
         self.lemmyInstance = correctedLink
         self.name = name
+        self.likedPosts = []
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.loginResponse = try container.decode(LoginResponse.self, forKey: .loginResponse)
+        self.lemmyInstance = try container.decode(String.self, forKey: .lemmyInstance)
+        self.name = try container.decode(String.self, forKey: .name)
+        
+        self.likedPosts = try container.decodeIfPresent([Int].self, forKey: .likedPosts) ?? []
     }
     
     static func == (lhs: SessionInfo, rhs: SessionInfo) -> Bool {

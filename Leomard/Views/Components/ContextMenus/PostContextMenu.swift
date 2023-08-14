@@ -30,13 +30,23 @@ struct PostContextMenu: View {
         }
         if let url = postView.post.url {
             Button(action: {
-                openURL(URL(string: url)!)
+                var link = url
+                if UserPreferences.getInstance.usePipedVideoForYoutube && link.containsAny("youtube.com/watch", "youtu.be/") {
+                    link = link.replacingOccurrences(of: "youtube.com", with: "piped.video")
+                    link = link.replacingOccurrences(of: "youtu.be/", with: "piped.video/watch?v=")
+                }
+                openURL(URL(string: link)!)
             }) {
                 Text("Open External Link")
                     .padding()
             }
             Button(action: {
-                Clipboard.copyToClipboard(text: url)
+                var link = url
+                if UserPreferences.getInstance.usePipedVideoForYoutube && link.containsAny("youtube.com/watch", "youtu.be/") {
+                    link = link.replacingOccurrences(of: "youtube.com", with: "piped.video")
+                    link = link.replacingOccurrences(of: "youtu.be/", with: "piped.video/watch?v=")
+                }
+                Clipboard.copyToClipboard(text: link)
             }) {
                 Text(LinkHelper.isImageLink(link: url) ? "Copy Image Link" : "Copy External Link")
                     .padding()

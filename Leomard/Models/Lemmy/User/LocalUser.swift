@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LocalUser: Codable {
+struct LocalUser: Codable, Hashable {
     public let id: Int
     public let acceptedApplication: Bool
     public let defaultListingType: ListingType

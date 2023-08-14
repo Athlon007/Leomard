@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.6 (2023-08-14)
+
+### Added
+
+- "Store Liked Posts" in Preferences -> Experiments
+    - With this enabled, you can see all the posts you liked in the "Liked" tab in your profile
+- Added "Experiments" preferences
+- Added saving posts as drafts
+    - You can now save posts as drafts, and continue editing them later
+    - You can access drafts in the "Drafts" tab in post creation view
+- Added post draft autosave, which will be restored if you accidentally close the program or it crashes
+    - You can disable it in Preferences -> General -> Autosave post drafts
+- Inbox replies now use the new text editor
+- "Use Piped.video for YouTube videos" in Preferences -> Content
+- In Compact View, posts with videos and link to articles will now show a thumbnail
+- Added "Truncate Post Titles" in Preferences -> Display
+- Read post titles are now grayed out (can be disabled in Preferences -> Display -> Read Post Indicators -> Gray out post titles)
+- Also added "Show checkmark" next to read posts in Preferences -> Display -> Read Post Indicators
+
+### Changes
+
+- Preferences: renamed "View Mode" to "Open Posts In"
+- Preferences: renamed "Single-Column" to "Popup"
+- Preferences: renamed "Two-Column" to "Second Column"
+- "Second Column" is now the default view
+- Post creation times that are in the future won't dispay "-" at the start anymore
+- Compact View setting is now displayed in style of the "Open Posts In" setting
+- Feed View optimizations
+- Community sidebar description is now hidden, if community is viewed in one-column view
+
+### Bug Fixes
+
+- Fixed padding of the post toolbar in Compact View
+- Post won't remain open when switching between sessions
+- Hiding comment will hide all its children
+- Fixed opening posts from Replies, if you had another post open in two-column view
+- Fixed app crashing if trying to load subcomments more than 5 replies deep
+- Fixed a bug where marking post as read on open would not be reflected in the feed
+- Post details in compact view will now wrap correctly, if the sender name and community name are too long
+
 ## 0.5.1 (2023-08-08)
 
 ### Bug Fixes

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MarkdownUI
 
 fileprivate struct FrequencyOption: Hashable, Equatable {
     let name: String
@@ -20,8 +21,8 @@ struct PreferencesView: View {
         .init(name: "General", icon: "gearshape", color: .blue),
         .init(name: "Content", icon: "text.alignleft", color: .cyan),
         .init(name: "Display", icon: "display", color: .teal),
-        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green)
-        //.init(name: "Experimental", icon: "testtube.2", color: .red)
+        .init(name: "Updates", icon: "square.and.arrow.down.on.square", color: .green),
+        .init(name: "Experiments", icon: "testtube.2", color: .red)
     ]
     @State fileprivate var currentSelection: PreferenceOption?
     
@@ -37,6 +38,10 @@ struct PreferencesView: View {
     @State var manuallyCheckedForUpdate: Bool = false
     
     @State fileprivate var selectedViewType: ViewModeOption = .singleColumn
+    @State fileprivate var selectedPostDisplayOption: PostDisplayOption = .card
+    
+    @State var helpText: String = ""
+    @State var showHelp: Bool = false
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -55,7 +60,7 @@ struct PreferencesView: View {
         }
         .task {
             self.currentSelection = self.preferenceOptions[0]
-        
+            
             for notificationCheckFrequency in notificationCheckFrequencies {
                 if UserPreferences.getInstance.checkNotifsEverySeconds == notificationCheckFrequency.seconds {
                     selectedNotificaitonCheckFrequency = notificationCheckFrequency
@@ -67,6 +72,10 @@ struct PreferencesView: View {
             }
             
             self.selectedViewType = UserPreferences.getInstance.twoColumnView ? .twoColumns : .singleColumn
+            self.selectedPostDisplayOption = UserPreferences.getInstance.usePostCompactView ? .compact : .card
+        }
+        .overlay {
+            helpOverlay
         }
     }
     
@@ -130,8 +139,8 @@ struct PreferencesView: View {
                     displayPreferences
                 case preferenceOptions[3]:
                     updatesPreferences
-                //case preferenceOptions[4]:
-                    //experimentalPreferences
+                case preferenceOptions[4]:
+                    experimentalPreferences
                 default:
                     Text("")
                 }
@@ -151,9 +160,6 @@ struct PreferencesView: View {
             .onChange(of: selectedNotificaitonCheckFrequency) { value in
                 UserPreferences.getInstance.checkNotifsEverySeconds = value.seconds
             }
-            Text("Note: Notifications are not checked when app is closed.")
-                .frame(maxWidth: .infinity, alignment:.leading)
-                .lineLimit(nil)
         }
         VStack(alignment: .leading) {
             Text("Inbox")
@@ -166,7 +172,7 @@ struct PreferencesView: View {
                 Toggle("Posts", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityPost)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Toggle("Followed", isOn: UserPreferences.getInstance.$preferDisplayNameCommunityFollowed)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             Divider()
             VStack {
@@ -175,6 +181,9 @@ struct PreferencesView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading) {
+            Toggle("Autosave post drafts", isOn: UserPreferences.getInstance.$autosavePostCreation)
+        }
     }
     
     @ViewBuilder
@@ -230,14 +239,67 @@ struct PreferencesView: View {
             Text("Any instances listed here will be filtered out. You won't see communities, posts, or comments from those instances. Simply type the hostname of the instance (comma-separated).")
                 .lineLimit(nil)
         }
+        VStack(alignment: .leading) {
+            HStack {
+                Toggle("Use Piped.video for YouTube videos", isOn: UserPreferences.getInstance.$usePipedVideoForYoutube)
+                Button("?", action: {
+                    self.helpText = """
+                # Use Piped.video for YouTube
+                Piped.video is an alternative privacy friendly YouTube frontend.
+                """
+                    self.showHelp = true
+                })
+                .cornerRadius(360)
+            }
+        }
     }
     
     @ViewBuilder
     private var displayPreferences: some View {
-        VStack(alignment: .leading) {
-            Toggle("Compact View", isOn: UserPreferences.getInstance.$usePostCompactView)
+        GroupBox("Post Display") {
+            VStack {
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "CardViewDark" : "CardView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.usePostCompactView = false
+                            selectedPostDisplayOption = .card
+                        }
+                    Picker("", selection: $selectedPostDisplayOption) {
+                        Text("Card").tag(PostDisplayOption.card)
+                    }
+                    .onChange(of: selectedPostDisplayOption) { value in
+                        if value == PostDisplayOption.card {
+                            UserPreferences.getInstance.usePostCompactView = false
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+                Divider()
+                VStack {
+                    Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "CompactViewDark" : "CompactView"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onTapGesture {
+                            UserPreferences.getInstance.usePostCompactView = true
+                            selectedPostDisplayOption = .compact
+                        }
+                    Picker("", selection: $selectedPostDisplayOption) {
+                        Text("Compact").tag(PostDisplayOption.compact)
+                    }
+                    .onChange(of: selectedPostDisplayOption) { value in
+                        if value == PostDisplayOption.compact {
+                            UserPreferences.getInstance.usePostCompactView = true
+                        }
+                    }
+                    .pickerStyle(.radioGroup)
+                    .padding(.bottom, 8)
+                }
+            }
         }
-        GroupBox("View Mode") {
+        GroupBox("Open Posts In") {
             VStack {
                 VStack {
                     Image(nsImage: NSImage(imageLiteralResourceName: colorScheme == .dark ? "PopupViewDark" : "PopupView"))
@@ -248,7 +310,7 @@ struct PreferencesView: View {
                             selectedViewType = .singleColumn
                         }
                     Picker("", selection: $selectedViewType) {
-                        Text("Single-Column").tag(ViewModeOption.singleColumn)
+                        Text("Popup").tag(ViewModeOption.singleColumn)
                     }
                     .onChange(of: selectedViewType) { value in
                         if value == ViewModeOption.singleColumn {
@@ -268,7 +330,7 @@ struct PreferencesView: View {
                             selectedViewType = .twoColumns
                         }
                     Picker("", selection: $selectedViewType) {
-                        Text("Two-Column").tag(ViewModeOption.twoColumns)
+                        Text("Second Column").tag(ViewModeOption.twoColumns)
                     }
                     .onChange(of: selectedViewType) { value in
                         if value == ViewModeOption.twoColumns {
@@ -287,6 +349,15 @@ struct PreferencesView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading) {
+            Toggle("Truncate Post Titles", isOn: UserPreferences.getInstance.$truncatePostTitles)
+        }
+        GroupBox("Read Post Indicators") {
+            Toggle("Gray out post titles", isOn: UserPreferences.getInstance.$grayoutReadPosts)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle("Show checkmark", isOn: UserPreferences.getInstance.$showReadPostIndicator)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+        }.frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
@@ -317,7 +388,65 @@ struct PreferencesView: View {
     @ViewBuilder
     private var experimentalPreferences: some View {
         VStack(alignment: .leading) {
-            // Unused for now.
+            HStack {
+                Toggle("Store liked posts locally", isOn: UserPreferences.getInstance.$saveLikedPosts)
+                Button("?", action: {
+                    self.helpText = """
+# Store liked posts locally
+Liked posts will be saved into your session, which then can be browsed in your Profile view under **Liked** posts.
+
+Leomard does not know which posts you liked in other apps, and will add them if either you see that post in, or you like one in Leomard only.
+
+The information about what you like is securely stored on your device.
+"""
+                    self.showHelp = true
+                })
+                .cornerRadius(360)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var helpOverlay: some View {
+        if showHelp {
+            ZStack {
+                Color(white: 0, opacity: 0.33)
+                    .onTapGesture {
+                        showHelp = false
+                    }
+                    .ignoresSafeArea()
+                VStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Button("Dismiss", action: { showHelp = false })
+                                .buttonStyle(.link)
+                            Spacer()
+                                .buttonStyle(.link)
+                        }
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .padding(.top, 10)
+                        .padding(.bottom, 0)
+                        let content = MarkdownContent(helpText)
+                        Markdown(content)
+                            .frame(minHeight: 0, maxHeight: .infinity)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                }
+                .padding()
+                .frame(maxWidth: 400, minHeight: 0, maxHeight: 250)
+                .background(Color(.textBackgroundColor))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.windowFrameTextColor), lineWidth: 1)
+                )
+                .cornerRadius(8)
+                .listStyle(SidebarListStyle())
+                .scrollContentBackground(.hidden)
+            }
         }
     }
 }
@@ -331,4 +460,9 @@ fileprivate struct PreferenceOption: Hashable {
 fileprivate enum ViewModeOption {
     case singleColumn
     case twoColumns
+}
+
+fileprivate enum PostDisplayOption {
+    case card
+    case compact
 }

@@ -344,6 +344,7 @@ struct ContentView: View {
     
     func navigateToFeed() {
         self.currentSelection = self.options[0]
+        self.openedPostView = nil
     }
     
     func loadUserData() {
@@ -391,7 +392,10 @@ struct ContentView: View {
         postService?.getPostForComment(comment: comment) { result in
             switch result {
             case .success(let postResponse):
-                self.openedPostView = postResponse.postView
+                self.openedPostView = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    self.openedPostView = postResponse.postView
+                }
             case .failure(let error):
                 print(error)
             }

@@ -35,18 +35,6 @@ struct PostOpenedView: View {
             )
             .task {
                 self.loadComments()
-                
-                if UserPreferences.getInstance.markPostAsReadOnOpen && !postView.read {
-                    postService.markAsRead(post: postView.post, read: true) { result in
-                        switch result {
-                        case .success(let postResponse):
-                            self.postView = postResponse.postView
-                        case .failure(let error):
-                            print(error)
-                            // TODO: Show error
-                        }
-                    }
-                }
             }
             .alert("Error", isPresented: $showingAlert, actions: {
                 Button("Retry", role: .destructive) {

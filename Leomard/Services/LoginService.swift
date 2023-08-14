@@ -103,4 +103,28 @@ class LoginService: Service {
         
         completion(.success(result))
     }
+    
+    public func register(site: GetSiteResponse, username: String, password: String, passwordVerify: String, showNsfw: Bool, email: String, captchaUuid: String, captchaAnswer: String, answer: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {
+        let host = site.siteView.site.actorId
+        let body = Register(
+            username: username,
+            password: password,
+            passwordVerify: passwordVerify,
+            showNsfw: showNsfw,
+            email: email.count > 0 ? email : nil,
+            captchaUuid: site.siteView.localSite.captchaEnabled ? captchaUuid : nil,
+            captchaAnswer: site.siteView.localSite.captchaEnabled ? captchaAnswer : nil,
+            answer: site.siteView.localSite.applicationQuestion != nil ? answer : nil)
+        
+        requestHandler.makeApiRequest(host: host, request: "/user/register", method: .post, body: body) { result in
+            self.respond(result, completion)
+        }
+    }
+    
+    public func getCaptcha(site: GetSiteResponse, completion: @escaping (Result<GetCaptchaResponse, Error>) -> Void) {
+        let host = site.siteView.site.actorId
+        requestHandler.makeApiRequest(host: host, request: "/user/get_captcha", method: .get) { result in
+            self.respond(result, completion)
+        }
+    }
 }
