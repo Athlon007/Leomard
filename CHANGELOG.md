@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added temporary photo icon to compact view posts, if they have a photo but it's not loaded yet
+- Added temporary photo icon to compact view posts, if the post has a photo but it's not loaded yet
 
 ### Bug Fixes
 
