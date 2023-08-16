@@ -864,8 +864,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "724"
             endingLineNumber = "724"
-            landmarkName = "onPostEdited(updatedPostView:)"
-            landmarkType = "7">
+            landmarkName = "PostUIView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -880,8 +880,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "726"
             endingLineNumber = "726"
-            landmarkName = "PostUIView"
-            landmarkType = "14">
+            landmarkName = "onPostEdited(updatedPostView:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -964,33 +964,33 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "23985529-F3AE-4A42-A829-7E0666A0F6D0 - f375d28e6070c740"
+                  uuid = "23985529-F3AE-4A42-A829-7E0666A0F6D0 - ee7a3aa7562d1691"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, noAuth: Swift.Bool, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "Leomard"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "100"
-                  endingLineNumber = "100"
-                  offsetFromSymbolStart = "12248">
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "13288">
                </Location>
                <Location
-                  uuid = "23985529-F3AE-4A42-A829-7E0666A0F6D0 - f6f30a4b9eb9c5de"
+                  uuid = "23985529-F3AE-4A42-A829-7E0666A0F6D0 - 4220495e93cb7be6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 @Sendable () async -&gt; () in Leomard.RequestHandler.makeApiRequest(host: Swift.String, request: Swift.String, method: Leomard.HTTPMethod, headers: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, body: Swift.Optional&lt;Swift.Decodable &amp; Swift.Encodable&gt;, noAuth: Swift.Bool, completion: (Swift.Result&lt;Leomard.APIResponse, Swift.Error&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "Leomard"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/konradfigura/Developer/Leomard/Leomard/Services/RequestHandler.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
                   offsetFromSymbolStart = "120">
                </Location>
             </Locations>
@@ -1822,8 +1822,8 @@
             filePath = "Leomard/Views/Components/AnimatedImage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "updateNSView(_:context:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1838,8 +1838,8 @@
             filePath = "Leomard/Views/Components/AnimatedImage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "updateNSView(_:context:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1968,7 +1968,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "784"
             endingLineNumber = "784"
-            landmarkName = "getBackgroundColor()"
+            landmarkName = "markPostAsReadOnDisapper()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1984,8 +1984,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "785"
             endingLineNumber = "785"
-            landmarkName = "getBackgroundColor()"
-            landmarkType = "7">
+            landmarkName = "PostUIView"
+            landmarkType = "14">
             <Locations>
                <Location
                   uuid = "0EDE8F82-C61D-4563-8342-194AC36D0B03 - 929d0a727305616a"
@@ -2032,8 +2032,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "823"
             endingLineNumber = "823"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "getLinkColor()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2673,6 +2673,38 @@
             startingLineNumber = "196"
             endingLineNumber = "196"
             landmarkName = "postsList(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "50BA85EB-119A-42F7-9A16-7658771900C6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/AnimatedImage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "updateNSView(_:context:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "78275DBF-F6B4-4D9B-A9FC-1DA3D1B398DD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Leomard/Views/Components/AnimatedImage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "updateNSView(_:context:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

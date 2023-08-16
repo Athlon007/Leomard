@@ -1,10 +1,20 @@
 # Changelog
 
-## 0.6.1 (TBA)
+## 0.7 (TBA)
 
 ### Added
 
 - Added temporary photo icon to compact view posts, if the post has a photo but it's not loaded yet
+- Added "YouTube Video Player" preference:
+    - You can select from 3 options: Linked Player, Youtube, Piped
+    - Linked Player will open the video in the player provided by the OP
+    - YouTube: videos will be played in the YouTube player
+    - Piped: videos will be played in the Piped player
+- Added support for playing Piped.video videos in the app
+
+### Changes
+
+- Article, video link or image linked in URL are now displayed first, then the post body
 
 ### Bug Fixes
 

@@ -123,6 +123,7 @@
 		B0A334D12A86566700D09C39 /* CaptchaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334D02A86566700D09C39 /* CaptchaResponse.swift */; };
 		B0A334D32A86567E00D09C39 /* GetCaptchaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334D22A86567E00D09C39 /* GetCaptchaResponse.swift */; };
 		B0A334D52A87CFC300D09C39 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334D42A87CFC300D09C39 /* RegisterView.swift */; };
+		B0A334D92A8D166500D09C39 /* YoutubeVideosPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A334D82A8D166500D09C39 /* YoutubeVideosPreference.swift */; };
 		B0A910B72A72870500959A1D /* RemovePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910B62A72870500959A1D /* RemovePost.swift */; };
 		B0A910B92A728AE500959A1D /* LockPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910B82A728AE400959A1D /* LockPost.swift */; };
 		B0A910BB2A72E41400959A1D /* DistinguishComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A910BA2A72E41400959A1D /* DistinguishComment.swift */; };
@@ -360,6 +361,7 @@
 		B0A334D02A86566700D09C39 /* CaptchaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaResponse.swift; sourceTree = "<group>"; };
 		B0A334D22A86567E00D09C39 /* GetCaptchaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCaptchaResponse.swift; sourceTree = "<group>"; };
 		B0A334D42A87CFC300D09C39 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		B0A334D82A8D166500D09C39 /* YoutubeVideosPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideosPreference.swift; sourceTree = "<group>"; };
 		B0A910B62A72870500959A1D /* RemovePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovePost.swift; sourceTree = "<group>"; };
 		B0A910B82A728AE400959A1D /* LockPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPost.swift; sourceTree = "<group>"; };
 		B0A910BA2A72E41400959A1D /* DistinguishComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistinguishComment.swift; sourceTree = "<group>"; };
@@ -822,6 +824,7 @@
 				B059982E2A693CBD00267636 /* LeomardExceptions.swift */,
 				B05998362A698AC000267636 /* UpdateFrequency.swift */,
 				B0A334CB2A83966400D09C39 /* PostDraft.swift */,
+				B0A334D82A8D166500D09C39 /* YoutubeVideosPreference.swift */,
 			);
 			path = Leomard;
 			sourceTree = "<group>";
@@ -1244,6 +1247,7 @@
 				B0CEBE612A52C60B00982D4D /* PersonView.swift in Sources */,
 				B0EEFE462A7C06A00065CB27 /* ModBanFromCommunityView.swift in Sources */,
 				B091F8462A54816000F0DA32 /* CreateCommentLike.swift in Sources */,
+				B0A334D92A8D166500D09C39 /* YoutubeVideosPreference.swift in Sources */,
 				B0CEBE8B2A52D34400982D4D /* SiteView.swift in Sources */,
 				B0EEFE4A2A7C06A00065CB27 /* ModRemoveCommunityView.swift in Sources */,
 				B05B21342A5EA98000BA8FB2 /* PrivateMessageView.swift in Sources */,

@@ -44,10 +44,10 @@ final class UserPreferences: ObservableObject {
     @AppStorage("two_column_view", store: .standard) var twoColumnView: Bool = true
     @AppStorage("save_liked_posts", store: .standard) var saveLikedPosts: Bool = false
     @AppStorage("autosave_post_creation", store: .standard) var autosavePostCreation: Bool = true
-    @AppStorage("use_piped_video_for_youtube", store: .standard) var usePipedVideoForYoutube: Bool = false
     @AppStorage("truncate_post_titles", store: .standard) var truncatePostTitles: Bool = true
     @AppStorage("grayout_read_posts", store: .standard) var grayoutReadPosts: Bool = true
     @AppStorage("show_read_post_indicator", store: .standard) var showReadPostIndicator: Bool = false
+    @AppStorage("youtube_video_preference", store: .standard) var youtubeVideoPreference: YoutubeVideoPreference = .preferLink
     
     // MARK: - Navbar
     @AppStorage("navbar_show_letter_separators", store: .standard) var navbarShowLetterSeparators: Bool = false

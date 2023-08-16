@@ -31,7 +31,7 @@ struct PostContextMenu: View {
         if let url = postView.post.url {
             Button(action: {
                 var link = url
-                if UserPreferences.getInstance.usePipedVideoForYoutube && link.containsAny("youtube.com/watch", "youtu.be/") {
+                if UserPreferences.getInstance.youtubeVideoPreference == .preferPiped && link.containsAny("youtube.com/watch", "youtu.be/") {
                     link = link.replacingOccurrences(of: "youtube.com", with: "piped.video")
                     link = link.replacingOccurrences(of: "youtu.be/", with: "piped.video/watch?v=")
                 }
@@ -42,7 +42,7 @@ struct PostContextMenu: View {
             }
             Button(action: {
                 var link = url
-                if UserPreferences.getInstance.usePipedVideoForYoutube && link.containsAny("youtube.com/watch", "youtu.be/") {
+                if UserPreferences.getInstance.youtubeVideoPreference == .preferPiped && link.containsAny("youtube.com/watch", "youtu.be/") {
                     link = link.replacingOccurrences(of: "youtube.com", with: "piped.video")
                     link = link.replacingOccurrences(of: "youtu.be/", with: "piped.video/watch?v=")
                 }

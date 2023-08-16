@@ -72,7 +72,7 @@ struct LinkHelper {
     }
     
     static func isYouTubeLink(link: String) -> Bool {
-        return link.contains("youtube.com") || link.contains("youtu.be")
+        return link.containsAny("youtube.com", "youtu.be", "piped.video")
     }
     
     static func isLemmyCommunityLink(link: String) -> Bool {

@@ -63,12 +63,12 @@ struct PostUIView: View {
                         )
                     if UserPreferences.getInstance.usePostCompactView {
                         if !shortBody {
-                            postBodyMarkdown
                             postBodyContent
+                            postBodyMarkdown
                         }
                     } else {
-                        postBodyMarkdown
                         postBodyContent
+                        postBodyMarkdown
                     }
                     Spacer(minLength: 6)
                     if UserPreferences.getInstance.usePostCompactView && shortBody {
@@ -306,7 +306,7 @@ struct PostUIView: View {
             })
             .markdownTextStyle(\.link, textStyle: {
                 ForegroundColor(getLinkColor())
-            })
+            })        
     }
     
     @ViewBuilder
@@ -409,7 +409,7 @@ struct PostUIView: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .frame(minWidth:0, maxWidth: !shortBody ? 600 : .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .background(GeometryReader { geometry in
                         Color.clear
                             .onAppear {

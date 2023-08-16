@@ -56,15 +56,17 @@ struct YoutubePlayer: NSViewRepresentable {
     
     func updateNSView(_ nsView: WKWebVideoNonInteractable, context: Context) {
         var url = self.link
-        if url.contains("youtube.com/watch?v=") {
+        if url.contains("/watch?v=") {
             url = url.replacingOccurrences(of: "/watch?v=", with: "/embed/")
         } else if link.contains("youtu.be/") {
             url = url.replacingOccurrences(of: "youtu.be/", with: "youtube.com/embed/")
         }
         
-        if UserPreferences.getInstance.usePipedVideoForYoutube {
+        if UserPreferences.getInstance.youtubeVideoPreference == .preferPiped && url.contains("youtube.com") {
             url = url.replacingOccurrences(of: "youtube.com", with: "piped.video")
             url = url.replacingOccurrences(of: "www.", with: "")
+        } else if UserPreferences.getInstance.youtubeVideoPreference == .preferYoutube && url.contains("piped.video") {
+            url = url.replacingOccurrences(of: "piped.video", with: "youtube.com")
         }
         
         let html = """

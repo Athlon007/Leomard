@@ -241,11 +241,25 @@ struct PreferencesView: View {
         }
         VStack(alignment: .leading) {
             HStack {
-                Toggle("Use Piped.video for YouTube videos", isOn: UserPreferences.getInstance.$usePipedVideoForYoutube)
+                Picker("Youtube Video Player", selection: UserPreferences.getInstance.$youtubeVideoPreference) {
+                    ForEach(YoutubeVideoPreference.allCases, id: \.self) { option in
+                        Text(option.description).tag(option)
+                    }
+                }
+                .pickerStyle(.radioGroup)
                 Button("?", action: {
                     self.helpText = """
-                # Use Piped.video for YouTube
-                Piped.video is an alternative privacy friendly YouTube frontend.
+                # YouTube Video Player
+                Select which YouTube vide player you prefer.
+                
+                ## Linked Player
+                Leomard will use whatever player the OP has chosen - either YouTube or Piped.
+                
+                ## YouTube
+                Leomard will convert Piped links to YouTube links.
+                
+                ## Piped
+                Leomard will convert YouTube links to Piped links.
                 """
                     self.showHelp = true
                 })
@@ -430,9 +444,12 @@ The information about what you like is securely stored on your device.
                         )
                         .padding(.top, 10)
                         .padding(.bottom, 0)
-                        let content = MarkdownContent(helpText)
-                        Markdown(content)
-                            .frame(minHeight: 0, maxHeight: .infinity)
+                        List {
+                            let content = MarkdownContent(helpText)
+                            Markdown(content)
+                                .frame(minHeight: 0, maxHeight: .infinity)
+                                .lineLimit(nil)
+                        }
                     }
                     .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 }
